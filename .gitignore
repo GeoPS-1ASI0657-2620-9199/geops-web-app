@@ -1,0 +1,17 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+.idea/
+*.iml
+.vscode/
+.env
+*.log
+node_modules/
+dist/
+.angular/
+.DS_Store
+docs/
+CLAUDE.md
+.claude/
+AGENTS.md
+*.zip
+*.docx
