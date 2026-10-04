@@ -20,7 +20,7 @@ export class OffersApiEndpoint extends BaseApiEndpoint<
    * @param http - angular http client
    */
   constructor(http: HttpClient, private readonly campaignApi: CampaignApiEndpoint) {
-    super(http, `${environment.platformProviderApiBaseUrl}/offers`, new OffersAssembler());
+    super(http, `${environment.apiBaseUrl}/offers`, new OffersAssembler());
   }
 
   /**
@@ -38,7 +38,7 @@ export class OffersApiEndpoint extends BaseApiEndpoint<
 
         // Fetch all campaigns with error handling
         const campaignRequests = campaignIds.map(id =>
-          this.http.get<any>(`${environment.platformProviderApiBaseUrl}/campaigns/${id}`).pipe(
+          this.http.get<any>(`${environment.apiBaseUrl}/campaigns/${id}`).pipe(
             map(campaign => ({ id, status: campaign.status })),
             catchError(err => {
               console.warn(`[OffersApiEndpoint] Campaign ${id} not found or error:`, err);
@@ -90,7 +90,7 @@ export class OffersApiEndpoint extends BaseApiEndpoint<
 
           // Fetch all campaigns with error handling
           const campaignRequests = campaignIds.map(id =>
-            this.http.get<any>(`${environment.platformProviderApiBaseUrl}/campaigns/${id}`).pipe(
+            this.http.get<any>(`${environment.apiBaseUrl}/campaigns/${id}`).pipe(
               map(campaign => ({ id, status: campaign.status })),
               catchError(err => {
                 console.warn(`[OffersApiEndpoint] Campaign ${id} not found or error:`, err);

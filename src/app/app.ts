@@ -17,7 +17,7 @@ export class App {
     this.translate = inject(TranslateService);
     this.router = inject(Router);
     this.translate.addLangs(['en', 'es']);
-    this.translate.use('en');
+    this.translate.use('es');
   }
 
   onGlobalSearch(q: string): void {

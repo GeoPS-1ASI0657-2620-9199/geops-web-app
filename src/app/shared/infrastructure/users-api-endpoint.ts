@@ -18,7 +18,7 @@ export class UsersApiEndpoint extends BaseApiEndpoint<
   constructor(http: HttpClient) {
     super(
       http,
-      `${environment.platformProviderApiBaseUrl}/users`,
+      `${environment.apiBaseUrl}/users`,
       new UsersAssembler()
     );
   }

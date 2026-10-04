@@ -36,7 +36,7 @@ export class CampaignApiEndpoint extends BaseApiEndpoint<
   private readonly offerAssembler = new OfferAssembler();
 
   constructor(http: HttpClient) {
-    super(http, `${environment.platformProviderApiBaseUrl}/campaigns`, new CampaignAssembler());
+    super(http, `${environment.apiBaseUrl}/campaigns`, new CampaignAssembler());
   }
 
   /**
@@ -83,7 +83,7 @@ export class CampaignApiEndpoint extends BaseApiEndpoint<
   getOffersByCampaignId(campaignId: number): Observable<CampaignOffer[]> {
     return this.http
       .get<OfferResource[]>(
-        `${environment.platformProviderApiBaseUrl}/offers/campaign/${campaignId}`
+        `${environment.apiBaseUrl}/offers/campaign/${campaignId}`
       )
       .pipe(map((resources) => resources.map((r) => this.offerAssembler.toEntityFromResource(r))));
   }
@@ -93,7 +93,7 @@ export class CampaignApiEndpoint extends BaseApiEndpoint<
    */
   getOfferById(offerId: number): Observable<CampaignOffer> {
     return this.http
-      .get<OfferResource>(`${environment.platformProviderApiBaseUrl}/offers/${offerId}`)
+      .get<OfferResource>(`${environment.apiBaseUrl}/offers/${offerId}`)
       .pipe(map((r) => this.offerAssembler.toEntityFromResource(r)));
   }
 
@@ -103,7 +103,7 @@ export class CampaignApiEndpoint extends BaseApiEndpoint<
   createOffer(offer: Partial<CampaignOffer>): Observable<CampaignOffer> {
     const resource = this.offerAssembler.toCreateResource(offer);
     return this.http
-      .post<OfferResource>(`${environment.platformProviderApiBaseUrl}/offers`, resource)
+      .post<OfferResource>(`${environment.apiBaseUrl}/offers`, resource)
       .pipe(map((r) => this.offerAssembler.toEntityFromResource(r)));
   }
 
@@ -113,7 +113,7 @@ export class CampaignApiEndpoint extends BaseApiEndpoint<
   updateOffer(offerId: number, offer: Partial<CampaignOffer>): Observable<CampaignOffer> {
     const resource = this.offerAssembler.toUpdateResource(offer);
     return this.http
-      .put<OfferResource>(`${environment.platformProviderApiBaseUrl}/offers/${offerId}`, resource)
+      .put<OfferResource>(`${environment.apiBaseUrl}/offers/${offerId}`, resource)
       .pipe(map((r) => this.offerAssembler.toEntityFromResource(r)));
   }
 
@@ -121,6 +121,6 @@ export class CampaignApiEndpoint extends BaseApiEndpoint<
    * Delete an offer
    */
   deleteOffer(offerId: number): Observable<void> {
-    return this.http.delete<void>(`${environment.platformProviderApiBaseUrl}/offers/${offerId}`);
+    return this.http.delete<void>(`${environment.apiBaseUrl}/offers/${offerId}`);
   }
 }

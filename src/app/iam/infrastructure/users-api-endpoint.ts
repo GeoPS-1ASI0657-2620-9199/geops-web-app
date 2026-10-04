@@ -23,7 +23,7 @@ export class UsersApiEndpoint extends BaseApiEndpoint<
    * @param http Angular HttpClient for HTTP requests
    */
   constructor(http: HttpClient) {
-    super(http, `${environment.platformProviderApiBaseUrl}/users`, new UsersAssembler());
+    super(http, `${environment.apiBaseUrl}/users`, new UsersAssembler());
   }
 
   /**
@@ -54,7 +54,7 @@ export class UsersApiEndpoint extends BaseApiEndpoint<
     };
 
     return this.http.post<AuthenticationResource>(
-      `${environment.platformProviderApiBaseUrl}/authentication/sign-up`,
+      `${environment.apiBaseUrl}/authentication/sign-up`,
       payload
     );
   }
@@ -68,7 +68,7 @@ export class UsersApiEndpoint extends BaseApiEndpoint<
   login(email: string, password: string): Observable<AuthenticationResource> {
     const loginBody = { email, password };
     return this.http.post<AuthenticationResource>(
-      `${environment.platformProviderApiBaseUrl}/authentication/sign-in`,
+      `${environment.apiBaseUrl}/authentication/sign-in`,
       loginBody
     );
   }

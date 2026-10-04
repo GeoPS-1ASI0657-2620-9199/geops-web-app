@@ -166,7 +166,7 @@ export class RegisterBussinesComponent implements OnInit {
     };
 
     this.http.post(
-      `${environment.platformProviderApiBaseUrl}/users/${userId}/owner-details`,
+      `${environment.apiBaseUrl}/users/${userId}/owner-details`,
       ownerDetailsPayload
     ).subscribe({
       next: () => {
