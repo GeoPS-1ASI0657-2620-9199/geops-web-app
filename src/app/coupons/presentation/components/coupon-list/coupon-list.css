@@ -1,0 +1,56 @@
+.layout {
+  max-width: 1720px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #000;
+  margin: 32px 0 24px 0;
+  padding: 0;
+}
+
+/* Responsive Design - 1024px */
+@media (max-width: 1024px) {
+  .layout {
+    padding: 0 20px;
+  }
+}
+
+/* Responsive Design - 768px */
+@media (max-width: 768px) {
+  .layout {
+    padding: 0 20px;
+  }
+
+  .page-title {
+    font-size: 1.75rem;
+    margin: 24px 0 20px 0;
+  }
+}
+
+/* Responsive Design - 640px */
+@media (max-width: 640px) {
+  .layout {
+    padding: 0 16px;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+    margin: 20px 0 16px 0;
+  }
+}
+
+/* Responsive Design - 375px */
+@media (max-width: 375px) {
+  .layout {
+    padding: 0 12px;
+  }
+
+  .page-title {
+    font-size: 1.25rem;
+    margin: 16px 0 12px 0;
+  }
+}

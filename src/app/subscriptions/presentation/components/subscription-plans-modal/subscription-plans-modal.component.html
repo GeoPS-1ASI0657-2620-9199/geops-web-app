@@ -1,0 +1,84 @@
+<div class="modal-overlay" [class.visible]="isVisible" (click)="onBackdropClick($event)">
+  <div class="modal-container" (click)="$event.stopPropagation()">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h2 class="modal-title">{{ 'subscriptions.title' | translate }}</h2>
+      <button class="close-button" (click)="onClose()" aria-label="Close modal">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Modal Subtitle -->
+    <div class="modal-subtitle">
+      <p>{{ 'subscriptions.subtitle' | translate }}</p>
+    </div>
+
+    <!-- Plans Content -->
+    <div class="plans-content" *ngIf="!loading(); else loadingTemplate">
+      <div class="plans-grid">
+        <div
+          *ngFor="let plan of subscriptionPlans()"
+          class="plan-card"
+          [class.basic-plan]="plan.type === 'BASIC'"
+          [class.premium-plan]="plan.type === 'PREMIUM'"
+          [class.recommended]="plan.recommended">
+
+          <!-- Recommended Badge -->
+          <div class="recommended-badge" *ngIf="plan.recommended">
+            {{ plan.name }} {{ 'subscriptions.recommended' | translate }}
+          </div>
+
+          <!-- Plan Content -->
+          <div class="plan-content">
+            <!-- Plan Name -->
+            <h3 class="plan-name">{{ plan.name }}</h3>
+
+            <!-- Plan Price -->
+            <div class="plan-price">
+              <span class="currency">{{ plan.currency }}</span>
+              <span class="price-amount">{{ plan.price }}</span>
+              <span class="price-interval" *ngIf="plan.price > 0">/{{ plan.interval }}</span>
+            </div>
+
+            <!-- Plan Features -->
+            <ul class="features-list">
+              <li *ngFor="let feature of plan.features" class="feature-item">
+                <svg class="feature-check" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="feature-text">{{ feature }}</span>
+              </li>
+            </ul>
+
+            <!-- Plan Button -->
+            <button
+              class="plan-button"
+              [class.basic-button]="plan.type === 'BASIC'"
+              [class.premium-button]="plan.type === 'PREMIUM'"
+              [disabled]="updating()"
+              (click)="onPlanSelect(plan)">
+              <span *ngIf="!updating()">{{ plan.buttonText }}</span>
+              <span *ngIf="updating()" class="button-loading">
+                <svg class="spinner" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" opacity="0.2"/>
+                  <path d="M4 12a8 8 0 018-8" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+                </svg>
+                {{ 'settings.updating' | translate }}
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading Template -->
+    <ng-template #loadingTemplate>
+      <div class="loading-container">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">{{ 'favoritesPage.loading' | translate }}</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

@@ -1,0 +1,342 @@
+/*
+  ProfileComponent Styles
+  Styles for the user profile display, including layout, card, header, avatar, details, edit button, list, tags, and footer.
+*/
+
+/* Main wrapper for the profile page */
+.profile-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 93vh;
+  background: #fff;
+}
+
+/* Card container for profile content */
+.profile-card {
+  max-width: 510px;
+  width: 100%;
+  margin: 48px auto 18px auto;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(74,0,114,0.08);
+}
+
+/* Profile header: avatar, name, plan, edit button */
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 34px 34px 25px 34px;
+  border-bottom: 1px solid #eee;
+}
+
+/* User avatar styling */
+.profile-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #A751D4;
+  color: #fff;
+  font-size: 28px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* User name styling */
+.profile-name {
+  font-size: 20px;
+  font-weight: 600;
+  color: #26242A;
+  margin-bottom: 2px;
+}
+
+/* User plan label styling */
+.profile-plan {
+  color: #A751D4;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* Edit profile button styling */
+.profile-edit-btn {
+  margin-left: auto;
+  background: #fff;
+  letter-spacing: 0.01rem;
+  color: #26242A;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 7px 24px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.profile-edit-btn:hover {
+  background: #F6F4FD;
+}
+
+/* List of profile details */
+.profile-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* Individual profile detail item */
+.profile-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 17px 34px;
+  border-bottom: 1px solid #eee;
+  font-size: 15px;
+}
+.profile-item.last {
+  border-bottom: none;
+}
+
+/* Value styling for profile details */
+.profile-value {
+  color: #737373;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 120px;
+  justify-content: flex-end;
+}
+
+/* Tag styles for categories or labels */
+.tag {
+  background: #f1edfa;
+  color: #A751D4;
+  font-size: 13px;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-weight: 500;
+  border: none;
+  margin-left: 4px;
+}
+.tag.selected {
+  background: #A751D4;
+  color: #fff;
+}
+
+/* Dot indicator for location status */
+.dot {
+  display: inline-block;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+}
+.dot.yellow {
+  background: #ffd500;
+  box-shadow: 0 0 8px rgba(255, 213, 0, 0.4);
+}
+.dot.green {
+  background: #4caf50;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.4);
+}
+.dot.red {
+  background: #f44336;
+  box-shadow: 0 0 8px rgba(244, 67, 54, 0.4);
+}
+
+/* Styling for places (home, work, university) */
+.places {
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+}
+
+/* Footer styling for rights information */
+.profile-footer {
+  text-align: center;
+  color: #777;
+  font-size: 13px;
+  margin-bottom: 18px;
+  margin-top: 20px;
+}
+
+/* Responsive Design - 1024px */
+@media (max-width: 1024px) {
+  .profile-card {
+    max-width: 640px;
+    margin: 40px auto 16px;
+  }
+
+  .profile-header {
+    padding: 28px 28px 20px;
+  }
+
+  .profile-item {
+    padding: 15px 28px;
+  }
+}
+
+/* Responsive Design - 768px */
+@media (max-width: 768px) {
+  .profile-wrapper {
+    min-height: auto;
+    padding: 0 16px;
+  }
+
+  .profile-card {
+    max-width: 100%;
+    margin: 32px auto 16px;
+    border-radius: 12px;
+  }
+
+  .profile-header {
+    padding: 24px 20px 18px;
+    gap: 14px;
+  }
+
+  .profile-avatar {
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+  }
+
+  .profile-name {
+    font-size: 18px;
+  }
+
+  .profile-plan {
+    font-size: 14px;
+  }
+
+  .profile-edit-btn {
+    padding: 6px 18px;
+    font-size: 14px;
+  }
+
+  .profile-item {
+    padding: 14px 20px;
+    font-size: 14px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .profile-value {
+    justify-content: flex-start;
+    min-width: auto;
+  }
+
+  .places {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .profile-footer {
+    font-size: 12px;
+  }
+}
+
+/* Responsive Design - 640px */
+@media (max-width: 640px) {
+  .profile-card {
+    margin: 24px auto 12px;
+  }
+
+  .profile-header {
+    flex-wrap: wrap;
+    padding: 20px 16px 16px;
+    gap: 12px;
+  }
+
+  .profile-avatar {
+    width: 44px;
+    height: 44px;
+    font-size: 22px;
+  }
+
+  .profile-header-details {
+    flex: 1;
+  }
+
+  .profile-name {
+    font-size: 17px;
+  }
+
+  .profile-plan {
+    font-size: 13px;
+  }
+
+  .profile-edit-btn {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 8px;
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .profile-item {
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+
+  .tag {
+    font-size: 12px;
+    padding: 3px 10px;
+  }
+}
+
+/* Responsive Design - 375px */
+@media (max-width: 375px) {
+  .profile-card {
+    margin: 20px auto 12px;
+    border-radius: 10px;
+  }
+
+  .profile-header {
+    padding: 16px 12px 14px;
+  }
+
+  .profile-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .profile-name {
+    font-size: 16px;
+  }
+
+  .profile-plan {
+    font-size: 12px;
+  }
+
+  .profile-edit-btn {
+    padding: 7px 14px;
+    font-size: 13px;
+  }
+
+  .profile-item {
+    padding: 11px 12px;
+    font-size: 12px;
+  }
+
+  .profile-label {
+    font-size: 12px;
+  }
+
+  .profile-value {
+    font-size: 12px;
+  }
+
+  .tag {
+    font-size: 11px;
+    padding: 2px 8px;
+  }
+
+  .profile-footer {
+    font-size: 11px;
+  }
+}
+

@@ -1,0 +1,97 @@
+<div class="reportes-container">
+  <mat-card class="report-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>assessment</mat-icon>
+        {{ 'campaigns.reports.title' | translate }}
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Filter and Format Options -->
+      <div class="report-options">
+        <mat-form-field>
+          <mat-label>{{ 'campaigns.reports.filterByStatus' | translate }}</mat-label>
+          <mat-select [(ngModel)]="filterStatus">
+            <mat-option value="ALL">{{ 'campaigns.reports.allCampaigns' | translate }}</mat-option>
+            <mat-option value="ACTIVE">{{ 'campaigns.tabs.active' | translate }}</mat-option>
+            <mat-option value="PAUSED">{{ 'campaigns.tabs.paused' | translate }}</mat-option>
+            <mat-option value="FINALIZED">{{ 'campaigns.tabs.finalized' | translate }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>{{ 'campaigns.reports.exportFormat' | translate }}</mat-label>
+          <mat-select [(ngModel)]="reportFormat">
+            <mat-option value="json">JSON</mat-option>
+            <mat-option value="csv">CSV</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Summary Statistics -->
+      <div class="report-summary">
+        <h3>{{ 'campaigns.reports.summary' | translate }}</h3>
+        <div class="summary-grid">
+          <div class="summary-item">
+            <span class="summary-label">{{ 'campaigns.stats.totalCampaigns' | translate }}</span>
+            <span class="summary-value">{{ reportData.summary.totalCampaigns }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">{{ 'campaigns.stats.totalImpressions' | translate }}</span>
+            <span class="summary-value">{{ reportData.summary.totalImpressions | number }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">{{ 'campaigns.stats.totalClicks' | translate }}</span>
+            <span class="summary-value">{{ reportData.summary.totalClicks | number }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">{{ 'campaigns.stats.totalBudget' | translate }}</span>
+            <span class="summary-value">S/ {{ reportData.summary.totalBudget | number:'1.2-2' }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">{{ 'campaigns.stats.averageCTR' | translate }}</span>
+            <span class="summary-value">{{ reportData.summary.averageCTR | number:'1.1-1' }}%</span>
+          </div>
+        </div>
+
+        <div class="status-breakdown">
+          <h4>{{ 'campaigns.reports.byStatus' | translate }}</h4>
+          <div class="status-grid">
+            <div class="status-item active">
+              <span class="status-label">{{ 'campaigns.tabs.active' | translate }}</span>
+              <span class="status-count">{{ reportData.summary.byStatus.active }}</span>
+            </div>
+            <div class="status-item paused">
+              <span class="status-label">{{ 'campaigns.tabs.paused' | translate }}</span>
+              <span class="status-count">{{ reportData.summary.byStatus.paused }}</span>
+            </div>
+            <div class="status-item finalized">
+              <span class="status-label">{{ 'campaigns.tabs.finalized' | translate }}</span>
+              <span class="status-count">{{ reportData.summary.byStatus.finalized }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Preview Section -->
+      <div class="report-preview">
+        <h3>{{ 'campaigns.reports.preview' | translate }} ({{ reportFormat === 'json' ? 'JSON' : 'CSV' }})</h3>
+        <pre *ngIf="reportFormat === 'json'">{{ jsonData }}</pre>
+        <pre *ngIf="reportFormat === 'csv'">{{ csvData }}</pre>
+      </div>
+
+      <!-- Actions -->
+      <div class="report-actions">
+        <button mat-raised-button color="primary" (click)="exportReport()">
+          <mat-icon>download</mat-icon>
+          {{ 'campaigns.actions.download' | translate }}
+        </button>
+        <button mat-raised-button (click)="printReport()">
+          <mat-icon>print</mat-icon>
+          {{ 'campaigns.actions.print' | translate }}
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

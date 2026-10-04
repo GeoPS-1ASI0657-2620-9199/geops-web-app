@@ -1,0 +1,148 @@
+.crear-campaign-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.form-header h2 {
+  margin: 0;
+  color: #1a1a1a;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.campaign-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.error-message {
+  padding: 12px;
+  background: #ffebee;
+  color: #c62828;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* Estilos para el calendario */
+::ng-deep .mat-datepicker-container {
+  background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(156, 39, 176, 0.2) !important;
+}
+
+::ng-deep .mat-calendar {
+  background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%) !important;
+  padding: 12px !important;
+}
+
+::ng-deep .mat-calendar-body {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-radius: 6px !important;
+  padding: 8px !important;
+}
+
+::ng-deep .mat-calendar-body-label {
+  color: #9c27b0 !important;
+  font-weight: 500 !important;
+}
+
+::ng-deep .mat-calendar-body-cell {
+  background: transparent;
+  border-radius: 4px !important;
+}
+
+::ng-deep .mat-calendar-body-cell:hover {
+  background: rgba(156, 39, 176, 0.1) !important;
+}
+
+::ng-deep .mat-calendar-body-selected {
+  background: linear-gradient(135deg, #9c27b0 0%, #ba68c8 100%) !important;
+  color: white !important;
+  border-radius: 4px !important;
+}
+
+::ng-deep .mat-calendar-body-today {
+  border: 2px solid #9c27b0 !important;
+  border-radius: 4px !important;
+}
+
+/* Custom styles for mat-mdc-select-panel */
+::ng-deep .mat-mdc-select-panel {
+  background: #fff !important;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(167, 81, 212, 0.15);
+  border: 1px solid #A751D4;
+  padding: 4px 0;
+}
+
+::ng-deep .mat-mdc-option {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: #4A0072;
+  border-radius: 4px;
+  margin: 0 4px;
+}
+
+::ng-deep .mat-mdc-option.mat-mdc-selected {
+  background: linear-gradient(90deg, #A751D4 0%, #AB58E3 100%);
+  color: #fff;
+}
+
+::ng-deep .mat-mdc-option:hover:not(.mat-mdc-selected) {
+  background: rgba(167, 81, 212, 0.08);
+  color: #8B3CC7;
+}
+
+@media (max-width: 768px) {
+  .crear-campaign-container {
+    margin: 20px;
+    padding: 15px;
+  }
+
+  .form-header h2 {
+    font-size: 20px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+}

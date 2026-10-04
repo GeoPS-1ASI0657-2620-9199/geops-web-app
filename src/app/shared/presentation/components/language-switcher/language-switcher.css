@@ -1,0 +1,26 @@
+.language-toggle {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  backdrop-filter: blur(4px);
+}
+
+.language-toggle ::ng-deep .mat-button-toggle {
+  border: none;
+  color: white;
+}
+
+.language-toggle ::ng-deep .mat-button-toggle-checked {
+  background: rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.language-toggle ::ng-deep .mat-button-toggle-button {
+  padding: 0 16px;
+  height: 40px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.language-toggle ::ng-deep .mdc-button__label {
+  z-index: 1;
+}

@@ -1,0 +1,261 @@
+.edit-campaign-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 24px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #A751D4;
+}
+
+.form-header h2 {
+  margin: 0;
+  color: #4A0072;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* Loading */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #666;
+}
+
+.loading-container p {
+  margin-top: 20px;
+  font-size: 16px;
+}
+
+/* Tabs */
+.campaign-tabs {
+  margin-top: 20px;
+}
+
+.tab-content {
+  padding: 24px 0;
+}
+
+/* Form */
+.campaign-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+/* Stats Section */
+.stats-section {
+  background: linear-gradient(135deg, #f5f0f9 0%, #f0e6f6 100%);
+  padding: 20px;
+  border-radius: 8px;
+  margin: 16px 0;
+}
+
+.stats-section h3 {
+  margin: 0 0 16px 0;
+  color: #4A0072;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #A751D4;
+}
+
+/* Offers Tab */
+.offers-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.offers-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.offer-form-section {
+  background: #f9f9f9;
+  padding: 24px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  border: 2px solid #E8D5F2;
+}
+
+.offers-list-section {
+  margin-top: 24px;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.form-actions button {
+  min-width: 120px;
+}
+
+/* Error Message */
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background-color: #ffebee;
+  color: #c62828;
+  border-radius: 4px;
+  margin-top: 16px;
+}
+
+.error-message mat-icon {
+  color: #c62828;
+}
+
+/* Estilos para el calendario */
+::ng-deep .mat-datepicker-container {
+  background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(156, 39, 176, 0.2) !important;
+}
+
+::ng-deep .mat-calendar {
+  background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%) !important;
+  padding: 12px !important;
+}
+
+::ng-deep .mat-calendar-body {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-radius: 6px !important;
+  padding: 8px !important;
+}
+
+::ng-deep .mat-calendar-body-label {
+  color: #9c27b0 !important;
+  font-weight: 500 !important;
+}
+
+::ng-deep .mat-calendar-body-cell {
+  background: transparent;
+  border-radius: 4px !important;
+}
+
+::ng-deep .mat-calendar-body-cell:hover {
+  background: rgba(156, 39, 176, 0.1) !important;
+}
+
+::ng-deep .mat-calendar-body-selected {
+  background: linear-gradient(135deg, #9c27b0 0%, #ba68c8 100%) !important;
+  color: white !important;
+  border-radius: 4px !important;
+}
+
+::ng-deep .mat-calendar-body-today {
+  border: 2px solid #9c27b0 !important;
+  border-radius: 4px !important;
+}
+
+/* Custom styles for mat-mdc-select-panel */
+::ng-deep .mat-mdc-select-panel {
+  background: #fff !important;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(167, 81, 212, 0.15);
+  border: 1px solid #A751D4;
+  padding: 4px 0;
+}
+
+::ng-deep .mat-mdc-option {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: #4A0072;
+  border-radius: 4px;
+  margin: 0 4px;
+}
+
+::ng-deep .mat-mdc-option.mat-mdc-selected {
+  background: linear-gradient(90deg, #A751D4 0%, #AB58E3 100%);
+  color: #fff;
+}
+
+::ng-deep .mat-mdc-option:hover:not(.mat-mdc-selected) {
+  background: rgba(167, 81, 212, 0.08);
+  color: #8B3CC7;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .edit-campaign-container {
+    margin: 20px;
+    padding: 16px;
+  }
+
+  .form-header h2 {
+    font-size: 20px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+}

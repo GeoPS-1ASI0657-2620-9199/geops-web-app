@@ -1,0 +1,70 @@
+<div class="layout">
+  <h2 class="page-title">{{ 'categorias.title' | translate }}</h2>
+
+  <div class="content">
+    <nav class="categories-navbar">
+      <button *ngFor="let c of categories"
+              [class.active]="filters.category === c"
+              (click)="filters.category = c; applyFilters()">
+        {{ ('categorias.' + c) | translate }}
+      </button>
+    </nav>
+
+    <section class="offers-grid" *ngIf="!loading">
+      <article class="offer-card" *ngFor="let o of filtered">
+
+        <div class="img-box" tabindex="0">
+          <img [src]="imgFor(o)" [alt]="o.title || (('offersData.titles.' + o.id) | translate)" />
+          <button class="fav" type="button"
+                  [class.active]="isFav(o.id)"
+                  (click)="toggleFav(o)">
+            <span class="heart">{{ isFav(o.id) ? '❤️' : '💜' }}</span>
+          </button>
+
+          <span class="scrim" aria-hidden="true"></span>
+
+          <button
+            type="button"
+            class="view-offer"
+            (click)="onViewOffer(o)"
+            [attr.aria-label]="('offersPage.card.view' | translate) + ' ' + (o.title || (('offersData.titles.' + o.id) | translate))">
+            {{ 'offersPage.card.view' | translate }}
+          </button>
+        </div>
+
+        <div class="card-body">
+          <!-- título traducido -->
+          <h3 class="ttl">{{ o.title || (('offersData.titles.' + o.id) | translate) }}</h3>
+          <div class="pname">{{ o.partner }}</div>
+
+          <div class="stars-row">
+            <span class="star" *ngFor="let s of [1,2,3,4,5]"></span>
+            <span class="score">{{ 'offersPage.card.rating' | translate:{ value: '5.0' } }}</span>
+          </div>
+
+          <hr class="sep" />
+
+          <div class="price-row">
+            <div class="prc">
+              <span class="curr">{{ 'offersPage.card.currency' | translate }}</span>
+              <span class="amt">{{ o.price | number:'1.2-2' }}</span>
+            </div>
+
+            <div class="loc">
+              <span class="pin" aria-hidden="true">📍</span>
+              <span *ngIf="isDistrict(o.location); else translatedLocation">{{ o.location }}</span>
+              <ng-template #translatedLocation>
+                <span>{{ 'offersData.locations.' + o.location | translate }}</span>
+              </ng-template>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button class="buy" (click)="buyNow(o)">{{ 'offersPage.card.buy' | translate }}</button>
+            <button class="add" (click)="addToCart(o)">{{ 'offersPage.card.add' | translate }}</button>
+          </div>
+        </div>
+      </article>
+    </section>
+  </div>
+</div>

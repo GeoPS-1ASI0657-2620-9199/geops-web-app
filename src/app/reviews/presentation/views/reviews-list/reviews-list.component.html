@@ -1,0 +1,181 @@
+<div class="reviews-container">
+  <div class="header-section">
+    <h2>{{ 'reviewsPage.title' | translate }}</h2>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="toggleForm()"
+      class="add-review-btn"
+      *ngIf="canCreateReview()">
+      <mat-icon>{{ showForm() ? 'close' : 'add' }}</mat-icon>
+      {{ (showForm() ? 'reviewsPage.actions.cancel' : 'reviewsPage.actions.addReview') | translate }}
+    </button>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="store.loading()" class="loading-container">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <!-- Error Message -->
+  <mat-card *ngIf="store.error()" class="error-card">
+    <mat-card-content>
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{ store.error() }}</p>
+      <button mat-button (click)="loadReviews()">{{ 'reviewsPage.actions.retry' | translate }}</button>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Review Statistics -->
+  <mat-card *ngIf="store.statistics() && !store.loading() && store.reviews().length > 0" class="statistics-card">
+    <mat-card-content>
+      <div class="statistics-grid">
+        <div class="stat-item">
+          <div class="stat-value">{{ store.statistics().averageRating }}</div>
+          <div class="stat-label">{{ 'reviewsPage.statistics.averageRating' | translate }}</div>
+          <div class="stars">
+            <mat-icon *ngFor="let star of getRatingArray(store.statistics().averageRating)" class="star-filled">star</mat-icon>
+            <mat-icon *ngFor="let star of getEmptyStarsArray(store.statistics().averageRating)" class="star-empty">star_border</mat-icon>
+          </div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">{{ store.statistics().total }}</div>
+          <div class="stat-label">{{ 'reviewsPage.statistics.totalReviews' | translate }}</div>
+        </div>
+        <!-- <div class="stat-item">
+          <div class="stat-value">{{ store.statistics().totalLikes }}</div>
+          <div class="stat-label">{{ 'reviewsPage.statistics.totalLikes' | translate }}</div>
+        </div> -->
+      </div>
+      <mat-divider class="stat-divider"></mat-divider>
+      <div class="rating-distribution">
+        <h4>{{ 'reviewsPage.statistics.distribution' | translate }}</h4>
+        <div *ngFor="let dist of store.statistics().ratingDistribution" class="rating-bar-container">
+          <span class="rating-label">{{ dist.rating }} <mat-icon class="small-icon">star</mat-icon></span>
+          <div class="rating-bar">
+            <div class="rating-bar-fill" [style.width.%]="dist.percentage"></div>
+          </div>
+          <span class="rating-count">{{ dist.count }}</span>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Create Review Form -->
+  <mat-card *ngIf="showForm() && canCreateReview()" class="review-form-card">
+    <mat-card-header>
+      <mat-card-title>{{ 'reviewsPage.form.newReview' | translate }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="reviewForm" (ngSubmit)="onSubmitReview()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'reviewsPage.form.rating' | translate }}</mat-label>
+          <mat-select formControlName="rating">
+            <mat-option [value]="5">5 - {{ 'reviewsPage.form.excellent' | translate }}</mat-option>
+            <mat-option [value]="4">4 - {{ 'reviewsPage.form.veryGood' | translate }}</mat-option>
+            <mat-option [value]="3">3 - {{ 'reviewsPage.form.good' | translate }}</mat-option>
+            <mat-option [value]="2">2 - {{ 'reviewsPage.form.fair' | translate }}</mat-option>
+            <mat-option [value]="1">1 - {{ 'reviewsPage.form.poor' | translate }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="reviewForm.get('rating')?.hasError('required')">{{ 'reviewsPage.form.ratingRequired' | translate }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>{{ 'reviewsPage.form.comment' | translate }}</mat-label>
+          <textarea
+            matInput
+            formControlName="text"
+            rows="5"
+            [placeholder]="'reviewsPage.form.commentPlaceholder' | translate"
+            maxlength="2000">
+          </textarea>
+          <mat-hint align="end">{{ reviewForm.get('text')?.value?.length || 0 }} / 2000</mat-hint>
+          <mat-error *ngIf="reviewForm.get('text')?.hasError('required')">{{ 'reviewsPage.form.commentRequired' | translate }}</mat-error>
+          <mat-error *ngIf="reviewForm.get('text')?.hasError('minlength')">{{ 'reviewsPage.form.commentMinLength' | translate }}</mat-error>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-button type="button" (click)="toggleForm()">{{ 'reviewsPage.actions.cancel' | translate }}</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="reviewForm.invalid || store.loading()">
+            <mat-icon>send</mat-icon>
+            {{ 'reviewsPage.actions.publish' | translate }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Filters and Sort -->
+  <mat-card *ngIf="!store.loading() && store.reviews().length > 0" class="filters-card">
+    <mat-card-content>
+      <div class="filters-row">
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>{{ 'reviewsPage.filters.sortBy' | translate }}</mat-label>
+          <mat-select [value]="sortBy()" (valueChange)="sortBy.set($event); onSortChange()">
+            <mat-option value="date">{{ 'reviewsPage.filters.mostRecent' | translate }}</mat-option>
+            <mat-option value="rating">{{ 'reviewsPage.filters.highestRating' | translate }}</mat-option>
+            <!-- <mat-option value="likes">{{ 'reviewsPage.filters.mostLikes' | translate }}</mat-option> -->
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>{{ 'reviewsPage.filters.filterByRating' | translate }}</mat-label>
+          <mat-select [value]="filterRating()" (valueChange)="filterRating.set($event); onFilterChange()">
+            <mat-option [value]="0">{{ 'reviewsPage.filters.all' | translate }}</mat-option>
+            <mat-option [value]="5">5 {{ 'reviewsPage.filters.stars' | translate }}</mat-option>
+            <mat-option [value]="4">4+ {{ 'reviewsPage.filters.stars' | translate }}</mat-option>
+            <mat-option [value]="3">3+ {{ 'reviewsPage.filters.stars' | translate }}</mat-option>
+            <mat-option [value]="2">2+ {{ 'reviewsPage.filters.stars' | translate }}</mat-option>
+            <mat-option [value]="1">1+ {{ 'reviewsPage.filters.stars' | translate }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Reviews List -->
+  <div *ngIf="!store.loading()" class="reviews-list">
+    <div *ngIf="filteredReviews().length === 0" class="empty-state">
+      <mat-icon>rate_review</mat-icon>
+      <p>{{ 'reviewsPage.empty.noReviews' | translate }}</p>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="toggleForm()"
+        *ngIf="!showForm() && canCreateReview()">
+        {{ 'reviewsPage.empty.beFirst' | translate }}
+      </button>
+    </div>
+
+    <mat-card *ngFor="let review of filteredReviews()" class="review-card">
+      <mat-card-header>
+        <div class="review-header-content">
+          <div class="user-info">
+            <mat-icon class="user-avatar">account_circle</mat-icon>
+            <div>
+              <div class="user-name">{{ review.userName }}</div>
+              <div class="review-date">{{ review.createdAt | date:'dd/MM/yyyy HH:mm' }}</div>
+            </div>
+          </div>
+          <div class="review-rating">
+            <mat-icon *ngFor="let star of getRatingArray(review.rating)" class="star-filled">star</mat-icon>
+            <mat-icon *ngFor="let star of getEmptyStarsArray(review.rating)" class="star-empty">star_border</mat-icon>
+          </div>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <p class="review-text">{{ review.text }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <!-- <button mat-button (click)="onLike(review.id)">
+          <mat-icon>thumb_up</mat-icon>
+          {{ review.likes }}
+        </button>
+        <button mat-button color="warn" (click)="onDelete(review.id)" *ngIf="userId && review.userId === userId">
+          <mat-icon>delete</mat-icon>
+          {{ 'reviewsPage.actions.delete' | translate }}
+        </button> -->
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

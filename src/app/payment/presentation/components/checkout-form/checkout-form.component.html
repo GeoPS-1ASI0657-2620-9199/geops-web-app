@@ -1,0 +1,150 @@
+<div class="checkout-form">
+  <div class="form-header">
+    <button mat-icon-button class="back-btn" (click)="onBack()" [attr.aria-label]="'payment.form.back' | translate">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h2>{{ 'payment.form.title' | translate }}</h2>
+  </div>
+
+  <!-- Payment Method Selection (First Step) -->
+  <div *ngIf="!selectedPaymentMethod()" class="payment-method-selection">
+    <div class="form-section">
+      <h3>{{ 'payment.form.selectPaymentMethod' | translate }}</h3>
+      <p class="selection-subtitle">{{ 'payment.form.chooseMethod' | translate }}</p>
+
+      <div class="payment-methods-grid">
+        <button
+          type="button"
+          class="payment-method-card"
+          (click)="selectPaymentMethod(PaymentMethod.YAPE)">
+          <div class="payment-method-icon yape">
+            <span>Y</span>
+          </div>
+          <span class="payment-method-name">Yape</span>
+        </button>
+
+        <button
+          type="button"
+          class="payment-method-card"
+          (click)="selectPaymentMethod(PaymentMethod.PLIN)">
+          <div class="payment-method-icon plin">
+            <span>P</span>
+          </div>
+          <span class="payment-method-name">Plin</span>
+        </button>
+
+        <button
+          type="button"
+          class="payment-method-card"
+          (click)="selectPaymentMethod(PaymentMethod.CARD)">
+          <div class="payment-method-icon card">
+            <mat-icon>credit_card</mat-icon>
+          </div>
+          <span class="payment-method-name">{{ 'payment.form.creditCard' | translate }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Order Summary in Selection -->
+    <div class="form-section order-summary">
+      <h3>{{ 'payment.form.orderSummary' | translate }}</h3>
+      <div class="summary-row">
+        <span>{{ 'payment.form.total' | translate }}</span>
+        <span class="total-amount">S/ {{ totalAmount | number:'1.2-2' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form for Card Payment (Second Step) -->
+  <form *ngIf="selectedPaymentMethod() === PaymentMethod.CARD" [formGroup]="checkoutForm" (ngSubmit)="onSubmit()" class="checkout-form-content">
+    <!-- Back to method selection -->
+    <div class="selected-method-header">
+      <button type="button" mat-icon-button class="change-method-btn" (click)="goBackToMethodSelection()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="selected-method-info">
+        <mat-icon>credit_card</mat-icon>
+        <span>{{ 'payment.form.creditCard' | translate }}</span>
+      </div>
+    </div>
+
+    <!-- Customer Information -->
+    <div class="form-section">
+      <h3>{{ 'payment.form.customerInfo' | translate }}</h3>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'payment.form.email' | translate }}</mat-label>
+        <input matInput formControlName="email" type="email" [placeholder]="'payment.form.emailPlaceholder' | translate" class="input-card">
+        <mat-error *ngIf="isFieldInvalid('email')">
+          {{ getFieldError('email') | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      <div class="name-row">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>{{ 'payment.form.firstName' | translate }}</mat-label>
+          <input matInput formControlName="firstName" [placeholder]="'payment.form.firstNamePlaceholder' | translate" class="input-card">
+          <mat-error *ngIf="isFieldInvalid('firstName')">
+            {{ getFieldError('firstName') | translate }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>{{ 'payment.form.lastName' | translate }}</mat-label>
+          <input matInput formControlName="lastName" [placeholder]="'payment.form.lastNamePlaceholder' | translate" class="input-card">
+          <mat-error *ngIf="isFieldInvalid('lastName')">
+            {{ getFieldError('lastName') | translate }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Card Details -->
+    <div class="form-section">
+      <h3>{{ 'payment.form.cardDetails' | translate }}</h3>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'payment.form.cardNumber' | translate }}</mat-label>
+        <input matInput formControlName="cardNumber" [placeholder]="'payment.form.cardNumberPlaceholder' | translate" maxlength="16" class="input-card">
+        <mat-error *ngIf="isFieldInvalid('cardNumber')">
+          {{ getFieldError('cardNumber') | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="cvv-field">
+        <mat-label>{{ 'payment.form.cvv' | translate }}</mat-label>
+        <input matInput formControlName="cvv" [placeholder]="'payment.form.cvvPlaceholder' | translate" maxlength="3" class="input-card">
+        <mat-error *ngIf="isFieldInvalid('cvv')">
+          {{ getFieldError('cvv') | translate }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="form-section order-summary">
+      <h3>{{ 'payment.form.orderSummary' | translate }}</h3>
+      <div class="summary-row">
+        <span>{{ 'payment.form.total' | translate }}</span>
+        <span class="total-amount">S/ {{ totalAmount | number:'1.2-2' }}</span>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="form-actions">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        class="pay-button"
+        [disabled]="checkoutForm.invalid || isProcessing()">
+        <span *ngIf="!isProcessing()">
+          {{ 'payment.form.processPayment' | translate }} S/ {{ totalAmount | number:'1.2-2' }}
+        </span>
+        <span *ngIf="isProcessing()" class="processing">
+          <mat-icon class="spinner">hourglass_empty</mat-icon>
+          {{ 'payment.form.processing' | translate }}
+        </span>
+      </button>
+    </div>
+  </form>
+</div>

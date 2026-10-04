@@ -1,0 +1,172 @@
+
+.notification-btn ::ng-deep .mat-badge-content,
+.notification-btn-mobile ::ng-deep .mat-badge-content {
+  background: #e53e3e;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  min-width: 20px;
+  height: 20px;
+  line-height: 20px;
+  padding: 0 5px;
+  border-radius: 10px;
+  border: 2px solid white;
+}
+
+::ng-deep .notification-menu {
+  max-width: 420px !important;
+  width: 420px !important;
+  background-color: white !important;
+}
+
+::ng-deep .notification-menu .mat-mdc-menu-content {
+  padding: 0 !important;
+}
+
+.notification-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: #A751D4;
+  color: white;
+}
+
+.notification-header h3 {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.notification-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.notification-actions button {
+  color: white;
+}
+
+.notification-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.loading-container,
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: #666;
+}
+
+.empty-state mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  color: #999;
+  margin-bottom: 12px;
+}
+
+.empty-state p,
+.loading-container p {
+  margin: 8px 0 0 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  color: #666;
+}
+
+.notification-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.notification-item:hover {
+  background-color: #f5f5f5;
+}
+
+.notification-item.unread {
+  background-color: #f3e5f8;
+}
+
+.notification-item.unread:hover {
+  background-color: #ede0f5;
+}
+
+.notification-icon {
+  flex-shrink: 0;
+}
+
+.notification-icon mat-icon {
+  color: #A751D4;
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.notification-icon mat-icon.unread-icon {
+  color: #8B3CC7;
+}
+
+.notification-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.notification-message {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  color: #666;
+  line-height: 1.4;
+  margin-bottom: 4px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.notification-time {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  color: #999;
+}
+
+.delete-btn {
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.notification-item:hover .delete-btn {
+  opacity: 1;
+}
+
+.delete-btn mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: #999;
+}
+
+.delete-btn:hover mat-icon {
+  color: #666;
+}

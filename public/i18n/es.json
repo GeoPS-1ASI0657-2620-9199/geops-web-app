@@ -1,0 +1,821 @@
+{
+  "header": {
+    "logo": "GeoPs",
+    "search": {
+      "placeholder": "Buscar y encuentra las mejores ofertas"
+    },
+    "help": "Ayuda",
+    "notifications": "Notificaciones",
+    "cart": "Carrito",
+    "profile": {
+      "menu": {
+        "myProfile": "Mi perfil",
+        "settings": "Configuración",
+        "logout": "Cerrar sesión"
+      }
+    }
+  },
+  "option": {
+    "home": "Inicio",
+    "offers": "Ofertas",
+    "categorias": "Categorías",
+    "favorites": "Favoritos",
+    "coupons": "Mis cupones"
+  },
+  "offersPage": {
+    "title": "Ofertas",
+    "hero": {
+      "rating": "{{value}}",
+      "buy": "Comprar"
+    },
+    "filters": {
+      "search": "Buscar",
+      "allCategories": "Todas las categorías",
+      "sort": {
+        "relevance": "Relevancia",
+        "priceAsc": "Menor precio",
+        "priceDesc": "Mayor precio",
+        "ratingDesc": "Mejor calificación"
+      },
+      "allLocations": "Todas",
+      "clear": "Limpiar"
+    },
+    "card": {
+      "view": "Ver oferta",
+      "rating": "{{value}}",
+      "currency": "S/",
+      "buy": "Comprar",
+      "add": "Agregar",
+      "locationPin": "Ubicación"
+    }
+  },
+  "offersData": {
+    "titles": {
+      "1": "Coney KIDS 2x1: Entrada para niños por 2 horas",
+      "2": "DBS: Kit de cuidado facial con 30% de descuento",
+      "3": "MINNA Beauty: Combo Lemon Sugar Scrub + Dallism Lip Gloss",
+      "4": "Kabuki – Promo: 2x1 Mixsoon Centella Cleansing Foam 150ml",
+      "5": "BUFFET ALMUERZO: SOLO sede Chorrillos, Lun–Dom",
+      "6": "FUN JUNGLE: 60 o 90 minutos en inflables",
+      "7": "BUFFET ALMUERZO: Criollo, chino, pastas, sopas, ensaladas, postres y más",
+      "8": "CINEMARK: 2× entradas 2D + 2 gaseosas grandes + canchita gigante",
+      "9": "BUFFET O CENA CON SHOW en Restaurante Internacional Mandarin",
+      "10": "Pack: 5 juegos + 1 gratis",
+      "11": "FUN JUNGLE TRUJILLO: 60 minutos juegos ilimitados",
+      "12": "Shimaya Ramen – 3 tablas de makis o 30 piezas de makis",
+      "13": "Infinity Park Perú – AREQUIPA ingresos ilimitados",
+      "14": "BUFFET CRIOLLO AREQUIPEÑO con estación de ceviche en vivo – CASA ANDINA PREMIUM",
+      "15": "ARUMA: Gift Card S/ 40 por S/ 29.90",
+      "16": "CINEPLANET: 2× entradas 2D + 2 gaseosas grandes + canchita gigante",
+      "17": "AQUATICA POOL PARK ICA: Diversión todo el día",
+      "18": "CINEMARK: 2 entradas + 2 gaseosas + canchita mediana o grande",
+      "19": "CINEPLANET PROVINCIAS: 2× entradas 2D + canchita gigante + 2 gaseosas grandes",
+      "20": "Pulsera full day – Juegos",
+      "21": "Nikkei todo lo que puedas comer",
+      "22": "Makis ilimitados + bebida",
+      "23": "Playland Kids – 2h ilimitado",
+      "24": "Mundo Kids – Pase ilimitado todo el día"
+    },
+    "categories": {
+      "Entretenimiento": "Entretenimiento",
+      "Belleza": "Belleza",
+      "Gastronomía": "Gastronomía",
+      "Gift Card": "Tarjeta de regalo",
+      "Educación": "Educación",
+      "Salud": "Salud",
+      "Tecnología": "Tecnología",
+      "Moda": "Moda",
+      "Hogar": "Hogar",
+      "Deportes": "Deportes",
+      "Viajes": "Viajes",
+      "Automotriz": "Automotriz",
+      "Servicios": "Servicios",
+      "Otros": "Otros"
+    },
+    "locations": {
+      "Varias Sedes": "Varias sedes",
+      "Tiendas seleccionadas": "Tiendas seleccionadas",
+      "Online y tiendas": "Online y tiendas"
+    }
+  },
+  "favoritesPage": {
+    "title": "Favoritos",
+    "loading": "Cargando…",
+    "empty": "Aún no tienes favoritos.",
+    "view": "Ver",
+    "remove": "Eliminar"
+  },
+  "home": {
+    "welcome": "Bienvenido",
+    "hi": "Hola",
+    "free-plan": "Plan gratuito",
+    "premium-plan": "Plan premium",
+    "see-more": "Ver más",
+    "map": {
+      "places": "Lugares",
+      "use-my-location": "Usar mi ubicación",
+      "location-active": "Ubicación activa",
+      "example": "ej.: cine, buffet",
+      "search": "Buscar",
+      "radius": "Radio",
+      "zoom": "Zoom",
+      "all": "Todos",
+      "cinemas": "Cines",
+      "buffets": "Buffets",
+      "parks": "Parques",
+      "for-children": "Para niños",
+      "makis": "Makis",
+      "beauty": "Belleza",
+      "near-you": "Cerca de ti",
+      "real-time": "Mapa en tiempo real",
+      "places-near-you": "Lugares cerca de ti",
+      "activate-location": "Activa tu ubicación\n",
+      "desc": "Para mostrar lugares cercanos y cupones en tiempo real.",
+      "right-map": "Compártenos tu ubicación\npara ver más lugares cerca de ti",
+      "nearby-offers": "Ofertas Cercanas",
+      "results": "resultados"
+    },
+    "cinemas": "Cines",
+    "lunch-buffets": "Buffets de almuerzo",
+    "inflatable-parks": "Parques de inflables",
+    "mechanical-games": "Juegos mecánicos",
+    "maki-open-bar": "Barra libre de makis",
+    "beauty": "Belleza",
+    "offers": "ofertas"
+  },
+  "welcomeBanner": {
+    "welcome": "Bienvenido",
+    "hello": "Hola,",
+    "user": "Ariana",
+    "viewMore": "Ver más",
+    "premium": "Premium",
+    "currentBasic": "Plan básico",
+    "currentPremium": "Plan premium"
+  },
+  "ownerToolbar": {
+    "summary": "Resumen",
+    "campaigns": "Campañas",
+    "create": "Crear",
+    "reports": "Reportes",
+    "comments": "Comentarios"
+  },
+  "campaign": {
+    "addOfferForm": {
+      "title": {
+        "new": "Nueva Oferta",
+        "edit": "Editar Oferta"
+      },
+      "fields": {
+        "title": {
+          "label": "Título de la Oferta",
+          "placeholder": "Ej: 20% de descuento en productos"
+        },
+        "partner": {
+          "label": "Socio/Partner",
+          "placeholder": "Ej: Restaurante El Sabor"
+        },
+        "price": {
+          "label": "Precio (S/.)",
+          "placeholder": "0.00"
+        },
+        "category": {
+          "label": "Categoría",
+          "placeholder": "Selecciona una categoría"
+        },
+        "codePrefix": {
+          "label": "Prefijo de Código",
+          "placeholder": "Ej: PROMO"
+        },
+        "location": {
+          "label": "Ubicación",
+          "placeholder": "Ej: Av. Principal 123, Miraflores"
+        },
+        "imageUrl": {
+          "label": "URL de la Imagen",
+          "placeholder": "https://ejemplo.com/imagen.jpg"
+        },
+        "validUntil": {
+          "label": "Válido Hasta"
+        }
+      },
+      "actions": {
+        "cancel": "Cancelar",
+        "save": "Guardar Cambios",
+        "add": "Agregar Oferta"
+      },
+      "errors": {
+        "required": "Este campo es requerido",
+        "minLength": "Debe tener al menos {{value}} caracteres",
+        "maxLength": "No debe exceder {{value}} caracteres",
+        "minValue": "El valor debe ser mayor o igual a 0"
+      }
+    },
+    "offersList": {
+      "empty": {
+        "description": "No hay ofertas asociadas"
+      },
+      "actions": {
+        "edit": "Editar",
+        "delete": "Eliminar"
+      },
+      "validUntil": "Válido hasta"
+    }
+  },
+  "subscriptions": {
+    "title": "Planes",
+    "subtitle": "Elige el plan que se ajusta a ti. Puedes cambiar cuando quieras.",
+    "currency": "s/",
+    "interval": "mes",
+    "recommended": "Recomendado",
+    "close": "Cerrar",
+    "consumer": {
+      "plans": {
+        "basic": {
+          "name": "Básico",
+          "description": "Plan gratuito con funcionalidades básicas",
+          "features": [
+            "Acceso a cupones públicos",
+            "Filtrar por categoría y radio",
+            "3 cupones activos al mismo tiempo",
+            "Soporte por correo"
+          ],
+          "buttonText": "Empezar"
+        },
+        "premium": {
+          "name": "Premium",
+          "description": "Plan premium con acceso a funcionalidades exclusivas",
+          "features": [
+            "Todo lo del Básico",
+            "Cupones exclusivos por ubicación",
+            "Mapa en vivo con ofertas/horarios",
+            "Historial inteligente y alertas",
+            "Soporte prioritario"
+          ],
+          "buttonText": "Probar Premium"
+        }
+      }
+    },
+    "provider": {
+      "plans": {
+        "basic": {
+          "name": "Básico",
+          "description": "Plan gratuito para empezar",
+          "features": [
+            "Crear campañas básicas",
+            "Segmentación por radio/ciudad",
+            "Reporte CSV"
+          ],
+          "buttonText": "Empezar"
+        },
+        "premium": {
+          "name": "Premium",
+          "description": "Plan premium con características avanzadas",
+          "features": [
+            "Métricas avanzadas (CTR, conversiones)",
+            "Exportar PDF/Excel",
+            "Segmentación detallada",
+            "Soporte prioritario"
+          ],
+          "buttonText": "Probar Premium"
+        }
+      }
+    }
+  },
+  "cart": {
+    "title": "Carrito de compras",
+    "loading": "Cargando...",
+    "empty": {
+      "title": "Tu carrito está vacío",
+      "message": "¡Agrega algunas ofertas para comenzar!"
+    },
+    "removeItem": "Eliminar artículo",
+    "summary": {
+      "items": "Artículos",
+      "total": "Total"
+    },
+    "actions": {
+      "clear": "Vaciar carrito",
+      "checkout": "Finalizar compra",
+      "payNow": "Pagar ahora"
+    }
+  },
+  "payment": {
+    "form": {
+      "title": "Finalizar compra",
+      "back": "Volver al carrito",
+      "customerInfo": "Información del cliente",
+      "email": "Correo electrónico",
+      "emailPlaceholder": "Ingresa tu correo electrónico",
+      "firstName": "Nombre",
+      "firstNamePlaceholder": "Ingresa tu nombre",
+      "lastName": "Apellido",
+      "lastNamePlaceholder": "Ingresa tu apellido",
+      "paymentMethod": "Método de pago",
+      "selectPaymentMethod": "Selecciona método de pago",
+      "chooseMethod": "Elige cómo deseas pagar",
+      "creditCard": "Tarjeta de crédito/débito",
+      "yape": "Yape",
+      "plin": "Plin",
+      "cardDetails": "Detalles de la tarjeta",
+      "cardNumber": "Número de tarjeta",
+      "cardNumberPlaceholder": "1234 5678 9012 3456",
+      "cvv": "CVV",
+      "cvvPlaceholder": "123",
+      "orderSummary": "Resumen del pedido",
+      "total": "Total",
+      "processPayment": "Procesar pago",
+      "processing": "Procesando...",
+      "errors": {
+        "emailRequired": "El correo electrónico es obligatorio",
+        "emailInvalid": "Por favor ingresa un correo válido",
+        "firstNameRequired": "El nombre es obligatorio",
+        "firstNameMinLength": "El nombre debe tener al menos 2 caracteres",
+        "lastNameRequired": "El apellido es obligatorio",
+        "lastNameMinLength": "El apellido debe tener al menos 2 caracteres",
+        "cardNumberRequired": "El número de tarjeta es obligatorio",
+        "cardNumberPattern": "Por favor ingresa un número de tarjeta válido de 16 dígitos",
+        "cvvRequired": "El CVV es obligatorio",
+        "cvvPattern": "Por favor ingresa un CVV válido de 3 dígitos"
+      }
+    },
+    "confirmation": {
+      "title": "Pago confirmado",
+      "subtitle": "Tu código de pago",
+      "codeLabel": "Código de pago",
+      "amount": "Monto",
+      "paymentMethod": "Método de pago",
+      "cardPayment": "Tarjeta de crédito/débito",
+      "yapePayment": "Yape",
+      "plinPayment": "Plin",
+      "customer": "Cliente",
+      "email": "Correo electrónico",
+      "date": "Fecha",
+      "continue": "Seguir comprando"
+    }
+  },
+  "login": {
+    "title": "Iniciar sesión",
+    "email": "Correo electrónico:",
+    "password": "Contraseña:",
+    "button": "Entrar",
+    "noAccount": "¿No tienes una cuenta?",
+    "register": "Regístrate aquí"
+  },
+  "profile": {
+    "planPremium": "Plan premium",
+    "planBasic": "Plan básico",
+    "edit": "Editar",
+    "email": "Correo electrónico",
+    "phone": "Teléfono",
+    "favorites": "Ofertas guardadas",
+    "location": "Ubicación",
+    "locationAlways": "Siempre",
+    "locationAsk": "Preguntar",
+    "locationDenied": "Denegado",
+    "places": "Lugares habituales",
+    "rights": "© 2025 Todos los derechos reservados"
+  },
+  "register": {
+    "title": "Registro de usuario",
+    "name": "Nombre:",
+    "email": "Correo electrónico:",
+    "password": "Contraseña:",
+    "phone": "Teléfono:",
+    "role": "Tipo de usuario:",
+    "owner": "Negocio (Propietario)",
+    "consumer": "Consumidor",
+    "plan": "Plan:",
+    "basic": "Básico",
+    "premium": "Premium",
+    "button": "Registrarse",
+    "hasAccount": "¿Ya tienes una cuenta?",
+    "loginHere": "Inicia sesión aquí"
+  },
+  "business": {
+    "title": "Datos adicionales del negocio",
+    "businessName": "Nombre del negocio:",
+    "businessType": "Tipo de negocio:",
+    "taxId": "RUC:",
+    "button": "Guardar"
+  },
+  "settings": {
+    "basicInfo": "Información básica",
+    "plan": {
+      "label": "Plan",
+      "BASIC": "Básico",
+      "PREMIUM": "Premium"
+    },
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "phone": "Teléfono",
+    "locationPermission": {
+      "label": "Permiso de ubicación",
+      "ASK": "Preguntar",
+      "ALWAYS": "Siempre"
+    },
+    "home": "Casa",
+    "work": "Trabajo",
+    "favorites": "Categoría favorita",
+    "security": "Seguridad",
+    "passwordCurrent": "Contraseña actual",
+    "passwordNew": "Nueva contraseña",
+    "passwordConfirm": "Confirmar nueva contraseña",
+    "clear": "Limpiar",
+    "changePassword": "Cambiar contraseña",
+    "updating": "Actualizando...",
+    "rights": "© 2025 Todos los derechos reservados",
+    "consumer": {
+      "title": "Detalles de Consumidor",
+      "notifications": "Recibir notificaciones",
+      "locationPermission": "Permitir acceso a ubicación",
+      "homeAddress": "Dirección de casa",
+      "workAddress": "Dirección de trabajo",
+      "universityAddress": "Dirección de universidad",
+      "favorites": "Categorías favoritas"
+    },
+    "preferences": {
+      "title": "Preferencias",
+      "notifications": "Recibir notificaciones",
+      "notificationsHelp": "Activa para recibir notificaciones sobre nuevas ofertas y promociones",
+      "locationPermission": "Permitir acceso a ubicación",
+      "locationPermissionHelp": "Permite compartir tu ubicación para ver ofertas cercanas"
+    },
+    "savedAddresses": {
+      "title": "Direcciones Guardadas",
+      "homeAddress": "Dirección de casa",
+      "workAddress": "Dirección de trabajo",
+      "universityAddress": "Dirección de universidad / Otra"
+    },
+    "owner": {
+      "title": "Detalles de Negocio",
+      "businessName": "Nombre del negocio",
+      "businessType": "Tipo de negocio",
+      "taxId": "RUC / Tax ID",
+      "website": "Sitio web",
+      "description": "Descripción del negocio",
+      "address": "Dirección del negocio",
+      "hours": "Horario de atención"
+    }
+  },
+  "helpCenter": {
+    "title": "Centro de ayuda",
+
+    "registerQuestion": "¿Cómo me registro como cliente?",
+    "registerWord": "Registrarse",
+    "registerStepsBefore": "Ve a",
+    "registerStepsAfter": ", ingresa tu correo, contraseña, confirma y verifica tu correo.",
+    "registerStepsLabel": "Pasos:",
+    "registerStep1Before": "Haz clic en",
+    "registerStep1After": "(en el encabezado o landing).",
+    "registerStep2": "Ingresa tu correo y una contraseña segura (8+ caracteres, 1 mayúscula, 1 número, 1 símbolo).",
+    "registerStep3": "Revisa tu correo y verifica tu cuenta.",
+    "registerStep4": "Regresa e inicia sesión.",
+
+    "couponQuestion": "¿Cómo canjeo un cupón en la tienda?",
+    "couponStepsBefore": "Muestra tu cupón desde",
+    "couponStepsAfter": "y el negocio lo valida con un código/QR.",
+    "couponStepsLabel": "Pasos:",
+    "couponStep1Before": "Compra la oferta y ve a",
+    "couponStep1Middle": "→",
+    "couponStep1After": ".",
+    "couponStep2Before": "Abre el cupón y toca",
+    "couponStep2After": ".",
+    "couponStep3Before": "El negocio escanea/ingresa el",
+    "couponStep3After": "y listo.",
+    "couponNoteBefore": "Nota: Necesitas conexión a internet para validar. Si tu cupón aparece como 'canjeado' por error, contáctanos con el",
+    "couponNoteAfter": ".",
+    "myCoupons": "Mis cupones",
+    "profile": "Perfil",
+    "showToRedeem": "Mostrar para canjear",
+    "uniqueCode": "código único",
+    "couponId": "ID del cupón",
+
+    "locationQuestion": "¿Por qué pedimos tu ubicación y cómo activarla?",
+    "locationStepsBefore": "Para mostrarte",
+    "locationStepsMiddle": "y ordenarlas por",
+    "locationStepsAfter": ".",
+    "locationStepsLabel": "Pasos:",
+    "locationStep1Before": "En la barra \"Cerca de ti\", toca",
+    "locationStep1After": ".",
+    "locationStep2": "Si denegaste permisos:",
+    "locationStep2aBefore": "",
+    "locationStep2aMiddle1": ": Permisos de ubicación →",
+    "locationStep2aMiddle2": "→ Recargar",
+    "locationStep3": "Ajusta el radio (ej. 1–10 km) con el selector para ver más o menos resultados.",
+    "nearbyOffers": "ofertas cercanas",
+    "distance": "distancia",
+    "allowLocation": "Permitir ubicación",
+    "allow": "Permitir"
+  },
+  "helpCenterProvider": {
+    "title": "Centro de ayuda",
+    "createCampaignQuestion": "¿Cómo creo una campaña?",
+    "createCampaignBefore": "Ve a",
+    "createCampaignWord": "Crear campaña",
+    "createCampaignAfter": ", completa título, presupuesto, fechas y segmentación (ubicación o radio), y publica.",
+    "pauseReactivateQuestion": "¿Cómo pauso o reactivo?",
+    "pauseReactivateBefore": "En Campañas, usa los botones",
+    "pauseReactivateAfter": "según el estado.",
+    "pauseReactivate": "Pausar / Reactivar",
+    "metricsQuestion": "¿Por qué no veo métricas?",
+    "metricsAnswer": "Si la campaña es nueva o está pausada, las métricas pueden tardar. Revisa más tarde o verifica el presupuesto."
+  },
+  "common": {
+    "currency": "s/",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "close": "Cerrar"
+  },
+  "offerDetail": {
+    "back": "Volver",
+    "buy": "Comprar",
+    "addToCart": "Agregar al carrito",
+    "bullets": {
+      "valid": "Válido online y en tiendas físicas de {{partner}}.",
+      "business": "Negocio: {{partner}}.",
+      "redeem": "Se puede canjear como medio de pago hasta el monto indicado."
+    },
+    "reviews": {
+      "title": "Comentarios",
+      "count": "{{count}} reseñas",
+      "yourRating": "Tu calificación",
+      "ariaRate": "Elige una calificación del 1 al 5",
+      "placeholder": "Cuéntanos tu experiencia con esta oferta",
+      "publish": "Publicar reseña"
+    }
+  },
+  "proveedor": {
+    "stats": {
+      "activeCampaigns": "Campañas activas",
+      "impressions": "Impresiones totales",
+      "ctr": "CTR promedio"
+    },
+    "metrics": {
+      "impressions": "Imp",
+      "clicks": "Clicks"
+    },
+    "actions": {
+      "pause": "Pausar",
+      "edit": "Editar",
+      "remove": "Eliminar",
+      "copy": "Copiar"
+    },
+    "latestCampaigns": "Últimas campañas"
+  },
+  "campaigns": {
+    "title": "Campañas",
+    "tabs": {
+      "active": "Activas",
+      "paused": "Pausadas",
+      "finalized": "Finalizadas"
+    },
+    "empty": {
+      "active": "No hay campañas activas",
+      "paused": "No hay campañas pausadas",
+      "finalized": "No hay campañas finalizadas"
+    },
+    "actions": {
+      "create": "Crear nueva campaña",
+      "edit": "Editar",
+      "pause": "Pausar",
+      "resume": "Reanudar",
+      "activate": "Activar",
+      "finalize": "Finalizar",
+      "view": "Visualizar",
+      "cancel": "Cancelar",
+      "save": "Guardar Cambios",
+      "remove": "Eliminar",
+      "addOffers": "Agregar Ofertas",
+      "removeOffer": "Quitar Oferta",
+      "back": "Volver",
+      "download": "Descargar Reporte",
+      "print": "Imprimir"
+    },
+    "status": {
+      "active": "Activa",
+      "paused": "Pausada",
+      "finalized": "Finalizada"
+    },
+    "statusLabels": {
+      "ACTIVE": "Activa",
+      "PAUSED": "Pausada",
+      "FINALIZED": "Finalizada"
+    },
+    "dialogs": {
+      "pause": {
+        "title": "¿Pausar campaña?",
+        "message": "¿Estás seguro de que deseas pausar la campaña \"{{name}}\"?",
+        "confirm": "Pausar"
+      },
+      "activate": {
+        "title": "¿Activar campaña?",
+        "message": "¿Estás seguro de que deseas activar la campaña \"{{name}}\"?",
+        "confirm": "Activar"
+      },
+      "finalize": {
+        "title": "¿Finalizar campaña?",
+        "message": "¿Estás seguro de que deseas finalizar la campaña \"{{name}}\"? Esta acción no se podrá revertir.",
+        "confirm": "Finalizar"
+      },
+      "delete": {
+        "title": "¿Eliminar campaña?",
+        "message": "¿Estás seguro de que deseas eliminar la campaña \"{{name}}\"? Esta acción no se puede deshacer.",
+        "confirm": "Eliminar"
+      }
+    },
+    "notifications": {
+      "pauseSuccess": "Campaña pausada exitosamente",
+      "activateSuccess": "Campaña activada exitosamente",
+      "finalizeSuccess": "Campaña finalizada exitosamente",
+      "deleteSuccess": "Campaña eliminada exitosamente"
+    },
+    "form": {
+      "createTitle": "Crear Nueva Campaña",
+      "editTitle": "Editar Campaña",
+      "name": "Nombre de la Campaña",
+      "namePlaceholder": "Ej: Promoción Verano 2025",
+      "nameRequired": "El nombre es requerido",
+      "nameMinLength": "El nombre debe tener al menos 3 caracteres",
+      "description": "Descripción",
+      "descriptionPlaceholder": "Describe tu campaña...",
+      "descriptionRequired": "La descripción es requerida",
+      "descriptionMinLength": "La descripción debe tener al menos 10 caracteres",
+      "startDate": "Fecha de Inicio",
+      "startDateRequired": "La fecha de inicio es requerida",
+      "endDate": "Fecha de Fin",
+      "endDateRequired": "La fecha de fin es requerida",
+      "budget": "Presupuesto Estimado (S/.)",
+      "budgetPlaceholder": "0.00",
+      "budgetRequired": "El presupuesto es requerido",
+      "budgetMin": "El presupuesto debe ser mayor o igual a 0",
+      "status": "Estado",
+      "initialStatus": "Estado Inicial",
+      "statusRequired": "El estado es requerido",
+      "creating": "Creando...",
+      "saving": "Guardando...",
+      "createButton": "Crear Campaña",
+      "saveButton": "Guardar Cambios"
+    },
+    "stats": {
+      "title": "Estadísticas de la Campaña",
+      "impressions": "Impresiones",
+      "clicks": "Clicks",
+      "ctr": "CTR",
+      "budget": "Presupuesto",
+      "totalCampaigns": "Total Campañas",
+      "totalImpressions": "Impresiones Totales",
+      "totalClicks": "Clicks Totales",
+      "totalBudget": "Presupuesto Total",
+      "averageCTR": "CTR Promedio"
+    },
+    "details": {
+      "title": "Detalles de la Campaña",
+      "loading": "Cargando campaña...",
+      "description": "Descripción",
+      "startDate": "Fecha de Inicio",
+      "endDate": "Fecha de Fin",
+      "estimatedBudget": "Presupuesto Estimado",
+      "associatedOffers": "Ofertas Asociadas"
+    },
+    "offers": {
+      "title": "Ofertas de la Campaña",
+      "empty": "Aún no se han agregado ofertas",
+      "add": "Agregar Ofertas",
+      "remove": "Quitar",
+      "view": "Ver Oferta",
+      "select": "Seleccionar Ofertas",
+      "selected": "{{count}} seleccionadas",
+      "availableOffers": "Ofertas Disponibles",
+      "searchPlaceholder": "Buscar ofertas..."
+    },
+    "reports": {
+      "title": "Reportes de Campañas",
+      "filterByStatus": "Filtrar por Estado",
+      "allCampaigns": "Todas las Campañas",
+      "exportFormat": "Formato de Exportación",
+      "summary": "Resumen General",
+      "byStatus": "Por Estado",
+      "preview": "Vista Previa"
+    },
+    "dashboard": {
+      "title": "Dashboard - Resumen de Campañas",
+      "subtitle": "Panel de Control",
+      "allCampaigns": "Todas las Campañas"
+    },
+    "messages": {
+      "createSuccess": "Campaña creada exitosamente",
+      "updateSuccess": "Campaña actualizada exitosamente",
+      "pauseSuccess": "Campaña pausada",
+      "resumeSuccess": "Campaña reanudada",
+      "finalizeSuccess": "Campaña finalizada",
+      "deleteSuccess": "Campaña eliminada",
+      "error": "Ocurrió un error. Por favor, intenta de nuevo."
+    }
+  },
+  "reviewsPage": {
+    "title": "Comentarios y Reseñas",
+    "addReview": "Agregar Reseña",
+    "cancel": "Cancelar",
+    "loading": "Cargando reseñas...",
+    "error": "Error al cargar reseñas",
+    "retry": "Reintentar",
+    "statistics": {
+      "averageRating": "Rating Promedio",
+      "totalReviews": "Total Reseñas",
+      "totalLikes": "Total Likes",
+      "distribution": "Distribución de Calificaciones"
+    },
+    "form": {
+      "newReview": "Nueva Reseña",
+      "rating": "Calificación",
+      "ratingRequired": "La calificación es requerida",
+      "excellent": "Excelente",
+      "veryGood": "Muy Bueno",
+      "good": "Bueno",
+      "fair": "Regular",
+      "poor": "Malo",
+      "comment": "Comentario",
+      "commentPlaceholder": "Escribe tu reseña aquí (mínimo 10 caracteres)",
+      "commentRequired": "El comentario es requerido",
+      "commentMinLength": "Mínimo 10 caracteres",
+      "commentMaxLength": "El comentario no debe exceder 500 caracteres",
+      "submit": "Publicar Reseña",
+      "submitting": "Publicando..."
+    },
+    "actions": {
+      "addReview": "Agregar Reseña",
+      "cancel": "Cancelar",
+      "publish": "Publicar Reseña",
+      "retry": "Reintentar",
+      "like": "Me gusta",
+      "unlike": "Quitar me gusta",
+      "reply": "Responder",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "report": "Reportar"
+    },
+    "filters": {
+      "sortBy": "Ordenar por",
+      "mostRecent": "Más Recientes",
+      "highestRating": "Mayor Calificación",
+      "mostLikes": "Más Likes",
+      "filterByRating": "Filtrar por calificación",
+      "all": "Todas",
+      "stars": "estrellas"
+    },
+    "empty": {
+      "noReviews": "No hay reseñas disponibles",
+      "beFirst": "Sé el primero en opinar"
+    },
+    "messages": {
+      "createSuccess": "Reseña publicada exitosamente",
+      "updateSuccess": "Reseña actualizada exitosamente",
+      "deleteSuccess": "Reseña eliminada",
+      "likeSuccess": "¡Gracias por tu opinión!",
+      "error": "Ocurrió un error. Por favor, intenta de nuevo."
+    }
+  },
+  "coupons": {
+    "title": "Mis Cupones",
+    "loading": "Cargando cupones...",
+    "empty": "Aún no tienes cupones. ¡Compra una oferta para obtener tu primer cupón!",
+    "error": "Error al cargar los cupones. Por favor, intenta de nuevo."
+  },
+  "footer": {
+    "tagline": "Ofertas y cupones cerca de ti",
+    "description": "Descubre las mejores ofertas y descuentos en restaurantes, entretenimiento, belleza y más en tu zona.",
+    "navigation": "Navegación",
+    "offers": "Ofertas",
+    "subscriptions": "Suscripciones",
+    "coupons": "Cupones",
+    "help": "Ayuda",
+    "support": "Soporte",
+    "faq": "Preguntas Frecuentes",
+    "contact": "Contacto",
+    "terms": "Términos y Condiciones",
+    "privacy": "Política de Privacidad",
+    "contact-us": "Contáctanos",
+    "rights": "Todos los derechos reservados.",
+    "made-with": "Hecho con",
+    "in-peru": "en Perú"
+  },
+  "categorias": {
+    "Entretenimiento": "Entretenimiento",
+    "Gastronomía": "Gastronomía",
+    "Belleza": "Belleza",
+    "Gift Card": "Gift Card",
+    "title": "Categorias",
+    "Educación": "Educación",
+    "Salud": "Salud",
+    "Tecnología": "Tecnología",
+    "Moda": "Moda",
+    "Hogar": "Hogar",
+    "Deportes": "Deportes",
+    "Viajes": "Viajes",
+    "Automotriz": "Automotriz",
+    "Servicios": "Servicios",
+    "Otros": "Otros"
+  }
+}

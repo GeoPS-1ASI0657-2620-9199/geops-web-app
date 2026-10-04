@@ -1,0 +1,522 @@
+<div class="layout">
+  <section class="welcome-banner">
+    <app-welcome-banner></app-welcome-banner>
+  </section>
+  <section class="map-container">
+
+    <div class="map-top-bar">
+      <div class="map-top-bar-left">
+        <label class="map-label">{{'home.map.places' | translate}}</label>
+        <button *ngIf="!locationAllowed()" class="map-top-bar-left-btn-main" (click)="getLocation(true)">
+          📍 {{'home.map.use-my-location' | translate}}
+        </button>
+        <span *ngIf="locationAllowed()" class="location-active">
+          ✅ {{'home.map.location-active' | translate}}
+        </span>
+      </div>
+
+      <div class="map-top-bar-right">
+        <label class="map-label">{{'home.map.radius' | translate}}:</label>
+        <select class="map-select" [(ngModel)]="maxDistanceKm" (ngModelChange)="updateDistanceRange($event)">
+          <option [value]="1.5">1.5 km</option>
+          <option [value]="2.5">2.5 km</option>
+          <option [value]="3.5">3.5 km</option>
+          <option [value]="5">5 km</option>
+          <option [value]="7.5">7.5 km</option>
+        </select>
+
+        <label class="map-label">{{'home.map.zoom' | translate}}:</label>
+        <select class="map-select" [(ngModel)]="zoomSignal">
+          <option [value]="12">12</option>
+          <option [value]="13">13</option>
+          <option [value]="14">14</option>
+          <option [value]="15">15</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="map-categories">
+      @for (cat of categories; track cat.key) {
+        <button
+          class="map-cat"
+          [class.active]="isCategoryActive(cat.key)"
+          (click)="selectCategory(cat.key)">
+          {{ cat.label | translate }}
+        </button>
+      }
+    </div>
+
+    <div class="map">
+      <div class="map-card">
+        <div class="map-image">
+          @if(locationAllowed()){
+            <google-map
+              mapId="53c43d6499ceb7c05e795dff"
+              height="500px"
+              width="100%"
+              [center]="center()"
+              [zoom]="+zoomSignal()"
+            >
+              @for(location of filteredMapOffers(); track location.offer.id)
+              {
+                <map-advanced-marker
+                  #marker="mapAdvancedMarker"
+                  [position]="{lat: location.lat, lng: location.lng}"
+                  (mapClick)="openInfoWindow(location, marker)"
+                />
+              }
+              <map-info-window/>
+            </google-map>
+          }
+          @else{
+            <div class="map-overlay">
+              <div class="map-overlay-header">
+                <p class="map-title">{{'home.map.real-time' | translate}}</p>
+                <h2 class="map-subtitle">{{'home.map.places-near-you' | translate}}</h2>
+              </div>
+              <div class="location-box">
+                <div class="location-box-text">
+                  <strong>{{'home.map.activate-location' | translate}}</strong><br>
+                  {{ 'home.map.desc' | translate }}
+                </div>
+                <button class="btn-use" (click)="getLocation(true)">
+                  📍 {{ 'home.map.use-my-location' | translate }}
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="info-card">
+        @if(locationAllowed()) {
+          <div class="info-card-header">
+            <h3 class="info-card-title">{{'home.map.nearby-offers' | translate}}</h3>
+            <span class="info-card-count">{{filteredMapOffers().length}} {{'home.map.results' | translate}}</span>
+          </div>
+          <div class="offer-map-list">
+            @for(location of filteredMapOffers(); track location.offer.id) {
+              <div class="offer-loc-item" [routerLink]="['/ofertas', location.offer.id]" (click)="onViewOffer(location.offer)">
+                <div class="offer-loc-info">
+                  <h4 class="offer-loc-title">{{location.offer.title}}</h4>
+                  <p class="offer-loc-partner">{{ location.offer.title }} | {{ ('offersData.titles.' + location.offer.id) | translate }}</p>
+                  <p class="offer-loc-location">📍 {{location.offer.location}}</p>
+                </div>
+                <div class="offer-loc-price">
+                  <span class="offer-loc-currency">S/</span>
+                  <span class="offer-loc-amount">{{location.offer.price | number:'1.2-2'}}</span>
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="info-card-empty">
+            <div class="info-card-pin">📍</div>
+            <p class="info-card-message">{{'home.map.right-map' | translate}}</p>
+          </div>
+        }
+      </div>
+    </div>
+
+  </section>
+  <section class="home-offers">
+    @if(cinemaOffers().length > 0) {
+    <div class="offers-container">
+      <div class="offer-texts">
+        <span>{{'home.cinemas' | translate}}</span>
+        <span class="offer-count">{{cinemaOffers().length}} {{'home.offers' | translate}}</span>
+      </div>
+      <div class="offer-cards">
+        @for(offer of cinemaOffers(); track offer.id) {
+          <div class="offer-card">
+            <div class="img-box" tabindex="0">
+              <img [src]="imgFor(offer)" [alt]="offer.title || (('offersData.titles.' + offer.id) | translate)" />
+              <button class="fav" type="button"
+                      [class.active]="this.isFav(offer.id)"
+                      (click)="this.toggleFav(offer)">
+                <span class="heart">{{ this.isFav(offer.id) ? '❤️' : '💜' }}</span>
+              </button>
+
+              <span class="scrim" aria-hidden="true"></span>
+
+              <button
+                type="button"
+                class="view-offer"
+                (click)="onViewOffer(offer)"
+                [routerLink]="['/ofertas', offer.id]"
+                [queryParams]="{ from: 'home' }"
+                [queryParamsHandling]="'preserve'">
+                {{ 'offersPage.card.view' | translate }}
+              </button>
+
+            </div>
+
+            <div class="card-body">
+              <h3 class="ttl">{{ offer.title || (('offersData.titles.' + offer.id) | translate) }}</h3>
+              <div class="pname">{{ offer.partner }}</div>
+
+              <div class="stars-row">
+                <span class="star" *ngFor="let s of [1,2,3,4,5]"></span>
+                <span class="score">{{ 'offersPage.card.rating' | translate:{ value: '5.0' } }}</span>
+              </div>
+
+              <hr class="sep" />
+
+              <div class="price-row">
+                <div class="prc">
+                  <span class="curr">{{ 'offersPage.card.currency' | translate }}</span>
+                  <span class="amt">{{ offer.price | number:'1.2-2' }}</span>
+                </div>
+
+                <div class="loc">
+                  <span class="pin" aria-hidden="true">📍</span>
+                  <span *ngIf="isDistrict(offer.location); else translatedLocation">{{ offer.location }}</span>
+                  <ng-template #translatedLocation>
+                    <span>{{ 'offersData.locations.' + offer.location | translate }}</span>
+                  </ng-template>
+                </div>
+              </div>
+
+              <div class="card-actions">
+                <button class="buy" (click)="this.buyNow(offer)">{{ 'offersPage.card.buy' | translate }}</button>
+                <button class="add" (click)="this.addToCart(offer)">{{ 'offersPage.card.add' | translate }}</button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+    }
+    @if(buffetOffers().length > 0) {
+    <div class="offers-container">
+      <div class="offer-texts">
+        <span>{{'home.lunch-buffets' | translate}}</span>
+        <span class="offer-count">{{buffetOffers().length}} {{'home.offers' | translate}}</span>
+      </div>
+
+      <div class="offer-cards">
+        @for(offer of buffetOffers(); track offer.id) {
+          <div class="offer-card">
+            <div class="img-box" tabindex="0">
+              <img [src]="imgFor(offer)" [alt]="offer.title || (('offersData.titles.' + offer.id) | translate)" />
+              <button class="fav" type="button"
+                      [class.active]="this.isFav(offer.id)"
+                      (click)="this.toggleFav(offer)">
+                <span class="heart">{{ this.isFav(offer.id) ? '❤️' : '💜' }}</span>
+              </button>
+
+              <span class="scrim" aria-hidden="true"></span>
+
+              <button
+                type="button"
+                class="view-offer"
+                (click)="onViewOffer(offer)"
+                [routerLink]="['/ofertas', offer.id]"
+                [queryParams]="{ from: 'home' }"
+                [queryParamsHandling]="'preserve'">
+                {{ 'offersPage.card.view' | translate }}
+              </button>
+
+            </div>
+
+            <div class="card-body">
+              <!-- título traducido -->
+              <h3 class="ttl">{{ offer.title || (('offersData.titles.' + offer.id) | translate) }}</h3>
+              <div class="pname">{{ offer.partner }}</div>
+
+              <div class="stars-row">
+                <span class="star" *ngFor="let s of [1,2,3,4,5]"></span>
+                <span class="score">{{ 'offersPage.card.rating' | translate:{ value: '5.0' } }}</span>
+              </div>
+
+              <hr class="sep" />
+
+              <div class="price-row">
+                <div class="prc">
+                  <span class="curr">{{ 'offersPage.card.currency' | translate }}</span>
+                  <span class="amt">{{ offer.price | number:'1.2-2' }}</span>
+                </div>
+
+                <div class="loc">
+                  <span class="pin" aria-hidden="true">📍</span>
+                  <span *ngIf="isDistrict(offer.location); else translatedLocation">{{ offer.location }}</span>
+                  <ng-template #translatedLocation>
+                    <span>{{ 'offersData.locations.' + offer.location | translate }}</span>
+                  </ng-template>
+                </div>
+              </div>
+
+              <div class="card-actions">
+                <button class="buy" (click)="this.buyNow(offer)">{{ 'offersPage.card.buy' | translate }}</button>
+                <button class="add" (click)="this.addToCart(offer)">{{ 'offersPage.card.add' | translate }}</button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+    }
+    @if(parkOffers().length > 0) {
+    <div class="offers-container">
+      <div class="offer-texts">
+        <span>{{'home.inflatable-parks' | translate}}</span>
+        <span class="offer-count">{{parkOffers().length}} {{'home.offers' | translate}}</span>
+      </div>
+      <div class="offer-cards">
+        @for(offer of parkOffers(); track offer.id) {
+          <div class="offer-card">
+            <div class="img-box" tabindex="0">
+              <img [src]="imgFor(offer)" [alt]="offer.title || (('offersData.titles.' + offer.id) | translate)" />
+              <button class="fav" type="button"
+                      [class.active]="this.isFav(offer.id)"
+                      (click)="this.toggleFav(offer)">
+                <span class="heart">{{ this.isFav(offer.id) ? '❤️' : '💜' }}</span>
+              </button>
+
+              <span class="scrim" aria-hidden="true"></span>
+
+              <button
+                type="button"
+                class="view-offer"
+                (click)="onViewOffer(offer)"
+                [routerLink]="['/ofertas', offer.id]"
+                [queryParams]="{ from: 'home' }"
+                [queryParamsHandling]="'preserve'">
+                {{ 'offersPage.card.view' | translate }}
+              </button>
+            </div>
+
+            <div class="card-body">
+              <h3 class="ttl">{{ offer.title || (('offersData.titles.' + offer.id) | translate) }}</h3>
+              <div class="pname">{{ offer.partner }}</div>
+
+              <div class="stars-row">
+                <span class="star" *ngFor="let s of [1,2,3,4,5]"></span>
+                <span class="score">{{ 'offersPage.card.rating' | translate:{ value: '5.0' } }}</span>
+              </div>
+
+              <hr class="sep" />
+
+              <div class="price-row">
+                <div class="prc">
+                  <span class="curr">{{ 'offersPage.card.currency' | translate }}</span>
+                  <span class="amt">{{ offer.price | number:'1.2-2' }}</span>
+                </div>
+
+                <div class="loc">
+                  <span class="pin" aria-hidden="true">📍</span>
+                  {{ offer.location }}
+                </div>
+              </div>
+
+              <div class="card-actions">
+                <button class="buy" (click)="this.buyNow(offer)">{{ 'offersPage.card.buy' | translate }}</button>
+                <button class="add" (click)="this.addToCart(offer)">{{ 'offersPage.card.add' | translate }}</button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+    }
+    @if(mechGamesOffers().length > 0) {
+    <div class="offers-container">
+      <div class="offer-texts">
+        <span>{{'home.mechanical-games' | translate}}</span>
+        <span class="offer-count">{{mechGamesOffers().length}} {{'home.offers' | translate}}</span>
+      </div>
+      <div class="offer-cards">
+        @for(offer of mechGamesOffers(); track offer.id) {
+          <div class="offer-card">
+            <div class="img-box" tabindex="0">
+              <img [src]="imgFor(offer)" [alt]="offer.title || (('offersData.titles.' + offer.id) | translate)" />
+              <button class="fav" type="button"
+                      [class.active]="this.isFav(offer.id)"
+                      (click)="this.toggleFav(offer)">
+                <span class="heart">{{ this.isFav(offer.id) ? '❤️' : '💜' }}</span>
+              </button>
+
+              <span class="scrim" aria-hidden="true"></span>
+
+              <button
+                type="button"
+                class="view-offer"
+                (click)="onViewOffer(offer)"
+                [routerLink]="['/ofertas', offer.id]"
+                [queryParams]="{ from: 'home' }"
+                [queryParamsHandling]="'preserve'">
+                {{ 'offersPage.card.view' | translate }}
+              </button>
+            </div>
+
+            <div class="card-body">
+              <h3 class="ttl">{{ offer.title || (('offersData.titles.' + offer.id) | translate) }}</h3>
+              <div class="pname">{{ offer.partner }}</div>
+
+              <div class="stars-row">
+                <span class="star" *ngFor="let s of [1,2,3,4,5]"></span>
+                <span class="score">{{ 'offersPage.card.rating' | translate:{ value: '5.0' } }}</span>
+              </div>
+
+              <hr class="sep" />
+
+              <div class="price-row">
+                <div class="prc">
+                  <span class="curr">{{ 'offersPage.card.currency' | translate }}</span>
+                  <span class="amt">{{ offer.price | number:'1.2-2' }}</span>
+                </div>
+
+                <div class="loc">
+                  <span class="pin" aria-hidden="true">📍</span>
+                  <span *ngIf="isDistrict(offer.location); else translatedLocation">{{ offer.location }}</span>
+                  <ng-template #translatedLocation>
+                    <span>{{ 'offersData.locations.' + offer.location | translate }}</span>
+                  </ng-template>
+                </div>
+              </div>
+
+              <div class="card-actions">
+                <button class="buy" (click)="this.buyNow(offer)">{{ 'offersPage.card.buy' | translate }}</button>
+                <button class="add" (click)="this.addToCart(offer)">{{ 'offersPage.card.add' | translate }}</button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+    }
+    @if(makisOffers().length > 0) {
+    <div class="offers-container">
+      <div class="offer-texts">
+        <span>{{'home.maki-open-bar' | translate}}</span>
+        <span class="offer-count">{{makisOffers().length}} {{'home.offers' | translate}}</span>
+      </div>
+      <div class="offer-cards">
+        @for(offer of makisOffers(); track offer.id) {
+          <div class="offer-card">
+            <div class="img-box" tabindex="0">
+              <img [src]="imgFor(offer)" [alt]="offer.title || (('offersData.titles.' + offer.id) | translate)" />
+              <button class="fav" type="button"
+                      [class.active]="this.isFav(offer.id)"
+                      (click)="this.toggleFav(offer)">
+                <span class="heart">{{ this.isFav(offer.id) ? '❤️' : '💜' }}</span>
+              </button>
+
+              <span class="scrim" aria-hidden="true"></span>
+
+              <button
+                type="button"
+                class="view-offer"
+                (click)="onViewOffer(offer)"
+                [routerLink]="['/ofertas', offer.id]"
+                [queryParams]="{ from: 'home' }"
+                [queryParamsHandling]="'preserve'">
+                {{ 'offersPage.card.view' | translate }}
+              </button>
+            </div>
+
+            <div class="card-body">
+              <!-- título traducido -->
+              <h3 class="ttl">{{ ('offersData.titles.' + offer.id) | translate }}</h3>
+              <div class="pname">{{ offer.partner }}</div>
+
+              <div class="stars-row">
+                <span class="star" *ngFor="let s of [1,2,3,4,5]"></span>
+                <span class="score">{{ 'offersPage.card.rating' | translate:{ value: '5.0' } }}</span>
+              </div>
+
+              <hr class="sep" />
+
+              <div class="price-row">
+                <div class="prc">
+                  <span class="curr">{{ 'offersPage.card.currency' | translate }}</span>
+                  <span class="amt">{{ offer.price | number:'1.2-2' }}</span>
+                </div>
+
+                <div class="loc">
+                  <span class="pin" aria-hidden="true">📍</span>
+                  <span *ngIf="isDistrict(offer.location); else translatedLocation">{{ offer.location }}</span>
+                  <ng-template #translatedLocation>
+                    <span>{{ 'offersData.locations.' + offer.location | translate }}</span>
+                  </ng-template>
+                </div>
+              </div>
+
+              <div class="card-actions">
+                <button class="buy" (click)="this.buyNow(offer)">{{ 'offersPage.card.buy' | translate }}</button>
+                <button class="add" (click)="this.addToCart(offer)">{{ 'offersPage.card.add' | translate }}</button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+    }
+    @if(beautyOffers().length > 0) {
+    <div class="offers-container">
+      <div class="offer-texts">
+        <span>{{'home.beauty' | translate}}</span>
+        <span class="offer-count">{{beautyOffers().length}} {{'home.offers' | translate}}</span>
+      </div>
+      <div class="offer-cards">
+        @for(offer of beautyOffers(); track offer.id) {
+          <div class="offer-card">
+          <div class="img-box" tabindex="0">
+            <img [src]="imgFor(offer)" [alt]="offer.title || (('offersData.titles.' + offer.id) | translate)" />
+            <button class="fav" type="button"
+                    [class.active]="this.isFav(offer.id)"
+                    (click)="this.toggleFav(offer)">
+              <span class="heart">{{ this.isFav(offer.id) ? '❤️' : '💜' }}</span>
+            </button>
+
+            <span class="scrim" aria-hidden="true"></span>
+
+            <button
+              type="button"
+              class="view-offer"
+              [routerLink]="['/ofertas', offer.id]"
+              [queryParams]="{ from: 'home' }"
+              [queryParamsHandling]="'preserve'">
+              {{ 'offersPage.card.view' | translate }}
+            </button>
+          </div>
+
+          <div class="card-body">
+            <!-- título traducido -->
+            <h3 class="ttl">{{ offer.title || (('offersData.titles.' + offer.id) | translate) }}</h3>
+            <div class="pname">{{ offer.partner }}</div>
+
+            <div class="stars-row">
+              <span class="star" *ngFor="let s of [1,2,3,4,5]"></span>
+              <span class="score">{{ 'offersPage.card.rating' | translate:{ value: '5.0' } }}</span>
+            </div>
+
+            <hr class="sep" />
+
+            <div class="price-row">
+              <div class="prc">
+                <span class="curr">{{ 'offersPage.card.currency' | translate }}</span>
+                <span class="amt">{{ offer.price | number:'1.2-2' }}</span>
+              </div>
+
+              <div class="loc">
+                <span class="pin" aria-hidden="true">📍</span>
+                <span *ngIf="isDistrict(offer.location); else translatedLocation">{{ offer.location }}</span>
+                <ng-template #translatedLocation>
+                  <span>{{ 'offersData.locations.' + offer.location | translate }}</span>
+                </ng-template>
+              </div>
+            </div>
+
+            <div class="card-actions">
+              <button class="buy" (click)="this.buyNow(offer)">{{ 'offersPage.card.buy' | translate }}</button>
+              <button class="add" (click)="this.addToCart(offer)">{{ 'offersPage.card.add' | translate }}</button>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+    }
+  </section>
+</div>

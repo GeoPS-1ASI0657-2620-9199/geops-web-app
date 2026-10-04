@@ -1,0 +1,117 @@
+.welcome-banner {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+/* Welcome Header Styles */
+.welcome-header {
+  background: linear-gradient(135deg, #E6E6FA 0%, #DDA0DD 100%);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(221, 160, 221, 0.15);
+}
+
+.welcome-text {
+  flex: 1;
+}
+
+.welcome-label {
+  display: block;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.greeting {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.username {
+  color: #8B5CF6;
+}
+
+.wave {
+  font-size: 20px;
+  animation: wave 2s ease-in-out infinite;
+}
+
+@keyframes wave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(20deg); }
+  75% { transform: rotate(-10deg); }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.btn-premium {
+  background: #FFD700;
+  color: #333;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+}
+
+.btn-premium:hover {
+  background: #FFC700;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+}
+
+.btn-view-more {
+  background: white;
+  color: #333;
+  border: 2px solid #E5E7EB;
+}
+
+.btn-view-more:hover {
+  background: #F9FAFB;
+  border-color: #D1D5DB;
+  transform: translateY(-1px);
+}
+
+/* Modal styles are now handled by the SubscriptionPlansModalComponent */
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .welcome-header {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .action-buttons {
+    justify-content: center;
+  }
+
+  .greeting {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .welcome-header {
+    padding: 20px;
+  }
+}

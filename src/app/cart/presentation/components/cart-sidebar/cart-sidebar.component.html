@@ -1,0 +1,221 @@
+<div class="cart-sidebar-overlay" [class.open]="isOpen()" (click)="close()">
+  <div class="cart-sidebar" (click)="$event.stopPropagation()">
+
+    <!-- Cart View -->
+    <div *ngIf="currentView() === 'cart'" class="cart-view">
+      <!-- Header -->
+      <div class="cart-header">
+        <h2>{{ 'cart.title' | translate }}</h2>
+        <button mat-icon-button (click)="close()" class="close-btn">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <!-- Loading state -->
+      <div *ngIf="isLoading()" class="loading-container">
+        <div class="loading-text">{{ 'cart.loading' | translate }}</div>
+      </div>
+
+      <!-- Cart content container -->
+      <div *ngIf="!isLoading()" class="cart-content">
+
+        <!-- Empty cart state (only when no payment confirmation) -->
+        <div *ngIf="isEmpty && paymentStep !== 'confirmation'" class="empty-cart">
+          <mat-icon class="empty-icon">shopping_cart</mat-icon>
+          <h3>{{ 'cart.empty.title' | translate }}</h3>
+          <p>{{ 'cart.empty.message' | translate }}</p>
+        </div>
+
+        <!-- Cart items (only when not empty) -->
+        <div *ngIf="!isEmpty" class="cart-items-container">
+          <!-- Cart items -->
+          <div class="cart-items">
+            <div *ngFor="let item of cart()?.items" class="cart-item">
+              <div class="item-image">
+                <img [src]="item.offerImageUrl" [alt]="item.offerTitle" onerror="this.src='assets/offers/placeholder.jpg'">
+              </div>
+
+              <div class="item-details">
+                <h4 class="item-title">{{ item.offerTitle }}</h4>
+                <div class="item-price">S/ {{ item.offerPrice | number:'1.2-2' }}</div>
+
+                <div class="quantity-controls">
+                  <button
+                    mat-icon-button
+                    class="quantity-btn decrease"
+                    (click)="updateQuantity(item, item.quantity - 1)"
+                    [disabled]="item.quantity <= 1">
+                    <mat-icon>remove</mat-icon>
+                  </button>
+
+                  <span class="quantity">{{ item.quantity }}</span>
+
+                  <button
+                    mat-icon-button
+                    class="quantity-btn increase"
+                    (click)="updateQuantity(item, item.quantity + 1)">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+              </div>
+
+              <div class="item-actions">
+                <div class="item-total">S/ {{ item.total | number:'1.2-2' }}</div>
+                <button
+                  mat-icon-button
+                  class="remove-btn"
+                  (click)="removeItem(item)"
+                  [attr.aria-label]="'cart.removeItem' | translate">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+        </div>
+
+        <!-- Cart Bottom Section (Always visible) -->
+        <div class="cart-bottom-section">
+
+          <!-- Total Summary (only when not empty and not in confirmation) -->
+          <div *ngIf="!isEmpty && paymentStep !== 'confirmation'" class="cart-summary">
+            <div class="summary-row">
+              <span class="summary-label">{{ 'cart.summary.items' | translate }}:</span>
+              <span class="summary-value">{{ totalItems() }}</span>
+            </div>
+
+            <div class="summary-row total">
+              <span class="summary-label">{{ 'cart.summary.total' | translate }}:</span>
+              <span class="summary-value">S/ {{ totalAmount() | number:'1.2-2' }}</span>
+            </div>
+          </div>
+
+          <!-- Payment Step 1: Method Selection (only when cart has items) -->
+          <div *ngIf="paymentStep === 'methods' && !isEmpty" class="payment-methods-section">
+            <h4>{{ 'payment.form.selectPaymentMethod' | translate }}</h4>
+
+            <div class="payment-methods-buttons">
+              <button
+                type="button"
+                class="payment-method-btn yape"
+                [class.selected]="selectedPaymentMethod() === 'YAPE'"
+                (click)="selectPaymentMethod('YAPE')">
+                <div class="payment-icon">Y</div>
+                <span>Yape</span>
+              </button>
+
+              <button
+                type="button"
+                class="payment-method-btn plin"
+                [class.selected]="selectedPaymentMethod() === 'PLIN'"
+                (click)="selectPaymentMethod('PLIN')">
+                <div class="payment-icon">P</div>
+                <span>Plin</span>
+              </button>
+
+              <button
+                type="button"
+                class="payment-method-btn card"
+                [class.selected]="selectedPaymentMethod() === 'CARD'"
+                (click)="selectPaymentMethod('CARD')">
+                <mat-icon>credit_card</mat-icon>
+                <span>{{ 'payment.form.creditCard' | translate }}</span>
+              </button>
+            </div>
+
+            <div class="payment-actions">
+              <button
+                mat-raised-button
+                color="primary"
+                class="pay-now-btn"
+                [disabled]="!selectedPaymentMethod() || isProcessingPayment()"
+                (click)="processPayment()">
+                <span *ngIf="!isProcessingPayment()">
+                  {{ 'cart.actions.payNow' | translate }}
+                </span>
+                <span *ngIf="isProcessingPayment()">
+                  {{ 'payment.form.processing' | translate }}
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Payment Step 2: Card Form (only for card) -->
+          <div *ngIf="paymentStep === 'card-form' && !isEmpty" class="card-form-section">
+            <div class="form-header-inline">
+              <button type="button" mat-icon-button (click)="goBackToMethods()">
+                <mat-icon>arrow_back</mat-icon>
+              </button>
+              <h4>{{ 'payment.form.cardDetails' | translate }}</h4>
+            </div>
+
+            <form [formGroup]="cardForm" (ngSubmit)="processCardPayment()" class="inline-card-form">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>{{ 'payment.form.email' | translate }}</mat-label>
+                <input matInput formControlName="email" type="email">
+              </mat-form-field>
+
+              <div class="name-row">
+                <mat-form-field appearance="outline" class="half-width">
+                  <mat-label>{{ 'payment.form.firstName' | translate }}</mat-label>
+                  <input matInput formControlName="firstName">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="half-width">
+                  <mat-label>{{ 'payment.form.lastName' | translate }}</mat-label>
+                  <input matInput formControlName="lastName">
+                </mat-form-field>
+              </div>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>{{ 'payment.form.cardNumber' | translate }}</mat-label>
+                <input matInput formControlName="cardNumber" maxlength="16">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="cvv-field">
+                <mat-label>{{ 'payment.form.cvv' | translate }}</mat-label>
+                <input matInput formControlName="cvv" maxlength="3">
+              </mat-form-field>
+
+              <button
+                mat-raised-button
+                color="primary"
+                type="submit"
+                class="pay-button"
+                [disabled]="cardForm.invalid || isProcessingPayment()">
+                <span *ngIf="!isProcessingPayment()">
+                  {{ 'payment.form.processPayment' | translate }} S/ {{ totalAmount() | number:'1.2-2' }}
+                </span>
+                <span *ngIf="isProcessingPayment()">
+                  {{ 'payment.form.processing' | translate }}
+                </span>
+              </button>
+            </form>
+          </div>
+
+          <!-- Payment Step 3: Confirmation (Always visible when there's a completed payment) -->
+          <div *ngIf="paymentStep === 'confirmation' && completedPayment()" class="payment-confirmation-inline">
+            <div class="confirmation-success">
+              <mat-icon class="success-icon">check_circle</mat-icon>
+              <div class="confirmation-details">
+                <h4>{{ 'payment.confirmation.title' | translate }}</h4>
+                <div class="payment-code">{{ completedPayment()!.paymentCode }}</div>
+              </div>
+            </div>
+
+            <button
+              mat-raised-button
+              color="primary"
+              class="continue-btn"
+              (click)="closeConfirmation()">
+              {{ 'payment.confirmation.continue' | translate }}
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

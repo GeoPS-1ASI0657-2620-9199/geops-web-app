@@ -1,0 +1,106 @@
+<div class="container">
+  <h1>{{ 'helpCenter.title' | translate }}</h1>
+
+  <section class="faq-section">
+    <details>
+      <summary class="faq-question">
+        {{ 'helpCenter.registerQuestion' | translate }}
+      </summary>
+
+      <div class="faq-answer">
+        <span>
+          {{ 'helpCenter.registerStepsBefore' | translate }}
+          <span class="highlight">{{ 'helpCenter.registerWord' | translate }}</span>{{ 'helpCenter.registerStepsAfter' | translate }}
+        </span>
+        <br><br>
+        <span>{{ 'helpCenter.registerStepsLabel' | translate }}</span>
+        <ol>
+          <li>
+            {{ 'helpCenter.registerStep1Before' | translate }}
+            <span class="highlight">{{ 'helpCenter.registerWord' | translate }}</span>
+            {{ 'helpCenter.registerStep1After' | translate }}
+          </li>
+          <li [innerHTML]="'helpCenter.registerStep2' | translate"></li>
+          <li [innerHTML]="'helpCenter.registerStep3' | translate"></li>
+          <li [innerHTML]="'helpCenter.registerStep4' | translate"></li>
+        </ol>
+      </div>
+    </details>
+  </section>
+
+  <section class="faq-section">
+    <details>
+      <summary class="faq-question">
+        {{ 'helpCenter.couponQuestion' | translate }}
+      </summary>
+
+      <div class="faq-answer">
+        <span>
+          {{ 'helpCenter.couponStepsBefore' | translate }}
+          <span class="highlight">{{ 'helpCenter.myCoupons' | translate }}</span>
+          {{ 'helpCenter.couponStepsAfter' | translate }}
+        </span>
+        <br><br>
+        <span>{{ 'helpCenter.couponStepsLabel' | translate }}</span>
+        <ol>
+          <li>
+            {{ 'helpCenter.couponStep1Before' | translate }}
+            <span class="highlight">{{ 'helpCenter.profile' | translate }}</span>
+            {{ 'helpCenter.couponStep1Middle' | translate }}
+            <span class="highlight">{{ 'helpCenter.myCoupons' | translate }}</span>{{ 'helpCenter.couponStep1After' | translate }}
+          </li>
+          <li>
+            {{ 'helpCenter.couponStep2Before' | translate }}
+            <span class="highlight">{{ 'helpCenter.showToRedeem' | translate }}</span>{{ 'helpCenter.couponStep2After' | translate }}
+          </li>
+          <li>
+            {{ 'helpCenter.couponStep3Before' | translate }}
+            <span class="highlight">{{ 'helpCenter.uniqueCode' | translate }}</span>
+            {{ 'helpCenter.couponStep3After' | translate }}
+          </li>
+        </ol>
+        <small class="note">
+          {{ 'helpCenter.couponNoteBefore' | translate }}
+          <span class="highlight">{{ 'helpCenter.couponId' | translate }}</span>{{ 'helpCenter.couponNoteAfter' | translate }}
+        </small>
+      </div>
+    </details>
+  </section>
+
+  <section class="faq-section">
+    <details>
+      <summary class="faq-question">
+        {{ 'helpCenter.locationQuestion' | translate }}
+      </summary>
+
+      <div class="faq-answer">
+        <span>
+          {{ 'helpCenter.locationStepsBefore' | translate }}
+          <span class="highlight">{{ 'helpCenter.nearbyOffers' | translate }}</span>
+          {{ 'helpCenter.locationStepsMiddle' | translate }}
+          <span class="highlight">{{ 'helpCenter.distance' | translate }}</span>{{ 'helpCenter.locationStepsAfter' | translate }}
+        </span>
+        <br><br>
+        <span>{{ 'helpCenter.locationStepsLabel' | translate }}</span>
+        <ol>
+          <li>
+            {{ 'helpCenter.locationStep1Before' | translate }}
+            <span class="highlight">{{ 'helpCenter.allowLocation' | translate }}</span>{{ 'helpCenter.locationStep1After' | translate }}
+          </li>
+          <li>
+            {{ 'helpCenter.locationStep2' | translate }}
+            <ul>
+              <li>
+                <span class="highlight">{{ 'helpCenter.profile' | translate }}</span>{{ 'helpCenter.locationStep2aMiddle1' | translate }}
+                <span class="highlight">{{ 'helpCenter.allow' | translate }}</span>
+                {{ 'helpCenter.locationStep2aMiddle2' | translate }}
+              </li>
+            </ul>
+          </li>
+          <li>{{ 'helpCenter.locationStep3' | translate }}</li>
+        </ol>
+      </div>
+    </details>
+  </section>
+</div>
+

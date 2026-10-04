@@ -1,0 +1,213 @@
+<div class="campaigns-container">
+  <!-- Tabs for filtering by status -->
+  <mat-tab-group [(selectedIndex)]="selectedTabIndex" class="campaigns-tabs">
+    <mat-tab [label]="'campaigns.tabs.active' | translate">
+      <div class="tab-content">
+        <div *ngIf="activeCampaigns.length === 0" class="empty-state">
+          <mat-icon>campaign</mat-icon>
+          <p>{{ 'campaigns.empty.active' | translate }}</p>
+          <button mat-raised-button color="primary" [routerLink]="['/crear-campañas']">
+            {{ 'campaigns.actions.create' | translate }}
+          </button>
+        </div>
+        <div *ngIf="activeCampaigns.length > 0" class="campaigns-list">
+          <div *ngFor="let campaign of activeCampaigns" class="campaign-card">
+            <div class="campaign-header">
+              <div class="campaign-title-section">
+                <h3 class="campaign-title">{{ campaign.name }}</h3>
+                <span class="campaign-status" [style.backgroundColor]="getStatusColor(campaign.status)">
+                  {{ campaign.status }}
+                </span>
+              </div>
+              <div class="campaign-dates">
+                <small>{{ campaign.startDate | date:'dd/MM/yyyy' }} - {{ campaign.endDate | date:'dd/MM/yyyy' }}</small>
+              </div>
+            </div>
+
+            <div class="campaign-description">
+              <p>{{ campaign.description }}</p>
+            </div>
+
+            <div class="campaign-stats">
+              <div class="campaign-stat">
+                <span class="stat-label-small">{{ 'campaigns.stats.impressions' | translate }}:</span>
+                <span class="stat-value-small">{{ campaign.totalImpressions | number }}</span>
+              </div>
+              <div class="campaign-stat">
+                <span class="stat-label-small">{{ 'campaigns.stats.clicks' | translate }}:</span>
+                <span class="stat-value-small">{{ campaign.totalClicks | number }}</span>
+              </div>
+              <div class="campaign-stat">
+                <span class="stat-label-small">{{ 'campaigns.stats.ctr' | translate }}:</span>
+                <span class="stat-value-small">{{ campaign.CTR | number:'1.1-1' }}%</span>
+              </div>
+              <div class="campaign-stat">
+                <span class="stat-label-small">{{ 'campaigns.stats.budget' | translate }}:</span>
+                <span class="stat-value-small">S/. {{ campaign.estimatedBudget | number:'1.2-2' }}</span>
+              </div>
+            </div>
+
+            <div class="campaign-actions">
+              <button
+                mat-raised-button
+                (click)="onEdit(campaign.id)"
+                class="action-btn edit-btn">
+                <mat-icon>edit</mat-icon>
+                {{ 'campaigns.actions.edit' | translate }}
+              </button>
+              <button
+                mat-raised-button
+                (click)="onPause(campaign.id)"
+                class="action-btn pause-btn">
+                <mat-icon>pause</mat-icon>
+                {{ 'campaigns.actions.pause' | translate }}
+              </button>
+              <button
+                mat-raised-button
+                (click)="onFinalize(campaign.id)"
+                class="action-btn finalize-btn">
+                <mat-icon>check_circle</mat-icon>
+                {{ 'campaigns.actions.finalize' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab [label]="'campaigns.tabs.paused' | translate">
+      <div class="tab-content">
+        <div *ngIf="pausedCampaigns.length === 0" class="empty-state">
+          <mat-icon>pause_circle</mat-icon>
+          <p>{{ 'campaigns.empty.paused' | translate }}</p>
+        </div>
+        <div *ngIf="pausedCampaigns.length > 0" class="campaigns-list">
+          <div *ngFor="let campaign of pausedCampaigns" class="campaign-card">
+            <div class="campaign-header">
+              <div class="campaign-title-section">
+                <h3 class="campaign-title">{{ campaign.name }}</h3>
+                <span class="campaign-status" [style.backgroundColor]="getStatusColor(campaign.status)">
+                  {{ campaign.status }}
+                </span>
+              </div>
+              <div class="campaign-dates">
+                <small>{{ campaign.startDate | date:'dd/MM/yyyy' }} - {{ campaign.endDate | date:'dd/MM/yyyy' }}</small>
+              </div>
+            </div>
+
+            <div class="campaign-description">
+              <p>{{ campaign.description }}</p>
+            </div>
+
+            <div class="campaign-stats">
+              <div class="campaign-stat">
+                <span class="stat-label-small">{{ 'campaigns.stats.impressions' | translate }}:</span>
+                <span class="stat-value-small">{{ campaign.totalImpressions | number }}</span>
+              </div>
+              <div class="campaign-stat">
+                <span class="stat-label-small">{{ 'campaigns.stats.clicks' | translate }}:</span>
+                <span class="stat-value-small">{{ campaign.totalClicks | number }}</span>
+              </div>
+              <div class="campaign-stat">
+                <span class="stat-label-small">{{ 'campaigns.stats.ctr' | translate }}:</span>
+                <span class="stat-value-small">{{ campaign.CTR | number:'1.1-1' }}%</span>
+              </div>
+              <div class="campaign-stat">
+                <span class="stat-label-small">{{ 'campaigns.stats.budget' | translate }}:</span>
+                <span class="stat-value-small">S/. {{ campaign.estimatedBudget | number:'1.2-2' }}</span>
+              </div>
+            </div>
+
+            <div class="campaign-actions">
+              <button
+                mat-raised-button
+                (click)="onActivate(campaign.id)"
+                class="action-btn activate-btn">
+                <mat-icon>play_arrow</mat-icon>
+                {{ 'campaigns.actions.activate' | translate }}
+              </button>
+              <button
+                mat-raised-button
+                (click)="onEdit(campaign.id)"
+                class="action-btn edit-btn">
+                <mat-icon>edit</mat-icon>
+                {{ 'campaigns.actions.edit' | translate }}
+              </button>
+              <button
+                mat-raised-button
+                (click)="onFinalize(campaign.id)"
+                class="action-btn finalize-btn">
+                <mat-icon>check_circle</mat-icon>
+                {{ 'campaigns.actions.finalize' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab [label]="'campaigns.tabs.finalized' | translate">
+      <div class="tab-content">
+        <div *ngIf="finishedCampaigns.length === 0" class="empty-state">
+          <mat-icon>check_circle</mat-icon>
+          <p>{{ 'campaigns.empty.finalized' | translate }}</p>
+        </div>
+        <div *ngIf="finishedCampaigns.length > 0" class="campaigns-list">
+          <div *ngFor="let campaign of finishedCampaigns" class="campaign-card">
+            <div class="campaign-header">
+              <div class="campaign-title-section">
+                <h3 class="campaign-title">{{ campaign.name }}</h3>
+                <span class="campaign-status" [style.backgroundColor]="getStatusColor(campaign.status)">
+                  {{ campaign.status }}
+                </span>
+              </div>
+              <div class="campaign-dates">
+                <small>{{ campaign.startDate | date:'dd/MM/yyyy' }} - {{ campaign.endDate | date:'dd/MM/yyyy' }}</small>
+              </div>
+            </div>
+
+            <div class="campaign-description">
+              <p>{{ campaign.description }}</p>
+            </div>
+
+            <div class="campaign-stats">
+              <div class="campaign-stat">
+                <span class="stat-label-small">{{ 'campaigns.stats.impressions' | translate }}:</span>
+                <span class="stat-value-small">{{ campaign.totalImpressions | number }}</span>
+              </div>
+              <div class="campaign-stat">
+                <span class="stat-label-small">{{ 'campaigns.stats.clicks' | translate }}:</span>
+                <span class="stat-value-small">{{ campaign.totalClicks | number }}</span>
+              </div>
+              <div class="campaign-stat">
+                <span class="stat-label-small">{{ 'campaigns.stats.ctr' | translate }}:</span>
+                <span class="stat-value-small">{{ campaign.CTR | number:'1.1-1' }}%</span>
+              </div>
+              <div class="campaign-stat">
+                <span class="stat-label-small">{{ 'campaigns.stats.budget' | translate }}:</span>
+                <span class="stat-value-small">S/. {{ campaign.estimatedBudget | number:'1.2-2' }}</span>
+              </div>
+            </div>
+
+            <div class="campaign-actions">
+              <button
+                mat-raised-button
+                (click)="onEdit(campaign.id)"
+                class="action-btn view-btn">
+                <mat-icon>visibility</mat-icon>
+                {{ 'campaigns.actions.view' | translate }}
+              </button>
+              <button
+                mat-raised-button
+                (click)="onDelete(campaign.id)"
+                class="action-btn delete-btn">
+                <mat-icon>delete</mat-icon>
+                {{ 'campaigns.actions.remove' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>

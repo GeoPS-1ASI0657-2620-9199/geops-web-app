@@ -1,0 +1,69 @@
+<div class="layout">
+  <h2 class="page-title">{{ 'favoritesPage.title' | translate }}</h2>
+
+  <div class="content">
+    <div *ngIf="loading" class="loading">
+      {{ 'favoritesPage.loading' | translate }}
+    </div>
+
+    <div *ngIf="!loading && offers.length === 0" class="empty">
+      {{ 'favoritesPage.empty' | translate }}
+    </div>
+
+    <section class="offers-grid" *ngIf="!loading && offers.length">
+      <article class="offer-card" *ngFor="let o of offers">
+
+        <div class="img-box" tabindex="0">
+          <img [src]="imgFor(o)" [alt]="o.title || (('offersData.titles.' + o.id) | translate)" />
+
+          <button class="fav active" type="button" (click)="remove(o)">
+            <span class="heart">❤️</span>
+          </button>
+
+          <span class="scrim" aria-hidden="true"></span>
+
+          <button
+            class="view-offer"
+            (click)="onViewOffer(o)"
+            [routerLink]="['/ofertas', o.id]"
+            [queryParams]="{ from: 'favorites' }">
+            {{ 'offersPage.card.view' | translate }}
+          </button>
+
+        </div>
+
+        <div class="card-body">
+          <h3 class="ttl">{{ o.title || (('offersData.titles.' + o.id) | translate) }}</h3>
+          <div class="pname">{{ o.partner }}</div>
+
+          <div class="stars-row">
+            <span class="star" *ngFor="let s of [1,2,3,4,5]"></span>
+            <span class="score">{{ 'offersPage.card.rating' | translate:{ value: '5.0' } }}</span>
+          </div>
+
+          <hr class="sep" />
+
+          <div class="price-row">
+            <div class="prc">
+              <span class="curr">{{ 'offersPage.card.currency' | translate }}</span>
+              <span class="amt">{{ o.price | number:'1.2-2' }}</span>
+            </div>
+
+            <div class="loc">
+              <span class="pin" aria-hidden="true">📍</span>
+              <span *ngIf="isDistrict(o.location); else translatedLocation">{{ o.location }}</span>
+              <ng-template #translatedLocation>
+                <span>{{ 'offersData.locations.' + o.location | translate }}</span>
+              </ng-template>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button class="buy" (click)="buyNow(o)">{{ 'offersPage.card.buy' | translate }}</button>
+            <button class="add" (click)="addToCart(o)">{{ 'offersPage.card.add' | translate }}</button>
+          </div>
+        </div>
+      </article>
+    </section>
+  </div>
+</div>

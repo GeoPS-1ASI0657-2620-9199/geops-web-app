@@ -1,0 +1,129 @@
+<div class="view-campaign-container">
+  <!-- Header -->
+  <div class="view-header">
+    <button mat-icon-button (click)="onBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h2>{{ 'campaigns.details.title' | translate }}</h2>
+    <button mat-raised-button color="primary" (click)="onEdit()">
+      <mat-icon>edit</mat-icon>
+      {{ 'campaigns.actions.edit' | translate }}
+    </button>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="loading() && !campaign()" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>{{ 'campaigns.details.loading' | translate }}</p>
+  </div>
+
+  <!-- Campaign Details -->
+  <div *ngIf="campaign()" class="campaign-details">
+    <!-- Campaign Info Card -->
+    <mat-card class="info-card">
+      <mat-card-header>
+        <div class="card-header-content">
+          <mat-card-title>{{ campaign()!.name }}</mat-card-title>
+          <span class="campaign-status" [style.backgroundColor]="getStatusColor(campaign()!.status)">
+            {{ getStatusLabel(campaign()!.status) }}
+          </span>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>{{ 'campaigns.details.description' | translate }}</label>
+            <p>{{ campaign()!.description }}</p>
+          </div>
+
+          <div class="info-row">
+            <div class="info-item">
+              <label>{{ 'campaigns.details.startDate' | translate }}</label>
+              <p>{{ campaign()!.startDate | date:'dd/MM/yyyy' }}</p>
+            </div>
+            <div class="info-item">
+              <label>{{ 'campaigns.details.endDate' | translate }}</label>
+              <p>{{ campaign()!.endDate | date:'dd/MM/yyyy' }}</p>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <label>{{ 'campaigns.details.estimatedBudget' | translate }}</label>
+            <p class="budget">S/ {{ campaign()!.estimatedBudget | number:'1.2-2' }}</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Stats Card -->
+    <mat-card class="stats-card">
+      <mat-card-header>
+        <mat-card-title>{{ 'campaigns.stats.title' | translate }}</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <mat-icon>visibility</mat-icon>
+            <div class="stat-content">
+              <span class="stat-label">{{ 'campaigns.stats.impressions' | translate }}</span>
+              <span class="stat-value">{{ campaign()!.totalImpressions | number }}</span>
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <mat-icon>touch_app</mat-icon>
+            <div class="stat-content">
+              <span class="stat-label">{{ 'campaigns.stats.clicks' | translate }}</span>
+              <span class="stat-value">{{ campaign()!.totalClicks | number }}</span>
+            </div>
+          </div>
+
+          <div class="stat-item">
+            <mat-icon>trending_up</mat-icon>
+            <div class="stat-content">
+              <span class="stat-label">{{ 'campaigns.stats.ctr' | translate }}</span>
+              <span class="stat-value">{{ campaign()!.CTR | number:'1.1-1' }}%</span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Offers Section -->
+    <mat-card class="offers-card">
+      <mat-card-header>
+        <mat-card-title>{{ 'campaigns.details.associatedOffers' | translate }} ({{ offers().length }})</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div *ngIf="offers().length === 0" class="empty-state">
+          <mat-icon>local_offer</mat-icon>
+          <p>{{ 'campaigns.offers.empty' | translate }}</p>
+        </div>
+
+        <div *ngIf="offers().length > 0" class="offers-list">
+          <div *ngFor="let offer of offers()" class="offer-item">
+            <img *ngIf="offer.imageUrl" [src]="offer.imageUrl" [alt]="offer.title" class="offer-image">
+            <div class="offer-info">
+              <h4>{{ offer.title }}</h4>
+              <p class="offer-partner">{{ offer.partner }}</p>
+              <div class="offer-details">
+                <span class="price">S/ {{ offer.price | number:'1.2-2' }}</span>
+                <span *ngIf="offer.originalPrice" class="original-price">
+                  S/ {{ offer.originalPrice | number:'1.2-2' }}
+                </span>
+                <span *ngIf="offer.category" class="category">{{ offer.category }}</span>
+              </div>
+              <p *ngIf="offer.location" class="location">
+                <mat-icon>location_on</mat-icon>
+                {{ offer.location }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

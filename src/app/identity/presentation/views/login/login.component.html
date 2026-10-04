@@ -1,0 +1,41 @@
+<!--
+  LoginComponent Template
+  Displays a user login form with translated labels, register link, and error feedback.
+-->
+
+<div class="login-container">
+  <!-- Language switcher for multilingual support -->
+  <div class="login-language-switch">
+    <app-language-switcher />
+  </div>
+
+  <!-- Form title, translated -->
+  <h2 class="login-title">{{ 'login.title' | translate }}</h2>
+
+  <!-- User login form -->
+  <form class="login-form" (ngSubmit)="onSubmit()" #loginForm="ngForm">
+    <!-- Email input -->
+    <label class="login-label">{{ 'login.email' | translate }}</label>
+    <input class="login-input" type="email" name="email" [(ngModel)]="model.email" required />
+
+    <!-- Password input -->
+    <label class="login-label">{{ 'login.password' | translate }}</label>
+    <input class="login-input" type="password" name="password" [(ngModel)]="model.password" required />
+
+    <!-- Submit button, disabled if loading or form is invalid -->
+    <button class="login-btn" type="submit" [disabled]="loading || !loginForm.form.valid">
+      {{ 'login.button' | translate }}
+    </button>
+  </form>
+
+  <!-- Register link for users who do not have an account -->
+  <p class="login-register-msg">
+    {{ 'login.noAccount' | translate }}
+    <a class="login-register-link" [routerLink]="['/register']">
+      {{ 'login.register' | translate }}
+    </a>
+  </p>
+
+  <!-- Error message display -->
+  <div *ngIf="errorMessage" class="login-error">{{errorMessage}}</div>
+</div>

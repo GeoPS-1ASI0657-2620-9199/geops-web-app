@@ -1,0 +1,13 @@
+<div class="coupon-item">
+  <div class="info">
+    <div class="title">{{ title || (coupon.offer && coupon.offer.title) || '' }}</div>
+    <div class="meta">
+      <span *ngIf="offerPrice">S/ {{ offerPrice }}</span>
+    </div>
+    <div class="meta-small">{{ paymentDate }}</div>
+  </div>
+  <div class="controls">
+    <span class="chip">{{ coupon.code }}</span>
+    <button class="btn" (click)="copy()">{{ 'proveedor.actions.copy' | translate }}</button>
+  </div>
+</div>

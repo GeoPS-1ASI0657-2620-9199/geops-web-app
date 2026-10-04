@@ -1,0 +1,64 @@
+<!--
+  ProfileComponent Template
+  Displays user profile information, including avatar, name, plan, email, phone, favorites, location permission, and saved places.
+  Includes an edit button and a footer for rights information.
+-->
+
+<div class="profile-wrapper" *ngIf="user">
+  <!-- Profile card with header and details -->
+  <div class="profile-card">
+    <!-- Profile header: avatar, name, plan, edit button -->
+    <div class="profile-header">
+      <div class="profile-avatar">{{ avatar }}</div>
+      <div class="profile-header-details">
+        <div class="profile-name">{{ user.name }}</div>
+        <div class="profile-plan">
+          {{ user.plan === 'PREMIUM' ? ('profile.planPremium' | translate) : ('profile.planBasic' | translate) }}
+        </div>
+      </div>
+      <!-- Edit profile button -->
+      <button class="profile-edit-btn" type="button" routerLink="/settings">
+        <span class="material-icons">edit</span> {{ 'profile.edit' | translate }}
+      </button>
+    </div>
+    <!-- Profile details list -->
+    <div class="profile-list">
+      <!-- Email -->
+      <div class="profile-item">
+        <span class="profile-label">{{ 'profile.email' | translate }}</span>
+        <span class="profile-value">{{ user.email }}</span>
+      </div>
+      <!-- Phone -->
+      <div class="profile-item">
+        <span class="profile-label">{{ 'profile.phone' | translate }}</span>
+        <span class="profile-value">{{ user.phone }}</span>
+      </div>
+      <!-- Favorites count -->
+      <div class="profile-item">
+        <span class="profile-label">{{ 'profile.favorites' | translate }}</span>
+        <span class="profile-value"><b>{{ favoriteCount }}</b></span>
+      </div>
+      <!-- Location permission -->
+      <div class="profile-item">
+        <span class="profile-label">{{ 'profile.location' | translate }}</span>
+        <span class="profile-value">
+          <span class="dot" [class.yellow]="locationPermission === 'ASK'"
+                            [class.green]="locationPermission === 'ALWAYS'"
+                            [class.red]="locationPermission === 'DENIED'"></span>
+          <span *ngIf="locationPermission === 'ALWAYS'">{{ 'profile.locationAlways' | translate }}</span>
+          <span *ngIf="locationPermission === 'ASK'">{{ 'profile.locationAsk' | translate }}</span>
+          <span *ngIf="locationPermission === 'DENIED'">{{ 'profile.locationDenied' | translate }}</span>
+        </span>
+      </div>
+      <!-- Saved places (home, work, university) -->
+      <div class="profile-item last">
+        <span class="profile-label">{{ 'profile.places' | translate }}</span>
+        <span class="profile-value places" [innerHTML]="places"></span>
+      </div>
+    </div>
+  </div>
+  <!-- Footer with rights information -->
+  <footer class="profile-footer">
+    {{ 'profile.rights' | translate }}
+  </footer>
+</div>

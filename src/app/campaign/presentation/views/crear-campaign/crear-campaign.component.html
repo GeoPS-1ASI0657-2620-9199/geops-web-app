@@ -1,0 +1,77 @@
+<div class="crear-campaign-container">
+  <div class="form-header">
+    <h2>{{ 'campaigns.form.createTitle' | translate }}</h2>
+    <button mat-icon-button (click)="onCancel()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <form [formGroup]="campaignForm" (ngSubmit)="onSubmit()" class="campaign-form">
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'campaigns.form.name' | translate }}</mat-label>
+      <input matInput formControlName="name" [placeholder]="'campaigns.form.namePlaceholder' | translate">
+      <mat-error *ngIf="campaignForm.get('name')?.hasError('required')">
+        {{ 'campaigns.form.nameRequired' | translate }}
+      </mat-error>
+      <mat-error *ngIf="campaignForm.get('name')?.hasError('minlength')">
+        {{ 'campaigns.form.nameMinLength' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'campaigns.form.description' | translate }}</mat-label>
+      <textarea matInput formControlName="description" rows="4" [placeholder]="'campaigns.form.descriptionPlaceholder' | translate"></textarea>
+      <mat-error *ngIf="campaignForm.get('description')?.hasError('required')">
+        {{ 'campaigns.form.descriptionRequired' | translate }}
+      </mat-error>
+      <mat-error *ngIf="campaignForm.get('description')?.hasError('minlength')">
+        {{ 'campaigns.form.descriptionMinLength' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'campaigns.form.startDate' | translate }}</mat-label>
+        <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+        <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+        <mat-datepicker #startPicker></mat-datepicker>
+        <mat-error *ngIf="campaignForm.get('startDate')?.hasError('required')">
+          {{ 'campaigns.form.startDateRequired' | translate }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'campaigns.form.endDate' | translate }}</mat-label>
+        <input matInput [matDatepicker]="endPicker" formControlName="endDate">
+        <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+        <mat-datepicker #endPicker></mat-datepicker>
+        <mat-error *ngIf="campaignForm.get('endDate')?.hasError('required')">
+          {{ 'campaigns.form.endDateRequired' | translate }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'campaigns.form.budget' | translate }}</mat-label>
+      <input matInput type="number" formControlName="estimatedBudget" [placeholder]="'campaigns.form.budgetPlaceholder' | translate">
+      <mat-icon matPrefix>attach_money</mat-icon>
+      <mat-error *ngIf="campaignForm.get('estimatedBudget')?.hasError('required')">
+        {{ 'campaigns.form.budgetRequired' | translate }}
+      </mat-error>
+      <mat-error *ngIf="campaignForm.get('estimatedBudget')?.hasError('min')">
+        {{ 'campaigns.form.budgetMin' | translate }}
+      </mat-error>
+    </mat-form-field>
+
+    <div class="form-actions">
+      <button mat-button type="button" (click)="onCancel()">{{ 'campaigns.actions.cancel' | translate }}</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="loading()">
+        {{ loading() ? ('campaigns.form.creating' | translate) : ('campaigns.form.createButton' | translate) }}
+      </button>
+    </div>
+
+    <div *ngIf="error()" class="error-message">
+      {{ error() }}
+    </div>
+  </form>
+</div>

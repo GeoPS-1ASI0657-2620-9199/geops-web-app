@@ -1,0 +1,236 @@
+.reportes-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.report-card {
+  margin-bottom: 24px;
+}
+
+mat-card-header {
+  margin-bottom: 24px;
+}
+
+mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 24px;
+  color: #4A0072;
+}
+
+mat-card-title mat-icon {
+  color: #A751D4;
+}
+
+.report-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.report-summary {
+  background: linear-gradient(135deg, #f8f3fc 0%, #ffffff 100%);
+  padding: 24px;
+  border-radius: 12px;
+  margin-bottom: 32px;
+}
+
+.report-summary h3 {
+  margin: 0 0 20px 0;
+  color: #4A0072;
+  font-size: 20px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.summary-item {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(167, 81, 212, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.summary-label {
+  font-size: 12px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.summary-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: #A751D4;
+}
+
+.status-breakdown {
+  margin-top: 24px;
+}
+
+.status-breakdown h4 {
+  margin: 0 0 16px 0;
+  color: #4A0072;
+  font-size: 16px;
+}
+
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.status-item {
+  padding: 16px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+}
+
+.status-item.active {
+  background: #e8f5e9;
+  border: 2px solid #4caf50;
+}
+
+.status-item.inactive {
+  background: #fff3e0;
+  border: 2px solid #ff9800;
+}
+
+.status-item.expired {
+  background: #ffebee;
+  border: 2px solid #f44336;
+}
+
+.status-label {
+  font-size: 12px;
+  color: #666;
+  text-transform: uppercase;
+}
+
+.status-count {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.status-item.active .status-count {
+  color: #4caf50;
+}
+
+.status-item.inactive .status-count {
+  color: #ff9800;
+}
+
+.status-item.expired .status-count {
+  color: #f44336;
+}
+
+.report-preview {
+  margin-bottom: 24px;
+}
+
+/* Estilos para el dropdown del filtro by status */
+::ng-deep .mat-mdc-select-panel {
+  background: linear-gradient(135deg, #f8f3fc 0%, #ffffff 100%) !important;
+}
+
+::ng-deep .mat-mdc-select-panel .mat-mdc-option {
+  background: transparent !important;
+}
+
+::ng-deep .mat-mdc-select-panel .mat-mdc-option:hover {
+  background: rgba(167, 81, 212, 0.1) !important;
+}
+
+::ng-deep .mat-mdc-option.mat-mdc-option-active {
+  background: rgba(167, 81, 212, 0.2) !important;
+}
+
+.report-preview h3 {
+  margin: 0 0 16px 0;
+  color: #4A0072;
+  font-size: 18px;
+}
+
+.report-preview pre {
+  background: #f5f5f5;
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  max-height: 400px;
+  font-size: 12px;
+  border: 1px solid #e0e0e0;
+}
+
+.report-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+}
+
+.report-actions button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .reportes-container {
+    padding: 16px;
+  }
+
+  .report-options {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .status-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .report-actions {
+    flex-direction: column;
+  }
+
+  .report-actions button {
+    width: 100%;
+  }
+
+  mat-card-title {
+    font-size: 20px;
+  }
+
+  .summary-value {
+    font-size: 20px;
+  }
+}
+
+@media print {
+  .report-options,
+  .report-actions {
+    display: none;
+  }
+
+  .report-preview {
+    page-break-inside: avoid;
+  }
+
+  .reportes-container {
+    max-width: 100%;
+  }
+}

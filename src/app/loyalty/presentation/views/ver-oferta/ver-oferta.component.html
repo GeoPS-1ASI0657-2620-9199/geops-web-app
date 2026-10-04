@@ -1,0 +1,109 @@
+<div class="offer-page">
+
+  <button class="back-btn" type="button" (click)="goBack()">
+    {{ 'offerDetail.back' | translate }}
+  </button>
+
+  <div class="offer-grid" *ngIf="offer as o">
+    <img class="offer-hero" [src]="imgFor()" [alt]="o.title">
+
+    <section class="summary">
+      <h1 class="title">{{ o.title || (('offersData.titles.' + o.id) | translate) }}</h1>
+      <div class="partner">{{ o.partner }}</div>
+
+      <div class="meta">
+        <span class="pin" aria-hidden="true">📍</span>
+        <span *ngIf="isDistrict(o.location); else translatedLocation">{{ o.location }}</span>
+        <ng-template #translatedLocation>
+          <span>{{ 'offersData.locations.' + o.location | translate }}</span>
+        </ng-template>
+
+        <span class="dot">•</span>
+        <span class="rating">{{ o.rating | number:'1.1-1' }}</span>
+        <span class="stars">★★★★★</span>
+      </div>
+
+      <div class="price">
+        <span class="currency">{{ 'common.currency' | translate }}</span>
+        <span class="amount">{{ o.price | number:'1.2-2' }}</span>
+      </div>
+
+      <div class="actions">
+        <button
+          class="btn-buy"
+          type="button"
+          (click)="buyNow()">
+          {{ 'offerDetail.buy' | translate }}
+        </button>
+
+        <button
+          class="btn-add"
+          type="button"
+          (click)="addToCart()">
+          {{ 'offerDetail.addToCart' | translate }}
+        </button>
+
+        <button class="btn-fav" type="button" [class.active]="isFav" (click)="toggleFav()">
+          {{ isFav ? '❤️' : '💜' }}
+        </button>
+      </div>
+
+
+      <ul class="bullets">
+        <li>{{ 'offerDetail.bullets.valid' | translate:{ partner: o.partner } }}</li>
+        <li>{{ 'offerDetail.bullets.business' | translate:{ partner: o.partner } }}</li>
+        <li>{{ 'offerDetail.bullets.redeem' | translate }}</li>
+      </ul>
+    </section>
+  </div>
+
+  <section class="reviews-card" *ngIf="offer">
+    <div class="reviews-card__head">
+      <h3>{{ 'offerDetail.reviews.title' | translate }}</h3>
+      <div class="reviews-card__meta">
+        <span class="score">{{ avgRating | number:'1.1-1' }}</span>
+        <span class="stars">★★★★★</span>
+        <span class="count">{{ 'offerDetail.reviews.count' | translate:{ count: reviewsCount } }}</span>
+      </div>
+    </div>
+
+    <div class="reviews-card__ratebox">
+      <label class="ratebox__label">{{ 'offerDetail.reviews.yourRating' | translate }}</label>
+
+      <div class="rate-stars" [attr.aria-label]="'offerDetail.reviews.ariaRate' | translate">
+        <button type="button"
+                *ngFor="let s of [1,2,3,4,5]"
+                (click)="myRating = s"
+                [class.active]="s <= myRating"
+                [attr.aria-pressed]="s <= myRating">★</button>
+      </div>
+
+      <textarea
+        [(ngModel)]="myText"
+        name="reviewText"
+        [placeholder]="'offerDetail.reviews.placeholder' | translate">
+      </textarea>
+
+      <div class="reviews-card__actions">
+        <button class="btn-publish" (click)="publishReview()" [disabled]="!canPublish">
+          {{ 'offerDetail.reviews.publish' | translate }}
+        </button>
+      </div>
+    </div>
+
+    <article class="review-item" *ngFor="let r of reviews">
+      <div class="avatar">{{ initialOf(r.userName, r.userId.toString()) }}</div>
+      <div class="body">
+        <div class="row">
+          <div class="inline-stars">
+            {{ '★'.repeat(r.rating) }}{{ '☆'.repeat(5 - r.rating) }}
+          </div>
+          <span class="muted">{{ r.createdAt | date:'medium' }}</span>
+        </div>
+        <p class="text">{{ r.text }}</p>
+      </div>
+      <button class="chip" (click)="like(r)">👍 {{ r.likes }}</button>
+    </article>
+  </section>
+
+</div>

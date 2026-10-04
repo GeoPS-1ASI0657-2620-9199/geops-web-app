@@ -1,0 +1,886 @@
+/*
+  SettingsComponent Styles
+  Styles for the user settings page, including layout, profile, form, and interactive elements.
+*/
+
+/* Layout wrapper for the settings page */
+.settings-wrapper {
+  margin: 0 auto;
+  padding-top: 56px;
+  min-height: 94vh;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Card container for settings content */
+.settings-card {
+  max-width: 600px;
+  width: 100%;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(74,0,114,0.07);
+  padding: 32px 24px 24px 24px;
+  margin-bottom: 24px;
+}
+
+/* Profile section: avatar, name, plan, actions */
+.settings-profile {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  border-bottom: 1px solid #EEE;
+  padding-bottom: 24px;
+  margin-bottom: 28px;
+}
+
+/* User avatar styling */
+.settings-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #A751D4;
+  color: #fff;
+  font-size: 28px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* User name styling */
+.settings-name {
+  font-size: 22px;
+  font-weight: 600;
+  color: #26242A;
+  margin-bottom: 2px;
+}
+
+/* User plan label styling */
+.settings-plan {
+  color: #A751D4;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* Profile action buttons */
+.settings-profile-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 10px;
+}
+
+/* General button styles */
+.settings-btn {
+  font-size: 15px;
+  font-weight: 500;
+  padding: 7px 20px;
+  border-radius: 8px;
+  background: #f1f1f8;
+  border: none;
+  color: #A751D4;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.settings-btn.secondary {
+  background: #fff;
+  border: 1px solid #CCC;
+  color: #26242A;
+}
+.settings-btn.primary {
+  background: #A751D4;
+  color: #fff;
+}
+.settings-btn.primary:hover {
+  background: #8636be;
+}
+
+/* Input and select styles for form fields */
+.settings-input,
+.settings-row input,
+.settings-row select {
+  width: 100%;
+  min-width: 220px;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 11px 16px;
+  border-radius: 7px;
+  border: 1.5px solid #e7e7ef;
+  outline: none;
+  font-size: 15px;
+  background: #fafafc;
+  color: #26242A;
+  margin-top: 2px;
+  margin-bottom: 0;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+.settings-input:focus,
+.settings-row input:focus,
+.settings-row select:focus {
+  border-color: #a751d4;
+  box-shadow: 0 0 0 2px #a751d421;
+}
+input[disabled], select[disabled] {
+  background: #f2f2f2 !important;
+  color: #8e8e8e !important;
+  border-style: dashed;
+}
+
+/* Form layout */
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
+  margin-top: 10px;
+}
+
+/* Section headers */
+.settings-form h3 {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #26242A;
+}
+
+.settings-form h4 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #666;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Row layout for each form field */
+.settings-row {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+/* Preference row with icon and toggle */
+.preference-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #fafafc 0%, #f5f5fa 100%);
+  border-radius: 14px;
+  border: 1.5px solid #e7e7ef;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-bottom: 14px;
+  min-height: 84px;
+  gap: 20px;
+}
+
+.preference-row:hover {
+  background: linear-gradient(135deg, #f5f5fa 0%, #f0f0f5 100%);
+  border-color: #c5c5d8;
+  box-shadow: 0 4px 16px rgba(167, 81, 212, 0.15);
+  transform: translateY(-2px);
+}
+
+.preference-label-container {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex: 1;
+  max-width: calc(100% - 70px);
+}
+
+.preference-icon {
+  color: #A751D4;
+  font-size: 28px;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #f1edfa 0%, #e8d3ff 100%);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(167, 81, 212, 0.1);
+}
+
+.preference-row:hover .preference-icon {
+  background: linear-gradient(135deg, #e8d3ff 0%, #d9b3ff 100%);
+  transform: scale(1.08) rotate(5deg);
+  box-shadow: 0 4px 12px rgba(167, 81, 212, 0.2);
+}
+
+.preference-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.preference-label {
+  font-size: 15.5px;
+  font-weight: 600;
+  color: #26242A;
+  margin: 0;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+.preference-help {
+  font-size: 13px;
+  color: #6b6b7a;
+  line-height: 1.5;
+  margin: 0;
+  display: block;
+  max-width: 100%;
+}
+
+/* Material slide toggle customization - Premium Design */
+::ng-deep .preference-row mat-slide-toggle {
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+::ng-deep .preference-row .mat-mdc-slide-toggle {
+  --mdc-switch-selected-track-color: #A751D4;
+  --mdc-switch-selected-handle-color: #ffffff;
+  --mdc-switch-selected-hover-track-color: #9244c7;
+  --mdc-switch-selected-hover-handle-color: #ffffff;
+  --mdc-switch-selected-focus-track-color: #A751D4;
+  --mdc-switch-selected-focus-handle-color: #ffffff;
+  --mdc-switch-selected-pressed-track-color: #8636be;
+  --mdc-switch-selected-pressed-handle-color: #ffffff;
+  --mdc-switch-unselected-track-color: #d4d4d9;
+  --mdc-switch-unselected-handle-color: #ffffff;
+  --mdc-switch-unselected-hover-track-color: #b8b8c0;
+  --mdc-switch-unselected-hover-handle-color: #ffffff;
+  --mdc-switch-handle-elevation: 4;
+}
+
+/* Switch container - Larger and more prominent */
+::ng-deep .preference-row mat-slide-toggle .mdc-switch {
+  width: 64px;
+  height: 36px;
+  position: relative;
+}
+
+/* Track - More rounded and with depth */
+::ng-deep .preference-row mat-slide-toggle .mdc-switch__track {
+  height: 24px;
+  width: 64px;
+  border-radius: 12px;
+  border: none;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: visible;
+}
+
+/* Handle - Larger with better shadow */
+::ng-deep .preference-row mat-slide-toggle .mdc-switch__handle {
+  height: 32px;
+  width: 32px;
+  left: -4px;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::ng-deep .preference-row mat-slide-toggle .mdc-switch__handle-track {
+  height: 32px;
+  width: 32px;
+}
+
+/* Track background when selected (ON state) - Premium gradient */
+::ng-deep .preference-row mat-slide-toggle .mdc-switch--selected .mdc-switch__track::after {
+  background: linear-gradient(135deg, #A751D4 0%, #8e3fc7 50%, #7825b3 100%);
+  box-shadow:
+    0 2px 8px rgba(167, 81, 212, 0.35),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.15);
+}
+
+/* Track background when unselected (OFF state) */
+::ng-deep .preference-row mat-slide-toggle .mdc-switch--unselected .mdc-switch__track::after {
+  background: linear-gradient(135deg, #d4d4d9 0%, #c0c0c8 100%);
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Handle button - White with premium shadow */
+::ng-deep .preference-row mat-slide-toggle .mdc-switch__handle::after {
+  background: linear-gradient(145deg, #ffffff 0%, #f8f8f8 100%);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.15),
+    0 2px 6px rgba(0, 0, 0, 0.1),
+    inset 0 1px 2px rgba(255, 255, 255, 0.8);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 50%;
+}
+
+/* Handle when selected - Enhanced shadow with purple glow */
+::ng-deep .preference-row mat-slide-toggle .mdc-switch--selected .mdc-switch__handle::after {
+  background: linear-gradient(145deg, #ffffff 0%, #f5f0ff 100%);
+  box-shadow:
+    0 5px 15px rgba(167, 81, 212, 0.45),
+    0 3px 8px rgba(167, 81, 212, 0.3),
+    inset 0 1px 2px rgba(255, 255, 255, 0.9),
+    0 0 20px rgba(167, 81, 212, 0.2);
+}
+
+/* Hover effect on handle */
+::ng-deep .preference-row mat-slide-toggle:hover .mdc-switch__handle::after {
+  transform: scale(1.08);
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.18),
+    0 3px 9px rgba(0, 0, 0, 0.12),
+    inset 0 1px 2px rgba(255, 255, 255, 0.9);
+}
+
+/* Hover effect on selected handle */
+::ng-deep .preference-row mat-slide-toggle:hover .mdc-switch--selected .mdc-switch__handle::after {
+  box-shadow:
+    0 6px 20px rgba(167, 81, 212, 0.55),
+    0 4px 12px rgba(167, 81, 212, 0.35),
+    inset 0 1px 2px rgba(255, 255, 255, 0.9),
+    0 0 25px rgba(167, 81, 212, 0.3);
+}
+
+/* Active/Pressed state */
+::ng-deep .preference-row mat-slide-toggle:active .mdc-switch__handle::after {
+  transform: scale(0.95);
+}
+
+/* Icon inside switch (if used) */
+::ng-deep .preference-row mat-slide-toggle .mdc-switch--selected .mdc-switch__icon {
+  fill: #A751D4;
+}
+
+/* Ripple effect - More subtle */
+::ng-deep .preference-row mat-slide-toggle .mdc-switch__ripple {
+  height: 52px;
+  width: 52px;
+  opacity: 0.12;
+}
+
+/* Focus state ring */
+::ng-deep .preference-row mat-slide-toggle .mdc-switch:focus-visible .mdc-switch__track::after {
+  outline: 2px solid #A751D4;
+  outline-offset: 3px;
+}
+
+/* Action buttons at the bottom of the form */
+.settings-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  justify-content: flex-end;
+}
+
+/* Footer text styling */
+.settings-footer {
+  text-align: center;
+  color: #777;
+  font-size: 13px;
+  margin-bottom: 18px;
+  margin-top: 20px;
+}
+
+/* ==========================================
+   FAVORITE CATEGORIES - Modern Chip Design
+   ========================================== */
+
+/* Grid layout for category chips */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+  margin-bottom: 20px;
+}
+
+/* Individual category chip */
+.category-chip {
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  display: block;
+}
+
+/* Hide the actual checkbox */
+.category-checkbox-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Chip content container */
+.category-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, #fafafc 0%, #f5f5fa 100%);
+  border: 2px solid #e7e7ef;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Category icon */
+.category-icon {
+  color: #8b8b96;
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Category name text */
+.category-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #26242A;
+  flex: 1;
+  transition: color 0.3s ease;
+}
+
+/* Check icon (hidden by default) */
+.check-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  color: #A751D4;
+  opacity: 0;
+  transform: scale(0.5) rotate(-180deg);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+
+/* Hover state */
+.category-chip:hover .category-content {
+  background: linear-gradient(135deg, #f5f5fa 0%, #f0f0f5 100%);
+  border-color: #d4d4dd;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.category-chip:hover .category-icon {
+  transform: scale(1.1);
+  color: #6b6b7a;
+}
+
+/* Selected state */
+.category-chip.selected .category-content {
+  background: linear-gradient(135deg, #f1edfa 0%, #e8d3ff 100%);
+  border-color: #A751D4;
+  box-shadow:
+    0 4px 16px rgba(167, 81, 212, 0.25),
+    inset 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.category-chip.selected .category-icon {
+  color: #A751D4;
+  transform: scale(1.15);
+}
+
+.category-chip.selected .category-name {
+  color: #7825b3;
+  font-weight: 700;
+}
+
+.category-chip.selected .check-icon {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+/* Selected + Hover state */
+.category-chip.selected:hover .category-content {
+  background: linear-gradient(135deg, #e8d3ff 0%, #d9b3ff 100%);
+  border-color: #9244c7;
+  transform: translateY(-3px);
+  box-shadow:
+    0 6px 20px rgba(167, 81, 212, 0.35),
+    inset 0 1px 2px rgba(255, 255, 255, 0.6);
+}
+
+.category-chip.selected:hover .category-icon {
+  transform: scale(1.2) rotate(5deg);
+}
+
+.category-chip.selected:hover .check-icon {
+  transform: scale(1.15) rotate(360deg);
+}
+
+/* Active/Pressed state */
+.category-chip:active .category-content {
+  transform: translateY(0) scale(0.98);
+  transition: all 0.1s ease;
+}
+
+/* Ripple effect background */
+.category-content::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(167, 81, 212, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.category-chip:active .category-content::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .categories-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+  }
+
+  .category-content {
+    padding: 12px 14px;
+    gap: 8px;
+  }
+
+  .category-name {
+    font-size: 13px;
+  }
+}
+
+.category-checkbox input[type="checkbox"] {
+  accent-color: #A751D4;
+  margin-right: 2px;
+  transform: scale(1.14);
+  cursor: pointer;
+}
+.category-checkbox input[type="checkbox"]:disabled {
+  opacity: 0.5;
+}
+.category-checkbox input[type="checkbox"]:checked {
+  background: #a259ff;
+  color: #fff;
+  box-shadow: 0 2px 8px #a259ff20;
+}
+.category-checkbox input[type="checkbox"]:checked ~ * {
+  color: #fff;
+}
+.category-checkbox:hover {
+  background: #e8d3ff;
+  color: #7f19cf;
+}
+
+/* Input group with edit icon */
+.input-edit-group {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  position: relative;
+}
+
+/* Edit icon button styling */
+.edit-icon-btn {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  padding: 3px 5px 3px 2px;
+  cursor: pointer;
+  border-radius: 50%;
+  margin-left: 8px;
+  z-index: 1;
+}
+.edit-icon-btn:hover, .input-edit-group:focus-within .edit-icon-btn {
+  background: #f6edfd;
+}
+.edit-icon-btn mat-icon {
+  font-size: 19px;
+  color: #a751d4;
+  opacity: .82;
+}
+.edit-icon-btn:hover mat-icon {
+  color: #8636be;
+  opacity: 1;
+}
+
+/* Responsive Design - 1024px */
+@media (max-width: 1024px) {
+  .settings-card {
+    max-width: 700px;
+  }
+
+  .settings-profile {
+    padding-bottom: 20px;
+    margin-bottom: 24px;
+  }
+
+  .settings-form {
+    gap: 16px;
+  }
+}
+
+/* Message feedback styling */
+.settings-msg {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #f1edfa 0%, #e8d3ff 100%);
+  border: 2px solid #A751D4;
+  border-radius: 10px;
+  color: #7825b3;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(167, 81, 212, 0.2);
+  animation: slideInDown 0.3s ease;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design - 768px */
+@media (max-width: 768px) {
+  .settings-wrapper {
+    padding-top: 40px;
+    min-height: auto;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .settings-card {
+    max-width: 100%;
+    padding: 24px 20px 20px;
+    border-radius: 12px;
+  }
+
+  .settings-profile {
+    gap: 14px;
+    padding-bottom: 18px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .settings-avatar {
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+  }
+
+  .settings-name {
+    font-size: 20px;
+  }
+
+  .settings-plan {
+    font-size: 14px;
+  }
+
+  .settings-profile-actions {
+    width: 100%;
+    margin-left: 0;
+    justify-content: flex-end;
+  }
+
+  .settings-btn {
+    padding: 6px 16px;
+    font-size: 14px;
+  }
+
+  .settings-form {
+    gap: 14px;
+  }
+
+  .settings-input,
+  .settings-row input,
+  .settings-row select {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+
+  .settings-row label {
+    font-size: 14px;
+  }
+
+  .category-checkbox {
+    font-size: 12px;
+    padding: 3px 14px 3px 8px;
+  }
+
+  .settings-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .settings-actions .settings-btn {
+    width: 100%;
+  }
+}
+
+/* Responsive Design - 640px */
+@media (max-width: 640px) {
+  .settings-wrapper {
+    padding-top: 32px;
+  }
+
+  .settings-card {
+    padding: 20px 16px 18px;
+  }
+
+  .settings-profile {
+    gap: 12px;
+    padding-bottom: 16px;
+    margin-bottom: 18px;
+  }
+
+  .settings-avatar {
+    width: 44px;
+    height: 44px;
+    font-size: 22px;
+  }
+
+  .settings-name {
+    font-size: 18px;
+  }
+
+  .settings-plan {
+    font-size: 13px;
+  }
+
+  .settings-profile-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .settings-profile-actions .settings-btn {
+    width: 100%;
+  }
+
+  .settings-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .settings-form {
+    gap: 12px;
+  }
+
+  .settings-input,
+  .settings-row input,
+  .settings-row select {
+    padding: 9px 12px;
+    font-size: 13px;
+  }
+
+  .settings-row label {
+    font-size: 13px;
+  }
+
+  .category-checkbox {
+    font-size: 11px;
+    padding: 3px 12px 3px 8px;
+    min-width: 65px;
+  }
+
+  .category-checkbox input[type="checkbox"] {
+    transform: scale(1.08);
+  }
+
+  .edit-icon-btn mat-icon {
+    font-size: 18px;
+  }
+}
+
+/* Responsive Design - 375px */
+@media (max-width: 375px) {
+  .settings-wrapper {
+    padding-top: 24px;
+  }
+
+  .settings-card {
+    padding: 16px 12px;
+    border-radius: 10px;
+  }
+
+  .settings-profile {
+    gap: 10px;
+    padding-bottom: 14px;
+    margin-bottom: 16px;
+  }
+
+  .settings-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .settings-name {
+    font-size: 17px;
+  }
+
+  .settings-plan {
+    font-size: 12px;
+  }
+
+  .settings-btn {
+    padding: 7px 14px;
+    font-size: 13px;
+  }
+
+  .settings-form {
+    gap: 11px;
+  }
+
+  .settings-input,
+  .settings-row input,
+  .settings-row select {
+    padding: 8px 11px;
+    font-size: 13px;
+  }
+
+  .settings-row label {
+    font-size: 12px;
+  }
+
+  .category-checkbox {
+    font-size: 11px;
+    padding: 2px 10px 2px 7px;
+    min-width: 60px;
+  }
+
+  .category-checkbox input[type="checkbox"] {
+    transform: scale(1.0);
+  }
+
+  .edit-icon-btn {
+    padding: 2px 4px 2px 2px;
+    margin-left: 6px;
+  }
+
+  .edit-icon-btn mat-icon {
+    font-size: 17px;
+  }
+
+  .settings-actions {
+    margin-top: 12px;
+  }
+}
+

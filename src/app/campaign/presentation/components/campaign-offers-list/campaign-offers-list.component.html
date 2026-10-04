@@ -1,0 +1,60 @@
+<div class="offers-list-container">
+  <div *ngIf="offers.length === 0" class="empty-state">
+    <mat-icon>local_offer</mat-icon>
+    <p>{{ 'campaign.offersList.empty.description' | translate }}</p>
+  </div>
+
+  <div *ngIf="offers.length > 0" class="offers-grid">
+    <mat-card *ngFor="let offer of offers" class="offer-card">
+      <div class="offer-image-container" *ngIf="offer.imageUrl">
+        <img [src]="offer.imageUrl" [alt]="offer.title" class="offer-image">
+      </div>
+
+      <mat-card-content>
+        <h3 class="offer-title">{{ offer.title }}</h3>
+        <p class="offer-partner">
+          <mat-icon>store</mat-icon>
+          {{ offer.partner }}
+        </p>
+
+        <div class="offer-price">
+          <span class="current-price">S/ {{ offer.price | number:'1.2-2' }}</span>
+          <span *ngIf="offer.originalPrice" class="original-price">
+            S/ {{ offer.originalPrice | number:'1.2-2' }}
+          </span>
+        </div>
+
+        <div class="offer-meta">
+          <span *ngIf="offer.category" class="meta-item category">
+            <mat-icon>label</mat-icon>
+            {{ offer.category }}
+          </span>
+          <span *ngIf="offer.location" class="meta-item location">
+            <mat-icon>location_on</mat-icon>
+            {{ offer.location }}
+          </span>
+        </div>
+
+        <p *ngIf="offer.description" class="offer-description">
+          {{ offer.description }}
+        </p>
+
+        <div *ngIf="offer.validUntil" class="offer-validity">
+          <mat-icon>schedule</mat-icon>
+          {{ 'campaign.offersList.validUntil' | translate }}: {{ offer.validUntil | date:'dd/MM/yyyy' }}
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions *ngIf="!readonly">
+        <button mat-button (click)="onEdit(offer)">
+          <mat-icon>edit</mat-icon>
+          {{ 'campaign.offersList.actions.edit' | translate }}
+        </button>
+        <button mat-button color="warn" (click)="onDelete(offer.id)">
+          <mat-icon>delete</mat-icon>
+          {{ 'campaign.offersList.actions.delete' | translate }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
