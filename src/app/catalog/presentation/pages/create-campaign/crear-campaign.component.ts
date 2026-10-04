@@ -80,11 +80,11 @@ export class CrearCampaignComponent {
 
     this.store.createCampaign(campaign);
     // Navigate after a short delay to allow store to update
-    setTimeout(() => this.router.navigate(['/campañas']), 500);
+    setTimeout(() => this.router.navigate(['/campaigns']), 500);
   }
 
   onCancel(): void {
-    this.router.navigate(['/campañas']);
+    this.router.navigate(['/campaigns']);
   }
 
   private getUserId(): number {

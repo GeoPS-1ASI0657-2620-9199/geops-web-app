@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseApiEndpoint } from '../../shared/infrastructure/base-api-endpoint';
 import { map, Observable } from 'rxjs';
-import { User } from '../../identity/domain/model/user.entity';
+import { User } from '../domain/model/user.entity';
 import { UserResource, UsersResponse, AuthenticationResource } from './users-response';
 import { UsersAssembler } from './users-assembler';
 import { environment } from '../../../environments/environment';

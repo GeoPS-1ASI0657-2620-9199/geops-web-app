@@ -6,7 +6,7 @@
         <div *ngIf="activeCampaigns.length === 0" class="empty-state">
           <mat-icon>campaign</mat-icon>
           <p>{{ 'campaigns.empty.active' | translate }}</p>
-          <button mat-raised-button color="primary" [routerLink]="['/crear-campañas']">
+          <button mat-raised-button color="primary" [routerLink]="['/campaigns/new']">
             {{ 'campaigns.actions.create' | translate }}
           </button>
         </div>

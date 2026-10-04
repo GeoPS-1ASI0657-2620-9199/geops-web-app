@@ -1,5 +1,0 @@
-.coupon-item{ display:flex; justify-content:space-between; align-items:center; padding:14px; border-radius:8px; border:1px solid #E5E7EB; background:#fff; margin-bottom:12px }
-.title{ font-weight:700 }
-.meta{ color:#6B7280; font-size:12px }
-.chip{ background:#F3E8FF; padding:6px 10px; border-radius:12px; margin-right:8px }
-.btn{ padding:6px 10px; border-radius:8px; border:1px solid #E5E7EB; background:#fff; cursor:pointer }

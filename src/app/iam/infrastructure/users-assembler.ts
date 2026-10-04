@@ -1,5 +1,5 @@
 import { BaseAssembler } from '../../shared/infrastructure/base-assembler';
-import { User } from '../../identity/domain/model/user.entity';
+import { User } from '../domain/model/user.entity';
 import { UserResource, UsersResponse } from './users-response';
 
 /**

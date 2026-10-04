@@ -1,7 +1,6 @@
 import { BaseAssembler } from '../../../shared/infrastructure/base-assembler';
 import { Campaign } from '../../domain/model/campaign.entity';
 import { CampaignOffer } from '../../domain/model/campaign-offer.entity';
-import { calculateCtr } from '../../../campaign/domain/utils/campaign-metrics.util';
 import {
   CampaignResource,
   CampaignResponse,
@@ -39,7 +38,7 @@ export class CampaignAssembler implements BaseAssembler<Campaign, CampaignResour
       estimatedBudget: resource.estimatedBudget,
       totalImpressions,
       totalClicks,
-      CTR: calculateCtr(totalClicks, totalImpressions),
+      CTR: resource.CTR ?? 0,
       createdAt: resource.createdAt,
       updatedAt: resource.updatedAt,
     };
@@ -63,7 +62,7 @@ export class CampaignAssembler implements BaseAssembler<Campaign, CampaignResour
       estimatedBudget: entity.estimatedBudget,
       totalImpressions,
       totalClicks,
-      CTR: calculateCtr(totalClicks, totalImpressions),
+      CTR: entity.CTR,
       createdAt: entity.createdAt,
       updatedAt: entity.updatedAt,
     };

@@ -176,7 +176,7 @@ export class RegisterBussinesComponent implements OnInit {
         this.submitting = false;
 
         // Redirigir al resumen
-        this.router.navigate(['/resumen']);
+        this.router.navigate(['/campaigns']);
       },
       error: (err: any) => {
         console.error('[RegisterBussines] ❌ Error creando detalles de propietario:', err);

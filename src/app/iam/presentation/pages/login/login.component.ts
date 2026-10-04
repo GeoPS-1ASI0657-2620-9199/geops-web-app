@@ -72,9 +72,9 @@ export class LoginComponent {
         if (user) {
           // Redirigir según el rol del usuario
           if (user.role === 'OWNER') {
-            this.router.navigate(['/resumen']);
+            this.router.navigate(['/campaigns']);
           } else {
-            this.router.navigate(['/home']);
+            this.router.navigate(['/offers']);
           }
         } else {
           this.errorMessage = 'Email o contraseña incorrectos';

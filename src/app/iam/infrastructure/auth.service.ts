@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { User } from '../../identity/domain/model/user.entity';
+import { User } from '../domain/model/user.entity';
 import { UsersApiEndpoint } from './users-api-endpoint';
 
 @Injectable({

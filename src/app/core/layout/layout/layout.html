@@ -10,7 +10,7 @@
     </button>
 
     <!-- Logo -->
-    <a routerLink="/home" class="logo" (click)="closeMobileMenu()">{{ 'header.logo' | translate }}</a>
+    <a routerLink="/offers" class="logo" (click)="closeMobileMenu()">{{ 'header.logo' | translate }}</a>
 
     <span class="spacer desktop-only"></span>
 
@@ -39,11 +39,6 @@
 
     <!-- Desktop Actions -->
     <div class="desktop-actions">
-      <a mat-raised-button class="action-btn help" [routerLink]="isOwner() ? '/help/help-center-provider' : '/help/help-center'">
-        {{ 'header.help' | translate }}
-      </a>
-
-      <app-notifications-dropdown class="action-btn notification"></app-notifications-dropdown>
 
       <button
         mat-button
@@ -66,52 +61,17 @@
           </div>
         </div>
         <mat-divider></mat-divider>
-        <button mat-menu-item [routerLink]="'/profile'">
-          <mat-icon>person</mat-icon>
-          <span>{{ 'header.profile.menu.myProfile' | translate }}</span>
-        </button>
-        <button mat-menu-item [routerLink]="'/settings'">
-          <mat-icon>settings</mat-icon>
-          <span>{{ 'header.profile.menu.settings' | translate }}</span>
-        </button>
-        <mat-divider></mat-divider>
         <button mat-menu-item (click)="onLogout()" class="logout-btn">
           <mat-icon>logout</mat-icon>
           <span>{{ 'header.profile.menu.logout' | translate }}</span>
         </button>
       </mat-menu>
 
-      <button
-        mat-raised-button
-        class="action-btn cart"
-        *ngIf="!isOwner()"
-        [attr.aria-label]="'header.cart' | translate"
-        [matBadge]="cartCount()"
-        [matBadgeHidden]="cartCount() === 0"
-        matBadgeColor="warn"
-        (click)="cartStore.openSidebar()">
-        <mat-icon>shopping_cart</mat-icon>
-        <span class="cart-text">{{ 'header.cart' | translate }}</span>
-      </button>
-
       <app-language-switcher/>
     </div>
 
     <!-- Mobile Actions (Icons Only) -->
     <div class="mobile-actions">
-      <app-notifications-dropdown class="action-btn notification mobile-only"></app-notifications-dropdown>
-
-      <button
-        mat-icon-button
-        class="action-btn cart-mobile"
-        *ngIf="!isOwner()"
-        [attr.aria-label]="'header.cart' | translate"
-        [matBadge]="cartCount()"
-        [matBadgeHidden]="cartCount() === 0"
-        matBadgeColor="warn"
-        (click)="cartStore.openSidebar()">
-        <mat-icon>shopping_cart</mat-icon>
-      </button>
     </div>
   </mat-toolbar-row>
 </mat-toolbar>
@@ -130,18 +90,6 @@
   </div>
 
   <nav class="mobile-menu-nav">
-    <a routerLink="/profile" class="mobile-menu-item" (click)="closeMobileMenu()">
-      <mat-icon>person</mat-icon>
-      <span>{{ 'header.profile.menu.myProfile' | translate }}</span>
-    </a>
-    <a routerLink="/settings" class="mobile-menu-item" (click)="closeMobileMenu()">
-      <mat-icon>settings</mat-icon>
-      <span>{{ 'header.profile.menu.settings' | translate }}</span>
-    </a>
-    <a [routerLink]="isOwner() ? '/help/help-center-provider' : '/help/help-center'" class="mobile-menu-item" (click)="closeMobileMenu()">
-      <mat-icon>help</mat-icon>
-      <span>{{ 'header.help' | translate }}</span>
-    </a>
   </nav>
 
   <div class="mobile-menu-footer">
@@ -162,8 +110,6 @@
 
 <app-footer-content></app-footer-content>
 
-<!-- Cart Sidebar -->
-<app-cart-sidebar *ngIf="!isOwner()"></app-cart-sidebar>
 
 <!-- Navigation Loading Backdrop -->
 <app-navigation-backdrop></app-navigation-backdrop>

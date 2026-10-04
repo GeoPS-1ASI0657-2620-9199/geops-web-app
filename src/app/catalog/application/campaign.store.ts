@@ -2,9 +2,7 @@ import { computed, Injectable, Signal, signal, inject } from '@angular/core';
 import { retry } from 'rxjs';
 import { Campaign } from '../domain/model/campaign.entity';
 import { CampaignOffer } from '../domain/model/campaign-offer.entity';
-import { calculateCtr } from '../../campaign/domain/utils/campaign-metrics.util';
 import { CampaignApi } from '../infrastructure/campaign/campaign-api';
-import { CampaignCartOperations } from '../../campaign/infrastructure/campaign-cart-operations';
 
 /**
  * Application service store for managing campaign state in the 'campaign' bounded context.
@@ -18,7 +16,6 @@ import { CampaignCartOperations } from '../../campaign/infrastructure/campaign-c
 })
 export class CampaignStore {
   private readonly api = inject(CampaignApi);
-  private readonly cartOperations = inject(CampaignCartOperations);
 
   // ==================== PRIVATE SIGNALS ====================
 
@@ -124,7 +121,7 @@ export class CampaignStore {
       ...campaign,
       totalImpressions,
       totalClicks,
-      CTR: calculateCtr(totalClicks, totalImpressions)
+      CTR: campaign.CTR ?? 0
     };
   }
 
@@ -209,27 +206,7 @@ export class CampaignStore {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
 
-    // Check if status is changing to PAUSED or FINALIZED
-    const currentCampaign = this.campaigns().find(c => c.id === id);
-    const isStatusChangingToNonActive =
-      currentCampaign?.status === 'ACTIVE' &&
-      (updates.status === 'PAUSED' || updates.status === 'FINALIZED');
-
-    // If changing to non-active status, clean carts first
-    if (isStatusChangingToNonActive) {
-      this.cartOperations.removeOffersFromAllCarts(id).subscribe({
-        next: () => {
-          this.performCampaignUpdate(id, updates);
-        },
-        error: err => {
-          this.errorSignal.set(this.formatError(err, 'Failed to clean carts'));
-          this.loadingSignal.set(false);
-        }
-      });
-    } else {
-      // Otherwise, just update
-      this.performCampaignUpdate(id, updates);
-    }
+    this.performCampaignUpdate(id, updates);
   }
 
   /**
@@ -258,35 +235,24 @@ export class CampaignStore {
 
   /**
    * Delete a campaign
-   * Removes all associated offers from all carts before deletion
    * @param id - The ID of the campaign to delete
    */
   deleteCampaign(id: number): void {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
 
-    // First, remove offers from all carts
-    this.cartOperations.removeOffersFromAllCarts(id).subscribe({
+    this.api.deleteCampaign(id).pipe(retry(2)).subscribe({
       next: () => {
-        // Then delete the campaign
-        this.api.deleteCampaign(id).pipe(retry(2)).subscribe({
-          next: () => {
-            this.campaignsSignal.update(campaigns =>
-              campaigns.filter(c => c.id !== id)
-            );
-            if (this.selectedCampaignSignal()?.id === id) {
-              this.selectedCampaignSignal.set(null);
-            }
-            this.loadingSignal.set(false);
-          },
-          error: err => {
-            this.errorSignal.set(this.formatError(err, 'Failed to delete campaign'));
-            this.loadingSignal.set(false);
-          }
-        });
+        this.campaignsSignal.update(campaigns =>
+          campaigns.filter(c => c.id !== id)
+        );
+        if (this.selectedCampaignSignal()?.id === id) {
+          this.selectedCampaignSignal.set(null);
+        }
+        this.loadingSignal.set(false);
       },
       error: err => {
-        this.errorSignal.set(this.formatError(err, 'Failed to clean carts before deletion'));
+        this.errorSignal.set(this.formatError(err, 'Failed to delete campaign'));
         this.loadingSignal.set(false);
       }
     });
@@ -423,7 +389,7 @@ export class CampaignStore {
     return {
       impressions: campaign.totalImpressions,
       clicks: campaign.totalClicks,
-      ctr: calculateCtr(campaign.totalClicks, campaign.totalImpressions),
+      ctr: campaign.CTR,
     };
   }
 

@@ -22,6 +22,6 @@ export class App {
 
   onGlobalSearch(q: string): void {
     if (!q) return;
-    this.router.navigate(['/home'], { queryParams: { q } });
+    this.router.navigate(['/offers'], { queryParams: { q } });
   }
 }

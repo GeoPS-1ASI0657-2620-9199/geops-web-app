@@ -19,7 +19,6 @@
           <span class="amount">{{ o.price | number:'1.2-2' }}</span>
         </div>
 
-        <button class="buy" (click)="buyNow(o)">{{ 'offersPage.hero.buy' | translate }}</button>
       </div>
 
       <div class="right">
@@ -110,18 +109,13 @@
 
         <div class="img-box" tabindex="0">
           <img [src]="imgFor(o)" [alt]="o.title || (('offersData.titles.' + o.id) | translate)" />
-          <button class="fav" type="button"
-                  [class.active]="isFav(o.id)"
-                  (click)="toggleFav(o)">
-            <span class="heart">{{ isFav(o.id) ? '❤️' : '💜' }}</span>
-          </button>
 
           <span class="scrim" aria-hidden="true"></span>
 
           <button
             class="view-offer"
             (click)="onViewOffer(o)"
-            [routerLink]="['/ofertas', o.id]"
+            [routerLink]="['/offers', o.id]"
             [queryParams]="{ from: 'offers' }"
             [queryParamsHandling]="'preserve'">
             {{ 'offersPage.card.view' | translate }}
@@ -153,11 +147,6 @@
                 <span>{{ 'offersData.locations.' + o.location | translate }}</span>
               </ng-template>
             </div>
-          </div>
-
-          <div class="card-actions">
-            <button class="buy" (click)="buyNow(o)">{{ 'offersPage.card.buy' | translate }}</button>
-            <button class="add" (click)="addToCart(o)">{{ 'offersPage.card.add' | translate }}</button>
           </div>
         </div>
       </article>

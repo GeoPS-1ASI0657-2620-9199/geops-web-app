@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatBadgeModule } from '@angular/material/badge';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatMenuModule } from '@angular/material/menu';
@@ -14,14 +13,10 @@ import { ConsumerToolbar } from '../consumer-toolbar/consumer-toolbar';
 import { OwnerToolbarComponent } from '../owner-toolbar/owner-toolbar.component';
 import {TranslateModule} from '@ngx-translate/core';
 import {LanguageSwitcher} from '../language-switcher/language-switcher';
-import { CartSidebarComponent } from '../../../cart/presentation/components/cart-sidebar/cart-sidebar.component';
-import { CartStore } from '../../../cart/application/cart.store';
 import {AuthService} from '../../../iam/infrastructure/auth.service';
 import {CommonModule} from '@angular/common';
 import { NavigationLoadingService } from '../../../shared/presentation/services/navigation-loading.service';
 import { NavigationBackdropComponent } from '../navigation-backdrop/navigation-backdrop.component';
-import { NotificationsDropdownComponent } from '../../../notifications/presentation/components/notifications-dropdown/notifications-dropdown.component';
-import { NotificationsStore } from '../../../notifications/application/notifications.store';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -33,7 +28,6 @@ import { filter } from 'rxjs/operators';
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
-    MatBadgeModule,
     MatInputModule,
     MatFormFieldModule,
     MatMenuModule,
@@ -43,17 +37,13 @@ import { filter } from 'rxjs/operators';
     OwnerToolbarComponent,
     TranslateModule,
     LanguageSwitcher,
-    CartSidebarComponent,
     CommonModule,
     NavigationBackdropComponent,
-    NotificationsDropdownComponent,
   ],
   templateUrl: './layout.html',
   styleUrl: './layout.css'
 })
 export class Layout implements OnInit {
-  readonly cartStore = inject(CartStore);
-  readonly notificationsStore = inject(NotificationsStore);
   private readonly navigationLoadingService = inject(NavigationLoadingService);
 
   q = '';
@@ -62,9 +52,6 @@ export class Layout implements OnInit {
   isMobileMenuOpen = signal(false);
   isSearchFocused = signal(false);
   isOwner = signal(false);
-
-  // Use cartStore's signals directly
-  cartCount = this.cartStore.totalItems;
 
   constructor(
     public authService: AuthService,
@@ -96,13 +83,9 @@ export class Layout implements OnInit {
       this.userName = user.name;
       this.userEmail = user.email || 'usuario@geops.com';
       this.isOwner.set(user.role === 'OWNER');
-
-      // Load notifications for authenticated user
-      this.notificationsStore.loadNotifications(user.id);
     } else {
       console.warn('[Layout] No hay usuario autenticado');
     }
-    // No need to subscribe - cartStore handles everything internally
   }
 
   get userInitial() {
@@ -113,7 +96,7 @@ export class Layout implements OnInit {
   doSearch() {
     const term = this.q.trim();
     if (term) {
-      this.router.navigate(['/ofertas'], { queryParams: { q: term } });
+      this.router.navigate(['/offers'], { queryParams: { q: term } });
       this.isSearchFocused.set(false);
       this.closeMobileMenu();
     }
@@ -121,7 +104,7 @@ export class Layout implements OnInit {
 
   clearSearch() {
     this.q = '';
-    this.router.navigate(['/ofertas']);
+    this.router.navigate(['/offers']);
   }
 
   toggleMobileMenu() {

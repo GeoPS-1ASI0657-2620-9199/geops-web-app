@@ -19,11 +19,8 @@ import { TranslateModule } from '@ngx-translate/core';
 export class OwnerToolbarComponent {
   /** Secciones del menú de owner */
   menuItems = [
-    { labelKey: 'ownerToolbar.summary', route: '/resumen', icon: 'dashboard' },
-    { labelKey: 'ownerToolbar.campaigns', route: '/campañas', icon: 'campaign' },
-    { labelKey: 'ownerToolbar.create', route: '/crear-campañas', icon: 'add_circle' },
-    { labelKey: 'ownerToolbar.reports', route: '/reportes', icon: 'assessment' },
-    { labelKey: 'ownerToolbar.comments', route: '/comentarios', icon: 'comment' }
+    { labelKey: 'ownerToolbar.campaigns', route: '/campaigns', icon: 'campaign' },
+    { labelKey: 'ownerToolbar.create', route: '/campaigns/new', icon: 'add_circle' }
   ];
 
   activeRoute = '/owner-dashboard';

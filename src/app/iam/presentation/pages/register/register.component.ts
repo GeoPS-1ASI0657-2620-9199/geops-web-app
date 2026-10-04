@@ -116,7 +116,7 @@ export class RegisterComponent {
 
       localStorage.setItem('register-owner-data', JSON.stringify(ownerData));
 
-      this.router.navigate(['/register-bussines']);
+      this.router.navigate(['/register-business']);
       this.registering = false;
       return;
     }
@@ -133,7 +133,7 @@ export class RegisterComponent {
 
     this.authService.register(payload).subscribe({
       next: (user: any) => {
-        this.router.navigate(['/home']);
+        this.router.navigate(['/offers']);
         this.registering = false;
       },
       error: (err: any) => {

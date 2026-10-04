@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
@@ -6,11 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { OffersApiEndpoint } from '../../../infrastructure/offers/offers-api-endpoint';
-import { FavoritesApiEndpoint } from '../../../../loyalty/infrastructure/favorites/favorites-api-endpoint';
-import { ReviewsApiEndpoint } from '../../../../loyalty/infrastructure/reviews-api-endpoint';
 import {AuthService} from '../../../../iam/infrastructure/auth.service';
-import { Review } from '../../../../loyalty/domain/model/review.entity';
-import { CartStore } from '../../../../cart/application/cart.store';
 import { Offer } from '../../../domain/model/offer.entity';
 
 @Component({
@@ -25,23 +21,9 @@ import { Offer } from '../../../domain/model/offer.entity';
  * offer detail screen
  */
 export class VerOfertaComponent implements OnInit {
-  private readonly cartStore = inject(CartStore);
-
   offer?: Offer;
   loading = false;
-  isFav = false;
-
-  reviews: Review[] = [];
-  avgRating = 0;
-  reviewsCount = 0;
-  myRating = 5;
-  myText = '';
-
   private userId: number | null = null;
-
-  get canPublish(): boolean {
-    return !!this.userId && !!this.myText.trim();
-  }
 
   from: 'offers' | 'favorites' | null = null;
 
@@ -51,8 +33,6 @@ export class VerOfertaComponent implements OnInit {
    * @param router
    * @param location
    * @param offersApi
-   * @param favsApi
-   * @param reviewsApi
    * @param auth
    */
   constructor(
@@ -60,8 +40,6 @@ export class VerOfertaComponent implements OnInit {
     private router: Router,
     private location: Location,
     private offersApi: OffersApiEndpoint,
-    private favsApi: FavoritesApiEndpoint,
-    private reviewsApi: ReviewsApiEndpoint,
     private auth: AuthService
   ) {}
 
@@ -87,13 +65,6 @@ export class VerOfertaComponent implements OnInit {
         this.loading = false;
         if (!this.offer) return;
 
-        if (this.userId) {
-          this.favsApi
-            .findRow(this.userId, this.offer.id)
-            .subscribe((rows) => (this.isFav = rows.length > 0));
-        }
-
-        this.loadReviews(this.offer.id);
       },
       error: () => (this.loading = false),
     });
@@ -139,8 +110,7 @@ export class VerOfertaComponent implements OnInit {
       this.location.back();
       return;
     }
-    const url = this.from === 'favorites' ? '/favoritos' : '/ofertas';
-    this.router.navigate([url]);
+    this.router.navigate(['/offers']);
   }
 
   /**
@@ -151,77 +121,6 @@ export class VerOfertaComponent implements OnInit {
   }
 
   /**
-   * toggles the offers favorite for the current user
-   * if it's already a favorite, remove it
-   * if not, add it
-   */
-  toggleFav(): void {
-    if (!this.userId || !this.offer) return;
-
-    if (this.isFav) {
-      this.favsApi.findRow(this.userId, this.offer.id).subscribe((rows) => {
-        if (!rows.length) return;
-        this.favsApi.removeRow(rows[0].id!).subscribe(() => (this.isFav = false));
-      });
-    } else {
-      this.favsApi.add(this.userId, this.offer.id).subscribe(() => (this.isFav = true));
-    }
-  }
-
-  /**
-   * load the offer reviews and calculate average/quantity
-   * @param offerId
-   * @private
-   */
-  private loadReviews(offerId: number) {
-    this.reviewsApi.listByOffer(offerId).subscribe((list) => {
-      this.reviews = list;
-      this.reviewsCount = list.length;
-      this.avgRating = list.length
-        ? +(list.reduce((s, r) => s + r.rating, 0) / list.length).toFixed(1)
-        : 0;
-    });
-  }
-
-  /**
-   * post a current user review for this offer
-   */
-  publishReview() {
-    if (!this.userId || !this.offer || !this.myText.trim()) return;
-
-    const me = this.auth.getCurrentUser();
-
-    this.reviewsApi
-      .add({
-        offerId: this.offer.id,
-        userId: this.userId,
-        userName: me?.name ?? '',
-        rating: this.myRating,
-        text: this.myText.trim(),
-      })
-      .subscribe((r) => {
-        this.reviews = [r, ...this.reviews];
-        this.reviewsCount++;
-        this.avgRating = +(
-          this.reviews.reduce((s, x) => s + x.rating, 0) / this.reviews.length
-        ).toFixed(1);
-        this.myText = '';
-        this.myRating = 5;
-      });
-  }
-
-  /**
-   * increase the "likes" of a review
-   * @param r - review that is liked
-   */
-  like(r: Review) {
-    this.reviewsApi.like(r.id, r.likes + 1).subscribe((updated) => {
-      const i = this.reviews.findIndex((x) => x.id === r.id);
-      if (i >= 0) this.reviews[i] = updated;
-    });
-  }
-
-  /**
    * returns the capital initial to display on the avatar to be displayed in reviews
    * @param name - username
    * @param fallback
@@ -229,44 +128,6 @@ export class VerOfertaComponent implements OnInit {
   initialOf(name?: string, fallback: string = '?'): string {
     const n = (name ?? '').trim();
     return n ? n[0].toUpperCase() : fallback;
-  }
-
-  /**
-   * Añade una oferta al carrito
-   */
-  addToCart() {
-    if (!this.offer) return;
-
-    if (!this.userId) {
-      alert('Debes iniciar sesión para agregar al carrito');
-      return;
-    }
-
-    const offerTitle = this.offer.title;
-    const offerImageUrl = this.imgFor();
-
-    this.cartStore.addItem(this.userId, this.offer.id, offerTitle, this.offer.price, offerImageUrl, 1);
-    this.offersApi.recordCampaignClick(this.offer.campaignId);
-  }
-
-  /**
-   * Procede a comprar directamente - añade al carrito y abre el sidebar
-   */
-  buyNow() {
-    if (!this.offer) return;
-
-    if (!this.userId) {
-      alert('Debes iniciar sesión para comprar');
-      return;
-    }
-
-    const offerTitle = this.offer.title;
-    const offerImageUrl = this.imgFor();
-
-    // Add to cart and open sidebar
-    this.cartStore.addItem(this.userId, this.offer.id, offerTitle, this.offer.price, offerImageUrl, 1);
-    this.cartStore.openSidebar();
-    this.offersApi.recordCampaignClick(this.offer.campaignId);
   }
 
   protected readonly String = String;
