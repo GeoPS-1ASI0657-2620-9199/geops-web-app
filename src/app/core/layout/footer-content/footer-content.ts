@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
@@ -5,7 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-footer-content',
   standalone: true,
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule, MatIconModule],
   templateUrl: './footer-content.html',
   styleUrls: ['./footer-content.css']
 })

@@ -51,7 +51,7 @@ export class RegisterBussinesComponent implements OnInit {
     // Obtener datos del OWNER desde localStorage
     const storedData = localStorage.getItem('register-owner-data');
     if (!storedData) {
-      console.error('[RegisterBussines] ❌ No hay datos de registro en localStorage');
+      console.error('[RegisterBussines] No hay datos de registro en localStorage');
       this.errorMessage = 'Error: Datos de registro no encontrados. Por favor vuelve a registrarte.';
       return;
     }
@@ -59,7 +59,7 @@ export class RegisterBussinesComponent implements OnInit {
     try {
       this.ownerData = JSON.parse(storedData);
     } catch (e) {
-      console.error('[RegisterBussines] ❌ Error al parsear datos:', e);
+      console.error('[RegisterBussines] Error al parsear datos:', e);
       this.errorMessage = 'Error: Datos inválidos. Por favor vuelve a registrarte.';
     }
   }
@@ -120,7 +120,7 @@ export class RegisterBussinesComponent implements OnInit {
 
         // Verificar que el backend creó el usuario con el rol correcto
         if (user.role !== 'OWNER') {
-          console.error('[RegisterBussines] ⚠️ ERROR: Backend creó usuario con rol incorrecto!');
+          console.error('[RegisterBussines] ERROR: Backend creó usuario con rol incorrecto!');
           console.error('[RegisterBussines] Esperado: OWNER, Recibido:', user.role);
           this.errorMessage = 'Error: Usuario creado con rol incorrecto. Por favor contacta soporte.';
           this.submitting = false;
@@ -131,7 +131,7 @@ export class RegisterBussinesComponent implements OnInit {
         this.createOwnerDetails(user.id);
       },
       error: (err: any) => {
-        console.error('[RegisterBussines] ❌ Error creando usuario OWNER:', err);
+        console.error('[RegisterBussines] Error creando usuario OWNER:', err);
 
         // Mensajes específicos según el código de error
         if (err?.status === 409) {
@@ -179,7 +179,7 @@ export class RegisterBussinesComponent implements OnInit {
         this.router.navigate(['/campaigns']);
       },
       error: (err: any) => {
-        console.error('[RegisterBussines] ❌ Error creando detalles de propietario:', err);
+        console.error('[RegisterBussines] Error creando detalles de propietario:', err);
 
         // Mensajes específicos según el código de error
         if (err?.status === 404) {

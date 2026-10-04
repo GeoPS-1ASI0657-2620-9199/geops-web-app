@@ -82,7 +82,7 @@ export class LoginComponent {
         this.loading = false;
       },
       error: (err: any) => {
-        console.error('[Login] ❌ Error:', err);
+        console.error('[Login] Error:', err);
 
         // Mensajes específicos según el código de error
         if (err?.status === 401) {

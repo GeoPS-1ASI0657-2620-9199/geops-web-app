@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,7 +13,7 @@ import { Offer } from '../../../domain/model/offer.entity';
 @Component({
   selector: 'app-ver-oferta',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule],
+  imports: [CommonModule, FormsModule, TranslateModule, MatIconModule],
   templateUrl: './ver-oferta.component.html',
   styleUrls: ['./ver-oferta.component.css'],
 })

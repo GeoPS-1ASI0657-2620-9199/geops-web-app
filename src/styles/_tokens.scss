@@ -1,0 +1,61 @@
+// GeoPS design tokens. Same names and values as the "GeoPS" variable collection in Figma
+// (page "Sistema de diseño"); the Figma web code syntax of each variable is its name here.
+
+:root {
+  // Brand
+  --brand-base: #a751d4;
+  --brand-deep: #4a0072;
+  --brand-action: #ab58e3;
+  --brand-soft: #ead5f5;
+  --brand-mist: #f4eafa;
+
+  // Neutrals
+  --neutral-bg: #ffffff;
+  --neutral-surface-2: #f7f5f9;
+  --neutral-line: #e4e0e8;
+  --neutral-line-soft: #f2eff5;
+
+  // Text
+  --text-primary: #1a1420;
+  --text-dim: #6b6275;
+  --text-faint: #9c93a6;
+
+  // Status: they never compete with the brand
+  --status-verified: #0e9f6e;
+  --status-reference: #c77700;
+  --status-expired: #d42a45;
+  --status-rating: #f5b027;
+  --status-user: #2563eb;
+
+  // Feedback surfaces
+  --feedback-verified-bg: #e7f7f0;
+  --feedback-verified-border: #bce8d7;
+  --feedback-verified-ink: #0b6b4c;
+  --feedback-amber-bg: #fdf5e6;
+  --feedback-amber-border: #f0dcb8;
+  --feedback-amber-ink: #8a5200;
+  --feedback-red-bg: #fdecef;
+  --feedback-red-border: #f7cbd4;
+  --feedback-red-ink: #9b1b31;
+  --feedback-purple-border: #dcc2ee;
+
+  // Spacing, 4 px grid
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+  --space-2xl: 32px;
+  --space-3xl: 48px;
+
+  // Radius by hierarchy
+  --radius-button: 6px;
+  --radius-input: 8px;
+  --radius-card: 10px;
+  --radius-panel: 12px;
+  --radius-modal: 14px;
+  --radius-chip: 999px;
+
+  --font-brand: 'Poppins', system-ui, sans-serif;
+  --font-logo: 'Lobster', cursive;
+}

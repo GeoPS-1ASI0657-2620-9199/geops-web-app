@@ -12,7 +12,7 @@
       <div class="partner">{{ o.partner }}</div>
 
       <div class="meta">
-        <span class="pin" aria-hidden="true">📍</span>
+        <mat-icon class="pin" aria-hidden="true">location_on</mat-icon>
         <span *ngIf="isDistrict(o.location); else translatedLocation">{{ o.location }}</span>
         <ng-template #translatedLocation>
           <span>{{ 'offersData.locations.' + o.location | translate }}</span>
@@ -20,7 +20,7 @@
 
         <span class="dot">•</span>
         <span class="rating">{{ o.rating | number:'1.1-1' }}</span>
-        <span class="stars">★★★★★</span>
+        <span class="stars" aria-hidden="true">@for (s of [1, 2, 3, 4, 5]; track s) {<mat-icon>star</mat-icon>}</span>
       </div>
 
       <div class="price">

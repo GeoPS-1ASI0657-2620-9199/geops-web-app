@@ -31,7 +31,7 @@
   bottom: 0;
   width: 80px;
   height: 4px;
-  background: linear-gradient(90deg, var(--purple) 0%, var(--cta) 100%);
+  background: linear-gradient(90deg, var(--brand-base) 0%, var(--brand-action) 100%);
   border-radius: 2px;
 }
 
@@ -97,7 +97,7 @@
 }
 
 .partner{
-  color:var(--purple);
+  color:var(--brand-base);
   font-weight:600;
   font-size:24px;
 }
@@ -129,7 +129,7 @@
 }
 
 .currency{
-  color:var(--purple);
+  color:var(--brand-base);
   font-weight:800;
   font-size:40px;
   line-height:1;
@@ -192,7 +192,7 @@
 }
 
 .line.active{
-  background:var(--purple);
+  background:var(--brand-base);
 }
 
 .filters-bar{
@@ -220,7 +220,7 @@
 .flt:focus,
 .flt:active,
 input.flt:focus {
-  border-color: var(--purple);
+  border-color: var(--brand-base);
   box-shadow: 0 0 0 3px rgba(167, 81, 212, 0.15);
 }
 
@@ -240,7 +240,7 @@ input.flt:focus {
 }
 
 .custom-select.open {
-  border-color: var(--purple);
+  border-color: var(--brand-base);
   box-shadow: 0 0 0 3px rgba(167, 81, 212, 0.15);
 }
 
@@ -260,7 +260,7 @@ input.flt:focus {
   height: 0;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-top: 5px solid var(--purple);
+  border-top: 5px solid var(--brand-base);
   transition: transform 0.3s ease;
   pointer-events: none;
 }
@@ -275,7 +275,7 @@ input.flt:focus {
   left: 0;
   right: 0;
   background: white;
-  border: 2px solid var(--purple);
+  border: 2px solid var(--brand-base);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(167, 81, 212, 0.2);
   max-height: 250px;
@@ -305,12 +305,12 @@ input.flt:focus {
 }
 
 .options::-webkit-scrollbar-thumb {
-  background: var(--purple);
+  background: var(--brand-base);
   border-radius: 4px;
 }
 
 .options::-webkit-scrollbar-thumb:hover {
-  background: var(--cta);
+  background: var(--brand-action);
 }
 
 .option {
@@ -326,19 +326,19 @@ input.flt:focus {
 }
 
 .option:hover {
-  background: linear-gradient(135deg, var(--purple) 0%, var(--cta) 100%);
+  background: linear-gradient(135deg, var(--brand-base) 0%, var(--brand-action) 100%);
   color: white;
   font-weight: 500;
 }
 
 .option.selected {
-  background: var(--purple);
+  background: var(--brand-base);
   color: white;
   font-weight: 600;
 }
 
 .option.selected:hover {
-  background: linear-gradient(135deg, var(--cta) 0%, var(--purple) 100%);
+  background: linear-gradient(135deg, var(--brand-action) 0%, var(--brand-base) 100%);
 }
 
 .flt.clear{
@@ -350,15 +350,15 @@ input.flt:focus {
 }
 
 .flt.clear:hover {
-  background: linear-gradient(135deg, var(--purple) 0%, var(--cta) 100%);
+  background: linear-gradient(135deg, var(--brand-base) 0%, var(--brand-action) 100%);
   color: white;
-  border-color: var(--purple);
+  border-color: var(--brand-base);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(167, 81, 212, 0.3);
 }
 
 .flt.clear:active {
-  background: linear-gradient(135deg, var(--purple) 0%, var(--cta) 100%);
+  background: linear-gradient(135deg, var(--brand-base) 0%, var(--brand-action) 100%);
   color: white;
   transform: translateY(0);
   box-shadow: 0 2px 8px rgba(167, 81, 212, 0.4);
@@ -391,7 +391,7 @@ input.flt:focus {
 .offer-card:hover {
   box-shadow: 0 12px 32px rgba(167, 81, 212, 0.2);
   transform: translateY(-8px);
-  border-color: var(--purple);
+  border-color: var(--brand-base);
 }
 
 .offer-card .img-box{
@@ -465,7 +465,7 @@ input.flt:focus {
   left:50%;
   top:50%;
   transform:translate(-50%,-50%) scale(.98);
-  background:var(--cta, #AB58E3);
+  background:var(--brand-action);
   color:#fff;
   border:0;
   border-radius:8px;
@@ -525,7 +525,7 @@ input.flt:focus {
 }
 
 .offer-card .pname{
-  color:var(--purple);
+  color:var(--brand-base);
   font-weight:600;
   font-size:14px;
 }
@@ -569,7 +569,7 @@ input.flt:focus {
 }
 
 .curr{
-  color:var(--purple);
+  color:var(--brand-base);
   font-weight:800;
   font-size:20px;
 }
@@ -605,7 +605,7 @@ input.flt:focus {
   height:31px;
   border:none;
   border-radius:8px;
-  background:var(--cta);
+  background:var(--brand-action);
   color:#fff;
   font-weight:400;
   font-size:13px;

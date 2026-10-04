@@ -137,7 +137,7 @@ export class RegisterComponent {
         this.registering = false;
       },
       error: (err: any) => {
-        console.error('[Register] ❌ Error al registrar:', err);
+        console.error('[Register] Error al registrar:', err);
 
         // Mensajes específicos según el código de error
         if (err?.status === 409) {

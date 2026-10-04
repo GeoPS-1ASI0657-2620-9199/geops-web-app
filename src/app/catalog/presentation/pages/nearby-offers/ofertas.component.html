@@ -141,7 +141,7 @@
             </div>
 
             <div class="loc">
-              <span class="pin" aria-hidden="true">📍</span>
+              <mat-icon class="pin" aria-hidden="true">location_on</mat-icon>
               <span *ngIf="isDistrict(o.location); else translatedLocation">{{ o.location }}</span>
               <ng-template #translatedLocation>
                 <span>{{ 'offersData.locations.' + o.location | translate }}</span>

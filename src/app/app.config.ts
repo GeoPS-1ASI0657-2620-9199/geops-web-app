@@ -1,4 +1,11 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  inject,
+  provideAppInitializer,
+  provideBrowserGlobalErrorListeners,
+  provideZoneChangeDetection,
+} from '@angular/core';
+import { MatIconRegistry } from '@angular/material/icon';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import {provideHttpClient, withFetch} from '@angular/common/http';
@@ -12,8 +19,12 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     provideTranslateService({
       loader: provideTranslateHttpLoader({ prefix: '/i18n/', suffix: '.json' }),
-      defaultLanguage: 'es'
+      fallbackLang: 'es'
     }),
-    provideRouter(routes)
+    provideRouter(routes),
+    // Material Symbols Rounded, the same icon set as the Figma Icono/* components.
+    provideAppInitializer(() => {
+      inject(MatIconRegistry).setDefaultFontSetClass('material-symbols-rounded');
+    }),
   ]
 };

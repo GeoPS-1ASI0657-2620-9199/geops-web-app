@@ -1,3 +1,4 @@
+import { MatIconModule } from '@angular/material/icon';
 import { Component, OnDestroy, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -10,7 +11,7 @@ import { Offer } from '../../../domain/model/offer.entity';
 @Component({
   selector: 'app-ofertas',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, RouterLink],
+  imports: [CommonModule, FormsModule, TranslateModule, RouterLink, MatIconModule],
   templateUrl: './ofertas.component.html',
   styleUrls: ['./ofertas.component.css'],
 })

@@ -5,7 +5,7 @@
 }
 
 .app-toolbar {
-  background: var(--purple) !important;
+  background: var(--brand-base) !important;
   color: white !important;
   box-shadow: 0 2px 8px rgba(0,0,0,.15);
   height: auto !important;
@@ -266,7 +266,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #8B3CC7 0%, var(--cta) 100%);
+  background: linear-gradient(135deg, #8B3CC7 0%, var(--brand-action) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -387,7 +387,7 @@
 
 .profile-dropdown-header {
   padding: 20px;
-  background: linear-gradient(135deg, var(--purple) 0%, var(--cta) 100%) !important;
+  background: linear-gradient(135deg, var(--brand-base) 0%, var(--brand-action) 100%) !important;
   color: white;
   display: flex;
   align-items: center;
@@ -401,7 +401,7 @@
   height: 56px;
   border-radius: 50%;
   background: white;
-  color: var(--purple);
+  color: var(--brand-base);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -449,7 +449,7 @@
 
 ::ng-deep .profile-dropdown .mat-mdc-menu-item mat-icon {
   margin-right: 16px;
-  color: var(--purple);
+  color: var(--brand-base);
 }
 
 ::ng-deep .profile-dropdown .logout-btn {
@@ -503,7 +503,7 @@
 
 .mobile-menu-header {
   padding: 24px 20px;
-  background: linear-gradient(135deg, var(--purple) 0%, var(--cta) 100%);
+  background: linear-gradient(135deg, var(--brand-base) 0%, var(--brand-action) 100%);
   color: white;
   display: flex;
   align-items: center;
@@ -531,11 +531,11 @@
 .mobile-menu-item:hover,
 .mobile-menu-item:active {
   background: rgba(167, 81, 212, 0.08);
-  border-left-color: var(--purple);
+  border-left-color: var(--brand-base);
 }
 
 .mobile-menu-item mat-icon {
-  color: var(--purple);
+  color: var(--brand-base);
 }
 
 .mobile-menu-footer {
@@ -557,11 +557,11 @@
   justify-content: center;
   font-size: 15px !important;
   font-weight: 500 !important;
-  color: var(--purple) !important;
+  color: var(--brand-base) !important;
 }
 
 .mobile-menu-footer ::ng-deep app-language-switcher button:hover {
-  background: var(--purple) !important;
+  background: var(--brand-base) !important;
   color: white !important;
 }
 

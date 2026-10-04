@@ -12,7 +12,7 @@
   color: #fff;
   padding: 4rem 2rem 0;
   margin-top: 4rem;
-  border-top: 4px solid var(--purple);
+  border-top: 4px solid var(--brand-base);
 }
 
 .footer-container {
@@ -39,7 +39,7 @@
   font-size: 2rem;
   font-weight: 800;
   margin: 0;
-  background: linear-gradient(135deg, var(--purple) 0%, var(--cta) 100%);
+  background: linear-gradient(135deg, var(--brand-base) 0%, var(--brand-action) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -81,8 +81,8 @@
 }
 
 .social-link:hover {
-  background: var(--purple);
-  border-color: var(--cta);
+  background: var(--brand-base);
+  border-color: var(--brand-action);
   transform: translateY(-3px);
   box-shadow: 0 4px 12px rgba(167, 81, 212, 0.4);
 }
@@ -104,7 +104,7 @@
   left: 0;
   width: 40px;
   height: 3px;
-  background: linear-gradient(90deg, var(--purple) 0%, var(--cta) 100%);
+  background: linear-gradient(90deg, var(--brand-base) 0%, var(--brand-action) 100%);
   border-radius: 2px;
 }
 
@@ -133,12 +133,12 @@
   left: 0;
   width: 0;
   height: 2px;
-  background: var(--purple);
+  background: var(--brand-base);
   transition: width 0.3s ease;
 }
 
 .footer-link:hover {
-  color: var(--purple);
+  color: var(--brand-base);
   transform: translateX(5px);
 }
 
@@ -156,7 +156,7 @@
 }
 
 .contact-item svg {
-  color: var(--purple);
+  color: var(--brand-base);
   flex-shrink: 0;
 }
 
