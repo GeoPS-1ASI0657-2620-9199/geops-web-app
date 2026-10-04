@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { Layout } from './shared/presentation/components/layout/layout';
-import { LoginComponent } from './identity/presentation/views/login/login.component';
-import { RegisterComponent } from './identity/presentation/views/register/register.component';
-import { RegisterBussinesComponent } from './identity/presentation/views/register-bussines/register-bussines.component';
+import { Layout } from './core/layout/layout/layout';
+import { LoginComponent } from './iam/presentation/pages/login/login.component';
+import { RegisterComponent } from './iam/presentation/pages/register/register.component';
+import { RegisterBussinesComponent } from './iam/presentation/pages/register-business/register-bussines.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/login' }, // redirige raíz a login
@@ -39,7 +39,7 @@ export const routes: Routes = [
       {
         path: 'ofertas',
         loadComponent: () =>
-          import('./loyalty/presentation/views/ofertas/ofertas.component').then(
+          import('./catalog/presentation/pages/nearby-offers/ofertas.component').then(
             (m) => m.OfertasComponent
           ),
         title: 'GeoPs - Ofertas',
@@ -47,7 +47,7 @@ export const routes: Routes = [
       {
         path: 'ofertas/:id',
         loadComponent: () =>
-          import('./loyalty/presentation/views/ver-oferta/ver-oferta.component').then(
+          import('./catalog/presentation/pages/offer-detail/ver-oferta.component').then(
             (m) => m.VerOfertaComponent
           ),
       },
@@ -102,7 +102,7 @@ export const routes: Routes = [
       {
         path: 'campañas',
         loadComponent: () =>
-          import('./campaign/presentation/views/campaigns/campaigns.component').then(
+          import('./catalog/presentation/pages/campaigns-panel/campaigns.component').then(
             (m) => m.CampaignsComponent
           ),
         title: 'GeoPs - Campañas',
@@ -110,7 +110,7 @@ export const routes: Routes = [
       {
         path: 'crear-campañas',
         loadComponent: () =>
-          import('./campaign/presentation/views/crear-campaign/crear-campaign.component').then(
+          import('./catalog/presentation/pages/create-campaign/crear-campaign.component').then(
             (m) => m.CrearCampaignComponent
           ),
         title: 'GeoPs - Crear Campaña',

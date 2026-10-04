@@ -14,12 +14,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { CampaignStore } from '../../../application/campaign.store';
-import { Campaign } from '../../../domain/model/campaign.entity';
-import { CampaignOffer } from '../../../domain/model/offer.entity';
+import { CampaignStore } from '../../../../catalog/application/campaign.store';
+import { Campaign } from '../../../../catalog/domain/model/campaign.entity';
+import { CampaignOffer } from '../../../../catalog/domain/model/campaign-offer.entity';
 import { CampaignOffersListComponent } from '../../components/campaign-offers-list/campaign-offers-list.component';
-import { AddOfferFormComponent } from '../../components/add-offer-form/add-offer-form.component';
-import { ConfirmDialogComponent } from '../../../../shared/presentation/components/confirm-dialog/confirm-dialog.component';
+import { AddOfferFormComponent } from '../../../../catalog/presentation/components/add-offer-form/add-offer-form.component';
+import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog.component';
 
 /**
  * EditCampaignComponent

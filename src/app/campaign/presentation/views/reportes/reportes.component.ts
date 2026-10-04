@@ -7,10 +7,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
-import { CampaignStore } from '../../../application/campaign.store';
-import { Campaign } from '../../../domain/model/campaign.entity';
+import { CampaignStore } from '../../../../catalog/application/campaign.store';
+import { Campaign } from '../../../../catalog/domain/model/campaign.entity';
 import { calculateCtr } from '../../../domain/utils/campaign-metrics.util';
-import { AuthService } from '../../../../identity/infrastructure/auth/auth.service';
+import { AuthService } from '../../../../iam/infrastructure/auth.service';
 
 /**
  * ReportesComponent

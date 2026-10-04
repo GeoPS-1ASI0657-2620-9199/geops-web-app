@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { AuthService } from '../../infrastructure/auth/auth.service';
+import { AuthService } from '../../../iam/infrastructure/auth.service';
 import { DetailsConsumerService } from '../../infrastructure/users/details-consumer.service';
 import { DetailsOwnerService } from '../../infrastructure/users/details-owner.service';
 import { CreateDetailsConsumerResource } from '../../infrastructure/users/details-consumer-response';

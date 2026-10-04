@@ -34,3 +34,38 @@ de Jira y pull request a `develop` con una aprobación. Conventional Commits con
 - Gilbert Alonso Huarcaya Matias
 - Jesús Iván Castillo Vidal
 - Giorgio Marzouk Awad Vargas
+
+## Arquitectura
+
+Arquitectura hexagonal por bounded context, la misma forma que los microservicios: el dominio
+no conoce a Angular ni a HTTP, los casos de uso hablan con puertos y la infraestructura los
+implementa con adaptadores.
+
+```
+src/app
+├── core/             config, http (interceptor, mapper de errores), layout por rol
+├── shared/           domain/ (modelos comunes) y ui/ (componentes del sistema de diseño)
+├── iam/              registro, inicio de sesión, sesión y guards
+└── catalog/          ofertas cercanas, detalle, campañas y zona
+```
+
+Dentro de cada contexto:
+
+| Carpeta | Contiene | Puede importar | Nunca importa |
+|---|---|---|---|
+| `domain/model` | Modelos y reglas en TypeScript puro | `shared/domain` | `@angular/*`, `rxjs`, `HttpClient`, otra capa |
+| `domain/ports` | Puertos como clases abstractas (sirven de token de inyección) | `domain/` | Lo mismo que el modelo |
+| `application/` | Casos de uso (`*.use-case.ts`) y stores con signals | `domain/`, `@angular/core` | `HttpClient`, `infrastructure/`, `presentation/` |
+| `infrastructure/` | Adaptadores HTTP, mappers DTO a dominio, almacenamiento, guards y `*.providers.ts` | `domain/`, `application/`, `HttpClient` | `presentation/` |
+| `presentation/` | `pages/` y `components/` | `application/`, `domain/model`, `shared/ui` | `infrastructure/` |
+
+Cada contexto registra sus adaptadores en su `*.providers.ts` y `app.config.ts` los incluye.
+Las pantallas siguen el Figma del equipo y sus tokens; los iconos son de Material Symbols.
+
+Comprobación de las capas (cada línea debe decir `LIMPIO`):
+
+```bash
+grep -rlE "@angular|rxjs|HttpClient" src/app/*/domain && echo REVISAR || echo LIMPIO
+grep -rlE "HttpClient|/infrastructure/" src/app/*/application && echo REVISAR || echo LIMPIO
+grep -rl "/infrastructure/" src/app/*/presentation && echo REVISAR || echo LIMPIO
+```

@@ -7,11 +7,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { CampaignStore } from '../../../application/campaign.store';
-import { Campaign, CampaignStatus } from '../../../domain/model/campaign.entity';
+import { CampaignStore } from '../../../../catalog/application/campaign.store';
+import { Campaign, CampaignStatus } from '../../../../catalog/domain/model/campaign.entity';
 import { calculateCtr } from '../../../domain/utils/campaign-metrics.util';
-import { AuthService } from '../../../../identity/infrastructure/auth/auth.service';
-import { ConfirmDialogComponent } from '../../../../shared/presentation/components/confirm-dialog/confirm-dialog.component';
+import { AuthService } from '../../../../iam/infrastructure/auth.service';
+import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog.component';
 import { WelcomeBannerComponent } from '../../../../subscriptions/presentation/components/welcome-banner/welcome-banner.component';
 
 type DialogAction = 'pause' | 'activate' | 'finalize' | 'delete';

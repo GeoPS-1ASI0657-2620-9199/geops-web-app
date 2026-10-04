@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { OffersApiEndpoint } from '../../../../loyalty/infrastructure/offers/offers-api-endpoint';
+import { OffersApiEndpoint } from '../../../../catalog/infrastructure/offers/offers-api-endpoint';
 import { Coupon } from '../../../domain/model/coupon.entity';
 
 /**

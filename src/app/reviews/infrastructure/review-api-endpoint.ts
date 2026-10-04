@@ -12,7 +12,7 @@ import {
 } from './review-response';
 import { ReviewAssembler } from './review-assembler';
 import { environment } from '../../../environments/environment';
-import { AuthService } from '../../identity/infrastructure/auth/auth.service';
+import { AuthService } from '../../iam/infrastructure/auth.service';
 
 /**
  * Review API Endpoint

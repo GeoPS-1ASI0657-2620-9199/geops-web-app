@@ -13,7 +13,7 @@ import { CartItem } from '../../../domain/model/cart-item.entity';
 import { PaymentApi, CreatePaymentRequest } from '../../../../payment/infrastructure/payment-api';
 import { PaymentMethod } from '../../../../payment/domain/model/payment-method.enum';
 import { Payment } from '../../../../payment/domain/model/payment.entity';
-import { AuthService } from '../../../../identity/infrastructure/auth/auth.service';
+import { AuthService } from '../../../../iam/infrastructure/auth.service';
 import { NotificationsStore } from '../../../../notifications/application/notifications.store';
 
 export type CartView = 'cart' | 'checkout' | 'confirmation';

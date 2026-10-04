@@ -1,7 +1,7 @@
 import { BaseAssembler } from '../../shared/infrastructure/base-assembler';
 import { Coupon } from '../domain/model/coupon.entity';
 import { CouponResource, CouponsResponse } from './coupons-response';
-import { Offer } from '../../loyalty/domain/model/offer.entity';
+import { Offer } from '../../catalog/domain/model/offer.entity';
 
 /**
  * Assembler to convert between Coupon entities, resources, and API responses.

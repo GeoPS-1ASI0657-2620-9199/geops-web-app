@@ -1,12 +1,12 @@
 import {Component, inject, OnInit, signal, viewChild, computed} from '@angular/core';
 import {TranslatePipe} from '@ngx-translate/core';
 import { WelcomeBannerComponent } from '../../../../subscriptions/presentation/components/welcome-banner/welcome-banner.component';
-import {Offer} from '../../../../loyalty/domain/model/offer.entity';
-import {OffersApiEndpoint} from '../../../../loyalty/infrastructure/offers/offers-api-endpoint';
+import {Offer} from '../../../../catalog/domain/model/offer.entity';
+import {OffersApiEndpoint} from '../../../../catalog/infrastructure/offers/offers-api-endpoint';
 import {DecimalPipe, NgForOf, NgIf} from '@angular/common';
 import {FavoritesApiEndpoint} from '../../../../loyalty/infrastructure/favorites/favorites-api-endpoint';
 import {CartStore} from '../../../../cart/application/cart.store';
-import {AuthService} from '../../../../identity/infrastructure/auth/auth.service';
+import {AuthService} from '../../../../iam/infrastructure/auth.service';
 import {RouterLink} from '@angular/router';
 import {GoogleMap, MapAdvancedMarker, MapInfoWindow} from '@angular/google-maps';
 import {FormsModule} from '@angular/forms';

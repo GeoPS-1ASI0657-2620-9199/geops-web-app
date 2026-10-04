@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { TranslateModule } from '@ngx-translate/core';
-import { CampaignOffer } from '../../../domain/model/offer.entity';
+import { CampaignOffer } from '../../../../catalog/domain/model/campaign-offer.entity';
 
 /**
  * CampaignOffersListComponent

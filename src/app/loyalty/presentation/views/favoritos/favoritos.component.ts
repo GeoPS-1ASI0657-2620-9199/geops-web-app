@@ -2,11 +2,11 @@ import {Component, inject, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FavoritesApiEndpoint } from '../../../infrastructure/favorites/favorites-api-endpoint';
-import { OffersApiEndpoint } from '../../../infrastructure/offers/offers-api-endpoint';
+import { OffersApiEndpoint } from '../../../../catalog/infrastructure/offers/offers-api-endpoint';
 import { TranslateModule } from '@ngx-translate/core';
-import {AuthService} from '../../../../identity/infrastructure/auth/auth.service';
+import {AuthService} from '../../../../iam/infrastructure/auth.service';
 import {CartStore} from '../../../../cart/application/cart.store';
-import { Offer } from '../../../domain/model/offer.entity';
+import { Offer } from '../../../../catalog/domain/model/offer.entity';
 
 @Component({
   selector: 'app-favoritos',

@@ -1,36 +1,26 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FavoritesApiEndpoint } from '../../../infrastructure/favorites/favorites-api-endpoint';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { OffersApiEndpoint } from '../../../infrastructure/offers/offers-api-endpoint';
+import { FavoritesApiEndpoint } from '../../../../loyalty/infrastructure/favorites/favorites-api-endpoint';
 import { TranslateModule } from '@ngx-translate/core';
 import { CartStore } from '../../../../cart/application/cart.store';
 import {AuthService} from '../../../../iam/infrastructure/auth.service';
-import { OffersApiEndpoint } from '../../../../catalog/infrastructure/offers/offers-api-endpoint';
-
-type Offer = {
-  campaignId: number;
-  id: number;
-  title: string;
-  partner: string;
-  price: number;
-  codePrefix: string;
-  validUntil: string;
-  rating: number;
-  location: string;
-  category: string;
-  imageUrl?: string;
-};
+import { Offer } from '../../../domain/model/offer.entity';
 
 @Component({
-  selector: 'app-categorias',
+  selector: 'app-ofertas',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule],
-  templateUrl: './categorias.component.html',
-  styleUrls: ['./categorias.component.css'],
+  imports: [CommonModule, FormsModule, TranslateModule, RouterLink],
+  templateUrl: './ofertas.component.html',
+  styleUrls: ['./ofertas.component.css'],
 })
 
-export class CategoriasComponent implements OnInit, OnDestroy {
+/**
+ * offers screen
+ */
+export class OfertasComponent implements OnInit, OnDestroy {
 
   private readonly cartStore = inject(CartStore);
 
@@ -45,6 +35,11 @@ export class CategoriasComponent implements OnInit, OnDestroy {
   idx = 0;
   timer?: any;
   userId = 0;
+
+  // Dropdown states
+  categoryOpen = false;
+  sortOpen = false;
+  locationOpen = false;
 
   /**
    * search filters
@@ -62,7 +57,12 @@ export class CategoriasComponent implements OnInit, OnDestroy {
   private impressionsTracked = false;
 
   /**
-   * creates an instance of the offerscomponent component
+   * creates an instance of the 'offersComponent' component
+   * @param route
+   * @param router
+   * @param offersApi
+   * @param favoritesApi
+   * @param authService
    */
   constructor(
     private route: ActivatedRoute,
@@ -73,14 +73,13 @@ export class CategoriasComponent implements OnInit, OnDestroy {
   ) {}
 
   /**
-   * retrieves offers from the API
-   * loads all offers
-   * starts the featured offers carousel
-   * retrieves user favorites
+   * initialize the page
    */
   ngOnInit(): void {
 
     const user = this.authService.getCurrentUser();
+    this.currentUserId = this.authService.getCurrentUserId();
+    this.userId = user ? (user.id) : 0;
     if (user) {
       this.userId = (user.id);
     } else {
@@ -92,6 +91,17 @@ export class CategoriasComponent implements OnInit, OnDestroy {
     if (!this.currentUserId) {
       console.warn('[Ofertas] No hay usuario autenticado');
     }
+
+    this.route.queryParams.subscribe(params => {
+      this.filters.q = params['q'] || '';
+      this.filters.category = params['category'] || 'all';
+      this.filters.location = params['location'] || 'all';
+      this.filters.sort = params['sort'] || 'relevance';
+
+      if (this.dataLoaded) {
+        this.applyFiltersWithoutUpdatingUrl();
+      }
+    });
 
     this.loading = true;
 
@@ -108,7 +118,7 @@ export class CategoriasComponent implements OnInit, OnDestroy {
 
         this.trackInitialImpressions(this.all);
         this.dataLoaded = true;
-        this.applyFilters();
+        this.applyFiltersWithoutUpdatingUrl();
         this.loading = false;
         this.startAuto();
       },
@@ -119,8 +129,8 @@ export class CategoriasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * it is executed when the component is destroyed
-   * it also stops the carousel timer
+   * called when the component is destroyed
+   * also stops the carousel timer
    * @return { void}
    */
   ngOnDestroy(): void {
@@ -128,48 +138,8 @@ export class CategoriasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * starts the automatic scrolling of the carousel
-   */
-  startAuto() {
-    clearInterval(this.timer);
-    this.timer = setInterval(() => this.next(), 2000);
-  }
-
-  /**
-   * changes the featured offer in the carousel
-   */
-  next() {
-    this.idx = (this.idx + 1) % this.featured.length;
-  }
-
-  /**
-   * changes the carousel to a specific offer
-   * @param index
-   */
-  goTo(index: number) {
-    this.idx = index;
-    this.startAuto();
-  }
-
-  /**
-   * gets the currently active featured offer
-   */
-  active(): Offer | null {
-    return this.featured[this.idx] ?? null;
-  }
-
-  /**
-   * returns the image URL for an offer, or a default path if no image is available
-   * returns a route
-   * @param o
-   */
-  imgFor(o: Offer | null): string {
-    return !o ? '' : (o.imageUrl ?? `assets/offers/${o.id}.jpg`);
-  }
-
-  /**
-   * checks if a location is a district (no translation needed)
-   * @param location
+   * checks if a location is a district and should not be translated
+   * @param location - location name
    */
   isDistrict(location: string): boolean {
     const districts = [
@@ -182,9 +152,67 @@ export class CategoriasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * applies filters
+   * starts the automatic scrolling of the carousel
+   */
+  startAuto() {
+    clearInterval(this.timer);
+    this.timer = setInterval(() => this.next(), 2000);
+  }
+
+  /**
+   * change the featured offer in the carousel
+   */
+  next() {
+    this.idx = (this.idx + 1) % this.featured.length;
+  }
+
+  /**
+   * change the carousel to a specific offer
+   * @param index
+   */
+  goTo(index: number) {
+    this.idx = index;
+    this.startAuto();
+  }
+
+  /**
+   * get the currently active featured offer
+   */
+  active(): Offer | null {
+    return this.featured[this.idx] ?? null;
+  }
+
+  /**
+   * returns the URL of the corresponding image of an offer, if there is no image
+   * @param o
+   */
+  imgFor(o: Offer | null): string {
+    return !o ? '' : (o.imageUrl ?? `assets/offers/${o.id}.jpg`);
+  }
+
+  /**
+   * filters are applied and URL is updated
    */
   applyFilters() {
+    this.applyFiltersWithoutUpdatingUrl();
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        q: this.filters.q || null,
+        category: this.filters.category !== 'all' ? this.filters.category : null,
+        location: this.filters.location !== 'all' ? this.filters.location : null,
+        sort: this.filters.sort !== 'relevance' ? this.filters.sort : null,
+      },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
+  }
+
+  /**
+   * applies filters without updating the URL (used when syncing from URL)
+   */
+  private applyFiltersWithoutUpdatingUrl() {
     const q = this.filters.q.trim().toLowerCase();
 
     let list = this.all.filter((o) => {
@@ -193,7 +221,7 @@ export class CategoriasComponent implements OnInit, OnDestroy {
           s.toLowerCase().includes(q)
         );
       const byCat = this.filters.category === 'all' || o.category === this.filters.category;
-      const byLoc = this.filters.location === 'all' || o.location === this.filters.location;
+      const byLoc = this.filters.location === 'all' || o.location.toLowerCase().includes(this.filters.location.toLowerCase());
       return byText && byCat && byLoc;
     });
 
@@ -205,15 +233,6 @@ export class CategoriasComponent implements OnInit, OnDestroy {
     }
 
     this.filtered = list;
-
-    if (this.dataLoaded) {
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams: { q: this.filters.q || null },
-        queryParamsHandling: 'merge',
-        replaceUrl: true,
-      });
-    }
   }
 
   /**
@@ -225,7 +244,76 @@ export class CategoriasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * fetches the current user's favorites from the API
+   * toggle category dropdown
+   */
+  toggleCategory() {
+    this.categoryOpen = !this.categoryOpen;
+    this.sortOpen = false;
+    this.locationOpen = false;
+  }
+
+  /**
+   * toggle sort dropdown
+   */
+  toggleSort() {
+    this.sortOpen = !this.sortOpen;
+    this.categoryOpen = false;
+    this.locationOpen = false;
+  }
+
+  /**
+   * toggle location dropdown
+   */
+  toggleLocation() {
+    this.locationOpen = !this.locationOpen;
+    this.categoryOpen = false;
+    this.sortOpen = false;
+  }
+
+  /**
+   * select category
+   */
+  selectCategory(category: string) {
+    this.filters.category = category;
+    this.categoryOpen = false;
+    this.applyFilters();
+  }
+
+  /**
+   * select sort option
+   */
+  selectSort(sort: 'relevance' | 'priceAsc' | 'priceDesc' | 'ratingDesc') {
+    this.filters.sort = sort;
+    this.sortOpen = false;
+    this.applyFilters();
+  }
+
+  /**
+   * select location
+   */
+  selectLocation(location: string) {
+    this.filters.location = location;
+    this.locationOpen = false;
+    this.applyFilters();
+  }
+
+  /**
+   * close all dropdowns when clicking outside
+   */
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    const clickedInsideDropdown = target.closest('.custom-select-wrapper');
+
+    if (!clickedInsideDropdown) {
+      this.categoryOpen = false;
+      this.sortOpen = false;
+      this.locationOpen = false;
+    }
+  }
+
+  /**
+   * get the current users favorites from the API
    * @private
    */
   private fetchFavs() {
@@ -242,25 +330,24 @@ export class CategoriasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * checks if an offer is marked as favorite
+   * check if an offer is marked as a favorite
    * @param id
    */
   isFav(id: number) { return this.favSet.has((id)); }
 
   /**
-   * basically updates the favorite state of an offer
-   * if it's already marked, it removes it from favorites, otherwise it adds it
+   * this basically updates the favorite status of an offer.
+   * If its already marked, it removes it from your favorites; if not, it adds it.
    * @param o
    */
   toggleFav(o: Offer) {
     if (!this.currentUserId) {
-      console.warn('[Ofertas] Debes iniciar sesión para agregar favoritos');
       alert('Debes iniciar sesión para agregar favoritos');
       return;
     }
 
     if (this.favSet.has((o.id))) {
-      // REMOVE favorite using the direct endpoint
+      // Eliminar favorito usando el endpoint directo
       this.favoritesApi.removeByUserAndOffer(this.currentUserId, o.id).subscribe({
         next: () => {
           this.favSet.delete((o.id));
@@ -270,7 +357,6 @@ export class CategoriasComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      // ADD favorite
       this.favoritesApi.add(this.currentUserId, o.id).subscribe(() => {
         this.favSet.add((o.id));
       });
@@ -278,7 +364,7 @@ export class CategoriasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * adds an offer to the cart
+   * add an offer to your cart
    * @param o - offer to add
    */
   addToCart(o: Offer) {
@@ -290,7 +376,7 @@ export class CategoriasComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * proceeds to buy directly - adds to cart and opens the sidebar
+   * proceed to buy directly - adds to cart and opens the sidebar
    * @param o - offer to buy
    */
   buyNow(o: Offer) {
@@ -305,10 +391,6 @@ export class CategoriasComponent implements OnInit, OnDestroy {
 
   onViewOffer(o: Offer) {
     this.offersApi.recordCampaignClick(o.campaignId);
-    this.router.navigate(['/ofertas', o.id], {
-      queryParams: { from: 'categorias' },
-      queryParamsHandling: 'preserve'
-    });
   }
 
   private trackInitialImpressions(offers: Offer[]): void {

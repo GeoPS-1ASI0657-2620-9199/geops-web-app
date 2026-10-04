@@ -1,5 +1,5 @@
 import { BaseEntity } from '../../../shared/infrastructure/base-entity';
-import { Offer } from '../../../loyalty/domain/model/offer.entity';
+import { Offer } from '../../../catalog/domain/model/offer.entity';
 
 /**
  * Domain entity for a coupon

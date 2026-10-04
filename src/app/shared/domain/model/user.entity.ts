@@ -1,4 +1,4 @@
-import { BaseEntity } from '../../../shared/infrastructure/base-entity';
+import { BaseEntity } from '../../infrastructure/base-entity';
 
 /**
  * Domain entity for a user

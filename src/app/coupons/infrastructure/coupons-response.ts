@@ -1,4 +1,4 @@
-import { OfferResource } from '../../loyalty/infrastructure/offers/offers-response';
+import { OfferResource } from '../../catalog/infrastructure/offers/offers-response';
 import { BaseResponse, BaseResource } from '../../shared/infrastructure/base-response';
 
 /**

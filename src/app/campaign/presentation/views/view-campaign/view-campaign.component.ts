@@ -7,9 +7,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
-import { CampaignStore } from '../../../application/campaign.store';
-import { Campaign } from '../../../domain/model/campaign.entity';
-import { CampaignOffer } from '../../../domain/model/offer.entity';
+import { CampaignStore } from '../../../../catalog/application/campaign.store';
+import { Campaign } from '../../../../catalog/domain/model/campaign.entity';
+import { CampaignOffer } from '../../../../catalog/domain/model/campaign-offer.entity';
 
 /**
  * ViewCampaignComponent

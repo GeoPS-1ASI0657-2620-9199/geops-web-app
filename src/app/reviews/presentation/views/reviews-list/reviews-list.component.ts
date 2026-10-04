@@ -17,7 +17,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { ReviewsStore } from '../../../application/reviews.store';
 import { Review } from '../../../domain/model/review.entity';
-import { AuthService } from '../../../../identity/infrastructure/auth/auth.service';
+import { AuthService } from '../../../../iam/infrastructure/auth.service';
 
 /**
  * ReviewsListComponent

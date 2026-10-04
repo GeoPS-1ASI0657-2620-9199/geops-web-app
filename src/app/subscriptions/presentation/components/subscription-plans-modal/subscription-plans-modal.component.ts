@@ -4,7 +4,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from '../../../domain/model/subscription.entity';
 import { SubscriptionsApi } from '../../../infrastructure/subscriptions-api';
 import { UsersApi } from '../../../../shared/infrastructure/users-api';
-import { AuthService } from '../../../../identity/infrastructure/auth/auth.service';
+import { AuthService } from '../../../../iam/infrastructure/auth.service';
 
 /**
  * Extended subscription interface with translation data
