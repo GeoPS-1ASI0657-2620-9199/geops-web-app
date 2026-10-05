@@ -26,10 +26,18 @@ const LIMA_CENTER: PickedPoint = { latitude: -12.0464, longitude: -77.0428 };
 /** Used only if the design tokens are not loaded. */
 const RADIUS_FALLBACK_COLOR = '#0E9F6E';
 
-L.Icon.Default.mergeOptions({
-  iconUrl: 'leaflet/marker-icon.png',
-  iconRetinaUrl: 'leaflet/marker-icon-2x.png',
-  shadowUrl: 'leaflet/marker-shadow.png',
+/**
+ * Explicit marker icon copied to /leaflet by angular.json. Leaflet's default icon prefixes the
+ * path it guesses from its CSS, which the bundler moves to /media, so the image never loads.
+ * Absolute URLs also keep working on nested routes such as /offers/1052.
+ */
+const MARKER_ICON = L.icon({
+  iconUrl: '/leaflet/marker-icon.png',
+  iconRetinaUrl: '/leaflet/marker-icon-2x.png',
+  shadowUrl: '/leaflet/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  shadowSize: [41, 41],
 });
 
 /**
@@ -42,8 +50,8 @@ L.Icon.Default.mergeOptions({
   template: `<div #mapHost class="geo-location-picker" role="application"
                   aria-label="Mapa para elegir la ubicación"></div>`,
   styles: [
-    `:host { display: block; }
-     .geo-location-picker { width: 100%; height: 100%; min-height: 280px;
+    `:host { display: block; height: 280px; }
+     .geo-location-picker { width: 100%; height: 100%;
        border-radius: var(--radius-card, 10px); overflow: hidden; }`,
   ],
 })
@@ -57,6 +65,7 @@ export class GeoLocationPicker implements AfterViewInit, OnDestroy {
 
   private readonly mapHost = viewChild.required<ElementRef<HTMLDivElement>>('mapHost');
   private map?: L.Map;
+  private resizeObserver?: ResizeObserver;
   private marker?: L.Marker;
   private circle?: L.Circle;
 
@@ -88,9 +97,13 @@ export class GeoLocationPicker implements AfterViewInit, OnDestroy {
     if (!this.readOnly()) {
       this.map.on('click', (event: L.LeafletMouseEvent) => this.select(event.latlng));
     }
+    // Leaflet measures its container once; redraw the tiles when the layout changes its size.
+    this.resizeObserver = new ResizeObserver(() => this.map?.invalidateSize());
+    this.resizeObserver.observe(this.mapHost().nativeElement);
   }
 
   ngOnDestroy(): void {
+    this.resizeObserver?.disconnect();
     this.map?.remove();
   }
 
@@ -108,7 +121,7 @@ export class GeoLocationPicker implements AfterViewInit, OnDestroy {
     if (this.marker) {
       this.marker.setLatLng(latlng);
     } else {
-      this.marker = L.marker(latlng, { draggable: !this.readOnly() }).addTo(this.map);
+      this.marker = L.marker(latlng, { draggable: !this.readOnly(), icon: MARKER_ICON }).addTo(this.map);
       this.marker.on('dragend', () => this.select(this.marker!.getLatLng()));
     }
     this.map.panTo(latlng);
