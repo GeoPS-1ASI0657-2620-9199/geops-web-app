@@ -1,0 +1,52 @@
+import { LimaDistrict } from '../domain/model/lima-district';
+
+/**
+ * The 43 districts of Lima Metropolitana with the center OpenStreetMap Nominatim gives for each
+ * (queried once on 2026-10-04, data (c) OpenStreetMap contributors, ODbL). The search starts
+ * there when the consumer picks a district (E-11, QAS12).
+ */
+export const LIMA_DISTRICTS: readonly LimaDistrict[] = [
+  { name: 'Ancón', center: { latitude: -11.6968, longitude: -77.1116 } },
+  { name: 'Ate', center: { latitude: -12.0387, longitude: -76.8969 } },
+  { name: 'Barranco', center: { latitude: -12.144, longitude: -77.0203 } },
+  { name: 'Breña', center: { latitude: -12.0597, longitude: -77.0501 } },
+  { name: 'Carabayllo', center: { latitude: -11.795, longitude: -76.9893 } },
+  { name: 'Chaclacayo', center: { latitude: -11.9925, longitude: -76.7762 } },
+  { name: 'Chorrillos', center: { latitude: -12.1923, longitude: -77.009 } },
+  { name: 'Cieneguilla', center: { latitude: -12.0732, longitude: -76.7771 } },
+  { name: 'Comas', center: { latitude: -11.9329, longitude: -77.0407 } },
+  { name: 'El Agustino', center: { latitude: -12.0421, longitude: -76.9957 } },
+  { name: 'Independencia', center: { latitude: -11.9893, longitude: -77.0473 } },
+  { name: 'Jesús María', center: { latitude: -12.0782, longitude: -77.0464 } },
+  { name: 'La Molina', center: { latitude: -12.0901, longitude: -76.9227 } },
+  { name: 'La Victoria', center: { latitude: -12.074, longitude: -77.0182 } },
+  { name: 'Lima', center: { latitude: -12.046, longitude: -77.0306 } },
+  { name: 'Lince', center: { latitude: -12.0853, longitude: -77.037 } },
+  { name: 'Los Olivos', center: { latitude: -11.966, longitude: -77.0731 } },
+  { name: 'Lurigancho', center: { latitude: -11.9488, longitude: -76.7627 } },
+  { name: 'Lurín', center: { latitude: -12.2382, longitude: -76.7839 } },
+  { name: 'Magdalena del Mar', center: { latitude: -12.0957, longitude: -77.0682 } },
+  { name: 'Miraflores', center: { latitude: -12.1215, longitude: -77.0259 } },
+  { name: 'Pachacámac', center: { latitude: -12.1495, longitude: -76.7913 } },
+  { name: 'Pucusana', center: { latitude: -12.4685, longitude: -76.7725 } },
+  { name: 'Pueblo Libre', center: { latitude: -12.0766, longitude: -77.0679 } },
+  { name: 'Puente Piedra', center: { latitude: -11.8768, longitude: -77.0747 } },
+  { name: 'Punta Hermosa', center: { latitude: -12.3327, longitude: -76.8257 } },
+  { name: 'Punta Negra', center: { latitude: -12.3656, longitude: -76.7952 } },
+  { name: 'Rímac', center: { latitude: -12.0203, longitude: -77.0355 } },
+  { name: 'San Bartolo', center: { latitude: -12.3898, longitude: -76.7806 } },
+  { name: 'San Borja', center: { latitude: -12.0965, longitude: -76.9957 } },
+  { name: 'San Isidro', center: { latitude: -12.0979, longitude: -77.0354 } },
+  { name: 'San Juan de Lurigancho', center: { latitude: -11.9488, longitude: -76.9779 } },
+  { name: 'San Juan de Miraflores', center: { latitude: -12.1554, longitude: -76.9724 } },
+  { name: 'San Luis', center: { latitude: -12.0724, longitude: -76.9959 } },
+  { name: 'San Martín de Porres', center: { latitude: -11.9878, longitude: -77.0983 } },
+  { name: 'San Miguel', center: { latitude: -12.0791, longitude: -77.0948 } },
+  { name: 'Santa Anita', center: { latitude: -12.0433, longitude: -76.9619 } },
+  { name: 'Santa María del Mar', center: { latitude: -12.4019, longitude: -76.7737 } },
+  { name: 'Santa Rosa', center: { latitude: -11.805, longitude: -77.16 } },
+  { name: 'Santiago de Surco', center: { latitude: -12.1251, longitude: -76.9822 } },
+  { name: 'Surquillo', center: { latitude: -12.1142, longitude: -77.0105 } },
+  { name: 'Villa El Salvador', center: { latitude: -12.2169, longitude: -76.9491 } },
+  { name: 'Villa María del Triunfo', center: { latitude: -12.1766, longitude: -76.919 } },
+];
