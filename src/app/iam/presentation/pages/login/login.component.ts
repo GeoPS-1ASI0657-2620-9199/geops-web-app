@@ -11,15 +11,9 @@ import { ApiError } from '../../../../shared/domain/api-error';
 import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { GeoTopBar } from '../../../../core/layout/geo-top-bar/geo-top-bar';
 import { LogInUseCase } from '../../../application/log-in.use-case';
-import { UserRole } from '../../../domain/model/user-role';
+import { HOME_BY_ROLE } from '../../../domain/model/home-by-role';
 
 const INVALID_CREDENTIALS = 'INVALID_CREDENTIALS';
-/** Where each role lands after logging in (US21: consumer; US23: business owner). */
-const HOME_BY_ROLE: Record<UserRole, string> = {
-  CONSUMER: '/offers',
-  BUSINESS_OWNER: '/campaigns',
-  ADMIN: '/offers',
-};
 
 interface LoginAlert {
   kind: 'success' | 'info' | 'error';

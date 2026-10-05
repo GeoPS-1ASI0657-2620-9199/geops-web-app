@@ -1,14 +1,30 @@
 import { Routes } from '@angular/router';
 import { Layout } from './core/layout/layout/layout';
-import { LoginComponent } from './iam/presentation/pages/login/login.component';
-import { RegisterComponent } from './iam/presentation/pages/register/register.component';
-import { RegisterBusinessComponent } from './iam/presentation/pages/register-business/register-business.component';
+import { authGuard } from './iam/infrastructure/auth.guard';
+import { roleGuard } from './iam/infrastructure/role.guard';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/login' },
-  { path: 'login', component: LoginComponent, title: 'GeoPS - Iniciar sesión' },
-  { path: 'register', component: RegisterComponent, title: 'GeoPS - Crear cuenta' },
-  { path: 'register-business', component: RegisterBusinessComponent, title: 'GeoPS - Registrar negocio' },
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./iam/presentation/pages/login/login.component').then((m) => m.LoginComponent),
+    title: 'GeoPS - Iniciar sesión',
+  },
+  {
+    path: 'register',
+    loadComponent: () =>
+      import('./iam/presentation/pages/register/register.component').then((m) => m.RegisterComponent),
+    title: 'GeoPS - Crear cuenta',
+  },
+  {
+    path: 'register-business',
+    loadComponent: () =>
+      import('./iam/presentation/pages/register-business/register-business.component').then(
+        (m) => m.RegisterBusinessComponent,
+      ),
+    title: 'GeoPS - Registrar negocio',
+  },
   {
     path: '',
     component: Layout,
@@ -31,6 +47,7 @@ export const routes: Routes = [
       },
       {
         path: 'campaigns',
+        canActivate: [authGuard, roleGuard('BUSINESS_OWNER')],
         loadComponent: () =>
           import('./catalog/presentation/pages/campaigns-panel/campaigns.component').then(
             (m) => m.CampaignsComponent
@@ -39,11 +56,17 @@ export const routes: Routes = [
       },
       {
         path: 'campaigns/new',
+        canActivate: [authGuard, roleGuard('BUSINESS_OWNER')],
         loadComponent: () =>
           import('./catalog/presentation/pages/create-campaign/crear-campaign.component').then(
             (m) => m.CrearCampaignComponent
           ),
         title: 'GeoPS - Publicar campaña',
+      },
+      {
+        path: 'forbidden',
+        loadComponent: () => import('./core/layout/forbidden/forbidden').then((m) => m.Forbidden),
+        title: 'GeoPS - Acceso denegado',
       },
     ],
   },
