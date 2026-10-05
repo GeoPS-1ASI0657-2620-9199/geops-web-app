@@ -353,14 +353,6 @@
       "continue": "Continue Shopping"
     }
   },
-  "login": {
-    "title": "Sign In",
-    "email": "Email:",
-    "password": "Password:",
-    "button": "Login",
-    "noAccount": "Don't have an account?",
-    "register": "Register here"
-  },
   "profile": {
     "planPremium": "Premium Plan",
     "planBasic": "Basic Plan",
@@ -839,6 +831,36 @@
       },
       "invalid": "Check your data",
       "generic": "We could not create your account"
+    }
+  },
+  "loginPage": {
+    "title": "Log in",
+    "intro": "Use the email you registered with.",
+    "brandTitle": "Offers that are honored, a few minutes away",
+    "brandText": "Search by distance, reserve without paying in advance and pay at the store. If you own a business, log in here too and you land on your campaign panel.",
+    "email": "Email",
+    "emailInvalid": "Enter a valid email.",
+    "password": "Password",
+    "passwordRequired": "Enter your password.",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "submit": "Log in",
+    "submitting": "Logging in…",
+    "noAccount": "No account yet?",
+    "createAccount": "Create account",
+    "registerBusiness": "Register my business",
+    "registered": {
+      "title": "Your account is ready",
+      "description": "Log in with the email and password you just registered."
+    },
+    "expired": "Your session ended. Log in again.",
+    "errors": {
+      "credentials": {
+        "title": "Wrong email or password",
+        "description": "We do not say which one failed to protect your account.",
+        "field": "Check the email and password and try again."
+      },
+      "generic": "We could not log you in"
     }
   }
 }
