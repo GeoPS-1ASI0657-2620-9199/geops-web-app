@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { IsActiveMatchOptions, RouterLink, RouterLinkActive } from '@angular/router';
 
 export interface NavItem {
   label: string;
@@ -22,7 +22,7 @@ export interface NavItem {
           class="tab"
           [routerLink]="item.route"
           routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
+          [routerLinkActiveOptions]="activeOptions"
           ariaCurrentWhenActive="page">
           {{ item.label }}
         </a>
@@ -54,4 +54,11 @@ export interface NavItem {
 })
 export class GeoNav {
   readonly items = input.required<NavItem[]>();
+  /** The tab stays active when the page adds query params, e.g. /campaigns?created=1. */
+  protected readonly activeOptions: IsActiveMatchOptions = {
+    paths: 'exact',
+    queryParams: 'ignored',
+    fragment: 'ignored',
+    matrixParams: 'ignored',
+  };
 }
