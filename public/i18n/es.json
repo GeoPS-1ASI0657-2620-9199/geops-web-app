@@ -530,156 +530,6 @@
     },
     "latestCampaigns": "Últimas campañas"
   },
-  "campaigns": {
-    "title": "Campañas",
-    "tabs": {
-      "active": "Activas",
-      "paused": "Pausadas",
-      "finalized": "Finalizadas"
-    },
-    "empty": {
-      "active": "No hay campañas activas",
-      "paused": "No hay campañas pausadas",
-      "finalized": "No hay campañas finalizadas"
-    },
-    "actions": {
-      "create": "Crear nueva campaña",
-      "edit": "Editar",
-      "pause": "Pausar",
-      "resume": "Reanudar",
-      "activate": "Activar",
-      "finalize": "Finalizar",
-      "view": "Visualizar",
-      "cancel": "Cancelar",
-      "save": "Guardar Cambios",
-      "remove": "Eliminar",
-      "addOffers": "Agregar Ofertas",
-      "removeOffer": "Quitar Oferta",
-      "back": "Volver",
-      "download": "Descargar Reporte",
-      "print": "Imprimir"
-    },
-    "status": {
-      "active": "Activa",
-      "paused": "Pausada",
-      "finalized": "Finalizada"
-    },
-    "statusLabels": {
-      "ACTIVE": "Activa",
-      "PAUSED": "Pausada",
-      "FINALIZED": "Finalizada"
-    },
-    "dialogs": {
-      "pause": {
-        "title": "¿Pausar campaña?",
-        "message": "¿Estás seguro de que deseas pausar la campaña \"{{name}}\"?",
-        "confirm": "Pausar"
-      },
-      "activate": {
-        "title": "¿Activar campaña?",
-        "message": "¿Estás seguro de que deseas activar la campaña \"{{name}}\"?",
-        "confirm": "Activar"
-      },
-      "finalize": {
-        "title": "¿Finalizar campaña?",
-        "message": "¿Estás seguro de que deseas finalizar la campaña \"{{name}}\"? Esta acción no se podrá revertir.",
-        "confirm": "Finalizar"
-      },
-      "delete": {
-        "title": "¿Eliminar campaña?",
-        "message": "¿Estás seguro de que deseas eliminar la campaña \"{{name}}\"? Esta acción no se puede deshacer.",
-        "confirm": "Eliminar"
-      }
-    },
-    "notifications": {
-      "pauseSuccess": "Campaña pausada exitosamente",
-      "activateSuccess": "Campaña activada exitosamente",
-      "finalizeSuccess": "Campaña finalizada exitosamente",
-      "deleteSuccess": "Campaña eliminada exitosamente"
-    },
-    "form": {
-      "createTitle": "Crear Nueva Campaña",
-      "editTitle": "Editar Campaña",
-      "name": "Nombre de la Campaña",
-      "namePlaceholder": "Ej: Promoción Verano 2025",
-      "nameRequired": "El nombre es requerido",
-      "nameMinLength": "El nombre debe tener al menos 3 caracteres",
-      "description": "Descripción",
-      "descriptionPlaceholder": "Describe tu campaña...",
-      "descriptionRequired": "La descripción es requerida",
-      "descriptionMinLength": "La descripción debe tener al menos 10 caracteres",
-      "startDate": "Fecha de Inicio",
-      "startDateRequired": "La fecha de inicio es requerida",
-      "endDate": "Fecha de Fin",
-      "endDateRequired": "La fecha de fin es requerida",
-      "budget": "Presupuesto Estimado (S/.)",
-      "budgetPlaceholder": "0.00",
-      "budgetRequired": "El presupuesto es requerido",
-      "budgetMin": "El presupuesto debe ser mayor o igual a 0",
-      "status": "Estado",
-      "initialStatus": "Estado Inicial",
-      "statusRequired": "El estado es requerido",
-      "creating": "Creando...",
-      "saving": "Guardando...",
-      "createButton": "Crear Campaña",
-      "saveButton": "Guardar Cambios"
-    },
-    "stats": {
-      "title": "Estadísticas de la Campaña",
-      "impressions": "Impresiones",
-      "clicks": "Clicks",
-      "ctr": "CTR",
-      "budget": "Presupuesto",
-      "totalCampaigns": "Total Campañas",
-      "totalImpressions": "Impresiones Totales",
-      "totalClicks": "Clicks Totales",
-      "totalBudget": "Presupuesto Total",
-      "averageCTR": "CTR Promedio"
-    },
-    "details": {
-      "title": "Detalles de la Campaña",
-      "loading": "Cargando campaña...",
-      "description": "Descripción",
-      "startDate": "Fecha de Inicio",
-      "endDate": "Fecha de Fin",
-      "estimatedBudget": "Presupuesto Estimado",
-      "associatedOffers": "Ofertas Asociadas"
-    },
-    "offers": {
-      "title": "Ofertas de la Campaña",
-      "empty": "Aún no se han agregado ofertas",
-      "add": "Agregar Ofertas",
-      "remove": "Quitar",
-      "view": "Ver Oferta",
-      "select": "Seleccionar Ofertas",
-      "selected": "{{count}} seleccionadas",
-      "availableOffers": "Ofertas Disponibles",
-      "searchPlaceholder": "Buscar ofertas..."
-    },
-    "reports": {
-      "title": "Reportes de Campañas",
-      "filterByStatus": "Filtrar por Estado",
-      "allCampaigns": "Todas las Campañas",
-      "exportFormat": "Formato de Exportación",
-      "summary": "Resumen General",
-      "byStatus": "Por Estado",
-      "preview": "Vista Previa"
-    },
-    "dashboard": {
-      "title": "Dashboard - Resumen de Campañas",
-      "subtitle": "Panel de Control",
-      "allCampaigns": "Todas las Campañas"
-    },
-    "messages": {
-      "createSuccess": "Campaña creada exitosamente",
-      "updateSuccess": "Campaña actualizada exitosamente",
-      "pauseSuccess": "Campaña pausada",
-      "resumeSuccess": "Campaña reanudada",
-      "finalizeSuccess": "Campaña finalizada",
-      "deleteSuccess": "Campaña eliminada",
-      "error": "Ocurrió un error. Por favor, intenta de nuevo."
-    }
-  },
   "reviewsPage": {
     "title": "Comentarios y Reseñas",
     "addReview": "Agregar Reseña",
@@ -889,6 +739,173 @@
       "phone": "Ya existe una cuenta con este celular",
       "ruc": "Revisa el RUC",
       "generic": "No pudimos registrar tu negocio"
+    }
+  },
+  "campaignsPage": {
+    "title": "Mis campañas",
+    "new": "Publicar campaña",
+    "created": {
+      "title": "Campaña publicada",
+      "description": "Ya se muestra a los clientes dentro de la zona que elegiste."
+    },
+    "empty": {
+      "title": "Publica una oferta para tu zona",
+      "description": "Elige el producto, el precio con descuento, la vigencia y hasta dónde quieres llegar."
+    }
+  },
+  "forbiddenPage": {
+    "title": "No tienes acceso a esta sección",
+    "description": "Tu cuenta no tiene permisos para esta parte de GeoPS. Si crees que es un error, escríbenos.",
+    "back": "Volver al inicio"
+  },
+  "campaigns": {
+    "title": "Campañas",
+    "tabs": {
+      "active": "Activas",
+      "paused": "Pausadas",
+      "finalized": "Finalizadas"
+    },
+    "empty": {
+      "active": "No hay campañas activas",
+      "paused": "No hay campañas pausadas",
+      "finalized": "No hay campañas finalizadas"
+    },
+    "actions": {
+      "create": "Crear nueva campaña",
+      "edit": "Editar",
+      "pause": "Pausar",
+      "resume": "Reanudar",
+      "activate": "Activar",
+      "finalize": "Finalizar",
+      "view": "Visualizar",
+      "cancel": "Cancelar",
+      "save": "Guardar Cambios",
+      "remove": "Eliminar",
+      "addOffers": "Agregar Ofertas",
+      "removeOffer": "Quitar Oferta",
+      "back": "Volver",
+      "download": "Descargar Reporte",
+      "print": "Imprimir"
+    },
+    "status": {
+      "active": "Activa",
+      "paused": "Pausada",
+      "finalized": "Finalizada"
+    },
+    "statusLabels": {
+      "ACTIVE": "Activa",
+      "PAUSED": "Pausada",
+      "FINALIZED": "Finalizada"
+    },
+    "dialogs": {
+      "pause": {
+        "title": "¿Pausar campaña?",
+        "message": "¿Estás seguro de que deseas pausar la campaña \"{{name}}\"?",
+        "confirm": "Pausar"
+      },
+      "activate": {
+        "title": "¿Activar campaña?",
+        "message": "¿Estás seguro de que deseas activar la campaña \"{{name}}\"?",
+        "confirm": "Activar"
+      },
+      "finalize": {
+        "title": "¿Finalizar campaña?",
+        "message": "¿Estás seguro de que deseas finalizar la campaña \"{{name}}\"? Esta acción no se podrá revertir.",
+        "confirm": "Finalizar"
+      },
+      "delete": {
+        "title": "¿Eliminar campaña?",
+        "message": "¿Estás seguro de que deseas eliminar la campaña \"{{name}}\"? Esta acción no se puede deshacer.",
+        "confirm": "Eliminar"
+      }
+    },
+    "notifications": {
+      "pauseSuccess": "Campaña pausada exitosamente",
+      "activateSuccess": "Campaña activada exitosamente",
+      "finalizeSuccess": "Campaña finalizada exitosamente",
+      "deleteSuccess": "Campaña eliminada exitosamente"
+    },
+    "form": {
+      "createTitle": "Crear Nueva Campaña",
+      "editTitle": "Editar Campaña",
+      "name": "Nombre de la Campaña",
+      "namePlaceholder": "Ej: Promoción Verano 2025",
+      "nameRequired": "El nombre es requerido",
+      "nameMinLength": "El nombre debe tener al menos 3 caracteres",
+      "description": "Descripción",
+      "descriptionPlaceholder": "Describe tu campaña...",
+      "descriptionRequired": "La descripción es requerida",
+      "descriptionMinLength": "La descripción debe tener al menos 10 caracteres",
+      "startDate": "Fecha de Inicio",
+      "startDateRequired": "La fecha de inicio es requerida",
+      "endDate": "Fecha de Fin",
+      "endDateRequired": "La fecha de fin es requerida",
+      "budget": "Presupuesto Estimado (S/.)",
+      "budgetPlaceholder": "0.00",
+      "budgetRequired": "El presupuesto es requerido",
+      "budgetMin": "El presupuesto debe ser mayor o igual a 0",
+      "status": "Estado",
+      "initialStatus": "Estado Inicial",
+      "statusRequired": "El estado es requerido",
+      "creating": "Creando...",
+      "saving": "Guardando...",
+      "createButton": "Crear Campaña",
+      "saveButton": "Guardar Cambios"
+    },
+    "stats": {
+      "title": "Estadísticas de la Campaña",
+      "impressions": "Impresiones",
+      "clicks": "Clicks",
+      "ctr": "CTR",
+      "budget": "Presupuesto",
+      "totalCampaigns": "Total Campañas",
+      "totalImpressions": "Impresiones Totales",
+      "totalClicks": "Clicks Totales",
+      "totalBudget": "Presupuesto Total",
+      "averageCTR": "CTR Promedio"
+    },
+    "details": {
+      "title": "Detalles de la Campaña",
+      "loading": "Cargando campaña...",
+      "description": "Descripción",
+      "startDate": "Fecha de Inicio",
+      "endDate": "Fecha de Fin",
+      "estimatedBudget": "Presupuesto Estimado",
+      "associatedOffers": "Ofertas Asociadas"
+    },
+    "offers": {
+      "title": "Ofertas de la Campaña",
+      "empty": "Aún no se han agregado ofertas",
+      "add": "Agregar Ofertas",
+      "remove": "Quitar",
+      "view": "Ver Oferta",
+      "select": "Seleccionar Ofertas",
+      "selected": "{{count}} seleccionadas",
+      "availableOffers": "Ofertas Disponibles",
+      "searchPlaceholder": "Buscar ofertas..."
+    },
+    "reports": {
+      "title": "Reportes de Campañas",
+      "filterByStatus": "Filtrar por Estado",
+      "allCampaigns": "Todas las Campañas",
+      "exportFormat": "Formato de Exportación",
+      "summary": "Resumen General",
+      "byStatus": "Por Estado",
+      "preview": "Vista Previa"
+    },
+    "dashboard": {
+      "title": "Dashboard - Resumen de Campañas",
+      "subtitle": "Panel de Control",
+      "allCampaigns": "Todas las Campañas"
+    },
+    "messages": {
+      "createSuccess": "Campaña creada exitosamente",
+      "updateSuccess": "Campaña actualizada exitosamente",
+      "pauseSuccess": "Campaña pausada",
+      "resumeSuccess": "Campaña reanudada",
+      "finalizeSuccess": "Campaña finalizada",
+      "deleteSuccess": "Campaña eliminada",
+      "error": "Ocurrió un error. Por favor, intenta de nuevo."
     }
   }
 }
