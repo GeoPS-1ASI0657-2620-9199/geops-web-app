@@ -22,33 +22,6 @@
     "favorites": "Favorites",
     "coupons": "My Coupons"
   },
-  "offersPage": {
-    "title": "Offers",
-    "hero": {
-      "rating": "{{value}}",
-      "buy": "Buy"
-    },
-    "filters": {
-      "search": "Search",
-      "allCategories": "All categories",
-      "sort": {
-        "relevance": "Relevance",
-        "priceAsc": "Lower price",
-        "priceDesc": "Higher price",
-        "ratingDesc": "Best rating"
-      },
-      "allLocations": "All",
-      "clear": "Clear"
-    },
-    "card": {
-      "view": "View offer",
-      "rating": "{{value}}",
-      "currency": "S/",
-      "buy": "Buy",
-      "add": "Add",
-      "locationPin": "Location"
-    }
-  },
   "offersData": {
     "titles": {
       "1": "Coney KIDS 2x1: Kids entry for 2 hours",
@@ -915,5 +888,44 @@
       "deleteSuccess": "Campaign deleted",
       "error": "An error occurred. Please try again."
     }
+  },
+  "nearbyPage": {
+    "title": "Offers near you",
+    "places": "Places:",
+    "yourLocation": "Your location",
+    "changeDistrict": "Change district",
+    "searching": "Searching your area…",
+    "count": "{{total}} valid offers within {{minutes}} walking minutes",
+    "loadMore": "See more",
+    "loadingMore": "Loading…",
+    "locating": {
+      "title": "Searching your area…",
+      "description": "If the browser asks for your location, accept it to see offers by distance."
+    },
+    "imprecise": {
+      "title": "Your location has a ±{{meters}} m margin",
+      "description": "With that margin distances can be off by several blocks. Choose your district or try again with GPS on."
+    },
+    "pick": {
+      "title": "Choose your district",
+      "noLocationTitle": "Prefer not to share your location?",
+      "retryGps": "Use my location",
+      "reason": {
+        "DENIED": "Choose your district and we show the offers of that area.",
+        "UNAVAILABLE": "We could not locate you. Choose your district and we show the offers of that area.",
+        "INSECURE_CONTEXT": "Your browser only shares location on secure sites. Choose your district to go on."
+      }
+    },
+    "empty": {
+      "title": "No valid offers within {{minutes}} minutes",
+      "description": "You can widen the distance or choose another district.",
+      "widen": "Widen to {{minutes}} walking min"
+    },
+    "error": {
+      "title": "We could not load the offers",
+      "description": "It may be your connection or the service. Try again in a moment.",
+      "retry": "Retry"
+    },
+    "countOne": "1 valid offer within {{minutes}} walking minutes"
   }
 }
