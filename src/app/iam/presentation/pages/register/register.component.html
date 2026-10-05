@@ -1,61 +1,84 @@
-<!--
-  RegisterComponent Template
-  Displays a user registration form with translated labels, role and plan selection, login link, and error feedback.
--->
+<geo-top-bar />
 
-<div class="register-container">
-  <!-- Language switcher for multilingual support -->
-  <div class="register-language-switch">
-    <app-language-switcher />
-  </div>
+<main class="page">
+  <form class="card" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <h1 class="geo-page-title">{{ 'registerPage.title' | translate }}</h1>
+    <p class="geo-body intro">{{ 'registerPage.intro' | translate }}</p>
 
-  <!-- Form title, translated -->
-  <h2 class="register-title">{{ 'register.title' | translate }}</h2>
+    @if (alert(); as a) {
+      <geo-alert
+        kind="error"
+        [title]="a.titleKey | translate"
+        [description]="a.description ?? (a.descriptionKey ? (a.descriptionKey | translate) : null)" />
+    }
 
-  <!-- User registration form -->
-  <form class="register-form" (ngSubmit)="onSubmit()" #registerForm="ngForm">
-    <!-- Name input -->
-    <label class="register-label">{{ 'register.name' | translate }}</label>
-    <input class="register-input" type="text" name="name" [(ngModel)]="model.name" required />
+    <div class="row">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'registerPage.givenNames' | translate }}</mat-label>
+        <input matInput formControlName="givenNames" autocomplete="given-name" />
+        <mat-error>{{ 'registerPage.required' | translate }}</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'registerPage.surnames' | translate }}</mat-label>
+        <input matInput formControlName="surnames" autocomplete="family-name" />
+        <mat-error>{{ 'registerPage.required' | translate }}</mat-error>
+      </mat-form-field>
+    </div>
 
-    <!-- Email input -->
-    <label class="register-label">{{ 'register.email' | translate }}</label>
-    <input class="register-input" type="email" name="email" [(ngModel)]="model.email" required />
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'registerPage.email' | translate }}</mat-label>
+      <input matInput type="email" formControlName="email" autocomplete="email" />
+      @if (form.controls.email.hasError('taken')) {
+        <mat-error>{{ 'registerPage.errors.emailTaken.field' | translate }}</mat-error>
+      } @else {
+        <mat-error>{{ 'registerPage.emailInvalid' | translate }}</mat-error>
+      }
+    </mat-form-field>
 
-    <!-- Password input -->
-    <label class="register-label">{{ 'register.password' | translate }}</label>
-    <input class="register-input" type="password" name="password" [(ngModel)]="model.password" required />
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'registerPage.phone' | translate }}</mat-label>
+      <input
+        matInput
+        formControlName="phone"
+        inputmode="numeric"
+        autocomplete="tel-national"
+        maxlength="9" />
+      <mat-hint>{{ 'registerPage.phoneHint' | translate }}</mat-hint>
+      @if (form.controls.phone.hasError('taken')) {
+        <mat-error>{{ 'registerPage.errors.phoneTaken.field' | translate }}</mat-error>
+      } @else {
+        <mat-error>{{ 'registerPage.phoneHint' | translate }}</mat-error>
+      }
+    </mat-form-field>
 
-    <!-- Phone input -->
-    <label class="register-label">{{ 'register.phone' | translate }}</label>
-    <input class="register-input" type="text" name="phone" [(ngModel)]="model.phone" required/>
+    <mat-form-field appearance="outline">
+      <mat-label>{{ 'registerPage.password' | translate }}</mat-label>
+      <input
+        matInput
+        [type]="showPassword() ? 'text' : 'password'"
+        formControlName="password"
+        autocomplete="new-password" />
+      <button
+        mat-icon-button
+        matSuffix
+        type="button"
+        (click)="togglePassword()"
+        [attr.aria-label]="(showPassword() ? 'registerPage.hidePassword' : 'registerPage.showPassword') | translate">
+        <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+      <mat-hint>{{ 'registerPage.passwordHint' | translate: passwordLimits }}</mat-hint>
+      <mat-error>{{ 'registerPage.passwordHint' | translate: passwordLimits }}</mat-error>
+    </mat-form-field>
 
-    <!-- Role selection -->
-    <label class="register-label">{{ 'register.role' | translate }}</label>
-    <select class="register-input" name="role" [(ngModel)]="model.role" required>
-      <option value="OWNER">{{ 'register.owner' | translate }}</option>
-      <option value="CONSUMER">{{ 'register.consumer' | translate }}</option>
-    </select>
-
-    <!-- Plan selection -->
-    <label class="register-label">{{ 'register.plan' | translate }}</label>
-    <select class="register-input" name="plan" [(ngModel)]="model.plan" required>
-      <option value="BASIC">{{ 'register.basic' | translate }}</option>
-      <option value="PREMIUM">{{ 'register.premium' | translate }}</option>
-    </select>
-
-    <!-- Submit button, disabled if registering or form is invalid -->
-    <button class="register-btn" type="submit" [disabled]="registering || !registerForm.form.valid">
-      {{ 'register.button' | translate }}
+    <button mat-flat-button class="submit" type="submit" [disabled]="submitting()">
+      {{ (submitting() ? 'registerPage.submitting' : 'registerPage.submit') | translate }}
     </button>
+
+    <p class="geo-meta links">
+      {{ 'registerPage.hasAccount' | translate }}
+      <a routerLink="/login">{{ 'registerPage.logIn' | translate }}</a>
+      <span aria-hidden="true">·</span>
+      <a routerLink="/register-business">{{ 'registerPage.registerBusiness' | translate }}</a>
+    </p>
   </form>
-
-  <!-- Login link for users who already have an account -->
-  <p class="register-login-msg">
-    {{ 'register.hasAccount' | translate }}
-    <a class="register-login-link" [routerLink]="['/login']">{{ 'register.loginHere' | translate }}</a>
-  </p>
-
-  <!-- Error message display -->
-  <div *ngIf="errorMessage" class="register-error">{{ errorMessage }}</div>
-</div>
+</main>

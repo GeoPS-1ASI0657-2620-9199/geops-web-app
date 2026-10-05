@@ -375,22 +375,6 @@
     "places": "Lugares habituales",
     "rights": "© 2025 Todos los derechos reservados"
   },
-  "register": {
-    "title": "Registro de usuario",
-    "name": "Nombre:",
-    "email": "Correo electrónico:",
-    "password": "Contraseña:",
-    "phone": "Teléfono:",
-    "role": "Tipo de usuario:",
-    "owner": "Negocio (Propietario)",
-    "consumer": "Consumidor",
-    "plan": "Plan:",
-    "basic": "Básico",
-    "premium": "Premium",
-    "button": "Registrarse",
-    "hasAccount": "¿Ya tienes una cuenta?",
-    "loginHere": "Inicia sesión aquí"
-  },
   "business": {
     "title": "Datos adicionales del negocio",
     "businessName": "Nombre del negocio:",
@@ -461,7 +445,6 @@
   },
   "helpCenter": {
     "title": "Centro de ayuda",
-
     "registerQuestion": "¿Cómo me registro como cliente?",
     "registerWord": "Registrarse",
     "registerStepsBefore": "Ve a",
@@ -472,7 +455,6 @@
     "registerStep2": "Ingresa tu correo y una contraseña segura (8+ caracteres, 1 mayúscula, 1 número, 1 símbolo).",
     "registerStep3": "Revisa tu correo y verifica tu cuenta.",
     "registerStep4": "Regresa e inicia sesión.",
-
     "couponQuestion": "¿Cómo canjeo un cupón en la tienda?",
     "couponStepsBefore": "Muestra tu cupón desde",
     "couponStepsAfter": "y el negocio lo valida con un código/QR.",
@@ -491,7 +473,6 @@
     "showToRedeem": "Mostrar para canjear",
     "uniqueCode": "código único",
     "couponId": "ID del cupón",
-
     "locationQuestion": "¿Por qué pedimos tu ubicación y cómo activarla?",
     "locationStepsBefore": "Para mostrarte",
     "locationStepsMiddle": "y ordenarlas por",
@@ -817,5 +798,39 @@
     "Automotriz": "Automotriz",
     "Servicios": "Servicios",
     "Otros": "Otros"
+  },
+  "registerPage": {
+    "title": "Crea tu cuenta",
+    "intro": "Te mostramos las ofertas vigentes de tu zona, ordenadas por cercanía.",
+    "givenNames": "Nombres",
+    "surnames": "Apellidos",
+    "email": "Correo electrónico",
+    "emailInvalid": "Ingresa un correo válido.",
+    "phone": "Celular",
+    "phoneHint": "9 dígitos, empieza con 9.",
+    "password": "Contraseña",
+    "passwordHint": "Entre {{min}} y {{max}} caracteres.",
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña",
+    "required": "Completa este dato.",
+    "submit": "Crear cuenta",
+    "submitting": "Creando tu cuenta…",
+    "hasAccount": "¿Ya tienes cuenta?",
+    "logIn": "Inicia sesión",
+    "registerBusiness": "Registrar mi negocio",
+    "errors": {
+      "emailTaken": {
+        "title": "Ya existe una cuenta con este correo",
+        "description": "Si es tuya, inicia sesión. Por seguridad no mostramos datos de esa cuenta.",
+        "field": "Usa otro correo o inicia sesión."
+      },
+      "phoneTaken": {
+        "title": "Ya existe una cuenta con este celular",
+        "description": "Si es tuya, inicia sesión. Por seguridad no mostramos datos de esa cuenta.",
+        "field": "Usa otro celular o inicia sesión."
+      },
+      "invalid": "Revisa los datos",
+      "generic": "No pudimos crear tu cuenta"
+    }
   }
 }
