@@ -13,7 +13,8 @@ import { ConsumerToolbar } from '../consumer-toolbar/consumer-toolbar';
 import { OwnerToolbarComponent } from '../owner-toolbar/owner-toolbar.component';
 import {TranslateModule} from '@ngx-translate/core';
 import {LanguageSwitcher} from '../language-switcher/language-switcher';
-import {AuthService} from '../../../iam/infrastructure/auth.service';
+import { SessionStore } from '../../../iam/application/session.store';
+import { LogOutUseCase } from '../../../iam/application/log-out.use-case';
 import {CommonModule} from '@angular/common';
 import { NavigationLoadingService } from '../../../shared/presentation/services/navigation-loading.service';
 import { NavigationBackdropComponent } from '../navigation-backdrop/navigation-backdrop.component';
@@ -47,14 +48,15 @@ export class Layout implements OnInit {
   private readonly navigationLoadingService = inject(NavigationLoadingService);
 
   q = '';
-  userName = 'Usuario';
-  userEmail = 'usuario@geops.com';
+  private readonly sessions = inject(SessionStore);
+  private readonly logOut = inject(LogOutUseCase);
+  userName = '';
+  userEmail = '';
   isMobileMenuOpen = signal(false);
   isSearchFocused = signal(false);
   isOwner = signal(false);
 
   constructor(
-    public authService: AuthService,
     private router: Router
   ) {
     // Listen to navigation events to show/hide backdrop
@@ -78,13 +80,11 @@ export class Layout implements OnInit {
     });
   }
   ngOnInit(): void {
-    const user = this.authService.getCurrentUser();
-    if (user) {
-      this.userName = user.name;
-      this.userEmail = user.email || 'usuario@geops.com';
-      this.isOwner.set(user.role === 'OWNER');
-    } else {
-      console.warn('[Layout] No hay usuario autenticado');
+    const session = this.sessions.activeSession();
+    if (session) {
+      this.userName = this.sessions.displayName() ?? session.email;
+      this.userEmail = session.email;
+      this.isOwner.set(session.role === 'BUSINESS_OWNER');
     }
   }
 
@@ -124,7 +124,7 @@ export class Layout implements OnInit {
   }
 
   onLogout() {
-    this.authService.logout();
+    this.logOut.execute();
     this.router.navigate(['/login']);
   }
 }
