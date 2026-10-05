@@ -1,3 +1,4 @@
+import { RegisterBusiness } from '../domain/model/register-business';
 import { RegisterConsumer, RegisteredUser, fullNameOf } from '../domain/model/register-consumer';
 import { Credentials, IssuedToken } from '../domain/model/session';
 import { UserRole } from '../domain/model/user-role';
@@ -9,6 +10,18 @@ export interface RegisterUserRequest {
   email: string;
   phone: string;
   password: string;
+  businessProfile?: BusinessProfileRequest;
+}
+
+/** businessProfile of the register body for role BUSINESS_OWNER. */
+export interface BusinessProfileRequest {
+  businessName: string;
+  businessType?: string;
+  ruc: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  openingHours?: string;
 }
 
 /** Body of the 201 answer (identity-service RegisteredUserResponse). */
@@ -28,6 +41,31 @@ export function toRegisterConsumerRequest(person: RegisterConsumer): RegisterUse
     email: person.email,
     phone: person.phone,
     password: person.password,
+  };
+}
+
+/** Optional texts travel only when the owner wrote them. */
+function optional(value: string): string | undefined {
+  return value ? value : undefined;
+}
+
+export function toRegisterBusinessRequest(owner: RegisterBusiness): RegisterUserRequest {
+  const business = owner.business;
+  return {
+    role: 'BUSINESS_OWNER',
+    fullName: owner.fullName,
+    email: owner.email,
+    phone: owner.phone,
+    password: owner.password,
+    businessProfile: {
+      businessName: business.businessName,
+      businessType: optional(business.businessType),
+      ruc: business.ruc,
+      address: business.address,
+      latitude: business.location.latitude,
+      longitude: business.location.longitude,
+      openingHours: optional(business.openingHours),
+    },
   };
 }
 
