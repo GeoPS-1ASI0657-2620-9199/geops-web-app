@@ -4,9 +4,13 @@ import { firstValueFrom } from 'rxjs';
 import { API_BASE_URL } from '../../core/config/api-base-url';
 import { toApiError } from '../../core/http/api-error.mapper';
 import { RegisterConsumer, RegisteredUser } from '../domain/model/register-consumer';
+import { Credentials, IssuedToken } from '../domain/model/session';
 import { IdentityGateway } from '../domain/ports/identity.gateway';
 import {
   RegisteredUserResponse,
+  TokenResponse,
+  toIssuedToken,
+  toLogInRequest,
   toRegisterConsumerRequest,
   toRegisteredUser,
 } from './identity.mapper';
@@ -26,6 +30,17 @@ export class HttpIdentityGateway implements IdentityGateway {
         ),
       );
       return toRegisteredUser(response);
+    } catch (error) {
+      throw toApiError(error);
+    }
+  }
+
+  async logIn(credentials: Credentials): Promise<IssuedToken> {
+    try {
+      const response = await firstValueFrom(
+        this.http.post<TokenResponse>(`${this.baseUrl}/auth/login`, toLogInRequest(credentials)),
+      );
+      return toIssuedToken(response);
     } catch (error) {
       throw toApiError(error);
     }

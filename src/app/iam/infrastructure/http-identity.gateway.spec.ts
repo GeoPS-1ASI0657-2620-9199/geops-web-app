@@ -72,4 +72,46 @@ describe('HttpIdentityGateway', () => {
       new ApiError('EMAIL_ALREADY_REGISTERED', 'Ese correo ya tiene una cuenta.'),
     );
   });
+
+  it('logs in through the gateway and maps the token answer', async () => {
+    const result = gateway.logIn({ email: 'rosa.quispe@ejemplo.pe', password: 'Bodega#2026' });
+
+    const request = http.expectOne(`${BASE_URL}/auth/login`);
+    expect(request.request.method).toBe('POST');
+    expect(request.request.body).toEqual({ email: 'rosa.quispe@ejemplo.pe', password: 'Bodega#2026' });
+    request.flush({
+      accessToken: 'header.payload.signature',
+      tokenType: 'Bearer',
+      expiresIn: 3600,
+      userId: 42,
+      role: 'BUSINESS_OWNER',
+      businessId: 7,
+      businessName: 'Bodega Doña Rosa',
+    });
+
+    expect(await result).toEqual({
+      accessToken: 'header.payload.signature',
+      expiresInSeconds: 3600,
+      userId: 42,
+      role: 'BUSINESS_OWNER',
+      consumerId: undefined,
+      businessId: 7,
+      businessName: 'Bodega Doña Rosa',
+    });
+  });
+
+  it('rejects wrong credentials with INVALID_CREDENTIALS', async () => {
+    const result = gateway.logIn({ email: 'rosa.quispe@ejemplo.pe', password: 'mala' });
+
+    http
+      .expectOne(`${BASE_URL}/auth/login`)
+      .flush(
+        { code: 'INVALID_CREDENTIALS', message: 'Correo o contraseña incorrectos.' },
+        { status: 401, statusText: 'Unauthorized' },
+      );
+
+    await expectAsync(result).toBeRejectedWith(
+      new ApiError('INVALID_CREDENTIALS', 'Correo o contraseña incorrectos.'),
+    );
+  });
 });
