@@ -1,40 +1,116 @@
-<!--
-  RegisterBussinesComponent Template
-  Displays a business registration form for OWNER users.
-  Includes language switcher, translated labels, and error feedback.
--->
+<geo-top-bar />
 
-<div class="register-container">
-  <!-- Language switcher for multilingual support -->
-  <div class="register-language-switch">
-    <app-language-switcher />
-  </div>
+<main class="page">
+  <section class="card">
+    <h1 class="geo-page-title">{{ 'registerBusinessPage.title' | translate }}</h1>
+    <geo-steps [steps]="[stepLabelKeys[0] | translate, stepLabelKeys[1] | translate]" [current]="step()" />
 
-  <!-- Form title, translated -->
-  <h2 class="register-title">{{ 'business.title' | translate }}</h2>
+    @if (alert(); as a) {
+      <geo-alert
+        [kind]="a.kind"
+        [title]="a.titleKey | translate"
+        [description]="a.description ?? (a.descriptionKey ? (a.descriptionKey | translate) : null)" />
+    }
 
-  <!-- Business registration form -->
-  <form class="register-form" (ngSubmit)="onSubmit()" #businessForm="ngForm">
-    <!-- Business name input -->
-    <label class="register-label">{{ 'business.businessName' | translate }}</label>
-    <input class="register-input" type="text" name="businessName" [(ngModel)]="business.businessName" required />
+    @if (step() === stepBusiness) {
+      <form [formGroup]="business" (ngSubmit)="continue()" novalidate>
+        <p class="geo-body intro">{{ 'registerBusinessPage.business.intro' | translate }}</p>
 
-    <!-- Business type input -->
-    <label class="register-label">{{ 'business.businessType' | translate }}</label>
-    <input class="register-input" type="text" name="businessType" [(ngModel)]="business.businessType" required />
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'registerBusinessPage.business.name' | translate }}</mat-label>
+            <input matInput formControlName="businessName" autocomplete="organization" />
+            <mat-error>{{ 'registerBusinessPage.required' | translate }}</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'registerBusinessPage.business.type' | translate }}</mat-label>
+            <input matInput formControlName="businessType" />
+            <mat-hint>{{ 'registerBusinessPage.business.typeHint' | translate }}</mat-hint>
+          </mat-form-field>
+        </div>
 
-    <!-- Tax ID input -->
-    <label class="register-label">{{ 'business.taxId' | translate }}</label>
-    <input class="register-input" type="text" name="taxId" [(ngModel)]="business.taxId" required />
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'registerBusinessPage.business.ruc' | translate }}</mat-label>
+          <input matInput formControlName="ruc" inputmode="numeric" maxlength="11" />
+          <mat-hint>{{ 'registerBusinessPage.business.rucHint' | translate }}</mat-hint>
+          <mat-error>{{ 'registerBusinessPage.business.rucHint' | translate }}</mat-error>
+        </mat-form-field>
 
-    <!-- Add more fields here if needed -->
+        <h2 class="geo-section-title subtitle">{{ 'registerBusinessPage.account.title' | translate }}</h2>
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'registerBusinessPage.account.fullName' | translate }}</mat-label>
+            <input matInput formControlName="fullName" autocomplete="name" />
+            <mat-error>{{ 'registerBusinessPage.required' | translate }}</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'registerBusinessPage.account.phone' | translate }}</mat-label>
+            <input matInput formControlName="phone" inputmode="numeric" maxlength="9" autocomplete="tel-national" />
+            <mat-hint>{{ 'registerPage.phoneHint' | translate }}</mat-hint>
+            <mat-error>{{ 'registerPage.phoneHint' | translate }}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'registerBusinessPage.account.email' | translate }}</mat-label>
+            <input matInput type="email" formControlName="email" autocomplete="email" />
+            <mat-error>{{ 'registerPage.emailInvalid' | translate }}</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'registerPage.password' | translate }}</mat-label>
+            <input
+              matInput
+              [type]="showPassword() ? 'text' : 'password'"
+              formControlName="password"
+              autocomplete="new-password" />
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="togglePassword()"
+              [attr.aria-label]="(showPassword() ? 'registerPage.hidePassword' : 'registerPage.showPassword') | translate">
+              <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-hint>{{ 'registerPage.passwordHint' | translate: passwordLimits }}</mat-hint>
+            <mat-error>{{ 'registerPage.passwordHint' | translate: passwordLimits }}</mat-error>
+          </mat-form-field>
+        </div>
 
-    <!-- Submit button, disabled if submitting or form is invalid -->
-    <button class="register-btn" type="submit" [disabled]="submitting || !businessForm.form.valid">
-      {{ 'business.button' | translate }}
-    </button>
-  </form>
+        <div class="actions">
+          <a mat-button routerLink="/login">{{ 'registerBusinessPage.haveAccount' | translate }}</a>
+          <button mat-flat-button type="submit">{{ 'registerBusinessPage.continue' | translate }}</button>
+        </div>
+      </form>
+    } @else {
+      <form [formGroup]="place" (ngSubmit)="submit()" novalidate>
+        <p class="geo-body intro">{{ 'registerBusinessPage.location.intro' | translate }}</p>
 
-  <!-- Error message display -->
-  <div *ngIf="errorMessage" class="register-error">{{ errorMessage }}</div>
-</div>
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'registerBusinessPage.location.address' | translate }}</mat-label>
+          <input matInput formControlName="address" autocomplete="street-address" />
+          @if (place.controls.address.hasError('server')) {
+            <mat-error>{{ 'registerBusinessPage.location.addressInvalid' | translate }}</mat-error>
+          } @else {
+            <mat-error>{{ 'registerBusinessPage.required' | translate }}</mat-error>
+          }
+        </mat-form-field>
+
+        <geo-location-picker class="map" [point]="location()" (pointSelected)="onPointSelected($event)" />
+        <p class="geo-meta map-hint">{{ 'registerBusinessPage.location.mapHint' | translate }}</p>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'registerBusinessPage.location.openingHours' | translate }}</mat-label>
+          <input matInput formControlName="openingHours" />
+          <mat-hint>{{ 'registerBusinessPage.location.openingHoursHint' | translate }}</mat-hint>
+        </mat-form-field>
+
+        <div class="actions">
+          <button mat-stroked-button type="button" (click)="back()">{{ 'registerBusinessPage.back' | translate }}</button>
+          <button mat-flat-button type="submit" [disabled]="submitting()">
+            {{ (submitting() ? 'registerBusinessPage.submitting' : 'registerBusinessPage.submit') | translate }}
+          </button>
+        </div>
+      </form>
+    }
+  </section>
+</main>

@@ -1,199 +1,240 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { TranslateModule } from '@ngx-translate/core';
-import { LanguageSwitcher } from '../../../../core/layout/language-switcher/language-switcher';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { environment } from '../../../../../environments/environment';
-import { AuthService } from '../../../infrastructure/auth.service';
+import { ApiError } from '../../../../shared/domain/api-error';
+import { GeoPoint } from '../../../../shared/domain/geo-point';
+import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
+import { GeoLocationPicker } from '../../../../shared/ui/geo-location-picker/geo-location-picker';
+import { GeoSteps } from '../../../../shared/ui/geo-steps/geo-steps';
+import { GeoTopBar } from '../../../../core/layout/geo-top-bar/geo-top-bar';
+import {
+  INVALID_LOCATION,
+  RegisterBusinessUseCase,
+} from '../../../application/register-business.use-case';
+import {
+  ADDRESS_MAX_LENGTH,
+  BUSINESS_NAME_MAX_LENGTH,
+  BUSINESS_TYPE_MAX_LENGTH,
+  OPENING_HOURS_MAX_LENGTH,
+  RUC_PATTERN,
+} from '../../../domain/model/register-business';
+import {
+  EMAIL_MAX_LENGTH,
+  FULL_NAME_MAX_LENGTH,
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
+  PHONE_PATTERN,
+} from '../../../domain/model/register-consumer';
+
+const STEP_BUSINESS = 0;
+const STEP_LOCATION = 1;
+
+type RejectableField = 'email' | 'phone' | 'ruc' | 'address';
+
+/** Errors that belong to a field of the first step: the wizard goes back and marks it. */
+const FIELD_BY_CODE: Record<string, Exclude<RejectableField, 'address'>> = {
+  EMAIL_ALREADY_REGISTERED: 'email',
+  PHONE_ALREADY_REGISTERED: 'phone',
+  RUC_ALREADY_REGISTERED: 'ruc',
+  INVALID_RUC: 'ruc',
+};
+
+interface WizardAlert {
+  kind: 'success' | 'error';
+  titleKey: string;
+  descriptionKey?: string;
+  description?: string;
+}
 
 /**
- * RegisterBussinesComponent handles business profile registration for OWNER users.
- * Creates the user with owner role and business details after completion.
+ * Business owner registration (US22, Figma screens 18, 20 and 21). Two steps in the Sprint 1:
+ * account and business, then the location; one request at the end, nothing kept in storage.
+ * The SUNAT check (US38) and the baseline (US45) join with their stories.
  */
 @Component({
-  selector: 'app-register-bussines',
+  selector: 'app-register-business',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, LanguageSwitcher,
-    MatButtonToggleModule],
-  templateUrl: './register-bussines.component.html',
-  styleUrls: ['./register-bussines.component.css']
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    TranslateModule,
+    GeoAlert,
+    GeoLocationPicker,
+    GeoSteps,
+    GeoTopBar,
+  ],
+  templateUrl: './register-business.component.html',
+  styleUrl: './register-business.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RegisterBussinesComponent implements OnInit {
-  /** Model for business registration form fields */
-  business: any = {
-    businessName: '',
-    businessType: '',
-    taxId: ''
-  };
-  /** Indicates if submission is in progress */
-  submitting = false;
-  /** Stores error messages for display */
-  errorMessage = '';
-  /** OWNER user data from localStorage */
-  ownerData: any = null;
+export class RegisterBusinessComponent {
+  private readonly registerBusiness = inject(RegisterBusinessUseCase);
+  private readonly router = inject(Router);
+  private readonly fb = inject(FormBuilder).nonNullable;
 
+  protected readonly stepBusiness = STEP_BUSINESS;
+  protected readonly stepLocation = STEP_LOCATION;
+  protected readonly stepLabelKeys = ['registerBusinessPage.steps.business', 'registerBusinessPage.steps.location'];
+  protected readonly passwordLimits = { min: PASSWORD_MIN_LENGTH, max: PASSWORD_MAX_LENGTH };
+
+  protected readonly step = signal(STEP_BUSINESS);
+  protected readonly location = signal<GeoPoint | null>(null);
+  protected readonly alert = signal<WizardAlert | null>(null);
+  protected readonly submitting = signal(false);
+  protected readonly showPassword = signal(false);
   /**
-   * Initializes RegisterBussinesComponent with dependencies.
-   * @param router Angular Router for navigation
-   * @param http Angular HttpClient for HTTP requests
-   * @param authService AuthService for user registration
+   * Field the server rejected. Kept in a signal and read by a validator, because Angular revalidates
+   * the controls when a step is drawn again and errors set by hand would be lost.
    */
-  constructor(
-    private router: Router,
-    private http: HttpClient,
-    private authService: AuthService
-  ) {}
+  private readonly rejected = signal<RejectableField | null>(null);
 
-  ngOnInit(): void {
-    // Obtener datos del OWNER desde localStorage
-    const storedData = localStorage.getItem('register-owner-data');
-    if (!storedData) {
-      console.error('[RegisterBussines] No hay datos de registro en localStorage');
-      this.errorMessage = 'Error: Datos de registro no encontrados. Por favor vuelve a registrarte.';
+  protected readonly business = this.fb.group({
+    businessName: ['', [Validators.required, Validators.maxLength(BUSINESS_NAME_MAX_LENGTH)]],
+    businessType: ['', Validators.maxLength(BUSINESS_TYPE_MAX_LENGTH)],
+    ruc: ['', [Validators.required, Validators.pattern(RUC_PATTERN), this.rejectedBy('ruc')]],
+    fullName: ['', [Validators.required, Validators.maxLength(FULL_NAME_MAX_LENGTH)]],
+    phone: ['', [Validators.required, Validators.pattern(PHONE_PATTERN), this.rejectedBy('phone')]],
+    email: [
+      '',
+      [Validators.required, Validators.email, Validators.maxLength(EMAIL_MAX_LENGTH), this.rejectedBy('email')],
+    ],
+    password: [
+      '',
+      [Validators.required, Validators.minLength(PASSWORD_MIN_LENGTH), Validators.maxLength(PASSWORD_MAX_LENGTH)],
+    ],
+  });
+
+  protected readonly place = this.fb.group({
+    address: ['', [Validators.required, Validators.maxLength(ADDRESS_MAX_LENGTH), this.rejectedBy('address')]],
+    openingHours: ['', Validators.maxLength(OPENING_HOURS_MAX_LENGTH)],
+  });
+
+  constructor() {
+    // Once the owner edits the rejected field, the server error no longer applies.
+    const destroyRef = inject(DestroyRef);
+    this.business.valueChanges.pipe(takeUntilDestroyed(destroyRef)).subscribe(() => this.clearRejected());
+    this.place.valueChanges.pipe(takeUntilDestroyed(destroyRef)).subscribe(() => this.clearRejected());
+  }
+
+  continue(): void {
+    if (this.business.invalid) {
+      this.business.markAllAsTouched();
       return;
     }
+    this.alert.set(null);
+    this.step.set(STEP_LOCATION);
+  }
 
+  back(): void {
+    this.alert.set(null);
+    this.step.set(STEP_BUSINESS);
+  }
+
+  onPointSelected(point: GeoPoint): void {
+    this.location.set(point);
+    this.clearRejected();
+    this.alert.set({
+      kind: 'success',
+      titleKey: 'registerBusinessPage.location.marked',
+      description: `${point.latitude.toFixed(5)}, ${point.longitude.toFixed(5)}`,
+    });
+  }
+
+  togglePassword(): void {
+    this.showPassword.update((visible) => !visible);
+  }
+
+  async submit(): Promise<void> {
+    if (this.place.invalid || this.submitting()) {
+      this.place.markAllAsTouched();
+      return;
+    }
+    this.submitting.set(true);
+    const account = this.business.getRawValue();
+    const place = this.place.getRawValue();
     try {
-      this.ownerData = JSON.parse(storedData);
-    } catch (e) {
-      console.error('[RegisterBussines] Error al parsear datos:', e);
-      this.errorMessage = 'Error: Datos inválidos. Por favor vuelve a registrarte.';
+      await this.registerBusiness.execute({
+        fullName: account.fullName,
+        email: account.email,
+        phone: account.phone,
+        password: account.password,
+        business: {
+          businessName: account.businessName,
+          businessType: account.businessType,
+          ruc: account.ruc,
+          address: place.address,
+          location: this.location() as GeoPoint,
+          openingHours: place.openingHours,
+        },
+      });
+      await this.router.navigate(['/login'], { queryParams: { registered: 1 } });
+    } catch (error) {
+      this.showError(error);
+    } finally {
+      this.submitting.set(false);
     }
   }
 
-  /**
-   * Validates business form data
-   * @returns true if valid, false otherwise
-   */
-  private validateBusinessData(): boolean {
-    if (!this.business.businessName || this.business.businessName.trim().length === 0) {
-      this.errorMessage = 'El nombre del negocio es requerido';
-      return false;
-    }
-
-    if (!this.business.businessType || this.business.businessType.trim().length === 0) {
-      this.errorMessage = 'El tipo de negocio es requerido';
-      return false;
-    }
-
-    if (!this.business.taxId || this.business.taxId.trim().length === 0) {
-      this.errorMessage = 'El RUC/NIT es requerido';
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
-   * Handles business registration form submission.
-   * Creates the OWNER user with all data and business details.
-   */
-  onSubmit() {
-    // Validar datos de negocio
-    if (!this.validateBusinessData()) {
-      return;
-    }
-
-    if (!this.ownerData) {
-      this.errorMessage = 'Error: Datos de usuario no encontrados';
-      return;
-    }
-
-    this.submitting = true;
-    this.errorMessage = '';
-
-    // Paso 1: Crear el usuario OWNER con todos los datos
-    const userPayload = {
-      name: this.ownerData.name,
-      email: this.ownerData.email,
-      phone: this.ownerData.phone,
-      password: this.ownerData.password,
-      role: 'OWNER',
-      plan: this.ownerData.plan || 'BASIC'
-    };
-
-    this.authService.register(userPayload).subscribe({
-      next: (user: any) => {
-
-        // Verificar que el backend creó el usuario con el rol correcto
-        if (user.role !== 'OWNER') {
-          console.error('[RegisterBussines] ERROR: Backend creó usuario con rol incorrecto!');
-          console.error('[RegisterBussines] Esperado: OWNER, Recibido:', user.role);
-          this.errorMessage = 'Error: Usuario creado con rol incorrecto. Por favor contacta soporte.';
-          this.submitting = false;
-          return;
-        }
-
-        // Continuar con la creación de owner-details
-        this.createOwnerDetails(user.id);
-      },
-      error: (err: any) => {
-        console.error('[RegisterBussines] Error creando usuario OWNER:', err);
-
-        // Mensajes específicos según el código de error
-        if (err?.status === 409) {
-          this.errorMessage = 'El email o teléfono ya están registrados. Usa otros diferentes.';
-        } else if (err?.status === 400) {
-          this.errorMessage = 'Datos inválidos. Por favor verifica todos los campos.';
-        } else if (err?.status === 0) {
-          this.errorMessage = 'No se puede conectar al servidor. ¿Está ejecutándose el backend?';
-        } else {
-          this.errorMessage = 'Error al registrar usuario OWNER. Intenta nuevamente.';
-        }
-
-        this.submitting = false;
+  private showError(error: unknown): void {
+    const apiError = error instanceof ApiError ? error : null;
+    const code = apiError?.code ?? '';
+    if (code === INVALID_LOCATION) {
+      // CA-22.2: an invalid location asks to correct it before creating the business. Without a
+      // point on the map the address is not to blame, so only the alert shows.
+      if (this.location()) {
+        this.reject('address');
       }
+      this.alert.set({
+        kind: 'error',
+        titleKey: 'registerBusinessPage.errors.location',
+        description: apiError?.message,
+      });
+      return;
+    }
+    const field = FIELD_BY_CODE[code];
+    if (field) {
+      this.step.set(STEP_BUSINESS);
+      this.reject(field);
+    }
+    this.alert.set({
+      kind: 'error',
+      titleKey: field ? `registerBusinessPage.errors.${field}` : 'registerBusinessPage.errors.generic',
+      description: apiError?.message,
     });
   }
 
-  /**
-   * Creates owner details for the user
-   * @param userId The ID of the user to create details for
-   */
-  private createOwnerDetails(userId: number): void {
+  private rejectedBy(field: RejectableField) {
+    return (_control: AbstractControl): ValidationErrors | null =>
+      this.rejected() === field ? { server: true } : null;
+  }
 
-    const ownerDetailsPayload = {
-      businessName: this.business.businessName,
-      businessType: this.business.businessType,
-      taxId: this.business.taxId,
-      website: this.business.website || '',
-      description: this.business.description || '',
-      address: this.business.address || '',
-      horarioAtencion: this.business.horarioAtencion || ''
-    };
+  private controlOf(field: RejectableField): AbstractControl {
+    return field === 'address' ? this.place.controls.address : this.business.controls[field];
+  }
 
-    this.http.post(
-      `${environment.apiBaseUrl}/users/${userId}/owner-details`,
-      ownerDetailsPayload
-    ).subscribe({
-      next: () => {
-        // Limpiar datos temporales del localStorage
-        localStorage.removeItem('register-owner-data');
+  private reject(field: RejectableField): void {
+    this.rejected.set(field);
+    const control = this.controlOf(field);
+    control.updateValueAndValidity({ emitEvent: false });
+    control.markAsTouched();
+  }
 
-        this.submitting = false;
-
-        // Redirigir al resumen
-        this.router.navigate(['/campaigns']);
-      },
-      error: (err: any) => {
-        console.error('[RegisterBussines] Error creando detalles de propietario:', err);
-
-        // Mensajes específicos según el código de error
-        if (err?.status === 404) {
-          this.errorMessage = 'Usuario no encontrado. Por favor intenta registrarse de nuevo.';
-        } else if (err?.status === 400) {
-          this.errorMessage = 'Datos de negocio inválidos. Por favor verifica todos los campos.';
-        } else if (err?.status === 0) {
-          this.errorMessage = 'No se puede conectar al servidor. ¿Está ejecutándose el backend?';
-        } else {
-          this.errorMessage = 'Error guardando detalles del negocio.';
-        }
-
-        this.submitting = false;
-      }
-    });
+  private clearRejected(): void {
+    const field = this.rejected();
+    if (!field) {
+      return;
+    }
+    this.rejected.set(null);
+    this.controlOf(field).updateValueAndValidity({ emitEvent: false });
   }
 }

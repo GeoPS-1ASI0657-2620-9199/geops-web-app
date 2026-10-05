@@ -367,13 +367,6 @@
     "places": "Usual places",
     "rights": "© 2025 All rights reserved"
   },
-  "business": {
-    "title": "Additional Business Details",
-    "businessName": "Business Name:",
-    "businessType": "Business Type:",
-    "taxId": "Tax ID:",
-    "button": "Save"
-  },
   "settings": {
     "basicInfo": "Basic Information",
     "plan": {
@@ -861,6 +854,49 @@
         "field": "Check the email and password and try again."
       },
       "generic": "We could not log you in"
+    }
+  },
+  "registerBusinessPage": {
+    "title": "Register your business",
+    "steps": {
+      "business": "Business data",
+      "location": "Store location"
+    },
+    "required": "Fill in this field.",
+    "continue": "Continue",
+    "back": "Back",
+    "submit": "Create my business",
+    "submitting": "Creating your business…",
+    "haveAccount": "I already have an account",
+    "business": {
+      "intro": "With these details your store shows up in the nearby offers search.",
+      "name": "Business name",
+      "type": "Category",
+      "typeHint": "For example: Food · Lunch menus, Grocery, Beauty.",
+      "ruc": "RUC",
+      "rucHint": "11 digits."
+    },
+    "account": {
+      "title": "Your account",
+      "fullName": "Your full name",
+      "phone": "Mobile",
+      "email": "Business email"
+    },
+    "location": {
+      "intro": "Write the address and mark the point on the map. Your customers see the distance from that location.",
+      "address": "Store address",
+      "addressInvalid": "Add street and number, or mark the point on the map.",
+      "mapHint": "Tap the map or drag the marker to your store's door.",
+      "openingHours": "Opening hours",
+      "openingHoursHint": "Optional. For example: Mon-Sat 07:00-22:00.",
+      "marked": "Location marked"
+    },
+    "errors": {
+      "location": "We could not place your store",
+      "email": "An account with this email already exists",
+      "phone": "An account with this mobile already exists",
+      "ruc": "Check the RUC",
+      "generic": "We could not register your business"
     }
   }
 }

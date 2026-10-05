@@ -2,13 +2,13 @@ import { Routes } from '@angular/router';
 import { Layout } from './core/layout/layout/layout';
 import { LoginComponent } from './iam/presentation/pages/login/login.component';
 import { RegisterComponent } from './iam/presentation/pages/register/register.component';
-import { RegisterBussinesComponent } from './iam/presentation/pages/register-business/register-bussines.component';
+import { RegisterBusinessComponent } from './iam/presentation/pages/register-business/register-business.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/login' },
   { path: 'login', component: LoginComponent, title: 'GeoPS - Iniciar sesión' },
   { path: 'register', component: RegisterComponent, title: 'GeoPS - Crear cuenta' },
-  { path: 'register-business', component: RegisterBussinesComponent, title: 'GeoPS - Registrar negocio' },
+  { path: 'register-business', component: RegisterBusinessComponent, title: 'GeoPS - Registrar negocio' },
   {
     path: '',
     component: Layout,
