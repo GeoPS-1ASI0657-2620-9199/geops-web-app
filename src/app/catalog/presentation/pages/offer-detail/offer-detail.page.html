@@ -1,42 +1,101 @@
-<div class="offer-page">
+<section class="page">
+  <a class="back geo-meta" routerLink="/offers">
+    <mat-icon aria-hidden="true">chevron_left</mat-icon>
+    {{ 'offerDetailPage.back' | translate }}
+  </a>
 
-  <button class="back-btn" type="button" (click)="goBack()">
-    {{ 'offerDetail.back' | translate }}
-  </button>
-
-  <div class="offer-grid" *ngIf="offer as o">
-    <img class="offer-hero" [src]="imgFor()" [alt]="o.title">
-
-    <section class="summary">
-      <h1 class="title">{{ o.title || (('offersData.titles.' + o.id) | translate) }}</h1>
-      <div class="partner">{{ o.partner }}</div>
-
-      <div class="meta">
-        <mat-icon class="pin" aria-hidden="true">location_on</mat-icon>
-        <span *ngIf="isDistrict(o.location); else translatedLocation">{{ o.location }}</span>
-        <ng-template #translatedLocation>
-          <span>{{ 'offersData.locations.' + o.location | translate }}</span>
-        </ng-template>
-
-        <span class="dot">•</span>
-        <span class="rating">{{ o.rating | number:'1.1-1' }}</span>
-        <span class="stars" aria-hidden="true">@for (s of [1, 2, 3, 4, 5]; track s) {<mat-icon>star</mat-icon>}</span>
+  @switch (state()) {
+    @case ('loading') {
+      <div class="layout" aria-busy="true">
+        <div class="skeleton tall"></div>
+        <div class="skeleton"></div>
       </div>
+    }
+    @case ('not-found') {
+      <geo-empty-state
+        icon="search_off"
+        [title]="'offerDetailPage.notFound.title' | translate"
+        [description]="'offerDetailPage.notFound.description' | translate">
+        <a mat-flat-button routerLink="/offers">{{ 'offerDetailPage.seeNearby' | translate }}</a>
+      </geo-empty-state>
+    }
+    @case ('error') {
+      <geo-empty-state
+        icon="cloud_off"
+        [title]="'offerDetailPage.error.title' | translate"
+        [description]="errorMessage() ?? ('offerDetailPage.error.description' | translate)">
+        <button mat-flat-button type="button" (click)="load()">{{ 'offerDetailPage.error.retry' | translate }}</button>
+      </geo-empty-state>
+    }
+    @case ('ready') {
+      @if (offer(); as o) {
+        <div class="layout">
+          <article class="main">
+            @if (o.imageUrl) {
+              <img class="photo" [src]="o.imageUrl" [alt]="o.title" />
+            } @else {
+              <div class="photo placeholder" aria-hidden="true">
+                <mat-icon>sell</mat-icon>
+                <span>{{ o.category }}</span>
+              </div>
+            }
+            <h1 class="geo-page-title">{{ o.title }}</h1>
+            <div class="merchant">
+              <span class="name">{{ o.businessName }}</span>
+              @if (o.source === 'PUBLIC_SOURCE') {
+                <geo-seal kind="reference" />
+              } @else if (o.verifiedSeal) {
+                <geo-seal kind="verified" />
+              }
+              @if (!o.available) {
+                <geo-seal kind="expired" />
+              }
+            </div>
 
-      <div class="price">
-        <span class="currency">{{ 'common.currency' | translate }}</span>
-        <span class="amount">{{ o.price | number:'1.2-2' }}</span>
-      </div>
+            @if (!o.available) {
+              <geo-alert
+                kind="error"
+                [title]="'offerDetailPage.unavailable.title' | translate"
+                [description]="'offerDetailPage.unavailable.description' | translate" />
+            }
 
+            <h2 class="geo-section-title">{{ 'offerDetailPage.conditions' | translate }}</h2>
+            <p class="geo-body conditions">{{ o.conditions }}</p>
+          </article>
 
+          <aside class="side">
+            <div class="panel">
+              <p class="price geo-tabular" [class.muted]="!o.available">
+                <small>S/</small> {{ o.price | number: '1.2-2' }}
+              </p>
+              <dl class="facts">
+                <dt>{{ 'offerDetailPage.validity' | translate }}</dt>
+                <dd [class.expired]="!o.available">{{ validity() }}</dd>
+                <dt>{{ 'offerDetailPage.category' | translate }}</dt>
+                <dd>{{ o.category }}</dd>
+                <dt>{{ 'offerDetailPage.address' | translate }}</dt>
+                <dd>{{ o.address }}</dd>
+              </dl>
+              <button mat-flat-button type="button" class="full" disabled>
+                {{ (o.available ? 'offerDetailPage.reserve' : 'offerDetailPage.notAvailable') | translate }}
+              </button>
+              <p class="geo-meta hint">
+                {{ (o.available ? 'offerDetailPage.payAtStore' : 'offerDetailPage.cannotReserve') | translate }}
+              </p>
+            </div>
 
-      <ul class="bullets">
-        <li>{{ 'offerDetail.bullets.valid' | translate:{ partner: o.partner } }}</li>
-        <li>{{ 'offerDetail.bullets.business' | translate:{ partner: o.partner } }}</li>
-        <li>{{ 'offerDetail.bullets.redeem' | translate }}</li>
-      </ul>
-    </section>
-  </div>
-
-
-</div>
+            <div class="panel map-panel">
+              <geo-location-picker class="map" [point]="o.location" [readOnly]="true" />
+              @if (directionsUrl(); as url) {
+                <a mat-stroked-button class="full" [href]="url" target="_blank" rel="noopener">
+                  <mat-icon>directions_walk</mat-icon>
+                  {{ 'offerDetailPage.directions' | translate }}
+                </a>
+              }
+            </div>
+          </aside>
+        </div>
+      }
+    }
+  }
+</section>

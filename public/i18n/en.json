@@ -22,55 +22,6 @@
     "favorites": "Favorites",
     "coupons": "My Coupons"
   },
-  "offersData": {
-    "titles": {
-      "1": "Coney KIDS 2x1: Kids entry for 2 hours",
-      "2": "DBS: Facial care kit with 30% off",
-      "3": "MINNA Beauty: Lemon Sugar Scrub + Dallism Lip Gloss combo",
-      "4": "Kabuki – Deal: 2x1 Mixsoon Centella Cleansing Foam 150ml",
-      "5": "BUFFET LUNCH: ONLY Chorrillos location, Mon–Sun",
-      "6": "FUN JUNGLE: 60 or 90 minutes on inflatables",
-      "7": "BUFFET LUNCH: Creole, Chinese, pasta, soups, salads, desserts & more",
-      "8": "CINEMARK: 2× 2D tickets + 2 large drinks + giant popcorn",
-      "9": "LUNCH BUFFET OR DINNER WITH DANCING at Mandarin International Restaurant",
-      "10": "Pack: 5 games + 1 free",
-      "11": "FUN JUNGLE TRUJILLO: 60 minutes unlimited games",
-      "12": "Shimaya Ramen – 3 maki boards or 30 maki pieces",
-      "13": "Infinity Park Peru – AREQUIPA unlimited entries",
-      "14": "Arequipeño Creole BUFFET with live Ceviche station – CASA ANDINA PREMIUM",
-      "15": "ARUMA: Gift Card S/ 40 for S/ 29.90",
-      "16": "CINEPLANET: 2× 2D tickets + 2 large drinks + giant popcorn",
-      "17": "AQUATICA POOL PARK ICA: Full-day fun",
-      "18": "CINEMARK: 2 tickets + 2 sodas + medium or large popcorn",
-      "19": "CINEPLANET PROVINCES: 2× 2D tickets + giant popcorn + 2 large drinks",
-      "20": "Full-day wristband – Rides",
-      "21": "All you can eat Nikkei",
-      "22": "All-you-can-eat makis + drink",
-      "23": "Playland Kids – 2h unlimited",
-      "24": "Mundo Kids – All-day unlimited pass"
-    },
-    "categories": {
-      "Entretenimiento": "Entertainment",
-      "Belleza": "Beauty",
-      "Gastronomía": "Dining",
-      "Gift Card": "Gift Card",
-      "Educación": "Education",
-      "Salud": "Health",
-      "Tecnología": "Technology",
-      "Moda": "Fashion",
-      "Hogar": "Home",
-      "Deportes": "Sports",
-      "Viajes": "Travel",
-      "Automotriz": "Automotive",
-      "Servicios": "Services",
-      "Otros": "Others"
-    },
-    "locations": {
-      "Varias Sedes": "Multiple locations",
-      "Tiendas seleccionadas": "Selected stores",
-      "Online y tiendas": "Online & stores"
-    }
-  },
   "favoritesPage": {
     "title": "Favorites",
     "loading": "Loading…",
@@ -466,24 +417,6 @@
     "confirm": "Confirm",
     "cancel": "Cancel",
     "close": "Close"
-  },
-  "offerDetail": {
-    "back": "Back",
-    "buy": "Buy",
-    "addToCart": "Add to cart",
-    "bullets": {
-      "valid": "Valid online and at {{partner}} physical stores.",
-      "business": "Business: {{partner}}.",
-      "redeem": "It can be redeemed as a means of payment up to the indicated amount."
-    },
-    "reviews": {
-      "title": "Comments",
-      "count": "{{count}} reviews",
-      "yourRating": "Your rating",
-      "ariaRate": "Choose a rating from 1 to 5",
-      "placeholder": "Tell us about your experience with this offer",
-      "publish": "Publish review"
-    }
   },
   "categoriesBar": {
     "cines": "Cinemas",
@@ -927,5 +860,80 @@
       "retry": "Retry"
     },
     "countOne": "1 valid offer within {{minutes}} walking minutes"
+  },
+  "offerDetailPage": {
+    "back": "Nearby offers",
+    "seeNearby": "See nearby offers",
+    "conditions": "Conditions",
+    "validity": "Valid until",
+    "category": "Category",
+    "address": "Store",
+    "reserve": "Reserve",
+    "notAvailable": "Not available",
+    "payAtStore": "You pay at the store. We do not ask for your card.",
+    "cannotReserve": "This offer expired and cannot be reserved.",
+    "directions": "Get directions",
+    "unavailable": {
+      "title": "This offer is no longer available",
+      "description": "It expired or the business removed it. Go back to the list to see the ones still valid near you."
+    },
+    "notFound": {
+      "title": "This offer does not exist",
+      "description": "The link may be incomplete. Search other offers near you."
+    },
+    "error": {
+      "title": "We could not load the offer",
+      "description": "It may be your connection or the service. Try again in a moment.",
+      "retry": "Retry"
+    }
+  },
+  "offersData": {
+    "titles": {
+      "1": "Coney KIDS 2x1: Kids entry for 2 hours",
+      "2": "DBS: Facial care kit with 30% off",
+      "3": "MINNA Beauty: Lemon Sugar Scrub + Dallism Lip Gloss combo",
+      "4": "Kabuki – Deal: 2x1 Mixsoon Centella Cleansing Foam 150ml",
+      "5": "BUFFET LUNCH: ONLY Chorrillos location, Mon–Sun",
+      "6": "FUN JUNGLE: 60 or 90 minutes on inflatables",
+      "7": "BUFFET LUNCH: Creole, Chinese, pasta, soups, salads, desserts & more",
+      "8": "CINEMARK: 2× 2D tickets + 2 large drinks + giant popcorn",
+      "9": "LUNCH BUFFET OR DINNER WITH DANCING at Mandarin International Restaurant",
+      "10": "Pack: 5 games + 1 free",
+      "11": "FUN JUNGLE TRUJILLO: 60 minutes unlimited games",
+      "12": "Shimaya Ramen – 3 maki boards or 30 maki pieces",
+      "13": "Infinity Park Peru – AREQUIPA unlimited entries",
+      "14": "Arequipeño Creole BUFFET with live Ceviche station – CASA ANDINA PREMIUM",
+      "15": "ARUMA: Gift Card S/ 40 for S/ 29.90",
+      "16": "CINEPLANET: 2× 2D tickets + 2 large drinks + giant popcorn",
+      "17": "AQUATICA POOL PARK ICA: Full-day fun",
+      "18": "CINEMARK: 2 tickets + 2 sodas + medium or large popcorn",
+      "19": "CINEPLANET PROVINCES: 2× 2D tickets + giant popcorn + 2 large drinks",
+      "20": "Full-day wristband – Rides",
+      "21": "All you can eat Nikkei",
+      "22": "All-you-can-eat makis + drink",
+      "23": "Playland Kids – 2h unlimited",
+      "24": "Mundo Kids – All-day unlimited pass"
+    },
+    "categories": {
+      "Entretenimiento": "Entertainment",
+      "Belleza": "Beauty",
+      "Gastronomía": "Dining",
+      "Gift Card": "Gift Card",
+      "Educación": "Education",
+      "Salud": "Health",
+      "Tecnología": "Technology",
+      "Moda": "Fashion",
+      "Hogar": "Home",
+      "Deportes": "Sports",
+      "Viajes": "Travel",
+      "Automotriz": "Automotive",
+      "Servicios": "Services",
+      "Otros": "Others"
+    },
+    "locations": {
+      "Varias Sedes": "Multiple locations",
+      "Tiendas seleccionadas": "Selected stores",
+      "Online y tiendas": "Online & stores"
+    }
   }
 }

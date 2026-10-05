@@ -1,132 +1,82 @@
+import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
+import { ApiError } from '../../../../shared/domain/api-error';
+import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
+import { GeoEmptyState } from '../../../../shared/ui/geo-empty-state/geo-empty-state';
+import { GeoLocationPicker } from '../../../../shared/ui/geo-location-picker/geo-location-picker';
+import { GeoSeal } from '../../../../shared/ui/geo-seal/geo-seal';
+import { GetOfferDetailUseCase } from '../../../application/get-offer-detail.use-case';
+import { OfferDetail } from '../../../domain/model/offer-detail';
+import { validityLabel } from '../../validity-label';
 
-import { OffersApiEndpoint } from '../../../infrastructure/offers/offers-api-endpoint';
-import { SessionStore } from '../../../../iam/application/session.store';
-import { Offer } from '../../../domain/model/offer.entity';
+const OFFER_NOT_FOUND = 'OFFER_NOT_FOUND';
+type ViewState = 'loading' | 'ready' | 'not-found' | 'error';
 
+/** Offer detail with its loading, not found, error and not available states (US04, GEO-98). */
 @Component({
-  selector: 'app-ver-oferta',
+  selector: 'app-offer-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, TranslateModule, MatIconModule],
-  templateUrl: './ver-oferta.component.html',
-  styleUrls: ['./ver-oferta.component.css'],
+  imports: [
+    DecimalPipe,
+    RouterLink,
+    MatButtonModule,
+    MatIconModule,
+    TranslateModule,
+    GeoAlert,
+    GeoEmptyState,
+    GeoLocationPicker,
+    GeoSeal,
+  ],
+  templateUrl: './offer-detail.page.html',
+  styleUrl: './offer-detail.page.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
+export class OfferDetailPage implements OnInit {
+  private readonly getOfferDetail = inject(GetOfferDetailUseCase);
+  private readonly offerId = Number(inject(ActivatedRoute).snapshot.paramMap.get('id'));
 
-/**
- * offer detail screen
- */
-export class VerOfertaComponent implements OnInit {
-  offer?: Offer;
-  loading = false;
-  private userId: number | null = null;
+  protected readonly state = signal<ViewState>('loading');
+  protected readonly offer = signal<OfferDetail | null>(null);
+  protected readonly errorMessage = signal<string | null>(null);
+  protected readonly validity = computed(() => {
+    const offer = this.offer();
+    return offer ? validityLabel(offer.validTo) : '';
+  });
+  /** Walking directions on OpenStreetMap, the same map stack as the rest of the app. */
+  protected readonly directionsUrl = computed(() => {
+    const offer = this.offer();
+    if (!offer) {
+      return null;
+    }
+    const { latitude, longitude } = offer.location;
+    return `https://www.openstreetmap.org/directions?engine=fossgis_osrm_foot&route=%3B${latitude}%2C${longitude}`;
+  });
 
-  from: 'offers' | 'favorites' | null = null;
-
-  /**
-   * creates an instance of the 'viewOfferComponent' component
-   * @param route
-   * @param router
-   * @param location
-   * @param offersApi
-   * @param sessions
-   */
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private location: Location,
-    private offersApi: OffersApiEndpoint,
-    private sessions: SessionStore
-  ) {}
-
-  /**
-   * initialize the page
-   */
   ngOnInit(): void {
-    window.scrollTo({ top: 0 });
-    this.userId = this.sessions.activeSession()?.userId ?? null;
-
-    this.from =
-      (this.route.snapshot.queryParamMap.get('from') as any) ?? history.state?.from ?? null;
-
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.loading = true;
-
-    this.offersApi.getByIds([id]).subscribe({
-      next: (offers) => {
-        this.offer = offers[0];
-        this.loading = false;
-        if (!this.offer) return;
-
-      },
-      error: () => (this.loading = false),
-    });
+    void this.load();
   }
 
-  /**
-   * checks if a location is a district and should not be translated
-   * @param location - location name
-   */
-  isDistrict(location: string): boolean {
-    const districts = [
-      'Surco',
-      'San Miguel',
-      'San Borja',
-      'Chorrillos',
-      'Santa Marina',
-      'Trujillo',
-      'Arequipa',
-      'Ica',
-      'Ate',
-      'Breña',
-      'Comas',
-      'Barranco',
-      'Los Olivos',
-      'Magdalena',
-      'Miraflores',
-      'Pueblo Libre',
-      'San Isidro',
-      'Tiendas seleccionadas',
-    ];
-    // Divide la ubicación por comas y elimina espacios
-    const locationParts = location.split(',').map((part) => part.trim());
-    // Verifica si alguna parte es un distrito
-    return locationParts.some((part) => districts.includes(part));
-  }
-
-  /**
-   * if there's history, use `location.back()`
-   * if not, navigate to the source (favorites / offers)
-   */
-  goBack() {
-    if (window.history.length > 1) {
-      this.location.back();
+  async load(): Promise<void> {
+    if (!Number.isInteger(this.offerId) || this.offerId <= 0) {
+      this.state.set('not-found');
       return;
     }
-    this.router.navigate(['/offers']);
+    this.state.set('loading');
+    try {
+      this.offer.set(await this.getOfferDetail.execute(this.offerId));
+      this.state.set('ready');
+    } catch (error) {
+      const apiError = error instanceof ApiError ? error : null;
+      if (apiError?.code === OFFER_NOT_FOUND) {
+        this.state.set('not-found');
+        return;
+      }
+      this.errorMessage.set(apiError?.message ?? null);
+      this.state.set('error');
+    }
   }
-
-  /**
-   * returns the URL of the offer image
-   */
-  imgFor(): string {
-    return this.offer?.imageUrl ?? `assets/offers/${this.offer?.id}.jpg`;
-  }
-
-  /**
-   * returns the capital initial to display on the avatar to be displayed in reviews
-   * @param name - username
-   * @param fallback
-   */
-  initialOf(name?: string, fallback: string = '?'): string {
-    const n = (name ?? '').trim();
-    return n ? n[0].toUpperCase() : fallback;
-  }
-
-  protected readonly String = String;
 }

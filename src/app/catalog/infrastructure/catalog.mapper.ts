@@ -1,4 +1,5 @@
 import { NearbyOffer, NearbyOfferPage } from '../domain/model/nearby-offer';
+import { OfferDetail, OfferSource } from '../domain/model/offer-detail';
 
 /** Body of GET /api/v1/offers/nearby (BRD-04 §6, Informe 4.3.2.5). */
 export interface NearbyOffersResponse {
@@ -42,5 +43,43 @@ function toNearbyOffer(offer: NearbyOfferResponse): NearbyOffer {
     category: offer.category,
     price: offer.price,
     validTo: offer.validTo,
+  };
+}
+
+/** Body of GET /api/v1/offers/{id} (BRD-05 §7.2). */
+export interface OfferDetailResponse {
+  offerId: number;
+  title: string;
+  conditions: string;
+  price: number;
+  validTo: string;
+  category: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  imageUrl?: string | null;
+  source: OfferSource;
+  businessId: number | null;
+  businessName: string;
+  verifiedSeal: boolean;
+  available: boolean;
+}
+
+export function toOfferDetail(response: OfferDetailResponse): OfferDetail {
+  return {
+    offerId: response.offerId,
+    title: response.title,
+    conditions: response.conditions,
+    price: response.price,
+    validTo: response.validTo,
+    category: response.category,
+    address: response.address,
+    location: { latitude: response.latitude, longitude: response.longitude },
+    imageUrl: response.imageUrl ?? null,
+    source: response.source,
+    businessId: response.businessId,
+    businessName: response.businessName,
+    verifiedSeal: response.verifiedSeal,
+    available: response.available,
   };
 }

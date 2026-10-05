@@ -40,8 +40,8 @@ export const routes: Routes = [
       {
         path: 'offers/:id',
         loadComponent: () =>
-          import('./catalog/presentation/pages/offer-detail/ver-oferta.component').then(
-            (m) => m.VerOfertaComponent
+          import('./catalog/presentation/pages/offer-detail/offer-detail.page').then(
+            (m) => m.OfferDetailPage,
           ),
         title: 'GeoPS - Detalle de oferta',
       },

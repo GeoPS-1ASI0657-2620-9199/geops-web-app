@@ -22,55 +22,6 @@
     "favorites": "Favoritos",
     "coupons": "Mis cupones"
   },
-  "offersData": {
-    "titles": {
-      "1": "Coney KIDS 2x1: Entrada para niños por 2 horas",
-      "2": "DBS: Kit de cuidado facial con 30% de descuento",
-      "3": "MINNA Beauty: Combo Lemon Sugar Scrub + Dallism Lip Gloss",
-      "4": "Kabuki – Promo: 2x1 Mixsoon Centella Cleansing Foam 150ml",
-      "5": "BUFFET ALMUERZO: SOLO sede Chorrillos, Lun–Dom",
-      "6": "FUN JUNGLE: 60 o 90 minutos en inflables",
-      "7": "BUFFET ALMUERZO: Criollo, chino, pastas, sopas, ensaladas, postres y más",
-      "8": "CINEMARK: 2× entradas 2D + 2 gaseosas grandes + canchita gigante",
-      "9": "BUFFET O CENA CON SHOW en Restaurante Internacional Mandarin",
-      "10": "Pack: 5 juegos + 1 gratis",
-      "11": "FUN JUNGLE TRUJILLO: 60 minutos juegos ilimitados",
-      "12": "Shimaya Ramen – 3 tablas de makis o 30 piezas de makis",
-      "13": "Infinity Park Perú – AREQUIPA ingresos ilimitados",
-      "14": "BUFFET CRIOLLO AREQUIPEÑO con estación de ceviche en vivo – CASA ANDINA PREMIUM",
-      "15": "ARUMA: Gift Card S/ 40 por S/ 29.90",
-      "16": "CINEPLANET: 2× entradas 2D + 2 gaseosas grandes + canchita gigante",
-      "17": "AQUATICA POOL PARK ICA: Diversión todo el día",
-      "18": "CINEMARK: 2 entradas + 2 gaseosas + canchita mediana o grande",
-      "19": "CINEPLANET PROVINCIAS: 2× entradas 2D + canchita gigante + 2 gaseosas grandes",
-      "20": "Pulsera full day – Juegos",
-      "21": "Nikkei todo lo que puedas comer",
-      "22": "Makis ilimitados + bebida",
-      "23": "Playland Kids – 2h ilimitado",
-      "24": "Mundo Kids – Pase ilimitado todo el día"
-    },
-    "categories": {
-      "Entretenimiento": "Entretenimiento",
-      "Belleza": "Belleza",
-      "Gastronomía": "Gastronomía",
-      "Gift Card": "Tarjeta de regalo",
-      "Educación": "Educación",
-      "Salud": "Salud",
-      "Tecnología": "Tecnología",
-      "Moda": "Moda",
-      "Hogar": "Hogar",
-      "Deportes": "Deportes",
-      "Viajes": "Viajes",
-      "Automotriz": "Automotriz",
-      "Servicios": "Servicios",
-      "Otros": "Otros"
-    },
-    "locations": {
-      "Varias Sedes": "Varias sedes",
-      "Tiendas seleccionadas": "Tiendas seleccionadas",
-      "Online y tiendas": "Online y tiendas"
-    }
-  },
   "favoritesPage": {
     "title": "Favoritos",
     "loading": "Cargando…",
@@ -466,24 +417,6 @@
     "confirm": "Confirmar",
     "cancel": "Cancelar",
     "close": "Cerrar"
-  },
-  "offerDetail": {
-    "back": "Volver",
-    "buy": "Comprar",
-    "addToCart": "Agregar al carrito",
-    "bullets": {
-      "valid": "Válido online y en tiendas físicas de {{partner}}.",
-      "business": "Negocio: {{partner}}.",
-      "redeem": "Se puede canjear como medio de pago hasta el monto indicado."
-    },
-    "reviews": {
-      "title": "Comentarios",
-      "count": "{{count}} reseñas",
-      "yourRating": "Tu calificación",
-      "ariaRate": "Elige una calificación del 1 al 5",
-      "placeholder": "Cuéntanos tu experiencia con esta oferta",
-      "publish": "Publicar reseña"
-    }
   },
   "proveedor": {
     "stats": {
@@ -919,5 +852,80 @@
       "retry": "Reintentar"
     },
     "countOne": "1 oferta vigente a {{minutes}} minutos a pie"
+  },
+  "offerDetailPage": {
+    "back": "Ofertas cercanas",
+    "seeNearby": "Ver ofertas cercanas",
+    "conditions": "Condiciones",
+    "validity": "Vigencia",
+    "category": "Categoría",
+    "address": "Local",
+    "reserve": "Reservar",
+    "notAvailable": "No disponible",
+    "payAtStore": "Pagas en el local. No pedimos tu tarjeta.",
+    "cannotReserve": "Esta oferta ya venció y no se puede reservar.",
+    "directions": "Cómo llegar",
+    "unavailable": {
+      "title": "Esta oferta ya no está disponible",
+      "description": "Venció o el comercio la retiró. Vuelve al listado para ver las que siguen vigentes cerca de ti."
+    },
+    "notFound": {
+      "title": "Esta oferta no existe",
+      "description": "Puede que el enlace esté incompleto. Busca otras ofertas cerca de ti."
+    },
+    "error": {
+      "title": "No pudimos cargar la oferta",
+      "description": "Puede ser tu conexión o el servicio. Inténtalo de nuevo en un momento.",
+      "retry": "Reintentar"
+    }
+  },
+  "offersData": {
+    "titles": {
+      "1": "Coney KIDS 2x1: Entrada para niños por 2 horas",
+      "2": "DBS: Kit de cuidado facial con 30% de descuento",
+      "3": "MINNA Beauty: Combo Lemon Sugar Scrub + Dallism Lip Gloss",
+      "4": "Kabuki – Promo: 2x1 Mixsoon Centella Cleansing Foam 150ml",
+      "5": "BUFFET ALMUERZO: SOLO sede Chorrillos, Lun–Dom",
+      "6": "FUN JUNGLE: 60 o 90 minutos en inflables",
+      "7": "BUFFET ALMUERZO: Criollo, chino, pastas, sopas, ensaladas, postres y más",
+      "8": "CINEMARK: 2× entradas 2D + 2 gaseosas grandes + canchita gigante",
+      "9": "BUFFET O CENA CON SHOW en Restaurante Internacional Mandarin",
+      "10": "Pack: 5 juegos + 1 gratis",
+      "11": "FUN JUNGLE TRUJILLO: 60 minutos juegos ilimitados",
+      "12": "Shimaya Ramen – 3 tablas de makis o 30 piezas de makis",
+      "13": "Infinity Park Perú – AREQUIPA ingresos ilimitados",
+      "14": "BUFFET CRIOLLO AREQUIPEÑO con estación de ceviche en vivo – CASA ANDINA PREMIUM",
+      "15": "ARUMA: Gift Card S/ 40 por S/ 29.90",
+      "16": "CINEPLANET: 2× entradas 2D + 2 gaseosas grandes + canchita gigante",
+      "17": "AQUATICA POOL PARK ICA: Diversión todo el día",
+      "18": "CINEMARK: 2 entradas + 2 gaseosas + canchita mediana o grande",
+      "19": "CINEPLANET PROVINCIAS: 2× entradas 2D + canchita gigante + 2 gaseosas grandes",
+      "20": "Pulsera full day – Juegos",
+      "21": "Nikkei todo lo que puedas comer",
+      "22": "Makis ilimitados + bebida",
+      "23": "Playland Kids – 2h ilimitado",
+      "24": "Mundo Kids – Pase ilimitado todo el día"
+    },
+    "categories": {
+      "Entretenimiento": "Entretenimiento",
+      "Belleza": "Belleza",
+      "Gastronomía": "Gastronomía",
+      "Gift Card": "Tarjeta de regalo",
+      "Educación": "Educación",
+      "Salud": "Salud",
+      "Tecnología": "Tecnología",
+      "Moda": "Moda",
+      "Hogar": "Hogar",
+      "Deportes": "Deportes",
+      "Viajes": "Viajes",
+      "Automotriz": "Automotriz",
+      "Servicios": "Servicios",
+      "Otros": "Otros"
+    },
+    "locations": {
+      "Varias Sedes": "Varias sedes",
+      "Tiendas seleccionadas": "Tiendas seleccionadas",
+      "Online y tiendas": "Online y tiendas"
+    }
   }
 }
