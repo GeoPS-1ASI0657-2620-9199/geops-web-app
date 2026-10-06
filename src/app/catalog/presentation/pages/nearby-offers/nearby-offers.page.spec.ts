@@ -37,7 +37,7 @@ describe('NearbyOffersPage', () => {
   let offers: jasmine.SpyObj<OfferRepository>;
 
   const create = async (reading: LocationReading) => {
-    offers = jasmine.createSpyObj<OfferRepository>('OfferRepository', ['findNearby']);
+    offers = jasmine.createSpyObj<OfferRepository>('OfferRepository', ['findNearby', 'findById']);
     await TestBed.configureTestingModule({
       imports: [NearbyOffersPage],
       providers: [

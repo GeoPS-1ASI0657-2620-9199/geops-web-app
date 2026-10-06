@@ -87,4 +87,40 @@ describe('HttpOfferRepository', () => {
       new ApiError('RADIUS_OUT_OF_RANGE', 'El radio debe estar entre 5 y 20 minutos a pie'),
     );
   });
+
+  it('reads the offer detail of BRD-05 with its location as a point', async () => {
+    const result = repository.findById(1052);
+
+    http.expectOne(`${BASE_URL}/offers/1052`).flush({
+      offerId: 1052,
+      title: '2x1 en almuerzos ejecutivos',
+      conditions: 'Válido de lunes a viernes de 12:00 a 15:00. Un cupón por mesa.',
+      price: 15.0,
+      validTo: '2026-10-15',
+      category: 'Gastronomía',
+      address: 'Av. Larco 345, Miraflores',
+      latitude: -12.1211,
+      longitude: -77.0297,
+      imageUrl: 'https://images.geops.pe/offers/1052.jpg',
+      source: 'AFFILIATED',
+      businessId: 84,
+      businessName: 'Restaurante Don Pepe',
+      verifiedSeal: false,
+      available: true,
+    });
+
+    const offer = await result;
+    expect(offer.location).toEqual({ latitude: -12.1211, longitude: -77.0297 });
+    expect(offer.available).toBeTrue();
+  });
+
+  it('rejects a missing offer with OFFER_NOT_FOUND', async () => {
+    const result = repository.findById(9999);
+
+    http
+      .expectOne(`${BASE_URL}/offers/9999`)
+      .flush({ code: 'OFFER_NOT_FOUND', message: 'La oferta 9999 no existe.' }, { status: 404, statusText: 'Not Found' });
+
+    await expectAsync(result).toBeRejectedWith(new ApiError('OFFER_NOT_FOUND', 'La oferta 9999 no existe.'));
+  });
 });

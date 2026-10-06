@@ -5,8 +5,14 @@ import { API_BASE_URL } from '../../core/config/api-base-url';
 import { toApiError } from '../../core/http/api-error.mapper';
 import { GeoPoint } from '../../shared/domain/geo-point';
 import { NearbyOfferPage, PAGE_SIZE } from '../domain/model/nearby-offer';
+import { OfferDetail } from '../domain/model/offer-detail';
 import { OfferRepository } from '../domain/ports/offer.repository';
-import { NearbyOffersResponse, toNearbyOfferPage } from './catalog.mapper';
+import {
+  NearbyOffersResponse,
+  OfferDetailResponse,
+  toNearbyOfferPage,
+  toOfferDetail,
+} from './catalog.mapper';
 
 /** OfferRepository over the gateway route of catalog-service. */
 @Injectable()
@@ -26,6 +32,17 @@ export class HttpOfferRepository implements OfferRepository {
         this.http.get<NearbyOffersResponse>(`${this.baseUrl}/offers/nearby`, { params }),
       );
       return toNearbyOfferPage(response);
+    } catch (error) {
+      throw toApiError(error);
+    }
+  }
+
+  async findById(offerId: number): Promise<OfferDetail> {
+    try {
+      const response = await firstValueFrom(
+        this.http.get<OfferDetailResponse>(`${this.baseUrl}/offers/${offerId}`),
+      );
+      return toOfferDetail(response);
     } catch (error) {
       throw toApiError(error);
     }
