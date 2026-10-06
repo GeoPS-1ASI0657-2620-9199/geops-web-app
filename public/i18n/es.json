@@ -367,13 +367,6 @@
     "places": "Lugares habituales",
     "rights": "© 2025 Todos los derechos reservados"
   },
-  "business": {
-    "title": "Datos adicionales del negocio",
-    "businessName": "Nombre del negocio:",
-    "businessType": "Tipo de negocio:",
-    "taxId": "RUC:",
-    "button": "Guardar"
-  },
   "settings": {
     "basicInfo": "Información básica",
     "plan": {
@@ -853,6 +846,49 @@
         "field": "Revisa el correo y la contraseña e inténtalo de nuevo."
       },
       "generic": "No pudimos iniciar tu sesión"
+    }
+  },
+  "registerBusinessPage": {
+    "title": "Registra tu negocio",
+    "steps": {
+      "business": "Datos del negocio",
+      "location": "Ubicación del local"
+    },
+    "required": "Completa este dato.",
+    "continue": "Continuar",
+    "back": "Atrás",
+    "submit": "Crear mi negocio",
+    "submitting": "Creando tu negocio…",
+    "haveAccount": "Ya tengo cuenta",
+    "business": {
+      "intro": "Con estos datos tu comercio aparece en la búsqueda de ofertas cercanas.",
+      "name": "Nombre comercial",
+      "type": "Rubro",
+      "typeHint": "Por ejemplo: Comida · Menús, Bodega, Belleza.",
+      "ruc": "RUC",
+      "rucHint": "11 dígitos."
+    },
+    "account": {
+      "title": "Tu cuenta",
+      "fullName": "Tu nombre y apellidos",
+      "phone": "Celular",
+      "email": "Correo del negocio"
+    },
+    "location": {
+      "intro": "Escribe la dirección y marca el punto en el mapa. Con esa ubicación se calcula la distancia que ven tus clientes.",
+      "address": "Dirección del local",
+      "addressInvalid": "Agrega calle y número, o marca el punto en el mapa.",
+      "mapHint": "Toca el mapa o arrastra el marcador hasta la puerta de tu local.",
+      "openingHours": "Horario de atención",
+      "openingHoursHint": "Opcional. Por ejemplo: Lun-Sáb 07:00-22:00.",
+      "marked": "Ubicación marcada"
+    },
+    "errors": {
+      "location": "No pudimos ubicar tu local",
+      "email": "Ya existe una cuenta con este correo",
+      "phone": "Ya existe una cuenta con este celular",
+      "ruc": "Revisa el RUC",
+      "generic": "No pudimos registrar tu negocio"
     }
   }
 }

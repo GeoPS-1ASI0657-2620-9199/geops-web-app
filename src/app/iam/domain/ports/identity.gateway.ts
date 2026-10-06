@@ -1,3 +1,4 @@
+import { RegisterBusiness } from '../model/register-business';
 import { RegisterConsumer, RegisteredUser } from '../model/register-consumer';
 import { Credentials, IssuedToken } from '../model/session';
 
@@ -7,5 +8,6 @@ import { Credentials, IssuedToken } from '../model/session';
  */
 export abstract class IdentityGateway {
   abstract registerConsumer(person: RegisterConsumer): Promise<RegisteredUser>;
+  abstract registerBusiness(owner: RegisterBusiness): Promise<RegisteredUser>;
   abstract logIn(credentials: Credentials): Promise<IssuedToken>;
 }

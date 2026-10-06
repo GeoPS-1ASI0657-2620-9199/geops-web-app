@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { API_BASE_URL } from '../../core/config/api-base-url';
 import { toApiError } from '../../core/http/api-error.mapper';
+import { RegisterBusiness } from '../domain/model/register-business';
 import { RegisterConsumer, RegisteredUser } from '../domain/model/register-consumer';
 import { Credentials, IssuedToken } from '../domain/model/session';
 import { IdentityGateway } from '../domain/ports/identity.gateway';
@@ -11,6 +12,7 @@ import {
   TokenResponse,
   toIssuedToken,
   toLogInRequest,
+  toRegisterBusinessRequest,
   toRegisterConsumerRequest,
   toRegisteredUser,
 } from './identity.mapper';
@@ -27,6 +29,20 @@ export class HttpIdentityGateway implements IdentityGateway {
         this.http.post<RegisteredUserResponse>(
           `${this.baseUrl}/auth/register`,
           toRegisterConsumerRequest(person),
+        ),
+      );
+      return toRegisteredUser(response);
+    } catch (error) {
+      throw toApiError(error);
+    }
+  }
+
+  async registerBusiness(owner: RegisterBusiness): Promise<RegisteredUser> {
+    try {
+      const response = await firstValueFrom(
+        this.http.post<RegisteredUserResponse>(
+          `${this.baseUrl}/auth/register`,
+          toRegisterBusinessRequest(owner),
         ),
       );
       return toRegisteredUser(response);

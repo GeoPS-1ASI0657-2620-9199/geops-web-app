@@ -1,0 +1,76 @@
+.page {
+  display: flex;
+  justify-content: center;
+  min-height: calc(100vh - 64px);
+  padding: 40px var(--space-lg) var(--space-3xl);
+  background: var(--neutral-surface-2);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  width: 100%;
+  max-width: 760px;
+  height: fit-content;
+  padding: var(--space-2xl) 40px;
+  background: var(--neutral-bg);
+  border: 1px solid var(--neutral-line);
+  border-radius: var(--radius-modal);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.intro {
+  margin: 0 0 var(--space-sm);
+  color: var(--text-dim);
+}
+
+.subtitle {
+  margin-top: var(--space-md);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.map {
+  height: 300px;
+}
+
+.map-hint {
+  margin: 0 0 var(--space-md);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+.actions button,
+.actions a {
+  min-height: 44px;
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: var(--space-xl) var(--space-lg);
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

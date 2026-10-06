@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { RegisterConsumer, RegisteredUser } from '../domain/model/register-consumer';
+import { RegisterBusiness } from '../domain/model/register-business';
 import { Credentials, IssuedToken, Session, isActive } from '../domain/model/session';
 import { IdentityGateway } from '../domain/ports/identity.gateway';
 import { SessionStorage } from '../domain/ports/session.storage';
@@ -14,6 +15,10 @@ class FakeIdentityGateway extends IdentityGateway {
   received?: Credentials;
 
   override registerConsumer(_person: RegisterConsumer): Promise<RegisteredUser> {
+    throw new Error('not used');
+  }
+
+  override registerBusiness(_owner: RegisterBusiness): Promise<RegisteredUser> {
     throw new Error('not used');
   }
 
