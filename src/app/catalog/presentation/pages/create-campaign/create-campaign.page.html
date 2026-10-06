@@ -1,0 +1,111 @@
+<section class="page">
+  <h1 class="geo-page-title">Publicar campaña</h1>
+
+  @if (alert(); as a) {
+    <geo-alert kind="error" [title]="a.title" [description]="a.description" />
+  }
+
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="layout">
+    <div class="column">
+      <div class="panel">
+        <h2 class="geo-section-title">La campaña</h2>
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input matInput formControlName="name" />
+          <mat-error>Ponle un nombre a la campaña.</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Descripción</mat-label>
+          <textarea matInput formControlName="description" rows="2"></textarea>
+        </mat-form-field>
+        <div class="row">
+          <mat-form-field appearance="outline">
+            <mat-label>Inicio</mat-label>
+            <input matInput type="date" formControlName="start" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Fin</mat-label>
+            <input matInput type="date" formControlName="end" [min]="today" />
+            <mat-error>Elige una fecha de fin desde hoy y posterior al inicio.</mat-error>
+          </mat-form-field>
+        </div>
+        <mat-form-field appearance="outline">
+          <mat-label>Presupuesto estimado (S/)</mat-label>
+          <input matInput type="number" min="0" formControlName="budget" />
+          <mat-hint>Opcional.</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <div class="panel" formArrayName="offers">
+        <h2 class="geo-section-title">Ofertas</h2>
+        @for (offer of offers.controls; track offer; let i = $index) {
+          <fieldset class="offer" [formGroupName]="i">
+            <legend class="geo-body-strong">Oferta {{ i + 1 }}</legend>
+            <mat-form-field appearance="outline">
+              <mat-label>Producto o servicio</mat-label>
+              <input matInput formControlName="title" />
+              <mat-error>Escribe qué ofreces.</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Condiciones</mat-label>
+              <textarea matInput formControlName="conditions" rows="2"></textarea>
+              <mat-error>Cuenta cuándo y cómo vale la oferta.</mat-error>
+            </mat-form-field>
+            <div class="row three">
+              <mat-form-field appearance="outline">
+                <mat-label>Precio con oferta (S/)</mat-label>
+                <input matInput type="number" min="0" step="0.10" formControlName="price" />
+                <mat-error>Indica el precio.</mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Vence</mat-label>
+                <input matInput type="date" formControlName="validTo" [min]="today" />
+                <mat-error>Elige hasta cuándo vale.</mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Categoría</mat-label>
+                <input matInput formControlName="category" />
+                <mat-error>Indica la categoría.</mat-error>
+              </mat-form-field>
+            </div>
+            @if (offers.length > 1) {
+              <button mat-button type="button" class="remove" (click)="removeOffer(i)">
+                <mat-icon>delete</mat-icon>
+                Quitar oferta
+              </button>
+            }
+          </fieldset>
+        }
+        <button mat-stroked-button type="button" (click)="addOffer()">
+          <mat-icon>add</mat-icon>
+          Agregar otra oferta
+        </button>
+      </div>
+    </div>
+
+    <div class="column">
+      <div class="panel">
+        <h2 class="geo-section-title">Tu local</h2>
+        <mat-form-field appearance="outline">
+          <mat-label>Dirección del local</mat-label>
+          <input matInput formControlName="address" autocomplete="street-address" />
+          <mat-error>Escribe la dirección del local.</mat-error>
+        </mat-form-field>
+        <geo-location-picker class="map" [point]="storePoint()" (pointSelected)="onStorePoint($event)" />
+        <p class="geo-meta">Toca el mapa en la puerta de tu local. Con ese punto se mide la distancia.</p>
+      </div>
+
+      <div class="panel">
+        <h2 class="geo-section-title">¿A quién se le muestra?</h2>
+        <app-zone-selector [center]="storePoint()" (zoneChange)="zone.set($event)" />
+      </div>
+
+      <div class="actions">
+        <a mat-stroked-button routerLink="/campaigns">Cancelar</a>
+        <button mat-flat-button type="submit" [disabled]="submitting()">
+          {{ submitting() ? 'Publicando…' : 'Publicar ahora' }}
+        </button>
+      </div>
+    </div>
+  </form>
+</section>

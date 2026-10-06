@@ -58,8 +58,8 @@ export const routes: Routes = [
         path: 'campaigns/new',
         canActivate: [authGuard, roleGuard('BUSINESS_OWNER')],
         loadComponent: () =>
-          import('./catalog/presentation/pages/create-campaign/crear-campaign.component').then(
-            (m) => m.CrearCampaignComponent
+          import('./catalog/presentation/pages/create-campaign/create-campaign.page').then(
+            (m) => m.CreateCampaignPage,
           ),
         title: 'GeoPS - Publicar campaña',
       },
