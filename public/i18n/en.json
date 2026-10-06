@@ -185,7 +185,7 @@
     "validity": "Valid until",
     "category": "Category",
     "address": "Store",
-    "reserve": "Reserve",
+    "reserve": "Reserve · pay at the store",
     "notAvailable": "Not available",
     "payAtStore": "You pay at the store. We do not ask for your card.",
     "cannotReserve": "This offer expired and cannot be reserved.",
@@ -200,6 +200,127 @@
     },
     "error": {
       "title": "We could not load the offer",
+      "description": "It may be your connection or the service. Try again in a moment.",
+      "retry": "Retry"
+    },
+    "reserving": "Reserving your offer",
+    "loginToReserve": "Log in to reserve. You pay at the store, no card needed.",
+    "reserveError": {
+      "OFFER_NOT_AVAILABLE": {
+        "title": "This offer can no longer be reserved",
+        "description": "It expired or the business withdrew it a moment ago. You were not charged."
+      },
+      "OFFER_NOT_FOUND": {
+        "title": "This offer no longer exists",
+        "description": "The business removed it from the catalog. Look for other offers near you."
+      },
+      "CATALOG_UNAVAILABLE": {
+        "title": "We could not confirm the offer",
+        "description": "The catalog did not answer. Try again in a moment."
+      },
+      "DEFAULT": {
+        "title": "We could not make the reservation",
+        "description": "Try again in a moment."
+      }
+    }
+  },
+  "reservation": {
+    "status": {
+      "ACTIVE": "Active",
+      "REDEEMED": "Redeemed",
+      "EXPIRED": "Expired",
+      "REPORTED": "Reported"
+    }
+  },
+  "reservationPage": {
+    "back": "My reservations",
+    "title": "My reservation",
+    "created": {
+      "title": "Done, your offer is reserved",
+      "description": "You paid nothing. Show the code at the store and pay there."
+    },
+    "existing": {
+      "title": "You had already reserved this offer",
+      "description": "This is the same reservation; no new one was created."
+    },
+    "banner": {
+      "ACTIVE": {
+        "title": "Active reservation",
+        "description": "You have not paid anything yet. You pay at the store."
+      },
+      "REDEEMED": {
+        "title": "Redeemed reservation",
+        "description": "The business already validated this code."
+      },
+      "EXPIRED": {
+        "title": "Expired without use",
+        "description": "You were not charged: with GeoPS you only pay at the store."
+      },
+      "REPORTED": {
+        "title": "Reported reservation",
+        "description": "You reported that the business did not honor the offer."
+      }
+    },
+    "showCode": "Show this code at the store",
+    "offer": "Offer",
+    "reservedAt": "Reserved",
+    "validUntil": "Valid until",
+    "redeemedAt": "Redeemed",
+    "seeOffer": "See the offer",
+    "howTo": {
+      "title": "How to redeem it",
+      "description": "Go to the store before it expires, show the code and pay there.",
+      "step1": {
+        "title": "Go to the store",
+        "hint": "Before {{date}}"
+      },
+      "step2": {
+        "title": "Show the code {{code}}",
+        "hint": "At the counter, before paying"
+      },
+      "step3": {
+        "title": "Pay the price of the offer",
+        "hint": "At the store. GeoPS charges you nothing."
+      }
+    },
+    "notFound": {
+      "title": "We could not find this reservation",
+      "description": "The link may be incomplete or the reservation may belong to another account."
+    },
+    "error": {
+      "title": "We could not load your reservation",
+      "description": "It may be your connection or the service. Try again in a moment.",
+      "retry": "Retry"
+    }
+  },
+  "reservationsPage": {
+    "title": "My reservations",
+    "filterLabel": "Filter by status",
+    "filters": {
+      "ALL": "All",
+      "ACTIVE": "Active",
+      "REDEEMED": "Redeemed",
+      "EXPIRED": "Expired",
+      "REPORTED": "Reported"
+    },
+    "code": "Code",
+    "reservedAt": "Reserved",
+    "expiresAt": "Expires",
+    "expiredAt": "Expired",
+    "redeemedAt": "Redeemed",
+    "open": "See reservation",
+    "empty": {
+      "title": "You have no reservations yet",
+      "description": "Reserve a nearby offer and pay at the store. Its code will show up here.",
+      "action": "See nearby offers"
+    },
+    "emptyFiltered": {
+      "title": "You have no reservations in this status",
+      "description": "Try another filter or see all your reservations.",
+      "action": "See all"
+    },
+    "error": {
+      "title": "We could not load your reservations",
       "description": "It may be your connection or the service. Try again in a moment.",
       "retry": "Retry"
     }

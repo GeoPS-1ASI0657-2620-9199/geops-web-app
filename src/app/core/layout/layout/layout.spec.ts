@@ -52,6 +52,12 @@ describe('Layout', () => {
     expect(fixture.nativeElement.textContent).toContain('Menús Doña Mirta');
   });
 
+  it('shows the offers and reservations tabs to a consumer', async () => {
+    await create({ ...OWNER, role: 'CONSUMER', businessId: undefined, businessName: undefined, consumerId: 2001 });
+
+    expect(tabs()).toEqual(['Ofertas cercanas', 'Mis reservas']);
+  });
+
   it('shows only the offers tab and the login link to a visitor', async () => {
     await create(null);
 
