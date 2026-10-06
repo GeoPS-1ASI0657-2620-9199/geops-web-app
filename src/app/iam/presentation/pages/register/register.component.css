@@ -1,0 +1,117 @@
+/*
+  RegisterComponent Styles
+  Styles for the user registration form, including layout, form fields, buttons, error messages, login link, and language switcher.
+*/
+
+/* Main container for the registration form */
+.register-container {
+  min-width: 340px;
+  max-width: 380px;
+  margin: 60px auto;
+  background: #fff;
+  padding: 32px 32px 24px 32px;
+  border-radius: 18px;
+  box-shadow: 0 2px 26px #7c3aed18, 0 1px 2px #7c3aed13;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Title styling for the registration form */
+.register-title {
+  font-size: 1.6em;
+  font-weight: bold;
+  color: #210b4b;
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+/* Form layout and spacing */
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+}
+
+/* Label styling for form fields */
+.register-label {
+  font-weight: 600;
+  font-size: 1em;
+  color: #6b21a8;
+  margin-bottom: .2em;
+}
+
+/* Input field styling */
+.register-input {
+  width: 100%;
+  border: 1.5px solid #e3d0fb;
+  border-radius: 10px;
+  padding: 12px 11px;
+  font-size: 1em;
+  outline: none;
+  background: #f7f6fd;
+  transition: border-color 0.19s;
+  margin-top: .1em;
+}
+.register-input:focus {
+  border-color: #a259ff;
+  background: #fff;
+}
+
+/* Submit button styling */
+.register-btn {
+  margin-top: 6px;
+  background: #a259ff;
+  color: white;
+  font-weight: bold;
+  font-size: 1.1em;
+  border: none;
+  border-radius: 10px;
+  padding: 13px;
+  cursor: pointer;
+  box-shadow: 0 1px 8px #a259ff1a;
+  transition: background .18s;
+}
+.register-btn:disabled {
+  background: #e6e6ea;
+  color: #bdbdbd;
+  cursor: not-allowed;
+}
+
+/* Error message styling */
+.register-error {
+  margin-top: 10px;
+  color: #e53e3e;
+  background: #faebeb;
+  border-radius: 6px;
+  padding: 8px 12px;
+  text-align: center;
+}
+
+/* Login message and link styling */
+.register-login-msg {
+  text-align: center;
+  margin-top: 17px;
+  color: #6941fa;
+  font-size: .97em;
+}
+.register-login-link {
+  color: #a259ff;
+  text-decoration: none;
+  font-weight: 600;
+}
+.register-login-link:hover {
+  text-decoration: underline;
+}
+
+/* Language switcher styling */
+.register-language-switch {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  z-index: 10;
+  background: #210b4b;
+  border: 1px solid rgba(27, 1, 73, 0.8);
+  padding: 0.5em;
+  border-radius: 6px;
+}

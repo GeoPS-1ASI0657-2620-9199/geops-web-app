@@ -1,0 +1,13 @@
+<nav class="owner-toolbar">
+  <div class="toolbar-container">
+    <a
+      *ngFor="let item of menuItems"
+      [routerLink]="item.route"
+      routerLinkActive="active"
+      class="toolbar-item"
+      (click)="navigateTo(item.route)">
+      <span class="toolbar-label">{{ item.labelKey | translate }}</span>
+    </a>
+  </div>
+</nav>
+

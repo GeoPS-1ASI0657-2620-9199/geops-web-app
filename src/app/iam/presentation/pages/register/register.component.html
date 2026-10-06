@@ -1,0 +1,61 @@
+<!--
+  RegisterComponent Template
+  Displays a user registration form with translated labels, role and plan selection, login link, and error feedback.
+-->
+
+<div class="register-container">
+  <!-- Language switcher for multilingual support -->
+  <div class="register-language-switch">
+    <app-language-switcher />
+  </div>
+
+  <!-- Form title, translated -->
+  <h2 class="register-title">{{ 'register.title' | translate }}</h2>
+
+  <!-- User registration form -->
+  <form class="register-form" (ngSubmit)="onSubmit()" #registerForm="ngForm">
+    <!-- Name input -->
+    <label class="register-label">{{ 'register.name' | translate }}</label>
+    <input class="register-input" type="text" name="name" [(ngModel)]="model.name" required />
+
+    <!-- Email input -->
+    <label class="register-label">{{ 'register.email' | translate }}</label>
+    <input class="register-input" type="email" name="email" [(ngModel)]="model.email" required />
+
+    <!-- Password input -->
+    <label class="register-label">{{ 'register.password' | translate }}</label>
+    <input class="register-input" type="password" name="password" [(ngModel)]="model.password" required />
+
+    <!-- Phone input -->
+    <label class="register-label">{{ 'register.phone' | translate }}</label>
+    <input class="register-input" type="text" name="phone" [(ngModel)]="model.phone" required/>
+
+    <!-- Role selection -->
+    <label class="register-label">{{ 'register.role' | translate }}</label>
+    <select class="register-input" name="role" [(ngModel)]="model.role" required>
+      <option value="OWNER">{{ 'register.owner' | translate }}</option>
+      <option value="CONSUMER">{{ 'register.consumer' | translate }}</option>
+    </select>
+
+    <!-- Plan selection -->
+    <label class="register-label">{{ 'register.plan' | translate }}</label>
+    <select class="register-input" name="plan" [(ngModel)]="model.plan" required>
+      <option value="BASIC">{{ 'register.basic' | translate }}</option>
+      <option value="PREMIUM">{{ 'register.premium' | translate }}</option>
+    </select>
+
+    <!-- Submit button, disabled if registering or form is invalid -->
+    <button class="register-btn" type="submit" [disabled]="registering || !registerForm.form.valid">
+      {{ 'register.button' | translate }}
+    </button>
+  </form>
+
+  <!-- Login link for users who already have an account -->
+  <p class="register-login-msg">
+    {{ 'register.hasAccount' | translate }}
+    <a class="register-login-link" [routerLink]="['/login']">{{ 'register.loginHere' | translate }}</a>
+  </p>
+
+  <!-- Error message display -->
+  <div *ngIf="errorMessage" class="register-error">{{ errorMessage }}</div>
+</div>

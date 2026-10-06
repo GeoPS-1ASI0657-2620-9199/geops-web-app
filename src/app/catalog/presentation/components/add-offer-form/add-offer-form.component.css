@@ -1,0 +1,122 @@
+.offer-form-container {
+  width: 100%;
+}
+
+.offer-form-container h3 {
+  margin: 0 0 20px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.offer-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.form-row.two-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid #e0e0e0;
+}
+
+/* Estilos para el calendario */
+::ng-deep .mat-datepicker-container {
+  background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(156, 39, 176, 0.2) !important;
+}
+
+::ng-deep .mat-calendar {
+  background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%) !important;
+  padding: 12px !important;
+}
+
+::ng-deep .mat-calendar-body {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-radius: 6px !important;
+  padding: 8px !important;
+}
+
+::ng-deep .mat-calendar-body-label {
+  color: #9c27b0 !important;
+  font-weight: 500 !important;
+}
+
+::ng-deep .mat-calendar-body-cell {
+  background: transparent;
+  border-radius: 4px !important;
+}
+
+::ng-deep .mat-calendar-body-cell:hover {
+  background: rgba(156, 39, 176, 0.1) !important;
+}
+
+::ng-deep .mat-calendar-body-selected {
+  background: linear-gradient(135deg, #9c27b0 0%, #ba68c8 100%) !important;
+  color: white !important;
+  border-radius: 4px !important;
+}
+
+::ng-deep .mat-calendar-body-today {
+  border: 2px solid #9c27b0 !important;
+  border-radius: 4px !important;
+}
+
+/* Custom styles for mat-mdc-select-panel */
+::ng-deep .mat-mdc-select-panel {
+  background: #fff !important;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(167, 81, 212, 0.15);
+  border: 1px solid #A751D4;
+  padding: 4px 0;
+}
+
+::ng-deep .mat-mdc-option {
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  color: #4A0072;
+  border-radius: 4px;
+  margin: 0 4px;
+}
+
+::ng-deep .mat-mdc-option.mat-mdc-selected {
+  background: linear-gradient(90deg, #A751D4 0%, #AB58E3 100%);
+  color: #fff;
+}
+
+::ng-deep .mat-mdc-option:hover:not(.mat-mdc-selected) {
+  background: rgba(167, 81, 212, 0.08);
+  color: #8B3CC7;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .form-row.two-columns {
+    grid-template-columns: 1fr;
+  }
+}

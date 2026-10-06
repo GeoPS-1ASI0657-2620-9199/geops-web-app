@@ -1,0 +1,38 @@
+// Angular Material 20 theme with the GeoPS brand, so form fields, buttons, chips, selects and
+// toggles take the Figma colors without one-off styles.
+@use '@angular/material' as mat;
+
+html {
+  color-scheme: light;
+  @include mat.theme((
+    color: (
+      primary: mat.$violet-palette,
+      tertiary: mat.$green-palette,
+      theme-type: light,
+    ),
+    typography: Poppins,
+    density: 0,
+  ));
+
+  // System tokens pinned to the exact brand values.
+  --mat-sys-primary: var(--brand-action);
+  --mat-sys-on-primary: var(--neutral-bg);
+  --mat-sys-primary-container: var(--brand-mist);
+  --mat-sys-on-primary-container: var(--brand-deep);
+  --mat-sys-secondary-container: var(--brand-soft);
+  --mat-sys-on-secondary-container: var(--brand-deep);
+  --mat-sys-error: var(--status-expired);
+  --mat-sys-surface: var(--neutral-bg);
+  --mat-sys-on-surface: var(--text-primary);
+  --mat-sys-on-surface-variant: var(--text-dim);
+  --mat-sys-outline: var(--neutral-line);
+  --mat-sys-outline-variant: var(--neutral-line-soft);
+
+  // Component shapes from the Figma radius tokens: buttons 6 px, fields 8 px.
+  --mat-button-filled-container-shape: var(--radius-button);
+  --mat-button-outlined-container-shape: var(--radius-button);
+  --mat-button-text-container-shape: var(--radius-button);
+  --mat-button-protected-container-shape: var(--radius-button);
+  --mat-button-outlined-outline-color: var(--neutral-line);
+  --mat-form-field-outlined-container-shape: var(--radius-input);
+}

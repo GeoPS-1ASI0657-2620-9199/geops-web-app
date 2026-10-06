@@ -1,0 +1,115 @@
+<mat-toolbar color="primary" class="app-toolbar">
+  <mat-toolbar-row class="toolbar-content">
+    <!-- Hamburger Menu (Mobile Only) -->
+    <button
+      mat-icon-button
+      class="hamburger-btn"
+      (click)="toggleMobileMenu()"
+      [attr.aria-label]="'Menu'">
+      <mat-icon>{{ isMobileMenuOpen() ? 'close' : 'menu' }}</mat-icon>
+    </button>
+
+    <!-- Logo -->
+    <a routerLink="/offers" class="logo" (click)="closeMobileMenu()">{{ 'header.logo' | translate }}</a>
+
+    <span class="spacer desktop-only"></span>
+
+    <!-- Search Field -->
+    <mat-form-field class="search-field" appearance="outline" *ngIf="!isOwner()">
+      <mat-icon matPrefix>search</mat-icon>
+      <input
+        matInput
+        [(ngModel)]="q"
+        [placeholder]="'header.search.placeholder' | translate"
+        (keyup.enter)="doSearch()"
+        (focus)="onSearchFocus()"
+        (blur)="onSearchBlur()">
+      <button
+        mat-icon-button
+        matSuffix
+        *ngIf="q.length > 0"
+        (click)="clearSearch()"
+        class="clear-search-btn"
+        [attr.aria-label]="'Clear search'">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <span class="spacer desktop-only"></span>
+
+    <!-- Desktop Actions -->
+    <div class="desktop-actions">
+
+      <button
+        mat-button
+        class="action-btn profile"
+        [matMenuTriggerFor]="profileMenu"
+        [attr.aria-label]="'header.profile.menu.myProfile' | translate">
+        <div class="profile-content">
+          <div class="avatar">{{ userInitial }}</div>
+          <span class="user-name">{{ userName }}</span>
+        </div>
+        <mat-icon class="dropdown-icon">expand_more</mat-icon>
+      </button>
+
+      <mat-menu #profileMenu="matMenu" class="profile-dropdown">
+        <div class="profile-dropdown-header">
+          <div class="avatar-large">{{ userInitial }}</div>
+          <div class="profile-info">
+            <p class="profile-name">{{ userName }}</p>
+            <p class="profile-email">{{ userEmail }}</p>
+          </div>
+        </div>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="onLogout()" class="logout-btn">
+          <mat-icon>logout</mat-icon>
+          <span>{{ 'header.profile.menu.logout' | translate }}</span>
+        </button>
+      </mat-menu>
+
+      <app-language-switcher/>
+    </div>
+
+    <!-- Mobile Actions (Icons Only) -->
+    <div class="mobile-actions">
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<!-- Mobile Menu Overlay -->
+<div class="mobile-menu-overlay" [class.open]="isMobileMenuOpen()" (click)="closeMobileMenu()"></div>
+
+<!-- Mobile Menu Drawer -->
+<div class="mobile-menu" [class.open]="isMobileMenuOpen()">
+  <div class="mobile-menu-header">
+    <div class="avatar-large">{{ userInitial }}</div>
+    <div class="profile-info">
+      <p class="profile-name">{{ userName }}</p>
+      <p class="profile-email">{{ authService.getCurrentUser()?.email || 'usuario@geops.com' }}</p>
+    </div>
+  </div>
+
+  <nav class="mobile-menu-nav">
+  </nav>
+
+  <div class="mobile-menu-footer">
+    <app-language-switcher/>
+    <button mat-raised-button color="warn" class="logout-btn-mobile" (click)="onLogout()">
+      <mat-icon>logout</mat-icon>
+      <span>{{ 'header.profile.menu.logout' | translate }}</span>
+    </button>
+  </div>
+</div>
+
+<app-consumer-toolbar *ngIf="!isOwner()"></app-consumer-toolbar>
+<app-owner-toolbar *ngIf="isOwner()"></app-owner-toolbar>
+
+<main class="layout-content">
+  <router-outlet></router-outlet>
+</main>
+
+<app-footer-content></app-footer-content>
+
+
+<!-- Navigation Loading Backdrop -->
+<app-navigation-backdrop></app-navigation-backdrop>

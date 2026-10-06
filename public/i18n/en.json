@@ -1,0 +1,829 @@
+{
+  "header": {
+    "logo": "GeoPs",
+    "search": {
+      "placeholder": "Search and find the best offers"
+    },
+    "help": "Help",
+    "notifications": "Notifications",
+    "cart": "Cart",
+    "profile": {
+      "menu": {
+        "myProfile": "My Profile",
+        "settings": "Settings",
+        "logout": "Logout"
+      }
+    }
+  },
+  "option": {
+    "home": "Home",
+    "offers": "Offers",
+    "categorias": "Categories",
+    "favorites": "Favorites",
+    "coupons": "My Coupons"
+  },
+  "offersPage": {
+    "title": "Offers",
+    "hero": {
+      "rating": "{{value}}",
+      "buy": "Buy"
+    },
+    "filters": {
+      "search": "Search",
+      "allCategories": "All categories",
+      "sort": {
+        "relevance": "Relevance",
+        "priceAsc": "Lower price",
+        "priceDesc": "Higher price",
+        "ratingDesc": "Best rating"
+      },
+      "allLocations": "All",
+      "clear": "Clear"
+    },
+    "card": {
+      "view": "View offer",
+      "rating": "{{value}}",
+      "currency": "S/",
+      "buy": "Buy",
+      "add": "Add",
+      "locationPin": "Location"
+    }
+  },
+  "offersData": {
+    "titles": {
+      "1": "Coney KIDS 2x1: Kids entry for 2 hours",
+      "2": "DBS: Facial care kit with 30% off",
+      "3": "MINNA Beauty: Lemon Sugar Scrub + Dallism Lip Gloss combo",
+      "4": "Kabuki – Deal: 2x1 Mixsoon Centella Cleansing Foam 150ml",
+      "5": "BUFFET LUNCH: ONLY Chorrillos location, Mon–Sun",
+      "6": "FUN JUNGLE: 60 or 90 minutes on inflatables",
+      "7": "BUFFET LUNCH: Creole, Chinese, pasta, soups, salads, desserts & more",
+      "8": "CINEMARK: 2× 2D tickets + 2 large drinks + giant popcorn",
+      "9": "LUNCH BUFFET OR DINNER WITH DANCING at Mandarin International Restaurant",
+      "10": "Pack: 5 games + 1 free",
+      "11": "FUN JUNGLE TRUJILLO: 60 minutes unlimited games",
+      "12": "Shimaya Ramen – 3 maki boards or 30 maki pieces",
+      "13": "Infinity Park Peru – AREQUIPA unlimited entries",
+      "14": "Arequipeño Creole BUFFET with live Ceviche station – CASA ANDINA PREMIUM",
+      "15": "ARUMA: Gift Card S/ 40 for S/ 29.90",
+      "16": "CINEPLANET: 2× 2D tickets + 2 large drinks + giant popcorn",
+      "17": "AQUATICA POOL PARK ICA: Full-day fun",
+      "18": "CINEMARK: 2 tickets + 2 sodas + medium or large popcorn",
+      "19": "CINEPLANET PROVINCES: 2× 2D tickets + giant popcorn + 2 large drinks",
+      "20": "Full-day wristband – Rides",
+      "21": "All you can eat Nikkei",
+      "22": "All-you-can-eat makis + drink",
+      "23": "Playland Kids – 2h unlimited",
+      "24": "Mundo Kids – All-day unlimited pass"
+    },
+    "categories": {
+      "Entretenimiento": "Entertainment",
+      "Belleza": "Beauty",
+      "Gastronomía": "Dining",
+      "Gift Card": "Gift Card",
+      "Educación": "Education",
+      "Salud": "Health",
+      "Tecnología": "Technology",
+      "Moda": "Fashion",
+      "Hogar": "Home",
+      "Deportes": "Sports",
+      "Viajes": "Travel",
+      "Automotriz": "Automotive",
+      "Servicios": "Services",
+      "Otros": "Others"
+    },
+    "locations": {
+      "Varias Sedes": "Multiple locations",
+      "Tiendas seleccionadas": "Selected stores",
+      "Online y tiendas": "Online & stores"
+    }
+  },
+  "favoritesPage": {
+    "title": "Favorites",
+    "loading": "Loading…",
+    "empty": "You don't have favorites yet.",
+    "view": "View",
+    "remove": "Remove"
+  },
+  "home": {
+    "welcome": "Welcome",
+    "hi": "Hi",
+    "free-plan": "Free Plan",
+    "premium-plan": "Premium Plan",
+    "see-more": "See more",
+    "map": {
+      "places": "Places",
+      "use-my-location": "Use my location",
+      "location-active": "Location active",
+      "example": "e.g.: cine, buffet",
+      "search": "Search",
+      "radius": "Radius",
+      "zoom": "Zoom",
+      "all": "All",
+      "cinemas": "Cinemas",
+      "buffets": "Buffets",
+      "parks": "Parks",
+      "for-children": "For children",
+      "makis": "Makis",
+      "beauty": "Beauty",
+      "near-you": "Near you",
+      "real-time": "Realtime Map",
+      "places-near-you": "Places near you",
+      "activate-location": "Activate your location",
+      "desc": "To show places near you and coupons in real time",
+      "right-map": "Share your location to see places near you",
+      "nearby-offers": "Nearby Offers",
+      "results": "results"
+    },
+    "cinemas": "Cinemas",
+    "lunch-buffets": "Lunch buffets",
+    "inflatable-parks": "Inflatable parks",
+    "mechanical-games": "Mechanical games",
+    "maki-open-bar": "Maki open bar",
+    "beauty": "Beauty",
+    "offers": "offers"
+  },
+  "welcomeBanner": {
+    "welcome": "Welcome",
+    "hello": "Hello,",
+    "user": "Ariana",
+    "viewMore": "View More",
+    "premium": "Premium",
+    "currentBasic": "Basic Plan",
+    "currentPremium": "Premium Plan"
+  },
+  "ownerToolbar": {
+    "summary": "Overview",
+    "campaigns": "Campaigns",
+    "create": "Create",
+    "reports": "Reports",
+    "comments": "Comments"
+  },
+  "campaign": {
+    "addOfferForm": {
+      "title": {
+        "new": "New Offer",
+        "edit": "Edit Offer"
+      },
+      "fields": {
+        "title": {
+          "label": "Offer Title",
+          "placeholder": "Ex: 20% off products"
+        },
+        "partner": {
+          "label": "Partner",
+          "placeholder": "Ex: Restaurant El Sabor"
+        },
+        "price": {
+          "label": "Price (S/.)",
+          "placeholder": "0.00"
+        },
+        "category": {
+          "label": "Category",
+          "placeholder": "Select a category"
+        },
+        "codePrefix": {
+          "label": "Code Prefix",
+          "placeholder": "Ex: PROMO"
+        },
+        "location": {
+          "label": "Location",
+          "placeholder": "Ex: Main Ave 123, Miraflores"
+        },
+        "imageUrl": {
+          "label": "Image URL",
+          "placeholder": "https://example.com/image.jpg"
+        },
+        "validUntil": {
+          "label": "Valid Until"
+        }
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "save": "Save Changes",
+        "add": "Add Offer"
+      },
+      "errors": {
+        "required": "This field is required",
+        "minLength": "Must be at least {{value}} characters",
+        "maxLength": "Must not exceed {{value}} characters",
+        "minValue": "Value must be greater than or equal to 0"
+      }
+    },
+    "offersList": {
+      "empty": {
+        "description": "No offers linked"
+      },
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "validUntil": "Valid until"
+    }
+  },
+  "subscriptions": {
+    "title": "Plans",
+    "subtitle": "Choose the plan that suits you. You can change whenever you want.",
+    "currency": "s/",
+    "interval": "month",
+    "recommended": "Recommended",
+    "close": "Close",
+    "consumer": {
+      "plans": {
+        "basic": {
+          "name": "Basic",
+          "description": "Free plan with basic functionalities",
+          "features": [
+            "Access to public coupons",
+            "Filter by category and radius",
+            "3 active coupons at the same time",
+            "Email support"
+          ],
+          "buttonText": "Get Started"
+        },
+        "premium": {
+          "name": "Premium",
+          "description": "Premium plan with access to exclusive functionalities",
+          "features": [
+            "Everything from Basic",
+            "Exclusive coupons by location",
+            "Live map with offers/schedules",
+            "Smart history and alerts",
+            "Priority support"
+          ],
+          "buttonText": "Try Premium"
+        }
+      }
+    },
+    "provider": {
+      "plans": {
+        "basic": {
+          "name": "Basic",
+          "description": "Free plan to start",
+          "features": [
+            "Create basic campaigns",
+            "Segmentation by radius/city",
+            "CSV Report"
+          ],
+          "buttonText": "Start"
+        },
+        "premium": {
+          "name": "Premium",
+          "description": "Premium plan with advanced features",
+          "features": [
+            "Advanced metrics (CTR, conversions)",
+            "Export PDF/Excel",
+            "Detailed segmentation",
+            "Priority support"
+          ],
+          "buttonText": "Try Premium"
+        }
+      }
+    }
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "loading": "Loading...",
+    "empty": {
+      "title": "Your cart is empty",
+      "message": "Add some offers to get started!"
+    },
+    "removeItem": "Remove item",
+    "summary": {
+      "items": "Items",
+      "total": "Total"
+    },
+    "actions": {
+      "clear": "Clear Cart",
+      "checkout": "Checkout",
+      "payNow": "Pay Now"
+    }
+  },
+  "payment": {
+    "form": {
+      "title": "Checkout",
+      "back": "Back to Cart",
+      "customerInfo": "Customer Information",
+      "email": "Email",
+      "emailPlaceholder": "Enter your email address",
+      "firstName": "First Name",
+      "firstNamePlaceholder": "Enter your first name",
+      "lastName": "Last Name",
+      "lastNamePlaceholder": "Enter your last name",
+      "paymentMethod": "Payment Method",
+      "selectPaymentMethod": "Select Payment Method",
+      "chooseMethod": "Choose how you want to pay",
+      "creditCard": "Credit/Debit Card",
+      "yape": "Yape",
+      "plin": "Plin",
+      "cardDetails": "Card Details",
+      "cardNumber": "Card Number",
+      "cardNumberPlaceholder": "1234 5678 9012 3456",
+      "cvv": "CVV",
+      "cvvPlaceholder": "123",
+      "orderSummary": "Order Summary",
+      "total": "Total",
+      "processPayment": "Process Payment",
+      "processing": "Processing...",
+      "errors": {
+        "emailRequired": "Email is required",
+        "emailInvalid": "Please enter a valid email",
+        "firstNameRequired": "First name is required",
+        "firstNameMinLength": "First name must be at least 2 characters",
+        "lastNameRequired": "Last name is required",
+        "lastNameMinLength": "Last name must be at least 2 characters",
+        "cardNumberRequired": "Card number is required",
+        "cardNumberPattern": "Please enter a valid 16-digit card number",
+        "cvvRequired": "CVV is required",
+        "cvvPattern": "Please enter a valid 3-digit CVV"
+      }
+    },
+    "confirmation": {
+      "title": "Payment Confirmed",
+      "subtitle": "Your payment code",
+      "codeLabel": "Payment Code",
+      "amount": "Amount",
+      "paymentMethod": "Payment Method",
+      "cardPayment": "Credit/Debit Card",
+      "yapePayment": "Yape",
+      "plinPayment": "Plin",
+      "customer": "Customer",
+      "email": "Email",
+      "date": "Date",
+      "continue": "Continue Shopping"
+    }
+  },
+  "login": {
+    "title": "Sign In",
+    "email": "Email:",
+    "password": "Password:",
+    "button": "Login",
+    "noAccount": "Don't have an account?",
+    "register": "Register here"
+  },
+  "profile": {
+    "planPremium": "Premium Plan",
+    "planBasic": "Basic Plan",
+    "edit": "Edit",
+    "email": "Email",
+    "phone": "Phone",
+    "favorites": "Saved offers",
+    "location": "Location",
+    "locationAlways": "Always",
+    "locationAsk": "Ask",
+    "locationDenied": "Denied",
+    "places": "Usual places",
+    "rights": "© 2025 All rights reserved"
+  },
+  "register": {
+    "title": "User Registration",
+    "name": "Name:",
+    "email": "Email:",
+    "password": "Password:",
+    "phone": "Phone:",
+    "role": "User type:",
+    "owner": "Business (Owner)",
+    "consumer": "Consumer",
+    "plan": "Plan:",
+    "basic": "Basic",
+    "premium": "Premium",
+    "button": "Register",
+    "hasAccount": "Already have an account?",
+    "loginHere": "Login here"
+  },
+  "business": {
+    "title": "Additional Business Details",
+    "businessName": "Business Name:",
+    "businessType": "Business Type:",
+    "taxId": "Tax ID:",
+    "button": "Save"
+  },
+  "settings": {
+    "basicInfo": "Basic Information",
+    "plan": {
+      "label": "Plan",
+      "BASIC": "Basic",
+      "PREMIUM": "Premium"
+    },
+    "save": "Save",
+    "cancel": "Cancel",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "locationPermission": {
+      "label": "Location Permission",
+      "ASK": "Ask",
+      "ALWAYS": "Always"
+    },
+    "home": "Home",
+    "work": "Work",
+    "favorites": "Favorite Category",
+    "security": "Security",
+    "passwordCurrent": "Current password",
+    "passwordNew": "New password",
+    "passwordConfirm": "Confirm new password",
+    "clear": "Clear",
+    "changePassword": "Change password",
+    "updating": "Updating...",
+    "rights": "© 2025 All rights reserved",
+    "consumer": {
+      "title": "Consumer Details",
+      "notifications": "Receive notifications",
+      "locationPermission": "Allow location access",
+      "homeAddress": "Home address",
+      "workAddress": "Work address",
+      "universityAddress": "University address",
+      "favorites": "Favorite categories"
+    },
+    "preferences": {
+      "title": "Preferences",
+      "notifications": "Receive notifications",
+      "notificationsHelp": "Enable to receive notifications about new offers and promotions",
+      "locationPermission": "Allow location access",
+      "locationPermissionHelp": "Allow sharing your location to see nearby offers"
+    },
+    "savedAddresses": {
+      "title": "Saved Addresses",
+      "homeAddress": "Home address",
+      "workAddress": "Work address",
+      "universityAddress": "University address / Other"
+    },
+    "owner": {
+      "title": "Business Details",
+      "businessName": "Business name",
+      "businessType": "Business type",
+      "taxId": "Tax ID / RUC",
+      "website": "Website",
+      "description": "Business description",
+      "address": "Business address",
+      "hours": "Business hours"
+    }
+  },
+  "helpCenter": {
+    "title": "Help Center",
+
+    "registerQuestion": "How do I register as a customer?",
+    "registerWord": "Register",
+    "registerStepsBefore": "Go to",
+    "registerStepsAfter": ", enter your email, password, confirm and verify your email.",
+    "registerStepsLabel": "Steps:",
+    "registerStep1Before": "Click on",
+    "registerStep1After": "(header or landing).",
+    "registerStep2": "Enter your email and a secure password (8+ characters, 1 uppercase, 1 number, 1 symbol).",
+    "registerStep3": "Check your email and verify your account.",
+    "registerStep4": "Return and log in.",
+
+    "couponQuestion": "How do I redeem a coupon at the store?",
+    "couponStepsBefore": "Show your coupon from",
+    "couponStepsAfter": "and the business validates it with a code/QR.",
+    "couponStepsLabel": "Steps:",
+    "couponStep1Before": "Buy the offer and go to",
+    "couponStep1Middle": "→",
+    "couponStep1After": ".",
+    "couponStep2Before": "Open the coupon and tap",
+    "couponStep2After": ".",
+    "couponStep3Before": "The business scans/enters the",
+    "couponStep3After": "and that's it.",
+    "couponNoteBefore": "Note: You need an internet connection to validate. If your coupon is marked as 'redeemed' by mistake, contact us with the",
+    "couponNoteAfter": ".",
+    "myCoupons": "My coupons",
+    "profile": "Profile",
+    "showToRedeem": "Show to redeem",
+    "uniqueCode": "unique code",
+    "couponId": "coupon ID",
+
+    "locationQuestion": "Why do we ask for your location and how to enable it?",
+    "locationStepsBefore": "To show you",
+    "locationStepsMiddle": "and sort them by",
+    "locationStepsAfter": ".",
+    "locationStepsLabel": "Steps:",
+    "locationStep1Before": "In the \"Near you\" bar, tap",
+    "locationStep1After": ".",
+    "locationStep2": "If you denied permissions:",
+    "locationStep2aBefore": "",
+    "locationStep2aMiddle1": ": Location permissions →",
+    "locationStep2aMiddle2": "→ Reload",
+    "locationStep3": "Adjust the radius (e.g. 1–10 km) with the selector to see more/fewer results.",
+    "nearbyOffers": "nearby offers",
+    "distance": "distance",
+    "allowLocation": "Allow location",
+    "allow": "Allow"
+  },
+  "helpCenterProvider": {
+    "title": "Help Center",
+    "createCampaignQuestion": "How do I create a campaign?",
+    "createCampaignBefore": "Go to",
+    "createCampaignWord": "Create campaign",
+    "createCampaignAfter": ", complete title, budget, dates and segmentation (location or radius), and publish.",
+    "pauseReactivateQuestion": "How do I pause or reactivate?",
+    "pauseReactivateBefore": "In Campaigns, use the buttons",
+    "pauseReactivateAfter": "according to the status.",
+    "pauseReactivate": "Pause / Reactivate",
+    "metricsQuestion": "Why don't I see metrics?",
+    "metricsAnswer": "If the campaign is new or paused, metrics may take time. Check back later or verify the budget."
+  },
+  "common": {
+    "currency": "s/",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "close": "Close"
+  },
+  "offerDetail": {
+    "back": "Back",
+    "buy": "Buy",
+    "addToCart": "Add to cart",
+    "bullets": {
+      "valid": "Valid online and at {{partner}} physical stores.",
+      "business": "Business: {{partner}}.",
+      "redeem": "It can be redeemed as a means of payment up to the indicated amount."
+    },
+    "reviews": {
+      "title": "Comments",
+      "count": "{{count}} reviews",
+      "yourRating": "Your rating",
+      "ariaRate": "Choose a rating from 1 to 5",
+      "placeholder": "Tell us about your experience with this offer",
+      "publish": "Publish review"
+    }
+  },
+  "categoriesBar": {
+    "cines": "Cinemas",
+    "buffets": "Buffets",
+    "parques": "Parks",
+    "infantiles": "For children",
+    "makis": "Makis",
+    "belleza": "Beauty"
+  },
+  "proveedor": {
+    "stats": {
+      "activeCampaigns": "Active campaigns",
+      "impressions": "Total impressions",
+      "ctr": "Avg CTR"
+    },
+    "metrics": {
+      "impressions": "Imp",
+      "clicks": "Clicks"
+    },
+    "actions": {
+      "pause": "Pause",
+      "edit": "Edit",
+      "remove": "Remove",
+      "copy": "Copy"
+    },
+    "latestCampaigns": "Latest campaigns"
+  },
+  "campaigns": {
+    "title": "Campaigns",
+    "tabs": {
+      "active": "Active",
+      "paused": "Paused",
+      "finalized": "Finalized"
+    },
+    "empty": {
+      "active": "No active campaigns",
+      "paused": "No paused campaigns",
+      "finalized": "No finalized campaigns"
+    },
+    "actions": {
+      "create": "Create new campaign",
+      "edit": "Edit",
+      "pause": "Pause",
+      "resume": "Resume",
+      "activate": "Activate",
+      "finalize": "Finalize",
+      "remove": "Remove",
+      "view": "View",
+      "cancel": "Cancel",
+      "save": "Save Changes",
+      "addOffers": "Add Offers",
+      "removeOffer": "Remove Offer",
+      "back": "Back",
+      "download": "Download Report",
+      "print": "Print"
+    },
+    "status": {
+      "active": "Active",
+      "paused": "Paused",
+      "finalized": "Finalized"
+    },
+    "statusLabels": {
+      "ACTIVE": "Active",
+      "PAUSED": "Paused",
+      "FINALIZED": "Finalized"
+    },
+    "dialogs": {
+      "pause": {
+        "title": "Pause campaign?",
+        "message": "Are you sure you want to pause the campaign \"{{name}}\"?",
+        "confirm": "Pause"
+      },
+      "activate": {
+        "title": "Activate campaign?",
+        "message": "Are you sure you want to activate the campaign \"{{name}}\"?",
+        "confirm": "Activate"
+      },
+      "finalize": {
+        "title": "Finalize campaign?",
+        "message": "Are you sure you want to finalize the campaign \"{{name}}\"? This action cannot be undone.",
+        "confirm": "Finalize"
+      },
+      "delete": {
+        "title": "Delete campaign?",
+        "message": "Are you sure you want to delete the campaign \"{{name}}\"? This action cannot be undone.",
+        "confirm": "Delete"
+      }
+    },
+    "notifications": {
+      "pauseSuccess": "Campaign paused successfully",
+      "activateSuccess": "Campaign activated successfully",
+      "finalizeSuccess": "Campaign finalized successfully",
+      "deleteSuccess": "Campaign deleted successfully"
+    },
+    "form": {
+      "createTitle": "Create New Campaign",
+      "editTitle": "Edit Campaign",
+      "name": "Campaign Name",
+      "namePlaceholder": "E.g: Summer Promotion 2025",
+      "nameRequired": "Name is required",
+      "nameMinLength": "Name must be at least 3 characters",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe your campaign...",
+      "descriptionRequired": "Description is required",
+      "descriptionMinLength": "Description must be at least 10 characters",
+      "startDate": "Start Date",
+      "startDateRequired": "Start date is required",
+      "endDate": "End Date",
+      "endDateRequired": "End date is required",
+      "budget": "Estimated Budget (S/.)",
+      "budgetPlaceholder": "0.00",
+      "budgetRequired": "Budget is required",
+      "budgetMin": "Budget must be greater than or equal to 0",
+      "status": "Status",
+      "initialStatus": "Initial Status",
+      "statusRequired": "Status is required",
+      "creating": "Creating...",
+      "saving": "Saving...",
+      "createButton": "Create Campaign",
+      "saveButton": "Save Changes"
+    },
+    "stats": {
+      "title": "Campaign Statistics",
+      "impressions": "Impressions",
+      "clicks": "Clicks",
+      "ctr": "CTR",
+      "budget": "Budget",
+      "totalCampaigns": "Total Campaigns",
+      "totalImpressions": "Total Impressions",
+      "totalClicks": "Total Clicks",
+      "totalBudget": "Total Budget",
+      "averageCTR": "Average CTR"
+    },
+    "details": {
+      "title": "Campaign Details",
+      "loading": "Loading campaign...",
+      "description": "Description",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "estimatedBudget": "Estimated Budget",
+      "associatedOffers": "Associated Offers"
+    },
+    "offers": {
+      "title": "Campaign Offers",
+      "empty": "No offers added yet",
+      "add": "Add Offers",
+      "remove": "Remove",
+      "view": "View Offer",
+      "select": "Select Offers",
+      "selected": "{{count}} selected",
+      "availableOffers": "Available Offers",
+      "searchPlaceholder": "Search offers..."
+    },
+    "reports": {
+      "title": "Campaign Reports",
+      "filterByStatus": "Filter by Status",
+      "allCampaigns": "All Campaigns",
+      "exportFormat": "Export Format",
+      "summary": "General Summary",
+      "byStatus": "By Status",
+      "preview": "Preview"
+    },
+    "dashboard": {
+      "title": "Dashboard - Campaign Summary",
+      "subtitle": "Control Panel",
+      "allCampaigns": "All Campaigns"
+    },
+    "messages": {
+      "createSuccess": "Campaign created successfully",
+      "updateSuccess": "Campaign updated successfully",
+      "pauseSuccess": "Campaign paused",
+      "resumeSuccess": "Campaign resumed",
+      "finalizeSuccess": "Campaign finalized",
+      "deleteSuccess": "Campaign deleted",
+      "error": "An error occurred. Please try again."
+    }
+  },
+  "reviewsPage": {
+    "title": "Comments and Reviews",
+    "addReview": "Add Review",
+    "cancel": "Cancel",
+    "loading": "Loading reviews...",
+    "error": "Error loading reviews",
+    "retry": "Retry",
+    "statistics": {
+      "averageRating": "Average Rating",
+      "totalReviews": "Total Reviews",
+      "totalLikes": "Total Likes",
+      "distribution": "Rating Distribution"
+    },
+    "form": {
+      "newReview": "New Review",
+      "rating": "Rating",
+      "ratingRequired": "Rating is required",
+      "excellent": "Excellent",
+      "veryGood": "Very Good",
+      "good": "Good",
+      "fair": "Fair",
+      "poor": "Poor",
+      "comment": "Comment",
+      "commentPlaceholder": "Write your review here (minimum 10 characters)",
+      "commentRequired": "Comment is required",
+      "commentMinLength": "Minimum 10 characters",
+      "commentMaxLength": "Comment must not exceed 500 characters",
+      "submit": "Publish Review",
+      "submitting": "Publishing..."
+    },
+    "actions": {
+      "addReview": "Add Review",
+      "cancel": "Cancel",
+      "publish": "Publish Review",
+      "retry": "Retry",
+      "like": "Like",
+      "unlike": "Unlike",
+      "reply": "Reply",
+      "edit": "Edit",
+      "delete": "Delete",
+      "report": "Report"
+    },
+    "filters": {
+      "sortBy": "Sort by",
+      "mostRecent": "Most Recent",
+      "highestRating": "Highest Rating",
+      "mostLikes": "Most Likes",
+      "filterByRating": "Filter by rating",
+      "all": "All",
+      "stars": "stars"
+    },
+    "empty": {
+      "noReviews": "No reviews available",
+      "beFirst": "Be the first to review"
+    },
+    "messages": {
+      "createSuccess": "Review published successfully",
+      "updateSuccess": "Review updated successfully",
+      "deleteSuccess": "Review deleted",
+      "likeSuccess": "Thanks for your feedback!",
+      "error": "An error occurred. Please try again."
+    }
+  },
+  "coupons": {
+    "title": "My Coupons",
+    "loading": "Loading coupons...",
+    "empty": "You don't have any coupons yet. Buy an offer to get your first coupon!",
+    "error": "Error loading coupons. Please try again."
+  },
+  "footer": {
+    "tagline": "Offers and coupons near you",
+    "description": "Discover the best deals and discounts on restaurants, entertainment, beauty and more in your area.",
+    "navigation": "Navigation",
+    "offers": "Offers",
+    "subscriptions": "Subscriptions",
+    "coupons": "Coupons",
+    "help": "Help",
+    "support": "Support",
+    "faq": "Frequent Questions",
+    "contact": "Contact",
+    "terms": "Terms and Conditions",
+    "privacy": "Privacy Policy",
+    "contact-us": "Contact Us",
+    "rights": "All rights reserved.",
+    "made-with": "Made with",
+    "in-peru": "in Peru"
+  },
+  "categorias": {
+    "Entretenimiento": "Entertainment",
+    "Gastronomía": "Buffets",
+    "Belleza": "Beauty",
+    "Gift Card": "Gift Card",
+    "title": "Categories",
+    "Educación": "Education",
+    "Salud": "Health",
+    "Tecnología": "Technology",
+    "Moda": "Fashion",
+    "Hogar": "Home",
+    "Deportes": "Sports",
+    "Viajes": "Travel",
+    "Automotriz": "Automotive",
+    "Servicios": "Services",
+    "Otros": "Others"
+  }
+}

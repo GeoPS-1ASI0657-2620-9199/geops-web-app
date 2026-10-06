@@ -1,0 +1,282 @@
+.campaigns-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+/* Tabs */
+.campaigns-tabs {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+::ng-deep .campaigns-tabs .mat-mdc-tab-labels {
+  background: white;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+::ng-deep .campaigns-tabs .mat-mdc-tab {
+  font-size: 16px;
+  font-weight: 600;
+  color: #666;
+  min-width: 120px;
+}
+
+::ng-deep .campaigns-tabs .mat-mdc-tab.mat-mdc-tab-active {
+  color: #A751D4;
+}
+
+::ng-deep .campaigns-tabs .mat-mdc-tab-header-pagination {
+  display: none;
+}
+
+/* Tab Content */
+.tab-content {
+  padding: 20px 0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.empty-state mat-icon {
+  font-size: 64px;
+  width: 64px;
+  height: 64px;
+  color: #ccc;
+}
+
+/* Campaigns List */
+.campaigns-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 0 20px;
+}
+
+/* Campaign Card */
+.campaign-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 20px;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.campaign-card:hover {
+  background: #fafafa;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.campaign-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  gap: 20px;
+}
+
+.campaign-title-section {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.campaign-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.campaign-status {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.campaign-dates {
+  text-align: right;
+  color: #999;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* Campaign Description */
+.campaign-description {
+  margin-bottom: 15px;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Campaign Stats */
+.campaign-stats {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
+  flex-wrap: wrap;
+}
+
+.campaign-stat {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.stat-label-small {
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.stat-value-small {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+/* Campaign Actions */
+.campaign-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.action-btn {
+  font-size: 12px !important;
+  padding: 8px 16px !important;
+  min-width: 100px;
+  text-transform: uppercase;
+  font-weight: 600;
+  border-radius: 6px !important;
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+}
+
+.action-btn mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.edit-btn {
+  background: #2196F3 !important;
+  color: white !important;
+}
+
+.pause-btn {
+  background: #FFC107 !important;
+  color: white !important;
+}
+
+.activate-btn {
+  background: #4CAF50 !important;
+  color: white !important;
+}
+
+.finalize-btn {
+  background: #9E9E9E !important;
+  color: white !important;
+}
+
+.view-btn {
+  background: #607D8B !important;
+  color: white !important;
+}
+
+.delete-btn {
+  background: #f44336 !important;
+  color: white !important;
+}
+
+/* Footer */
+.campaigns-footer {
+  text-align: center;
+  padding: 20px;
+  color: #999;
+  font-size: 12px;
+  border-top: 1px solid #e0e0e0;
+  margin-top: 20px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .campaigns-list {
+    padding: 0 10px;
+  }
+
+  .campaign-stats {
+    gap: 20px;
+  }
+
+  .campaign-actions {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .campaigns-container {
+    padding: 12px;
+  }
+
+  .campaigns-list {
+    padding: 0;
+  }
+
+  .campaign-card {
+    padding: 15px;
+  }
+
+  .campaign-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .campaign-dates {
+    text-align: left;
+  }
+
+  .campaign-title {
+    font-size: 16px;
+  }
+
+  .campaign-stats {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .action-btn {
+    flex: 1;
+    min-width: 80px;
+    font-size: 11px !important;
+  }
+
+  ::ng-deep .campaigns-tabs .mat-mdc-tab {
+    min-width: 80px;
+    font-size: 14px;
+  }
+}

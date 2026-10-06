@@ -1,0 +1,42 @@
+<div class="offer-page">
+
+  <button class="back-btn" type="button" (click)="goBack()">
+    {{ 'offerDetail.back' | translate }}
+  </button>
+
+  <div class="offer-grid" *ngIf="offer as o">
+    <img class="offer-hero" [src]="imgFor()" [alt]="o.title">
+
+    <section class="summary">
+      <h1 class="title">{{ o.title || (('offersData.titles.' + o.id) | translate) }}</h1>
+      <div class="partner">{{ o.partner }}</div>
+
+      <div class="meta">
+        <mat-icon class="pin" aria-hidden="true">location_on</mat-icon>
+        <span *ngIf="isDistrict(o.location); else translatedLocation">{{ o.location }}</span>
+        <ng-template #translatedLocation>
+          <span>{{ 'offersData.locations.' + o.location | translate }}</span>
+        </ng-template>
+
+        <span class="dot">•</span>
+        <span class="rating">{{ o.rating | number:'1.1-1' }}</span>
+        <span class="stars" aria-hidden="true">@for (s of [1, 2, 3, 4, 5]; track s) {<mat-icon>star</mat-icon>}</span>
+      </div>
+
+      <div class="price">
+        <span class="currency">{{ 'common.currency' | translate }}</span>
+        <span class="amount">{{ o.price | number:'1.2-2' }}</span>
+      </div>
+
+
+
+      <ul class="bullets">
+        <li>{{ 'offerDetail.bullets.valid' | translate:{ partner: o.partner } }}</li>
+        <li>{{ 'offerDetail.bullets.business' | translate:{ partner: o.partner } }}</li>
+        <li>{{ 'offerDetail.bullets.redeem' | translate }}</li>
+      </ul>
+    </section>
+  </div>
+
+
+</div>
