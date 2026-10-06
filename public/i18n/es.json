@@ -22,33 +22,6 @@
     "favorites": "Favoritos",
     "coupons": "Mis cupones"
   },
-  "offersPage": {
-    "title": "Ofertas",
-    "hero": {
-      "rating": "{{value}}",
-      "buy": "Comprar"
-    },
-    "filters": {
-      "search": "Buscar",
-      "allCategories": "Todas las categorías",
-      "sort": {
-        "relevance": "Relevancia",
-        "priceAsc": "Menor precio",
-        "priceDesc": "Mayor precio",
-        "ratingDesc": "Mejor calificación"
-      },
-      "allLocations": "Todas",
-      "clear": "Limpiar"
-    },
-    "card": {
-      "view": "Ver oferta",
-      "rating": "{{value}}",
-      "currency": "S/",
-      "buy": "Comprar",
-      "add": "Agregar",
-      "locationPin": "Ubicación"
-    }
-  },
   "offersData": {
     "titles": {
       "1": "Coney KIDS 2x1: Entrada para niños por 2 horas",
@@ -907,5 +880,44 @@
       "deleteSuccess": "Campaña eliminada",
       "error": "Ocurrió un error. Por favor, intenta de nuevo."
     }
+  },
+  "nearbyPage": {
+    "title": "Ofertas cerca de ti",
+    "places": "Lugares:",
+    "yourLocation": "Tu ubicación",
+    "changeDistrict": "Cambiar distrito",
+    "searching": "Buscando en tu zona…",
+    "count": "{{total}} ofertas vigentes a {{minutes}} minutos a pie",
+    "loadMore": "Ver más",
+    "loadingMore": "Cargando…",
+    "locating": {
+      "title": "Buscando en tu zona…",
+      "description": "Si el navegador te pide permiso de ubicación, acéptalo para ver las ofertas por cercanía."
+    },
+    "imprecise": {
+      "title": "Tu ubicación tiene un margen de ±{{meters}} m",
+      "description": "Con ese margen las distancias pueden fallar por varias cuadras. Elige tu distrito o vuelve a intentar con el GPS activado."
+    },
+    "pick": {
+      "title": "Elige tu distrito",
+      "noLocationTitle": "¿Prefieres no compartir tu ubicación?",
+      "retryGps": "Usar mi ubicación",
+      "reason": {
+        "DENIED": "Elige tu distrito y te mostramos las ofertas de esa zona.",
+        "UNAVAILABLE": "No pudimos ubicarte. Elige tu distrito y te mostramos las ofertas de esa zona.",
+        "INSECURE_CONTEXT": "Tu navegador solo comparte la ubicación en sitios seguros. Elige tu distrito para seguir."
+      }
+    },
+    "empty": {
+      "title": "No hay ofertas vigentes a {{minutes}} minutos",
+      "description": "Puedes ampliar la distancia o elegir otro distrito.",
+      "widen": "Ampliar a {{minutes}} min a pie"
+    },
+    "error": {
+      "title": "No pudimos cargar las ofertas",
+      "description": "Puede ser tu conexión o el servicio. Inténtalo de nuevo en un momento.",
+      "retry": "Reintentar"
+    },
+    "countOne": "1 oferta vigente a {{minutes}} minutos a pie"
   }
 }

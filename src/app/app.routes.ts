@@ -32,8 +32,8 @@ export const routes: Routes = [
       {
         path: 'offers',
         loadComponent: () =>
-          import('./catalog/presentation/pages/nearby-offers/ofertas.component').then(
-            (m) => m.OfertasComponent
+          import('./catalog/presentation/pages/nearby-offers/nearby-offers.page').then(
+            (m) => m.NearbyOffersPage,
           ),
         title: 'GeoPS - Ofertas cercanas',
       },

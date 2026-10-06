@@ -18,12 +18,21 @@ const MAX_STARS = 5;
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <article class="card" [class.reference]="kind() === 'reference'">
-      <img class="photo" [src]="imageUrl()" [alt]="title()" [attr.loading]="priority() ? 'eager' : 'lazy'" />
+      @if (imageUrl(); as url) {
+        <img class="photo" [src]="url" [alt]="title()" [attr.loading]="priority() ? 'eager' : 'lazy'" />
+      } @else if (category()) {
+        <div class="photo placeholder" aria-hidden="true">
+          <mat-icon>sell</mat-icon>
+          <span>{{ category() }}</span>
+        </div>
+      }
       <div class="content">
         <h3 class="geo-card-title title">{{ title() }}</h3>
         <div class="merchant-row">
           <span class="merchant">{{ merchant() }}</span>
-          <geo-seal [kind]="kind() === 'reference' ? 'reference' : 'verified'" />
+          @if (kind() !== 'standard') {
+            <geo-seal [kind]="kind() === 'reference' ? 'reference' : 'verified'" />
+          }
         </div>
         @if (rating() !== null) {
           <div class="rating" [attr.aria-label]="'Valoración ' + rating() + ' de 5'">
@@ -64,6 +73,17 @@ const MAX_STARS = 5;
       }
       .card.reference { border: 1.5px dashed var(--status-reference); }
       .photo { width: 100%; height: 148px; object-fit: cover; background: var(--neutral-line-soft); }
+      .placeholder {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-xs);
+        height: 96px;
+        background: var(--brand-mist);
+        color: var(--brand-deep);
+        font: 500 12px/1.3 var(--font-brand);
+      }
       .content { display: flex; flex-direction: column; gap: 6px; padding: var(--space-md) var(--space-lg) var(--space-lg); }
       .title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
       .merchant-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-sm); }
@@ -87,10 +107,13 @@ const MAX_STARS = 5;
   ],
 })
 export class GeoOfferCard {
-  readonly kind = input<'verified' | 'reference'>('verified');
+  /** verified: business with seal · reference: public source without guarantee · standard: neither. */
+  readonly kind = input<'verified' | 'reference' | 'standard'>('verified');
   readonly title = input.required<string>();
   readonly merchant = input.required<string>();
-  readonly imageUrl = input.required<string>();
+  /** Photo of the offer; Catalog does not send one in the Sprint 1, so the category stands in. */
+  readonly imageUrl = input<string | null>(null);
+  readonly category = input<string | null>(null);
   readonly validity = input.required<string>();
   readonly price = input.required<number>();
   readonly regularPrice = input<number | null>(null);
