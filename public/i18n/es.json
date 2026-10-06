@@ -353,14 +353,6 @@
       "continue": "Seguir comprando"
     }
   },
-  "login": {
-    "title": "Iniciar sesión",
-    "email": "Correo electrónico:",
-    "password": "Contraseña:",
-    "button": "Entrar",
-    "noAccount": "¿No tienes una cuenta?",
-    "register": "Regístrate aquí"
-  },
   "profile": {
     "planPremium": "Plan premium",
     "planBasic": "Plan básico",
@@ -831,6 +823,36 @@
       },
       "invalid": "Revisa los datos",
       "generic": "No pudimos crear tu cuenta"
+    }
+  },
+  "loginPage": {
+    "title": "Inicia sesión",
+    "intro": "Usa el correo con el que te registraste.",
+    "brandTitle": "Ofertas que se respetan, a pocos minutos de ti",
+    "brandText": "Busca por cercanía, reserva sin pagar por adelantado y paga en el local. Si tienes un negocio, entra con la misma pantalla y llegas a tu panel de campañas.",
+    "email": "Correo electrónico",
+    "emailInvalid": "Ingresa un correo válido.",
+    "password": "Contraseña",
+    "passwordRequired": "Ingresa tu contraseña.",
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña",
+    "submit": "Iniciar sesión",
+    "submitting": "Entrando…",
+    "noAccount": "¿Aún no tienes cuenta?",
+    "createAccount": "Crear cuenta",
+    "registerBusiness": "Registrar mi negocio",
+    "registered": {
+      "title": "Tu cuenta está lista",
+      "description": "Inicia sesión con el correo y la contraseña que acabas de registrar."
+    },
+    "expired": "Tu sesión terminó. Vuelve a iniciar sesión.",
+    "errors": {
+      "credentials": {
+        "title": "Correo o contraseña incorrectos",
+        "description": "No decimos cuál de los dos falló para proteger tu cuenta.",
+        "field": "Revisa el correo y la contraseña e inténtalo de nuevo."
+      },
+      "generic": "No pudimos iniciar tu sesión"
     }
   }
 }

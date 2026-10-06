@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { RegisterConsumer, RegisteredUser } from '../domain/model/register-consumer';
+import { Credentials, IssuedToken } from '../domain/model/session';
 import { IdentityGateway } from '../domain/ports/identity.gateway';
 import { RegisterConsumerUseCase } from './register-consumer.use-case';
 
@@ -9,6 +10,10 @@ class FakeIdentityGateway extends IdentityGateway {
   override async registerConsumer(person: RegisterConsumer): Promise<RegisteredUser> {
     this.received = person;
     return { userId: 1, fullName: 'Ariana Torres', email: person.email, role: 'CONSUMER' };
+  }
+
+  override logIn(_credentials: Credentials): Promise<IssuedToken> {
+    throw new Error('not used');
   }
 }
 

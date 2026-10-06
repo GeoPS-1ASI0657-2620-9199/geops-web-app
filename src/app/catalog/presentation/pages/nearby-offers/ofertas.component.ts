@@ -1,11 +1,11 @@
 import { MatIconModule } from '@angular/material/icon';
-import { Component, OnDestroy, OnInit, HostListener } from '@angular/core';
+import { Component, OnDestroy, OnInit, HostListener, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { OffersApiEndpoint } from '../../../infrastructure/offers/offers-api-endpoint';
 import { TranslateModule } from '@ngx-translate/core';
-import {AuthService} from '../../../../iam/infrastructure/auth.service';
+import { SessionStore } from '../../../../iam/application/session.store';
 import { Offer } from '../../../domain/model/offer.entity';
 
 @Component({
@@ -58,34 +58,22 @@ export class OfertasComponent implements OnInit, OnDestroy {
    * @param route
    * @param router
    * @param offersApi
-   * @param authService
    */
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private offersApi: OffersApiEndpoint,
-    private authService: AuthService
   ) {}
+
+  private readonly sessions = inject(SessionStore);
 
   /**
    * initialize the page
    */
   ngOnInit(): void {
 
-    const user = this.authService.getCurrentUser();
-    this.currentUserId = this.authService.getCurrentUserId();
-    this.userId = user ? (user.id) : 0;
-    if (user) {
-      this.userId = (user.id);
-    } else {
-      console.warn('[Layout] No hay usuario autenticado');
-    }
-
-    this.currentUserId = this.authService.getCurrentUserId();
-
-    if (!this.currentUserId) {
-      console.warn('[Ofertas] No hay usuario autenticado');
-    }
+    this.currentUserId = this.sessions.activeSession()?.userId ?? null;
+    this.userId = this.currentUserId ?? 0;
 
     this.route.queryParams.subscribe(params => {
       this.filters.q = params['q'] || '';

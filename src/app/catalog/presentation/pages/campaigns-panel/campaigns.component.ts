@@ -9,7 +9,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CampaignStore } from '../../../application/campaign.store';
 import { Campaign } from '../../../domain/model/campaign.entity';
-import { AuthService } from '../../../../iam/infrastructure/auth.service';
+import { SessionStore } from '../../../../iam/application/session.store';
 import { ConfirmDialogComponent } from '../../../../shared/ui/confirm-dialog/confirm-dialog.component';
 
 type DialogAction = 'pause' | 'activate' | 'finalize' | 'delete';
@@ -41,7 +41,7 @@ type NotificationKey = 'pauseSuccess' | 'activateSuccess' | 'finalizeSuccess' | 
 export class CampaignsComponent implements OnInit {
   private readonly store = inject(CampaignStore);
   private readonly router = inject(Router);
-  private readonly authService = inject(AuthService);
+  private readonly sessions = inject(SessionStore);
   private readonly snackBar = inject(MatSnackBar);
   private readonly dialog = inject(MatDialog);
   private readonly translate = inject(TranslateService);
@@ -186,7 +186,7 @@ export class CampaignsComponent implements OnInit {
    * Get user ID from authentication service
    */
   private getUserId(): number {
-    const userId = this.authService.getCurrentUserId();
+    const userId = this.sessions.activeSession()?.userId;
     if (!userId) {
       throw new Error('No authenticated user found');
     }

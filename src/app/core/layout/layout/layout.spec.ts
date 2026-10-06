@@ -1,6 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
+import { iamProviders } from '../../../iam/infrastructure/iam.providers';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Layout } from './layout';
@@ -12,7 +13,7 @@ describe('Layout', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Layout],
-      providers: [provideHttpClient(), provideRouter([]), provideTranslateService()],
+      providers: [provideHttpClient(), provideRouter([]), provideTranslateService(), ...iamProviders],
     })
     .compileComponents();
 

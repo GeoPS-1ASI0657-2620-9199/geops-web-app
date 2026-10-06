@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { OffersApiEndpoint } from '../../../infrastructure/offers/offers-api-endpoint';
-import {AuthService} from '../../../../iam/infrastructure/auth.service';
+import { SessionStore } from '../../../../iam/application/session.store';
 import { Offer } from '../../../domain/model/offer.entity';
 
 @Component({
@@ -34,14 +34,14 @@ export class VerOfertaComponent implements OnInit {
    * @param router
    * @param location
    * @param offersApi
-   * @param auth
+   * @param sessions
    */
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
     private offersApi: OffersApiEndpoint,
-    private auth: AuthService
+    private sessions: SessionStore
   ) {}
 
   /**
@@ -49,10 +49,7 @@ export class VerOfertaComponent implements OnInit {
    */
   ngOnInit(): void {
     window.scrollTo({ top: 0 });
-    this.userId = this.auth.getCurrentUserId();
-
-    const user = this.auth.getCurrentUser();
-    this.userId = user ? user.id : 0;
+    this.userId = this.sessions.activeSession()?.userId ?? null;
 
     this.from =
       (this.route.snapshot.queryParamMap.get('from') as any) ?? history.state?.from ?? null;

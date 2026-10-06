@@ -11,7 +11,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { CampaignStore } from '../../../application/campaign.store';
 import { Campaign } from '../../../domain/model/campaign.entity';
-import { AuthService } from '../../../../iam/infrastructure/auth.service';
+import { SessionStore } from '../../../../iam/application/session.store';
 
 /**
  * CreateCampaignComponent
@@ -42,7 +42,7 @@ export class CrearCampaignComponent {
   private readonly fb = inject(FormBuilder);
   private readonly store = inject(CampaignStore);
   private readonly router = inject(Router);
-  private readonly authService = inject(AuthService);
+  private readonly sessions = inject(SessionStore);
   private readonly defaultStatus: Campaign['status'] = 'ACTIVE';
 
   campaignForm: FormGroup;
@@ -88,7 +88,7 @@ export class CrearCampaignComponent {
   }
 
   private getUserId(): number {
-    const userId = this.authService.getCurrentUserId();
+    const userId = this.sessions.activeSession()?.userId;
     if (!userId) {
       throw new Error('No authenticated user found');
     }
