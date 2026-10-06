@@ -1,0 +1,95 @@
+<section class="page">
+  <h1 class="geo-page-title">{{ 'reservationsPage.title' | translate }}</h1>
+
+  <div class="filters" role="group" [attr.aria-label]="'reservationsPage.filterLabel' | translate">
+    @for (option of filters; track option) {
+      <button
+        type="button"
+        class="chip"
+        [class.selected]="filter() === option"
+        [attr.aria-pressed]="filter() === option"
+        (click)="select(option)">
+        {{ 'reservationsPage.filters.' + option | translate }}
+      </button>
+    }
+  </div>
+
+  @switch (state()) {
+    @case ('loading') {
+      <div class="list" aria-busy="true">
+        @for (item of skeletons; track item) {
+          <div class="skeleton"></div>
+        }
+      </div>
+    }
+    @case ('empty') {
+      @if (filter() === 'ALL') {
+        <geo-empty-state
+          icon="confirmation_number"
+          [title]="'reservationsPage.empty.title' | translate"
+          [description]="'reservationsPage.empty.description' | translate">
+          <a mat-flat-button routerLink="/offers">{{ 'reservationsPage.empty.action' | translate }}</a>
+        </geo-empty-state>
+      } @else {
+        <geo-empty-state
+          icon="filter_alt_off"
+          [title]="'reservationsPage.emptyFiltered.title' | translate"
+          [description]="'reservationsPage.emptyFiltered.description' | translate">
+          <button mat-stroked-button type="button" (click)="select('ALL')">
+            {{ 'reservationsPage.emptyFiltered.action' | translate }}
+          </button>
+        </geo-empty-state>
+      }
+    }
+    @case ('error') {
+      <geo-empty-state
+        icon="cloud_off"
+        [title]="'reservationsPage.error.title' | translate"
+        [description]="errorMessage() ?? ('reservationsPage.error.description' | translate)">
+        <button mat-flat-button type="button" (click)="load()">
+          {{ 'reservationsPage.error.retry' | translate }}
+        </button>
+      </geo-empty-state>
+    }
+    @case ('ready') {
+      <ul class="list">
+        @for (r of reservations(); track r.reservationId) {
+          <li class="card">
+            <div class="top">
+              <div class="code-box">
+                <span class="geo-meta">{{ 'reservationsPage.code' | translate }}</span>
+                <span class="code geo-tabular" [class.void]="r.status !== 'ACTIVE'">{{ r.code }}</span>
+              </div>
+              <a class="title geo-card-title" [routerLink]="['/reservations', r.reservationId]">
+                {{ r.offerTitle }}
+              </a>
+              <geo-seal [kind]="seals[r.status]" [text]="'reservation.status.' + r.status | translate" />
+            </div>
+            <dl class="facts">
+              <div>
+                <dt>{{ 'reservationsPage.reservedAt' | translate }}</dt>
+                <dd>{{ limaDateTime(r.reservedAt) }}</dd>
+              </div>
+              @if (r.redeemedAt) {
+                <div>
+                  <dt>{{ 'reservationsPage.redeemedAt' | translate }}</dt>
+                  <dd>{{ limaDateTime(r.redeemedAt) }}</dd>
+                </div>
+              } @else {
+                <div>
+                  <dt>
+                    {{ (r.status === 'EXPIRED' ? 'reservationsPage.expiredAt' : 'reservationsPage.expiresAt') | translate }}
+                  </dt>
+                  <dd [class.expired]="r.status === 'EXPIRED'">{{ limaDateTime(r.expiresAt) }}</dd>
+                </div>
+              }
+            </dl>
+            <a mat-stroked-button class="open" [routerLink]="['/reservations', r.reservationId]">
+              {{ 'reservationsPage.open' | translate }}
+            </a>
+          </li>
+        }
+      </ul>
+    }
+  }
+</section>

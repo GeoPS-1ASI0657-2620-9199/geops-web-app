@@ -9,7 +9,10 @@ import { GeoTopBar } from '../geo-top-bar/geo-top-bar';
 /** Tabs of each role, limited to the routes that exist in the sprint. */
 const NAV_BY_ROLE: Record<UserRole | 'VISITOR', NavItem[]> = {
   VISITOR: [{ label: 'Ofertas cercanas', route: '/offers' }],
-  CONSUMER: [{ label: 'Ofertas cercanas', route: '/offers' }],
+  CONSUMER: [
+    { label: 'Ofertas cercanas', route: '/offers' },
+    { label: 'Mis reservas', route: '/reservations' },
+  ],
   BUSINESS_OWNER: [
     { label: 'Mis campañas', route: '/campaigns' },
     { label: 'Publicar campaña', route: '/campaigns/new' },

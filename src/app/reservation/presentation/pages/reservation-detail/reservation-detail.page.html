@@ -1,0 +1,123 @@
+<section class="page">
+  <a class="back geo-meta" routerLink="/reservations">
+    <mat-icon aria-hidden="true">chevron_left</mat-icon>
+    {{ 'reservationPage.back' | translate }}
+  </a>
+
+  @switch (state()) {
+    @case ('loading') {
+      <div class="layout" aria-busy="true">
+        <div class="skeleton tall"></div>
+        <div class="skeleton"></div>
+      </div>
+    }
+    @case ('not-found') {
+      <geo-empty-state
+        icon="search_off"
+        [title]="'reservationPage.notFound.title' | translate"
+        [description]="'reservationPage.notFound.description' | translate">
+        <a mat-flat-button routerLink="/reservations">{{ 'reservationPage.back' | translate }}</a>
+      </geo-empty-state>
+    }
+    @case ('error') {
+      <geo-empty-state
+        icon="cloud_off"
+        [title]="'reservationPage.error.title' | translate"
+        [description]="errorMessage() ?? ('reservationPage.error.description' | translate)">
+        <button mat-flat-button type="button" (click)="load()">
+          {{ 'reservationPage.error.retry' | translate }}
+        </button>
+      </geo-empty-state>
+    }
+    @case ('ready') {
+      @if (reservation(); as r) {
+        <h1 class="geo-page-title">{{ 'reservationPage.title' | translate }}</h1>
+
+        @if (placed === 'new') {
+          <geo-alert
+            kind="success"
+            [title]="'reservationPage.created.title' | translate"
+            [description]="'reservationPage.created.description' | translate" />
+        } @else if (placed === 'existing') {
+          <geo-alert
+            kind="info"
+            [title]="'reservationPage.existing.title' | translate"
+            [description]="'reservationPage.existing.description' | translate" />
+        }
+
+        <div class="layout">
+          <article class="ticket" [class.inactive]="!isActive()">
+            <header class="banner">
+              <div>
+                <p class="banner-title">{{ 'reservationPage.banner.' + r.status + '.title' | translate }}</p>
+                <p class="banner-text">
+                  {{ 'reservationPage.banner.' + r.status + '.description' | translate }}
+                </p>
+              </div>
+              <geo-seal [kind]="seal()" [text]="'reservation.status.' + r.status | translate" />
+            </header>
+
+            <div class="code-block">
+              <p class="geo-meta">{{ 'reservationPage.showCode' | translate }}</p>
+              <p class="code geo-tabular" [class.void]="!isActive()">{{ r.code }}</p>
+            </div>
+
+            <dl class="facts">
+              <dt>{{ 'reservationPage.offer' | translate }}</dt>
+              <dd>
+                <a [routerLink]="['/offers', r.offerId]">{{ r.offerTitle }}</a>
+              </dd>
+              <dt>{{ 'reservationPage.reservedAt' | translate }}</dt>
+              <dd>{{ limaDateTime(r.reservedAt) }}</dd>
+              <dt>{{ 'reservationPage.validUntil' | translate }}</dt>
+              <dd [class.expired]="r.status === 'EXPIRED'">{{ limaDateTime(r.expiresAt) }}</dd>
+              @if (r.redeemedAt) {
+                <dt>{{ 'reservationPage.redeemedAt' | translate }}</dt>
+                <dd>{{ limaDateTime(r.redeemedAt) }}</dd>
+              }
+            </dl>
+
+            <a mat-stroked-button class="full" [routerLink]="['/offers', r.offerId]">
+              <mat-icon>sell</mat-icon>
+              {{ 'reservationPage.seeOffer' | translate }}
+            </a>
+          </article>
+
+          <aside class="side">
+            <geo-alert
+              kind="info"
+              [title]="'reservationPage.howTo.title' | translate"
+              [description]="'reservationPage.howTo.description' | translate" />
+            <ol class="steps">
+              <li>
+                <span class="dot">1</span>
+                <div>
+                  <p class="geo-body-strong">{{ 'reservationPage.howTo.step1.title' | translate }}</p>
+                  <p class="geo-meta">
+                    {{ 'reservationPage.howTo.step1.hint' | translate: { date: limaDateTime(r.expiresAt) } }}
+                  </p>
+                </div>
+              </li>
+              <li>
+                <span class="dot">2</span>
+                <div>
+                  <p class="geo-body-strong">
+                    {{ 'reservationPage.howTo.step2.title' | translate: { code: r.code } }}
+                  </p>
+                  <p class="geo-meta">{{ 'reservationPage.howTo.step2.hint' | translate }}</p>
+                </div>
+              </li>
+              <li>
+                <span class="dot">3</span>
+                <div>
+                  <p class="geo-body-strong">{{ 'reservationPage.howTo.step3.title' | translate }}</p>
+                  <p class="geo-meta">{{ 'reservationPage.howTo.step3.hint' | translate }}</p>
+                </div>
+              </li>
+            </ol>
+          </aside>
+        </div>
+      }
+    }
+  }
+</section>
