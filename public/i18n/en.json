@@ -375,22 +375,6 @@
     "places": "Usual places",
     "rights": "© 2025 All rights reserved"
   },
-  "register": {
-    "title": "User Registration",
-    "name": "Name:",
-    "email": "Email:",
-    "password": "Password:",
-    "phone": "Phone:",
-    "role": "User type:",
-    "owner": "Business (Owner)",
-    "consumer": "Consumer",
-    "plan": "Plan:",
-    "basic": "Basic",
-    "premium": "Premium",
-    "button": "Register",
-    "hasAccount": "Already have an account?",
-    "loginHere": "Login here"
-  },
   "business": {
     "title": "Additional Business Details",
     "businessName": "Business Name:",
@@ -461,7 +445,6 @@
   },
   "helpCenter": {
     "title": "Help Center",
-
     "registerQuestion": "How do I register as a customer?",
     "registerWord": "Register",
     "registerStepsBefore": "Go to",
@@ -472,7 +455,6 @@
     "registerStep2": "Enter your email and a secure password (8+ characters, 1 uppercase, 1 number, 1 symbol).",
     "registerStep3": "Check your email and verify your account.",
     "registerStep4": "Return and log in.",
-
     "couponQuestion": "How do I redeem a coupon at the store?",
     "couponStepsBefore": "Show your coupon from",
     "couponStepsAfter": "and the business validates it with a code/QR.",
@@ -491,7 +473,6 @@
     "showToRedeem": "Show to redeem",
     "uniqueCode": "unique code",
     "couponId": "coupon ID",
-
     "locationQuestion": "Why do we ask for your location and how to enable it?",
     "locationStepsBefore": "To show you",
     "locationStepsMiddle": "and sort them by",
@@ -825,5 +806,39 @@
     "Automotriz": "Automotive",
     "Servicios": "Services",
     "Otros": "Others"
+  },
+  "registerPage": {
+    "title": "Create your account",
+    "intro": "We show you the valid offers around you, sorted by distance.",
+    "givenNames": "Given names",
+    "surnames": "Surnames",
+    "email": "Email",
+    "emailInvalid": "Enter a valid email.",
+    "phone": "Mobile",
+    "phoneHint": "9 digits, starting with 9.",
+    "password": "Password",
+    "passwordHint": "Between {{min}} and {{max}} characters.",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "required": "Fill in this field.",
+    "submit": "Create account",
+    "submitting": "Creating your account…",
+    "hasAccount": "Already have an account?",
+    "logIn": "Log in",
+    "registerBusiness": "Register my business",
+    "errors": {
+      "emailTaken": {
+        "title": "An account with this email already exists",
+        "description": "If it is yours, log in. For security we do not show data of that account.",
+        "field": "Use another email or log in."
+      },
+      "phoneTaken": {
+        "title": "An account with this mobile already exists",
+        "description": "If it is yours, log in. For security we do not show data of that account.",
+        "field": "Use another mobile or log in."
+      },
+      "invalid": "Check your data",
+      "generic": "We could not create your account"
+    }
   }
 }

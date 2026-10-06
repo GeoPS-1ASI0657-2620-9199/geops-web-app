@@ -1,3 +1,6 @@
+import { provideHttpClient } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
+import { provideTranslateService } from '@ngx-translate/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LanguageSwitcher } from './language-switcher';
@@ -8,7 +11,8 @@ describe('LanguageSwitcher', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LanguageSwitcher]
+      imports: [LanguageSwitcher],
+      providers: [provideHttpClient(), provideRouter([]), provideTranslateService()],
     })
     .compileComponents();
 

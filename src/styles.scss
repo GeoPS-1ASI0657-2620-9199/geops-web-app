@@ -36,3 +36,8 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+// Field hints in the dim text color of the Figma (Material 20 has no token for it).
+.mat-mdc-form-field-hint {
+  color: var(--text-dim);
+}
