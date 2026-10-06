@@ -538,156 +538,6 @@
     },
     "latestCampaigns": "Latest campaigns"
   },
-  "campaigns": {
-    "title": "Campaigns",
-    "tabs": {
-      "active": "Active",
-      "paused": "Paused",
-      "finalized": "Finalized"
-    },
-    "empty": {
-      "active": "No active campaigns",
-      "paused": "No paused campaigns",
-      "finalized": "No finalized campaigns"
-    },
-    "actions": {
-      "create": "Create new campaign",
-      "edit": "Edit",
-      "pause": "Pause",
-      "resume": "Resume",
-      "activate": "Activate",
-      "finalize": "Finalize",
-      "remove": "Remove",
-      "view": "View",
-      "cancel": "Cancel",
-      "save": "Save Changes",
-      "addOffers": "Add Offers",
-      "removeOffer": "Remove Offer",
-      "back": "Back",
-      "download": "Download Report",
-      "print": "Print"
-    },
-    "status": {
-      "active": "Active",
-      "paused": "Paused",
-      "finalized": "Finalized"
-    },
-    "statusLabels": {
-      "ACTIVE": "Active",
-      "PAUSED": "Paused",
-      "FINALIZED": "Finalized"
-    },
-    "dialogs": {
-      "pause": {
-        "title": "Pause campaign?",
-        "message": "Are you sure you want to pause the campaign \"{{name}}\"?",
-        "confirm": "Pause"
-      },
-      "activate": {
-        "title": "Activate campaign?",
-        "message": "Are you sure you want to activate the campaign \"{{name}}\"?",
-        "confirm": "Activate"
-      },
-      "finalize": {
-        "title": "Finalize campaign?",
-        "message": "Are you sure you want to finalize the campaign \"{{name}}\"? This action cannot be undone.",
-        "confirm": "Finalize"
-      },
-      "delete": {
-        "title": "Delete campaign?",
-        "message": "Are you sure you want to delete the campaign \"{{name}}\"? This action cannot be undone.",
-        "confirm": "Delete"
-      }
-    },
-    "notifications": {
-      "pauseSuccess": "Campaign paused successfully",
-      "activateSuccess": "Campaign activated successfully",
-      "finalizeSuccess": "Campaign finalized successfully",
-      "deleteSuccess": "Campaign deleted successfully"
-    },
-    "form": {
-      "createTitle": "Create New Campaign",
-      "editTitle": "Edit Campaign",
-      "name": "Campaign Name",
-      "namePlaceholder": "E.g: Summer Promotion 2025",
-      "nameRequired": "Name is required",
-      "nameMinLength": "Name must be at least 3 characters",
-      "description": "Description",
-      "descriptionPlaceholder": "Describe your campaign...",
-      "descriptionRequired": "Description is required",
-      "descriptionMinLength": "Description must be at least 10 characters",
-      "startDate": "Start Date",
-      "startDateRequired": "Start date is required",
-      "endDate": "End Date",
-      "endDateRequired": "End date is required",
-      "budget": "Estimated Budget (S/.)",
-      "budgetPlaceholder": "0.00",
-      "budgetRequired": "Budget is required",
-      "budgetMin": "Budget must be greater than or equal to 0",
-      "status": "Status",
-      "initialStatus": "Initial Status",
-      "statusRequired": "Status is required",
-      "creating": "Creating...",
-      "saving": "Saving...",
-      "createButton": "Create Campaign",
-      "saveButton": "Save Changes"
-    },
-    "stats": {
-      "title": "Campaign Statistics",
-      "impressions": "Impressions",
-      "clicks": "Clicks",
-      "ctr": "CTR",
-      "budget": "Budget",
-      "totalCampaigns": "Total Campaigns",
-      "totalImpressions": "Total Impressions",
-      "totalClicks": "Total Clicks",
-      "totalBudget": "Total Budget",
-      "averageCTR": "Average CTR"
-    },
-    "details": {
-      "title": "Campaign Details",
-      "loading": "Loading campaign...",
-      "description": "Description",
-      "startDate": "Start Date",
-      "endDate": "End Date",
-      "estimatedBudget": "Estimated Budget",
-      "associatedOffers": "Associated Offers"
-    },
-    "offers": {
-      "title": "Campaign Offers",
-      "empty": "No offers added yet",
-      "add": "Add Offers",
-      "remove": "Remove",
-      "view": "View Offer",
-      "select": "Select Offers",
-      "selected": "{{count}} selected",
-      "availableOffers": "Available Offers",
-      "searchPlaceholder": "Search offers..."
-    },
-    "reports": {
-      "title": "Campaign Reports",
-      "filterByStatus": "Filter by Status",
-      "allCampaigns": "All Campaigns",
-      "exportFormat": "Export Format",
-      "summary": "General Summary",
-      "byStatus": "By Status",
-      "preview": "Preview"
-    },
-    "dashboard": {
-      "title": "Dashboard - Campaign Summary",
-      "subtitle": "Control Panel",
-      "allCampaigns": "All Campaigns"
-    },
-    "messages": {
-      "createSuccess": "Campaign created successfully",
-      "updateSuccess": "Campaign updated successfully",
-      "pauseSuccess": "Campaign paused",
-      "resumeSuccess": "Campaign resumed",
-      "finalizeSuccess": "Campaign finalized",
-      "deleteSuccess": "Campaign deleted",
-      "error": "An error occurred. Please try again."
-    }
-  },
   "reviewsPage": {
     "title": "Comments and Reviews",
     "addReview": "Add Review",
@@ -897,6 +747,173 @@
       "phone": "An account with this mobile already exists",
       "ruc": "Check the RUC",
       "generic": "We could not register your business"
+    }
+  },
+  "campaignsPage": {
+    "title": "My campaigns",
+    "new": "Publish campaign",
+    "created": {
+      "title": "Campaign published",
+      "description": "Customers inside the zone you chose can already see it."
+    },
+    "empty": {
+      "title": "Publish an offer for your area",
+      "description": "Choose the product, the discounted price, the validity and how far you want to reach."
+    }
+  },
+  "forbiddenPage": {
+    "title": "You do not have access to this section",
+    "description": "Your account has no permission for this part of GeoPS. If you think this is a mistake, write to us.",
+    "back": "Back to start"
+  },
+  "campaigns": {
+    "title": "Campaigns",
+    "tabs": {
+      "active": "Active",
+      "paused": "Paused",
+      "finalized": "Finalized"
+    },
+    "empty": {
+      "active": "No active campaigns",
+      "paused": "No paused campaigns",
+      "finalized": "No finalized campaigns"
+    },
+    "actions": {
+      "create": "Create new campaign",
+      "edit": "Edit",
+      "pause": "Pause",
+      "resume": "Resume",
+      "activate": "Activate",
+      "finalize": "Finalize",
+      "remove": "Remove",
+      "view": "View",
+      "cancel": "Cancel",
+      "save": "Save Changes",
+      "addOffers": "Add Offers",
+      "removeOffer": "Remove Offer",
+      "back": "Back",
+      "download": "Download Report",
+      "print": "Print"
+    },
+    "status": {
+      "active": "Active",
+      "paused": "Paused",
+      "finalized": "Finalized"
+    },
+    "statusLabels": {
+      "ACTIVE": "Active",
+      "PAUSED": "Paused",
+      "FINALIZED": "Finalized"
+    },
+    "dialogs": {
+      "pause": {
+        "title": "Pause campaign?",
+        "message": "Are you sure you want to pause the campaign \"{{name}}\"?",
+        "confirm": "Pause"
+      },
+      "activate": {
+        "title": "Activate campaign?",
+        "message": "Are you sure you want to activate the campaign \"{{name}}\"?",
+        "confirm": "Activate"
+      },
+      "finalize": {
+        "title": "Finalize campaign?",
+        "message": "Are you sure you want to finalize the campaign \"{{name}}\"? This action cannot be undone.",
+        "confirm": "Finalize"
+      },
+      "delete": {
+        "title": "Delete campaign?",
+        "message": "Are you sure you want to delete the campaign \"{{name}}\"? This action cannot be undone.",
+        "confirm": "Delete"
+      }
+    },
+    "notifications": {
+      "pauseSuccess": "Campaign paused successfully",
+      "activateSuccess": "Campaign activated successfully",
+      "finalizeSuccess": "Campaign finalized successfully",
+      "deleteSuccess": "Campaign deleted successfully"
+    },
+    "form": {
+      "createTitle": "Create New Campaign",
+      "editTitle": "Edit Campaign",
+      "name": "Campaign Name",
+      "namePlaceholder": "E.g: Summer Promotion 2025",
+      "nameRequired": "Name is required",
+      "nameMinLength": "Name must be at least 3 characters",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe your campaign...",
+      "descriptionRequired": "Description is required",
+      "descriptionMinLength": "Description must be at least 10 characters",
+      "startDate": "Start Date",
+      "startDateRequired": "Start date is required",
+      "endDate": "End Date",
+      "endDateRequired": "End date is required",
+      "budget": "Estimated Budget (S/.)",
+      "budgetPlaceholder": "0.00",
+      "budgetRequired": "Budget is required",
+      "budgetMin": "Budget must be greater than or equal to 0",
+      "status": "Status",
+      "initialStatus": "Initial Status",
+      "statusRequired": "Status is required",
+      "creating": "Creating...",
+      "saving": "Saving...",
+      "createButton": "Create Campaign",
+      "saveButton": "Save Changes"
+    },
+    "stats": {
+      "title": "Campaign Statistics",
+      "impressions": "Impressions",
+      "clicks": "Clicks",
+      "ctr": "CTR",
+      "budget": "Budget",
+      "totalCampaigns": "Total Campaigns",
+      "totalImpressions": "Total Impressions",
+      "totalClicks": "Total Clicks",
+      "totalBudget": "Total Budget",
+      "averageCTR": "Average CTR"
+    },
+    "details": {
+      "title": "Campaign Details",
+      "loading": "Loading campaign...",
+      "description": "Description",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "estimatedBudget": "Estimated Budget",
+      "associatedOffers": "Associated Offers"
+    },
+    "offers": {
+      "title": "Campaign Offers",
+      "empty": "No offers added yet",
+      "add": "Add Offers",
+      "remove": "Remove",
+      "view": "View Offer",
+      "select": "Select Offers",
+      "selected": "{{count}} selected",
+      "availableOffers": "Available Offers",
+      "searchPlaceholder": "Search offers..."
+    },
+    "reports": {
+      "title": "Campaign Reports",
+      "filterByStatus": "Filter by Status",
+      "allCampaigns": "All Campaigns",
+      "exportFormat": "Export Format",
+      "summary": "General Summary",
+      "byStatus": "By Status",
+      "preview": "Preview"
+    },
+    "dashboard": {
+      "title": "Dashboard - Campaign Summary",
+      "subtitle": "Control Panel",
+      "allCampaigns": "All Campaigns"
+    },
+    "messages": {
+      "createSuccess": "Campaign created successfully",
+      "updateSuccess": "Campaign updated successfully",
+      "pauseSuccess": "Campaign paused",
+      "resumeSuccess": "Campaign resumed",
+      "finalizeSuccess": "Campaign finalized",
+      "deleteSuccess": "Campaign deleted",
+      "error": "An error occurred. Please try again."
     }
   }
 }

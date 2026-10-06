@@ -33,6 +33,8 @@ const HOME_BY_ROLE: Record<ShellRole, string> = {
             <span>Cerrar sesión</span>
           </button>
         </mat-menu>
+      } @else if (showLogin()) {
+        <a class="pill login" routerLink="/login">Iniciar sesión</a>
       }
     </header>
   `,
@@ -60,7 +62,9 @@ const HOME_BY_ROLE: Record<ShellRole, string> = {
         color: var(--text-primary);
         font: 500 13px/1 var(--font-brand);
         cursor: pointer;
+        text-decoration: none;
       }
+      .pill.login { padding: 4px 16px; font-weight: 600; color: var(--brand-deep); }
       .avatar {
         display: grid;
         place-items: center;
@@ -78,6 +82,8 @@ const HOME_BY_ROLE: Record<ShellRole, string> = {
 export class GeoTopBar {
   readonly role = input<ShellRole>('CONSUMER');
   readonly userName = input<string | null>(null);
+  /** Shows the login link to visitors without a session; off on the login and register pages. */
+  readonly showLogin = input(false);
   readonly logOut = output<void>();
   protected readonly home = computed(() => HOME_BY_ROLE[this.role()]);
   protected readonly initial = computed(() => (this.userName() ?? '?').trim().charAt(0).toUpperCase());

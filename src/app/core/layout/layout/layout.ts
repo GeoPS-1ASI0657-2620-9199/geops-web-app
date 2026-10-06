@@ -1,132 +1,54 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
-import {Router, RouterLink, RouterOutlet, NavigationStart, NavigationEnd, NavigationCancel, NavigationError} from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatDividerModule } from '@angular/material/divider';
-import { FooterContent } from '../footer-content/footer-content';
-import { ConsumerToolbar } from '../consumer-toolbar/consumer-toolbar';
-import { OwnerToolbarComponent } from '../owner-toolbar/owner-toolbar.component';
-import {TranslateModule} from '@ngx-translate/core';
-import {LanguageSwitcher} from '../language-switcher/language-switcher';
-import { SessionStore } from '../../../iam/application/session.store';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 import { LogOutUseCase } from '../../../iam/application/log-out.use-case';
-import {CommonModule} from '@angular/common';
-import { NavigationLoadingService } from '../../../shared/presentation/services/navigation-loading.service';
-import { NavigationBackdropComponent } from '../navigation-backdrop/navigation-backdrop.component';
-import { filter } from 'rxjs/operators';
+import { SessionStore } from '../../../iam/application/session.store';
+import { UserRole } from '../../../iam/domain/model/user-role';
+import { GeoNav, NavItem } from '../geo-nav/geo-nav';
+import { GeoTopBar } from '../geo-top-bar/geo-top-bar';
 
+/** Tabs of each role, limited to the routes that exist in the sprint. */
+const NAV_BY_ROLE: Record<UserRole | 'VISITOR', NavItem[]> = {
+  VISITOR: [{ label: 'Ofertas cercanas', route: '/offers' }],
+  CONSUMER: [{ label: 'Ofertas cercanas', route: '/offers' }],
+  BUSINESS_OWNER: [
+    { label: 'Mis campañas', route: '/campaigns' },
+    { label: 'Publicar campaña', route: '/campaigns/new' },
+  ],
+  ADMIN: [{ label: 'Ofertas cercanas', route: '/offers' }],
+};
+
+/** Shell of the signed-in area: top bar and tabs by role (Figma "Barra superior" and "Navegación"). */
 @Component({
   selector: 'app-layout',
-  imports: [
-    RouterOutlet,
-    RouterLink,
-    FormsModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatMenuModule,
-    MatDividerModule,
-    FooterContent,
-    ConsumerToolbar,
-    OwnerToolbarComponent,
-    TranslateModule,
-    LanguageSwitcher,
-    CommonModule,
-    NavigationBackdropComponent,
+  standalone: true,
+  imports: [RouterOutlet, GeoNav, GeoTopBar],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    <geo-top-bar
+      [role]="role() ?? 'CONSUMER'"
+      [userName]="sessions.displayName()"
+      [showLogin]="true"
+      (logOut)="logOut()" />
+    <geo-nav [items]="navItems()" />
+    <main class="content"><router-outlet /></main>
+  `,
+  styles: [
+    `
+      :host { display: block; min-height: 100vh; background: var(--neutral-surface-2); }
+      .content { min-height: calc(100vh - 112px); }
+    `,
   ],
-  templateUrl: './layout.html',
-  styleUrl: './layout.css'
 })
-export class Layout implements OnInit {
-  private readonly navigationLoadingService = inject(NavigationLoadingService);
+export class Layout {
+  protected readonly sessions = inject(SessionStore);
+  private readonly logOutUseCase = inject(LogOutUseCase);
+  private readonly router = inject(Router);
 
-  q = '';
-  private readonly sessions = inject(SessionStore);
-  private readonly logOut = inject(LogOutUseCase);
-  userName = '';
-  userEmail = '';
-  isMobileMenuOpen = signal(false);
-  isSearchFocused = signal(false);
-  isOwner = signal(false);
+  protected readonly role = computed(() => this.sessions.role());
+  protected readonly navItems = computed(() => NAV_BY_ROLE[this.role() ?? 'VISITOR']);
 
-  constructor(
-    private router: Router
-  ) {
-    // Listen to navigation events to show/hide backdrop
-    this.router.events.pipe(
-      filter(event =>
-        event instanceof NavigationStart ||
-        event instanceof NavigationEnd ||
-        event instanceof NavigationCancel ||
-        event instanceof NavigationError
-      )
-    ).subscribe(event => {
-      if (event instanceof NavigationStart) {
-        // Show backdrop when navigation starts
-        this.navigationLoadingService.showBackdrop();
-      } else {
-        // Hide backdrop when navigation ends, is cancelled, or errors
-        setTimeout(() => {
-          this.navigationLoadingService.hideBackdrop();
-        }, 300); // Small delay to ensure smooth transition
-      }
-    });
-  }
-  ngOnInit(): void {
-    const session = this.sessions.activeSession();
-    if (session) {
-      this.userName = this.sessions.displayName() ?? session.email;
-      this.userEmail = session.email;
-      this.isOwner.set(session.role === 'BUSINESS_OWNER');
-    }
-  }
-
-  get userInitial() {
-    const n = this.userName?.trim();
-    return n ? n[0].toUpperCase() : '?';
-  }
-
-  doSearch() {
-    const term = this.q.trim();
-    if (term) {
-      this.router.navigate(['/offers'], { queryParams: { q: term } });
-      this.isSearchFocused.set(false);
-      this.closeMobileMenu();
-    }
-  }
-
-  clearSearch() {
-    this.q = '';
-    this.router.navigate(['/offers']);
-  }
-
-  toggleMobileMenu() {
-    this.isMobileMenuOpen.update(value => !value);
-  }
-
-  closeMobileMenu() {
-    this.isMobileMenuOpen.set(false);
-  }
-
-  onSearchFocus() {
-    this.isSearchFocused.set(true);
-  }
-
-  onSearchBlur() {
-    setTimeout(() => this.isSearchFocused.set(false), 200);
-  }
-
-  onLogout() {
-    this.logOut.execute();
-    this.router.navigate(['/login']);
+  logOut(): void {
+    this.logOutUseCase.execute();
+    void this.router.navigate(['/login']);
   }
 }
-
-
