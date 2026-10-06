@@ -64,6 +64,24 @@ export const routes: Routes = [
         title: 'GeoPS - Publicar campaña',
       },
       {
+        path: 'reservations',
+        canActivate: [authGuard, roleGuard('CONSUMER')],
+        loadComponent: () =>
+          import('./reservation/presentation/pages/my-reservations/my-reservations.page').then(
+            (m) => m.MyReservationsPage,
+          ),
+        title: 'GeoPS - Mis reservas',
+      },
+      {
+        path: 'reservations/:id',
+        canActivate: [authGuard, roleGuard('CONSUMER')],
+        loadComponent: () =>
+          import('./reservation/presentation/pages/reservation-detail/reservation-detail.page').then(
+            (m) => m.ReservationDetailPage,
+          ),
+        title: 'GeoPS - Mi reserva',
+      },
+      {
         path: 'forbidden',
         loadComponent: () => import('./core/layout/forbidden/forbidden').then((m) => m.Forbidden),
         title: 'GeoPS - Acceso denegado',

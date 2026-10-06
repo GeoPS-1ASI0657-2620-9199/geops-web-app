@@ -1,0 +1,142 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-xl) var(--space-3xl) var(--space-3xl);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.chip {
+  min-height: 32px;
+  padding: 0 var(--space-md);
+  border: 1px solid var(--neutral-line);
+  border-radius: var(--radius-chip);
+  background: var(--neutral-bg);
+  color: var(--text-primary);
+  font: 500 12px/1 var(--font-brand);
+  cursor: pointer;
+}
+
+.chip.selected {
+  border-color: var(--brand-action);
+  background: var(--brand-action);
+  color: var(--neutral-bg);
+}
+
+.chip:focus-visible {
+  outline: 2px solid var(--brand-deep);
+  outline-offset: 2px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  background: var(--neutral-bg);
+  border: 1px solid var(--neutral-line);
+  border-radius: var(--radius-panel);
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.code-box {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-card);
+  background: var(--neutral-surface-2);
+}
+
+.code {
+  font: 600 18px/1.3 var(--font-brand);
+  letter-spacing: 0.06em;
+  color: var(--text-primary);
+}
+
+.code.void {
+  color: var(--text-faint);
+  text-decoration: line-through;
+}
+
+.title {
+  flex: 1;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.title:hover {
+  color: var(--brand-action);
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xl);
+  margin: 0;
+  font: 400 13px/1.45 var(--font-brand);
+}
+
+.facts dt {
+  color: var(--text-dim);
+}
+
+.facts dd {
+  margin: 0;
+  font-weight: 500;
+}
+
+.facts dd.expired {
+  color: var(--status-expired);
+}
+
+.open {
+  align-self: flex-start;
+}
+
+.skeleton {
+  height: 160px;
+  border-radius: var(--radius-panel);
+  background: linear-gradient(90deg, var(--neutral-line-soft) 25%, var(--neutral-bg) 50%, var(--neutral-line-soft) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.2s infinite linear;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: var(--space-lg);
+  }
+
+  .top {
+    flex-wrap: wrap;
+  }
+}
