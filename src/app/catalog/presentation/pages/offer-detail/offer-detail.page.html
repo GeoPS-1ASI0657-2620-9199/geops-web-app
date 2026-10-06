@@ -76,12 +76,42 @@
                 <dt>{{ 'offerDetailPage.address' | translate }}</dt>
                 <dd>{{ o.address }}</dd>
               </dl>
-              <button mat-flat-button type="button" class="full" disabled>
-                {{ (o.available ? 'offerDetailPage.reserve' : 'offerDetailPage.notAvailable') | translate }}
-              </button>
-              <p class="geo-meta hint">
-                {{ (o.available ? 'offerDetailPage.payAtStore' : 'offerDetailPage.cannotReserve') | translate }}
-              </p>
+              @if (canReserve()) {
+                <button
+                  mat-flat-button
+                  type="button"
+                  class="full reserve"
+                  [disabled]="!o.available || reserving()"
+                  (click)="reserve()">
+                  <mat-icon>{{ o.available ? 'confirmation_number' : 'block' }}</mat-icon>
+                  {{
+                    (o.available
+                      ? reserving()
+                        ? 'offerDetailPage.reserving'
+                        : 'offerDetailPage.reserve'
+                      : 'offerDetailPage.notAvailable'
+                    ) | translate
+                  }}
+                </button>
+                @if (reserveFailure(); as failure) {
+                  <geo-alert
+                    kind="error"
+                    [title]="'offerDetailPage.reserveError.' + failure.code + '.title' | translate"
+                    [description]="
+                      failure.message ?? ('offerDetailPage.reserveError.' + failure.code + '.description' | translate)
+                    " />
+                }
+                <p class="geo-meta hint">
+                  {{
+                    (!o.available
+                      ? 'offerDetailPage.cannotReserve'
+                      : isVisitor()
+                        ? 'offerDetailPage.loginToReserve'
+                        : 'offerDetailPage.payAtStore'
+                    ) | translate
+                  }}
+                </p>
+              }
             </div>
 
             <div class="panel map-panel">
