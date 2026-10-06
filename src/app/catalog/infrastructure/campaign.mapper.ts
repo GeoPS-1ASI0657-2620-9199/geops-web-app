@@ -4,6 +4,7 @@ const CURRENCY = 'PEN';
 
 /** Body of POST /api/v1/campaigns (BRD-05 §7.3). */
 export interface CreateCampaignRequest {
+  businessName: string;
   name: string;
   description: string;
   period: { start: string; end: string };
@@ -27,6 +28,7 @@ export function toCreateCampaignRequest(draft: CampaignDraft): CreateCampaignReq
   const point = draft.storeLocation.point!;
   const zone = draft.zone;
   return {
+    businessName: draft.businessName,
     name: draft.name,
     description: draft.description,
     period: { start: draft.period.start, end: draft.period.end },

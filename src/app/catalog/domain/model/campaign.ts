@@ -28,8 +28,12 @@ export interface OfferDraft {
   readonly category: string;
 }
 
-/** A campaign as the owner fills it in (US05). Its business comes from the token, not from here. */
+/**
+ * A campaign as the owner fills it in (US05). Its business id comes from the token. The business
+ * name travels with it until Catalog receives BusinessRegistered (US33), BRD-05 decision DG-1.
+ */
 export interface CampaignDraft {
+  readonly businessName: string;
   readonly name: string;
   readonly description: string;
   readonly period: { readonly start: string; readonly end: string };

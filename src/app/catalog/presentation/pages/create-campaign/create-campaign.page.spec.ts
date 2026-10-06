@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
+import { SessionStore } from '../../../../iam/application/session.store';
 import { ApiError } from '../../../../shared/domain/api-error';
 import { CreateCampaignUseCase } from '../../../application/create-campaign.use-case';
 import { DistrictDirectory } from '../../../domain/ports/district.directory';
@@ -41,6 +42,7 @@ describe('CreateCampaignPage', () => {
         provideRouter([]),
         { provide: CreateCampaignUseCase, useValue: useCase },
         { provide: DistrictDirectory, useValue: { all: () => [] } },
+        { provide: SessionStore, useValue: { session: () => ({ businessName: 'Restaurante Don Pepe' }) } },
       ],
     }).compileComponents();
     fixture = TestBed.createComponent(CreateCampaignPage);
@@ -50,12 +52,13 @@ describe('CreateCampaignPage', () => {
     spyOn(router, 'navigate').and.resolveTo(true);
   });
 
-  it('publishes and goes back to the panel with the confirmation (CA-05.1)', async () => {
+  it('publishes with the business name of the session and goes back to the panel (CA-05.1, DG-1)', async () => {
     fill();
     useCase.execute.and.resolveTo({ campaignId: 31, name: 'Almuerzos de octubre', status: 'ACTIVE' });
 
     await page.submit();
 
+    expect(useCase.execute.calls.mostRecent().args[0].businessName).toBe('Restaurante Don Pepe');
     expect(useCase.execute.calls.mostRecent().args[0].zone).toEqual(
       jasmine.objectContaining({ type: 'RADIUS', radiusMeters: 800 }),
     );

@@ -6,6 +6,7 @@ import { CreateCampaignUseCase } from './create-campaign.use-case';
 
 const NOW = new Date('2026-10-05T15:00:00Z');
 const DRAFT: CampaignDraft = {
+  businessName: 'Restaurante Don Pepe',
   name: '  Almuerzos de octubre ',
   description: '',
   period: { start: '2026-10-05', end: '2026-10-31' },
@@ -31,6 +32,7 @@ describe('CreateCampaignUseCase', () => {
 
     const sent = campaigns.create.calls.mostRecent().args[0];
     expect(sent.name).toBe('Almuerzos de octubre');
+    expect(sent.businessName).toBe('Restaurante Don Pepe');
     expect(sent.storeLocation.address).toBe('Av. Larco 345');
     expect(sent.offers[0].title).toBe('2x1');
   });

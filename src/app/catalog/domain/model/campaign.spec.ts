@@ -2,6 +2,7 @@ import { CampaignDraft, firstViolation, todayInLima } from './campaign';
 
 const TODAY = '2026-10-05';
 const DRAFT: CampaignDraft = {
+  businessName: 'Restaurante Don Pepe',
   name: 'Almuerzos de octubre',
   description: 'Menú ejecutivo a mitad de precio para oficinas cercanas',
   period: { start: '2026-10-05', end: '2026-10-31' },
