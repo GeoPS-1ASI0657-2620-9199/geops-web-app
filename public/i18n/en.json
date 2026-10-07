@@ -1,0 +1,328 @@
+{
+  "header": {
+    "logo": "GeoPs",
+    "search": {
+      "placeholder": "Search and find the best offers"
+    },
+    "help": "Help",
+    "notifications": "Notifications",
+    "cart": "Cart",
+    "profile": {
+      "menu": {
+        "myProfile": "My Profile",
+        "settings": "Settings",
+        "logout": "Logout"
+      }
+    }
+  },
+  "registerPage": {
+    "title": "Create your account",
+    "intro": "We show you the valid offers around you, sorted by distance.",
+    "givenNames": "Given names",
+    "surnames": "Surnames",
+    "email": "Email",
+    "emailInvalid": "Enter a valid email.",
+    "phone": "Mobile",
+    "phoneHint": "9 digits, starting with 9.",
+    "password": "Password",
+    "passwordHint": "Between {{min}} and {{max}} characters.",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "required": "Fill in this field.",
+    "submit": "Create account",
+    "submitting": "Creating your account…",
+    "hasAccount": "Already have an account?",
+    "logIn": "Log in",
+    "registerBusiness": "Register my business",
+    "errors": {
+      "emailTaken": {
+        "title": "An account with this email already exists",
+        "description": "If it is yours, log in. For security we do not show data of that account.",
+        "field": "Use another email or log in."
+      },
+      "phoneTaken": {
+        "title": "An account with this mobile already exists",
+        "description": "If it is yours, log in. For security we do not show data of that account.",
+        "field": "Use another mobile or log in."
+      },
+      "invalid": "Check your data",
+      "generic": "We could not create your account"
+    }
+  },
+  "loginPage": {
+    "title": "Log in",
+    "intro": "Use the email you registered with.",
+    "brandTitle": "Offers that are honored, a few minutes away",
+    "brandText": "Search by distance, reserve without paying in advance and pay at the store. If you own a business, log in here too and you land on your campaign panel.",
+    "email": "Email",
+    "emailInvalid": "Enter a valid email.",
+    "password": "Password",
+    "passwordRequired": "Enter your password.",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "submit": "Log in",
+    "submitting": "Logging in…",
+    "noAccount": "No account yet?",
+    "createAccount": "Create account",
+    "registerBusiness": "Register my business",
+    "registered": {
+      "title": "Your account is ready",
+      "description": "Log in with the email and password you just registered."
+    },
+    "expired": "Your session ended. Log in again.",
+    "errors": {
+      "credentials": {
+        "title": "Wrong email or password",
+        "description": "We do not say which one failed to protect your account.",
+        "field": "Check the email and password and try again."
+      },
+      "generic": "We could not log you in"
+    }
+  },
+  "registerBusinessPage": {
+    "title": "Register your business",
+    "steps": {
+      "business": "Business data",
+      "location": "Store location"
+    },
+    "required": "Fill in this field.",
+    "continue": "Continue",
+    "back": "Back",
+    "submit": "Create my business",
+    "submitting": "Creating your business…",
+    "haveAccount": "I already have an account",
+    "business": {
+      "intro": "With these details your store shows up in the nearby offers search.",
+      "name": "Business name",
+      "type": "Category",
+      "typeHint": "For example: Food · Lunch menus, Grocery, Beauty.",
+      "ruc": "RUC",
+      "rucHint": "11 digits."
+    },
+    "account": {
+      "title": "Your account",
+      "fullName": "Your full name",
+      "phone": "Mobile",
+      "email": "Business email"
+    },
+    "location": {
+      "intro": "Write the address and mark the point on the map. Your customers see the distance from that location.",
+      "address": "Store address",
+      "addressInvalid": "Add street and number, or mark the point on the map.",
+      "mapHint": "Tap the map or drag the marker to your store's door.",
+      "openingHours": "Opening hours",
+      "openingHoursHint": "Optional. For example: Mon-Sat 07:00-22:00.",
+      "marked": "Location marked"
+    },
+    "errors": {
+      "location": "We could not place your store",
+      "email": "An account with this email already exists",
+      "phone": "An account with this mobile already exists",
+      "ruc": "Check the RUC",
+      "generic": "We could not register your business"
+    }
+  },
+  "campaignsPage": {
+    "title": "My campaigns",
+    "new": "Publish campaign",
+    "created": {
+      "title": "Campaign published",
+      "description": "Customers inside the zone you chose can already see it."
+    },
+    "empty": {
+      "title": "Publish an offer for your area",
+      "description": "Choose the product, the discounted price, the validity and how far you want to reach."
+    }
+  },
+  "forbiddenPage": {
+    "title": "You do not have access to this section",
+    "description": "Your account has no permission for this part of GeoPS. If you think this is a mistake, write to us.",
+    "back": "Back to start"
+  },
+  "nearbyPage": {
+    "title": "Offers near you",
+    "places": "Places:",
+    "yourLocation": "Your location",
+    "changeDistrict": "Change district",
+    "searching": "Searching your area…",
+    "count": "{{total}} valid offers within {{minutes}} walking minutes",
+    "loadMore": "See more",
+    "loadingMore": "Loading…",
+    "locating": {
+      "title": "Searching your area…",
+      "description": "If the browser asks for your location, accept it to see offers by distance."
+    },
+    "imprecise": {
+      "title": "Your location has a ±{{meters}} m margin",
+      "description": "With that margin distances can be off by several blocks. Choose your district or try again with GPS on."
+    },
+    "pick": {
+      "title": "Choose your district",
+      "noLocationTitle": "Prefer not to share your location?",
+      "retryGps": "Use my location",
+      "reason": {
+        "DENIED": "Choose your district and we show the offers of that area.",
+        "UNAVAILABLE": "We could not locate you. Choose your district and we show the offers of that area.",
+        "INSECURE_CONTEXT": "Your browser only shares location on secure sites. Choose your district to go on."
+      }
+    },
+    "empty": {
+      "title": "No valid offers within {{minutes}} minutes",
+      "description": "You can widen the distance or choose another district.",
+      "widen": "Widen to {{minutes}} walking min"
+    },
+    "error": {
+      "title": "We could not load the offers",
+      "description": "It may be your connection or the service. Try again in a moment.",
+      "retry": "Retry"
+    },
+    "countOne": "1 valid offer within {{minutes}} walking minutes"
+  },
+  "offerDetailPage": {
+    "back": "Nearby offers",
+    "seeNearby": "See nearby offers",
+    "conditions": "Conditions",
+    "validity": "Valid until",
+    "category": "Category",
+    "address": "Store",
+    "reserve": "Reserve · pay at the store",
+    "notAvailable": "Not available",
+    "payAtStore": "You pay at the store. We do not ask for your card.",
+    "cannotReserve": "This offer expired and cannot be reserved.",
+    "directions": "Get directions",
+    "unavailable": {
+      "title": "This offer is no longer available",
+      "description": "It expired or the business removed it. Go back to the list to see the ones still valid near you."
+    },
+    "notFound": {
+      "title": "This offer does not exist",
+      "description": "The link may be incomplete. Search other offers near you."
+    },
+    "error": {
+      "title": "We could not load the offer",
+      "description": "It may be your connection or the service. Try again in a moment.",
+      "retry": "Retry"
+    },
+    "reserving": "Reserving your offer",
+    "loginToReserve": "Log in to reserve. You pay at the store, no card needed.",
+    "reserveError": {
+      "OFFER_NOT_AVAILABLE": {
+        "title": "This offer can no longer be reserved",
+        "description": "It expired or the business withdrew it a moment ago. You were not charged."
+      },
+      "OFFER_NOT_FOUND": {
+        "title": "This offer no longer exists",
+        "description": "The business removed it from the catalog. Look for other offers near you."
+      },
+      "CATALOG_UNAVAILABLE": {
+        "title": "We could not confirm the offer",
+        "description": "The catalog did not answer. Try again in a moment."
+      },
+      "DEFAULT": {
+        "title": "We could not make the reservation",
+        "description": "Try again in a moment."
+      }
+    }
+  },
+  "reservation": {
+    "status": {
+      "ACTIVE": "Active",
+      "REDEEMED": "Redeemed",
+      "EXPIRED": "Expired",
+      "REPORTED": "Reported"
+    }
+  },
+  "reservationPage": {
+    "back": "My reservations",
+    "title": "My reservation",
+    "created": {
+      "title": "Done, your offer is reserved",
+      "description": "You paid nothing. Show the code at the store and pay there."
+    },
+    "existing": {
+      "title": "You had already reserved this offer",
+      "description": "This is the same reservation; no new one was created."
+    },
+    "banner": {
+      "ACTIVE": {
+        "title": "Active reservation",
+        "description": "You have not paid anything yet. You pay at the store."
+      },
+      "REDEEMED": {
+        "title": "Redeemed reservation",
+        "description": "The business already validated this code."
+      },
+      "EXPIRED": {
+        "title": "Expired without use",
+        "description": "You were not charged: with GeoPS you only pay at the store."
+      },
+      "REPORTED": {
+        "title": "Reported reservation",
+        "description": "You reported that the business did not honor the offer."
+      }
+    },
+    "showCode": "Show this code at the store",
+    "offer": "Offer",
+    "reservedAt": "Reserved",
+    "validUntil": "Valid until",
+    "redeemedAt": "Redeemed",
+    "seeOffer": "See the offer",
+    "howTo": {
+      "title": "How to redeem it",
+      "description": "Go to the store before it expires, show the code and pay there.",
+      "step1": {
+        "title": "Go to the store",
+        "hint": "Before {{date}}"
+      },
+      "step2": {
+        "title": "Show the code {{code}}",
+        "hint": "At the counter, before paying"
+      },
+      "step3": {
+        "title": "Pay the price of the offer",
+        "hint": "At the store. GeoPS charges you nothing."
+      }
+    },
+    "notFound": {
+      "title": "We could not find this reservation",
+      "description": "The link may be incomplete or the reservation may belong to another account."
+    },
+    "error": {
+      "title": "We could not load your reservation",
+      "description": "It may be your connection or the service. Try again in a moment.",
+      "retry": "Retry"
+    }
+  },
+  "reservationsPage": {
+    "title": "My reservations",
+    "filterLabel": "Filter by status",
+    "filters": {
+      "ALL": "All",
+      "ACTIVE": "Active",
+      "REDEEMED": "Redeemed",
+      "EXPIRED": "Expired",
+      "REPORTED": "Reported"
+    },
+    "code": "Code",
+    "reservedAt": "Reserved",
+    "expiresAt": "Expires",
+    "expiredAt": "Expired",
+    "redeemedAt": "Redeemed",
+    "open": "See reservation",
+    "empty": {
+      "title": "You have no reservations yet",
+      "description": "Reserve a nearby offer and pay at the store. Its code will show up here.",
+      "action": "See nearby offers"
+    },
+    "emptyFiltered": {
+      "title": "You have no reservations in this status",
+      "description": "Try another filter or see all your reservations.",
+      "action": "See all"
+    },
+    "error": {
+      "title": "We could not load your reservations",
+      "description": "It may be your connection or the service. Try again in a moment.",
+      "retry": "Retry"
+    }
+  }
+}

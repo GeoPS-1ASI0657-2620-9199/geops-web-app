@@ -1,0 +1,105 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-2xl) var(--space-3xl) var(--space-3xl);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 480px);
+  gap: var(--space-xl);
+  align-items: start;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-xl);
+  background: var(--neutral-bg);
+  border: 1px solid var(--neutral-line);
+  border-radius: var(--radius-panel);
+}
+
+.panel .geo-section-title {
+  margin: 0 0 var(--space-sm);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+}
+
+.row.three {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.offer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin: 0 0 var(--space-md);
+  padding: var(--space-lg);
+  border: 1px solid var(--neutral-line-soft);
+  border-radius: var(--radius-card);
+}
+
+.offer legend {
+  padding: 0 var(--space-xs);
+}
+
+.remove {
+  align-self: flex-end;
+  color: var(--status-expired);
+}
+
+.map {
+  height: 260px;
+}
+
+.panel .geo-meta {
+  margin: var(--space-xs) 0 0;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-md);
+}
+
+.actions a,
+.actions button {
+  min-height: 44px;
+}
+
+@media (max-width: 960px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: var(--space-xl) var(--space-lg);
+  }
+
+  .row,
+  .row.three {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

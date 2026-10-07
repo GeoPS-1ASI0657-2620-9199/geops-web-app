@@ -1,0 +1,28 @@
+<section class="panel">
+  <header class="head">
+    <div>
+      <h1 class="geo-page-title">{{ 'campaignsPage.title' | translate }}</h1>
+      @if (sessions.session()?.businessName; as business) {
+        <p class="geo-meta">{{ business }}</p>
+      }
+    </div>
+    <a mat-flat-button routerLink="/campaigns/new">
+      <mat-icon>add</mat-icon>
+      {{ 'campaignsPage.new' | translate }}
+    </a>
+  </header>
+
+  @if (justCreated) {
+    <geo-alert
+      kind="success"
+      [title]="'campaignsPage.created.title' | translate"
+      [description]="'campaignsPage.created.description' | translate" />
+  }
+
+  <geo-empty-state
+    icon="campaign"
+    [title]="'campaignsPage.empty.title' | translate"
+    [description]="'campaignsPage.empty.description' | translate">
+    <a mat-flat-button routerLink="/campaigns/new">{{ 'campaignsPage.new' | translate }}</a>
+  </geo-empty-state>
+</section>

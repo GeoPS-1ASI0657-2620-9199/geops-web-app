@@ -1,0 +1,43 @@
+@use 'styles/tokens';
+@use 'styles/typography';
+@use 'styles/theme';
+
+@import '@fontsource/poppins/400.css';
+@import '@fontsource/poppins/500.css';
+@import '@fontsource/poppins/600.css';
+@import '@fontsource/poppins/700.css';
+@import '@fontsource/lobster/400.css';
+@import 'material-symbols/rounded.css';
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-brand);
+  color: var(--text-primary);
+  background: var(--neutral-surface-2);
+}
+
+// Visible keyboard focus everywhere (contrast 3:1 on interface elements).
+:focus-visible {
+  outline: 2px solid var(--brand-action);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+// Field hints in the dim text color of the Figma (Material 20 has no token for it).
+.mat-mdc-form-field-hint {
+  color: var(--text-dim);
+}

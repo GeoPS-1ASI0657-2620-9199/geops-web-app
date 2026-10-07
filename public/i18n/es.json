@@ -1,0 +1,328 @@
+{
+  "header": {
+    "logo": "GeoPs",
+    "search": {
+      "placeholder": "Buscar y encuentra las mejores ofertas"
+    },
+    "help": "Ayuda",
+    "notifications": "Notificaciones",
+    "cart": "Carrito",
+    "profile": {
+      "menu": {
+        "myProfile": "Mi perfil",
+        "settings": "Configuración",
+        "logout": "Cerrar sesión"
+      }
+    }
+  },
+  "registerPage": {
+    "title": "Crea tu cuenta",
+    "intro": "Te mostramos las ofertas vigentes de tu zona, ordenadas por cercanía.",
+    "givenNames": "Nombres",
+    "surnames": "Apellidos",
+    "email": "Correo electrónico",
+    "emailInvalid": "Ingresa un correo válido.",
+    "phone": "Celular",
+    "phoneHint": "9 dígitos, empieza con 9.",
+    "password": "Contraseña",
+    "passwordHint": "Entre {{min}} y {{max}} caracteres.",
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña",
+    "required": "Completa este dato.",
+    "submit": "Crear cuenta",
+    "submitting": "Creando tu cuenta…",
+    "hasAccount": "¿Ya tienes cuenta?",
+    "logIn": "Inicia sesión",
+    "registerBusiness": "Registrar mi negocio",
+    "errors": {
+      "emailTaken": {
+        "title": "Ya existe una cuenta con este correo",
+        "description": "Si es tuya, inicia sesión. Por seguridad no mostramos datos de esa cuenta.",
+        "field": "Usa otro correo o inicia sesión."
+      },
+      "phoneTaken": {
+        "title": "Ya existe una cuenta con este celular",
+        "description": "Si es tuya, inicia sesión. Por seguridad no mostramos datos de esa cuenta.",
+        "field": "Usa otro celular o inicia sesión."
+      },
+      "invalid": "Revisa los datos",
+      "generic": "No pudimos crear tu cuenta"
+    }
+  },
+  "loginPage": {
+    "title": "Inicia sesión",
+    "intro": "Usa el correo con el que te registraste.",
+    "brandTitle": "Ofertas que se respetan, a pocos minutos de ti",
+    "brandText": "Busca por cercanía, reserva sin pagar por adelantado y paga en el local. Si tienes un negocio, entra con la misma pantalla y llegas a tu panel de campañas.",
+    "email": "Correo electrónico",
+    "emailInvalid": "Ingresa un correo válido.",
+    "password": "Contraseña",
+    "passwordRequired": "Ingresa tu contraseña.",
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña",
+    "submit": "Iniciar sesión",
+    "submitting": "Entrando…",
+    "noAccount": "¿Aún no tienes cuenta?",
+    "createAccount": "Crear cuenta",
+    "registerBusiness": "Registrar mi negocio",
+    "registered": {
+      "title": "Tu cuenta está lista",
+      "description": "Inicia sesión con el correo y la contraseña que acabas de registrar."
+    },
+    "expired": "Tu sesión terminó. Vuelve a iniciar sesión.",
+    "errors": {
+      "credentials": {
+        "title": "Correo o contraseña incorrectos",
+        "description": "No decimos cuál de los dos falló para proteger tu cuenta.",
+        "field": "Revisa el correo y la contraseña e inténtalo de nuevo."
+      },
+      "generic": "No pudimos iniciar tu sesión"
+    }
+  },
+  "registerBusinessPage": {
+    "title": "Registra tu negocio",
+    "steps": {
+      "business": "Datos del negocio",
+      "location": "Ubicación del local"
+    },
+    "required": "Completa este dato.",
+    "continue": "Continuar",
+    "back": "Atrás",
+    "submit": "Crear mi negocio",
+    "submitting": "Creando tu negocio…",
+    "haveAccount": "Ya tengo cuenta",
+    "business": {
+      "intro": "Con estos datos tu comercio aparece en la búsqueda de ofertas cercanas.",
+      "name": "Nombre comercial",
+      "type": "Rubro",
+      "typeHint": "Por ejemplo: Comida · Menús, Bodega, Belleza.",
+      "ruc": "RUC",
+      "rucHint": "11 dígitos."
+    },
+    "account": {
+      "title": "Tu cuenta",
+      "fullName": "Tu nombre y apellidos",
+      "phone": "Celular",
+      "email": "Correo del negocio"
+    },
+    "location": {
+      "intro": "Escribe la dirección y marca el punto en el mapa. Con esa ubicación se calcula la distancia que ven tus clientes.",
+      "address": "Dirección del local",
+      "addressInvalid": "Agrega calle y número, o marca el punto en el mapa.",
+      "mapHint": "Toca el mapa o arrastra el marcador hasta la puerta de tu local.",
+      "openingHours": "Horario de atención",
+      "openingHoursHint": "Opcional. Por ejemplo: Lun-Sáb 07:00-22:00.",
+      "marked": "Ubicación marcada"
+    },
+    "errors": {
+      "location": "No pudimos ubicar tu local",
+      "email": "Ya existe una cuenta con este correo",
+      "phone": "Ya existe una cuenta con este celular",
+      "ruc": "Revisa el RUC",
+      "generic": "No pudimos registrar tu negocio"
+    }
+  },
+  "campaignsPage": {
+    "title": "Mis campañas",
+    "new": "Publicar campaña",
+    "created": {
+      "title": "Campaña publicada",
+      "description": "Ya se muestra a los clientes dentro de la zona que elegiste."
+    },
+    "empty": {
+      "title": "Publica una oferta para tu zona",
+      "description": "Elige el producto, el precio con descuento, la vigencia y hasta dónde quieres llegar."
+    }
+  },
+  "forbiddenPage": {
+    "title": "No tienes acceso a esta sección",
+    "description": "Tu cuenta no tiene permisos para esta parte de GeoPS. Si crees que es un error, escríbenos.",
+    "back": "Volver al inicio"
+  },
+  "nearbyPage": {
+    "title": "Ofertas cerca de ti",
+    "places": "Lugares:",
+    "yourLocation": "Tu ubicación",
+    "changeDistrict": "Cambiar distrito",
+    "searching": "Buscando en tu zona…",
+    "count": "{{total}} ofertas vigentes a {{minutes}} minutos a pie",
+    "loadMore": "Ver más",
+    "loadingMore": "Cargando…",
+    "locating": {
+      "title": "Buscando en tu zona…",
+      "description": "Si el navegador te pide permiso de ubicación, acéptalo para ver las ofertas por cercanía."
+    },
+    "imprecise": {
+      "title": "Tu ubicación tiene un margen de ±{{meters}} m",
+      "description": "Con ese margen las distancias pueden fallar por varias cuadras. Elige tu distrito o vuelve a intentar con el GPS activado."
+    },
+    "pick": {
+      "title": "Elige tu distrito",
+      "noLocationTitle": "¿Prefieres no compartir tu ubicación?",
+      "retryGps": "Usar mi ubicación",
+      "reason": {
+        "DENIED": "Elige tu distrito y te mostramos las ofertas de esa zona.",
+        "UNAVAILABLE": "No pudimos ubicarte. Elige tu distrito y te mostramos las ofertas de esa zona.",
+        "INSECURE_CONTEXT": "Tu navegador solo comparte la ubicación en sitios seguros. Elige tu distrito para seguir."
+      }
+    },
+    "empty": {
+      "title": "No hay ofertas vigentes a {{minutes}} minutos",
+      "description": "Puedes ampliar la distancia o elegir otro distrito.",
+      "widen": "Ampliar a {{minutes}} min a pie"
+    },
+    "error": {
+      "title": "No pudimos cargar las ofertas",
+      "description": "Puede ser tu conexión o el servicio. Inténtalo de nuevo en un momento.",
+      "retry": "Reintentar"
+    },
+    "countOne": "1 oferta vigente a {{minutes}} minutos a pie"
+  },
+  "offerDetailPage": {
+    "back": "Ofertas cercanas",
+    "seeNearby": "Ver ofertas cercanas",
+    "conditions": "Condiciones",
+    "validity": "Vigencia",
+    "category": "Categoría",
+    "address": "Local",
+    "reserve": "Reservar · pagas en el local",
+    "notAvailable": "No disponible",
+    "payAtStore": "Pagas en el local. No pedimos tu tarjeta.",
+    "cannotReserve": "Esta oferta ya venció y no se puede reservar.",
+    "directions": "Cómo llegar",
+    "unavailable": {
+      "title": "Esta oferta ya no está disponible",
+      "description": "Venció o el comercio la retiró. Vuelve al listado para ver las que siguen vigentes cerca de ti."
+    },
+    "notFound": {
+      "title": "Esta oferta no existe",
+      "description": "Puede que el enlace esté incompleto. Busca otras ofertas cerca de ti."
+    },
+    "error": {
+      "title": "No pudimos cargar la oferta",
+      "description": "Puede ser tu conexión o el servicio. Inténtalo de nuevo en un momento.",
+      "retry": "Reintentar"
+    },
+    "reserving": "Reservando tu oferta",
+    "loginToReserve": "Inicia sesión para reservar. Pagas en el local, sin tarjeta.",
+    "reserveError": {
+      "OFFER_NOT_AVAILABLE": {
+        "title": "Esta oferta ya no se puede reservar",
+        "description": "Venció o el comercio la retiró hace un momento. No se te cobró nada."
+      },
+      "OFFER_NOT_FOUND": {
+        "title": "Esta oferta ya no existe",
+        "description": "El comercio la quitó del catálogo. Busca otras ofertas cerca de ti."
+      },
+      "CATALOG_UNAVAILABLE": {
+        "title": "No pudimos confirmar la oferta",
+        "description": "El catálogo no respondió. Inténtalo de nuevo en un momento."
+      },
+      "DEFAULT": {
+        "title": "No pudimos hacer la reserva",
+        "description": "Inténtalo de nuevo en un momento."
+      }
+    }
+  },
+  "reservation": {
+    "status": {
+      "ACTIVE": "Activa",
+      "REDEEMED": "Canjeada",
+      "EXPIRED": "Vencida",
+      "REPORTED": "Reportada"
+    }
+  },
+  "reservationPage": {
+    "back": "Mis reservas",
+    "title": "Mi reserva",
+    "created": {
+      "title": "Listo, tu oferta está reservada",
+      "description": "No pagaste nada. Muestra el código en el local y paga ahí mismo."
+    },
+    "existing": {
+      "title": "Ya tenías esta oferta reservada",
+      "description": "Te mostramos la misma reserva; no se creó otra."
+    },
+    "banner": {
+      "ACTIVE": {
+        "title": "Reserva activa",
+        "description": "No pagaste nada todavía. El cobro ocurre en el local."
+      },
+      "REDEEMED": {
+        "title": "Reserva canjeada",
+        "description": "El comercio ya validó este código."
+      },
+      "EXPIRED": {
+        "title": "Venció sin usarse",
+        "description": "No se te cobró nada: en GeoPS solo pagas en el local."
+      },
+      "REPORTED": {
+        "title": "Reserva reportada",
+        "description": "Avisaste que el comercio no respetó la oferta."
+      }
+    },
+    "showCode": "Muestra este código en el local",
+    "offer": "Oferta",
+    "reservedAt": "Reservada",
+    "validUntil": "Válida hasta",
+    "redeemedAt": "Canjeada",
+    "seeOffer": "Ver la oferta",
+    "howTo": {
+      "title": "Cómo se canjea",
+      "description": "Llega al local dentro del plazo, muestra el código y paga ahí mismo.",
+      "step1": {
+        "title": "Llega al local",
+        "hint": "Antes del {{date}}"
+      },
+      "step2": {
+        "title": "Muestra el código {{code}}",
+        "hint": "En caja, antes de pagar"
+      },
+      "step3": {
+        "title": "Paga el precio de la oferta",
+        "hint": "En el local. GeoPS no te cobra nada."
+      }
+    },
+    "notFound": {
+      "title": "No encontramos esta reserva",
+      "description": "Puede que el enlace esté incompleto o que la reserva sea de otra cuenta."
+    },
+    "error": {
+      "title": "No pudimos cargar tu reserva",
+      "description": "Puede ser tu conexión o el servicio. Inténtalo de nuevo en un momento.",
+      "retry": "Reintentar"
+    }
+  },
+  "reservationsPage": {
+    "title": "Mis reservas",
+    "filterLabel": "Filtrar por estado",
+    "filters": {
+      "ALL": "Todas",
+      "ACTIVE": "Activas",
+      "REDEEMED": "Canjeadas",
+      "EXPIRED": "Vencidas",
+      "REPORTED": "Reportadas"
+    },
+    "code": "Código",
+    "reservedAt": "Reservada",
+    "expiresAt": "Vence",
+    "expiredAt": "Venció",
+    "redeemedAt": "Canjeada",
+    "open": "Ver reserva",
+    "empty": {
+      "title": "Todavía no tienes reservas",
+      "description": "Reserva una oferta cercana y paga en el local. Aquí verás su código.",
+      "action": "Ver ofertas cercanas"
+    },
+    "emptyFiltered": {
+      "title": "No tienes reservas en este estado",
+      "description": "Prueba con otro filtro o mira todas tus reservas.",
+      "action": "Ver todas"
+    },
+    "error": {
+      "title": "No pudimos cargar tus reservas",
+      "description": "Puede ser tu conexión o el servicio. Inténtalo de nuevo en un momento.",
+      "retry": "Reintentar"
+    }
+  }
+}

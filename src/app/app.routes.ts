@@ -1,0 +1,97 @@
+import { Routes } from '@angular/router';
+import { Layout } from './core/layout/layout/layout';
+import { authGuard } from './iam/infrastructure/auth.guard';
+import { roleGuard } from './iam/infrastructure/role.guard';
+
+export const routes: Routes = [
+  { path: '', pathMatch: 'full', redirectTo: '/login' },
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./iam/presentation/pages/login/login.component').then((m) => m.LoginComponent),
+    title: 'GeoPS - Iniciar sesión',
+  },
+  {
+    path: 'register',
+    loadComponent: () =>
+      import('./iam/presentation/pages/register/register.component').then((m) => m.RegisterComponent),
+    title: 'GeoPS - Crear cuenta',
+  },
+  {
+    path: 'register-business',
+    loadComponent: () =>
+      import('./iam/presentation/pages/register-business/register-business.component').then(
+        (m) => m.RegisterBusinessComponent,
+      ),
+    title: 'GeoPS - Registrar negocio',
+  },
+  {
+    path: '',
+    component: Layout,
+    children: [
+      {
+        path: 'offers',
+        loadComponent: () =>
+          import('./catalog/presentation/pages/nearby-offers/nearby-offers.page').then(
+            (m) => m.NearbyOffersPage,
+          ),
+        title: 'GeoPS - Ofertas cercanas',
+      },
+      {
+        path: 'offers/:id',
+        loadComponent: () =>
+          import('./catalog/presentation/pages/offer-detail/offer-detail.page').then(
+            (m) => m.OfferDetailPage,
+          ),
+        title: 'GeoPS - Detalle de oferta',
+      },
+      {
+        path: 'campaigns',
+        canActivate: [authGuard, roleGuard('BUSINESS_OWNER')],
+        loadComponent: () =>
+          import('./catalog/presentation/pages/campaigns-panel/campaigns.component').then(
+            (m) => m.CampaignsComponent
+          ),
+        title: 'GeoPS - Mis campañas',
+      },
+      {
+        path: 'campaigns/new',
+        canActivate: [authGuard, roleGuard('BUSINESS_OWNER')],
+        loadComponent: () =>
+          import('./catalog/presentation/pages/create-campaign/create-campaign.page').then(
+            (m) => m.CreateCampaignPage,
+          ),
+        title: 'GeoPS - Publicar campaña',
+      },
+      {
+        path: 'reservations',
+        canActivate: [authGuard, roleGuard('CONSUMER')],
+        loadComponent: () =>
+          import('./reservation/presentation/pages/my-reservations/my-reservations.page').then(
+            (m) => m.MyReservationsPage,
+          ),
+        title: 'GeoPS - Mis reservas',
+      },
+      {
+        path: 'reservations/:id',
+        canActivate: [authGuard, roleGuard('CONSUMER')],
+        loadComponent: () =>
+          import('./reservation/presentation/pages/reservation-detail/reservation-detail.page').then(
+            (m) => m.ReservationDetailPage,
+          ),
+        title: 'GeoPS - Mi reserva',
+      },
+      {
+        path: 'forbidden',
+        loadComponent: () => import('./core/layout/forbidden/forbidden').then((m) => m.Forbidden),
+        title: 'GeoPS - Acceso denegado',
+      },
+    ],
+  },
+  {
+    path: '**',
+    loadComponent: () =>
+      import('./core/layout/page-not-found/page-not-found').then((m) => m.PageNotFound),
+    title: 'GeoPS - Página no encontrada',
+  },
+];
