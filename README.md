@@ -24,6 +24,15 @@ npx ng serve
 La aplicación queda en `http://localhost:4200` y llama al gateway en
 `http://localhost:8080/api/v1` (`src/environments/environment.ts`).
 
+## Despliegue
+
+La aplicación se publica en Vercel desde este repositorio. `vercel.json` fija el comando de
+construcción (`npm run build`), la carpeta publicada (`dist/geops-frontend/browser`) y la
+reescritura de cualquier ruta a `index.html`, para que las rutas de Angular funcionen al recargar.
+La versión publicada usa `src/environments/environment.prod.ts`, que apunta al gateway desplegado
+en Azure (`https://geops-g10.eastus.cloudapp.azure.com/api/v1`); el gateway acepta las peticiones
+de los dominios `*.vercel.app`.
+
 ## Forma de trabajo
 
 GitFlow con `main` y `develop` protegidas, una rama `feature/GEO-<n>-<descripcion>` por tarjeta
