@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { SessionStore } from '../../../../iam/application/session.store';
 import { ApiError } from '../../../../shared/domain/api-error';
 import { GeoPoint } from '../../../../shared/domain/geo-point';
 import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
@@ -42,6 +43,7 @@ const END_DATE_CODES = ['CAMPAIGN_ALREADY_ENDED', 'INVALID_CAMPAIGN_PERIOD'];
 export class CreateCampaignPage {
   private readonly createCampaign = inject(CreateCampaignUseCase);
   private readonly router = inject(Router);
+  private readonly sessions = inject(SessionStore);
   private readonly fb = inject(FormBuilder).nonNullable;
   private readonly host = inject(ElementRef<HTMLElement>);
   private readonly injector = inject(Injector);
@@ -110,6 +112,7 @@ export class CreateCampaignPage {
     this.alert.set(null);
     try {
       await this.createCampaign.execute({
+        businessName: this.sessions.session()?.businessName ?? '',
         name: value.name,
         description: value.description,
         period: { start: value.start, end: value.end },

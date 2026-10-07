@@ -8,6 +8,7 @@ import { HttpCampaignRepository } from './http-campaign.repository';
 
 const BASE_URL = 'http://gateway.test/api/v1';
 const DRAFT: CampaignDraft = {
+  businessName: 'Restaurante Don Pepe',
   name: 'Almuerzos de octubre',
   description: 'Menú ejecutivo a mitad de precio para oficinas cercanas',
   period: { start: '2026-10-05', end: '2026-10-31' },
@@ -50,6 +51,7 @@ describe('HttpCampaignRepository', () => {
     const request = http.expectOne(`${BASE_URL}/campaigns`);
     expect(request.request.method).toBe('POST');
     expect(request.request.body).toEqual({
+      businessName: 'Restaurante Don Pepe',
       name: 'Almuerzos de octubre',
       description: 'Menú ejecutivo a mitad de precio para oficinas cercanas',
       period: { start: '2026-10-05', end: '2026-10-31' },

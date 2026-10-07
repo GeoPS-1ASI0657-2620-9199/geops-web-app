@@ -24,6 +24,7 @@ export class CreateCampaignUseCase {
     }
     return this.campaigns.create({
       ...draft,
+      businessName: draft.businessName.trim(),
       name: draft.name.trim(),
       description: draft.description.trim(),
       storeLocation: { ...draft.storeLocation, address: draft.storeLocation.address.trim() },
