@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://<subdominio>.duckdns.org/api/v1'
+  apiBaseUrl: 'https://geops-g10.eastus.cloudapp.azure.com/api/v1'
 };
