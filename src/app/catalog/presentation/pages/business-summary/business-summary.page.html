@@ -1,0 +1,92 @@
+<section class="page">
+  <header class="head">
+    <div>
+      <h1 class="title">{{ 'businessSummary.greeting' | translate: { name: sessions.displayName() } }}</h1>
+      <p class="subtitle">{{ 'businessSummary.subtitle' | translate }}</p>
+    </div>
+    <geo-seal kind="active" [text]="'businessSummary.ownerAccount' | translate" />
+  </header>
+
+  @switch (state()) {
+    @case ('loading') {
+      <div class="metrics" aria-busy="true">
+        @for (s of [1, 2, 3, 4]; track s) {
+          <div class="skeleton"></div>
+        }
+      </div>
+    }
+    @case ('error') {
+      <geo-empty-state
+        icon="cloud_off"
+        [title]="'campaignsPage.error.title' | translate"
+        [description]="errorMessage() ?? ('campaignsPage.error.description' | translate)">
+        <button mat-flat-button type="button" (click)="load()">{{ 'campaignsPage.error.retry' | translate }}</button>
+      </geo-empty-state>
+    }
+    @case ('ready') {
+      <div class="metrics">
+        <div class="metric">
+          <span class="figure green">{{ counts().ACTIVE }}</span>
+          <span class="label">{{ 'businessSummary.metrics.active' | translate }}</span>
+          <span class="hint">{{ 'businessSummary.metrics.activeHint' | translate: { total: campaigns().length } }}</span>
+        </div>
+        <div class="metric">
+          <span class="figure">{{ publishedOffers() }}</span>
+          <span class="label">{{ 'businessSummary.metrics.offers' | translate }}</span>
+          <span class="hint">{{ 'businessSummary.metrics.offersHint' | translate }}</span>
+        </div>
+        <div class="metric">
+          <span class="figure purple">{{ reachMeters() !== null ? (reachMeters()! | number: '1.0-0') + ' m' : '—' }}</span>
+          <span class="label">{{ 'businessSummary.metrics.reach' | translate }}</span>
+          <span class="hint">{{ 'businessSummary.metrics.reachHint' | translate }}</span>
+        </div>
+        <div class="metric">
+          <span class="figure">{{ counts().FINISHED }}</span>
+          <span class="label">{{ 'businessSummary.metrics.finished' | translate }}</span>
+          <span class="hint">{{ 'businessSummary.metrics.finishedHint' | translate }}</span>
+        </div>
+      </div>
+
+      <div class="layout">
+        <div class="left">
+          <h2 class="sub">{{ 'businessSummary.activeCampaigns' | translate }}</h2>
+          @for (campaign of active(); track campaign.campaignId) {
+            <a class="row" routerLink="/campaigns">
+              <span class="icon"><mat-icon aria-hidden="true">{{ icon(campaign) }}</mat-icon></span>
+              <span class="text">
+                <span class="name">{{ campaign.name }} <geo-seal kind="active" [text]="'campaignsPage.status.ACTIVE' | translate" /></span>
+                <span class="meta">{{ campaign.offers[0]?.category }} · {{ period(campaign) }}</span>
+              </span>
+              <span class="figures">
+                <span class="green">{{ (campaign.offers.length === 1 ? 'businessSummary.offerCountOne' : 'businessSummary.offerCount') | translate: { total: campaign.offers.length } }}</span>
+                @if (campaign.offers[0]; as first) {
+                  <span class="price">S/ {{ first.price | number: '1.2-2' }}</span>
+                }
+              </span>
+            </a>
+          } @empty {
+            <geo-empty-state
+              icon="campaign"
+              [title]="'campaignsPage.empty.title' | translate"
+              [description]="'campaignsPage.empty.description' | translate">
+              <a mat-flat-button routerLink="/campaigns/new">{{ 'campaignsPage.new' | translate }}</a>
+            </geo-empty-state>
+          }
+        </div>
+
+        <aside class="right">
+          <h2 class="sub">{{ 'businessSummary.zone' | translate }}</h2>
+          @if (zone(); as z) {
+            <geo-offers-map class="map" [center]="z.center" [radiusMeters]="reachMeters()" [pins]="pins()" [showUser]="false" />
+            <dl class="facts">
+              <div><dt>{{ 'businessSummary.zoneType' | translate }}</dt><dd>{{ zoneText(z) }}</dd></div>
+              <div><dt>{{ 'businessSummary.walking' | translate }}</dt><dd>{{ 'search.minutes' | translate: { minutes: ((reachMeters() ?? 0) / 80 | number: '1.0-0') } }}</dd></div>
+            </dl>
+          }
+          <a mat-flat-button class="full" routerLink="/campaigns/new">{{ 'businessSummary.create' | translate }}</a>
+          <a mat-stroked-button class="full" routerLink="/campaigns">{{ 'businessSummary.seeCampaigns' | translate }}</a>
+        </aside>
+      </div>
+    }
+  }
+</section>

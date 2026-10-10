@@ -1,30 +1,39 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { IsActiveMatchOptions, RouterLink, RouterLinkActive } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 export interface NavItem {
+  /** i18n key of the tab label. */
   label: string;
   route: string;
+  /** True when the tab also stays active on the routes under it, e.g. /offers/1052. */
+  matchChildren?: boolean;
 }
 
-/**
- * White tab bar under the top bar (Figma "Navegación"). It only receives the routes that exist
- * in the current sprint, so no tab leads to a missing page.
- */
+const EXACT: IsActiveMatchOptions = {
+  paths: 'exact',
+  queryParams: 'ignored',
+  fragment: 'ignored',
+  matrixParams: 'ignored',
+};
+const SUBSET: IsActiveMatchOptions = { ...EXACT, paths: 'subset' };
+
+/** White tab bar under the top bar (Figma "Navegación"): Poppins 14, the active tab in deep purple. */
 @Component({
   selector: 'geo-nav',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, TranslateModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <nav class="nav" aria-label="Navegación principal">
+    <nav class="nav" [attr.aria-label]="'nav.label' | translate">
       @for (item of items(); track item.route) {
         <a
           class="tab"
           [routerLink]="item.route"
           routerLinkActive="active"
-          [routerLinkActiveOptions]="activeOptions"
+          [routerLinkActiveOptions]="item.matchChildren ? subset : exact"
           ariaCurrentWhenActive="page">
-          {{ item.label }}
+          {{ item.label | translate }}
         </a>
       }
     </nav>
@@ -34,31 +43,30 @@ export interface NavItem {
       .nav {
         display: flex;
         justify-content: center;
-        gap: var(--space-2xl);
+        gap: 44px;
         height: 48px;
+        padding: 0 16px;
+        overflow-x: auto;
         background: var(--neutral-bg);
         border-bottom: 1px solid var(--neutral-line);
       }
       .tab {
         display: flex;
         align-items: center;
-        min-height: 44px;
-        font: 500 13px/1 var(--font-brand);
+        flex: none;
+        font: 500 14px/1.3 var(--font-brand);
         color: var(--text-primary);
         text-decoration: none;
-        border-bottom: 2px solid transparent;
+        white-space: nowrap;
       }
-      .tab.active { font-weight: 600; color: var(--brand-deep); border-bottom-color: var(--brand-deep); }
+      .tab:hover { color: var(--brand-deep); }
+      .tab.active { font-weight: 600; color: var(--brand-deep); }
+      @media (max-width: 720px) { .nav { justify-content: flex-start; gap: 24px; } }
     `,
   ],
 })
 export class GeoNav {
   readonly items = input.required<NavItem[]>();
-  /** The tab stays active when the page adds query params, e.g. /campaigns?created=1. */
-  protected readonly activeOptions: IsActiveMatchOptions = {
-    paths: 'exact',
-    queryParams: 'ignored',
-    fragment: 'ignored',
-    matrixParams: 'ignored',
-  };
+  protected readonly exact = EXACT;
+  protected readonly subset = SUBSET;
 }

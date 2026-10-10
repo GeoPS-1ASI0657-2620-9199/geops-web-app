@@ -49,7 +49,14 @@ export function isActive(session: Session | null, now: number): session is Sessi
   return session !== null && now < session.expiresAt;
 }
 
-/** Name shown in the top bar: the business for owners, the email for consumers. */
+/**
+ * Name shown in the top bar and in the greeting: the business for owners; for consumers, whose token
+ * carries no name, the first word of the email, e.g. "Lucia" for lucia.fernandez@correo.pe.
+ */
 export function displayNameOf(session: Session): string {
-  return session.businessName ?? session.email;
+  if (session.businessName) {
+    return session.businessName;
+  }
+  const first = session.email.split('@')[0].split(/[._\-+\d]/).find((part) => part.length > 0);
+  return first ? first.charAt(0).toUpperCase() + first.slice(1).toLowerCase() : session.email;
 }

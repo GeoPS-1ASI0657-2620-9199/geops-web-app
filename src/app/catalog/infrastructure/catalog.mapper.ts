@@ -18,6 +18,10 @@ export interface NearbyOfferResponse {
   distanceMeters: number;
   walkMinutes: number;
   category: string;
+  address?: string | null;
+  imageUrl?: string | null;
+  latitude: number;
+  longitude: number;
   price: number;
   validTo: string;
 }
@@ -41,6 +45,9 @@ function toNearbyOffer(offer: NearbyOfferResponse): NearbyOffer {
     distanceMeters: offer.distanceMeters,
     walkMinutes: offer.walkMinutes,
     category: offer.category,
+    address: offer.address ?? '',
+    imageUrl: offer.imageUrl ?? null,
+    location: { latitude: offer.latitude, longitude: offer.longitude },
     price: offer.price,
     validTo: offer.validTo,
   };

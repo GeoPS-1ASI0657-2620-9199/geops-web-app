@@ -1,5 +1,5 @@
 <section class="page">
-  <h1 class="geo-page-title">{{ 'reservationsPage.title' | translate }}</h1>
+  <h1 class="title">{{ 'reservationsPage.title' | translate }}</h1>
 
   <div class="filters" role="group" [attr.aria-label]="'reservationsPage.filterLabel' | translate">
     @for (option of filters; track option) {
@@ -23,7 +23,7 @@
       </div>
     }
     @case ('empty') {
-      @if (filter() === 'ALL') {
+      @if (filter() === 'ALL' || filter() === 'ACTIVE') {
         <geo-empty-state
           icon="confirmation_number"
           [title]="'reservationsPage.empty.title' | translate"

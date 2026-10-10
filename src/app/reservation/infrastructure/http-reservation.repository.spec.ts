@@ -89,6 +89,14 @@ describe('HttpReservationRepository', () => {
     );
   });
 
+  it('looks a code up for the business owner (US41)', async () => {
+    const result = repository.findByCode('K7P3XM9Q');
+
+    http.expectOne(`${RESERVATIONS_URL}/code/K7P3XM9Q`).flush(RESERVATION);
+
+    expect(await result).toEqual(jasmine.objectContaining({ code: 'K7P3XM9Q', status: 'ACTIVE' }));
+  });
+
   it('reads one reservation with its offer and status', async () => {
     const result = repository.findById(15);
 

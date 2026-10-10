@@ -2,10 +2,21 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-lg);
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: var(--space-xl) var(--space-3xl) var(--space-3xl);
+  padding: 24px 26px 40px;
 }
+
+.title { margin: 0; font: 600 22px/1.25 var(--font-brand); color: var(--text-primary); }
+.left {
+  flex: none;
+  padding: 4px 12px;
+  border-radius: var(--radius-chip);
+  background: var(--neutral-bg);
+  font: 500 11.5px/1.3 var(--font-brand);
+  color: var(--brand-deep);
+}
+.price { color: var(--brand-action); font-weight: 600; }
+.map { height: 250px; }
+.buttons { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md); margin: 0 var(--space-xl); }
 
 .back {
   display: inline-flex;
@@ -27,7 +38,7 @@
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: 620px minmax(0, 1fr);
   gap: var(--space-xl);
   align-items: start;
 }
@@ -193,3 +204,5 @@
     font-size: 32px;
   }
 }
+
+@media (max-width: 1000px) { .layout { grid-template-columns: 1fr; } }

@@ -42,6 +42,17 @@ export class HttpReservationRepository implements ReservationRepository {
     }
   }
 
+  async findByCode(code: string): Promise<Reservation> {
+    try {
+      const response = await firstValueFrom(
+        this.http.get<ReservationResponse>(`${this.url}/code/${encodeURIComponent(code)}`),
+      );
+      return toReservation(response);
+    } catch (error) {
+      throw toApiError(error);
+    }
+  }
+
   async findMine(status: ReservationStatus | null): Promise<Reservation[]> {
     const params = status ? new HttpParams().set('status', status) : new HttpParams();
     try {

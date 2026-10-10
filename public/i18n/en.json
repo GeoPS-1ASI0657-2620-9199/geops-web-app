@@ -2,7 +2,7 @@
   "header": {
     "logo": "GeoPs",
     "search": {
-      "placeholder": "Search and find the best offers"
+      "placeholder": "Search for the best deals"
     },
     "help": "Help",
     "notifications": "Notifications",
@@ -13,6 +13,15 @@
         "settings": "Settings",
         "logout": "Logout"
       }
+    },
+    "logIn": "Log in",
+    "accountMenu": "Account menu",
+    "noNotices": "No new notices.",
+    "helpMenu": {
+      "title": "How GeoPS works",
+      "step1": "Pick your district or share your location and see deals a few minutes away.",
+      "step2": "Reserve without paying: you get a code.",
+      "step3": "Show the code at the store and pay there."
     }
   },
   "registerPage": {
@@ -124,7 +133,7 @@
   },
   "campaignsPage": {
     "title": "My campaigns",
-    "new": "Publish campaign",
+    "new": "New campaign",
     "created": {
       "title": "Campaign published",
       "description": "Customers inside the zone you chose can already see it."
@@ -132,6 +141,34 @@
     "empty": {
       "title": "Publish an offer for your area",
       "description": "Choose the product, the discounted price, the validity and how far you want to reach."
+    },
+    "summary": "{{active}} active · {{paused}} paused · {{finished}} finished",
+    "filters": {
+      "ALL": "All",
+      "ACTIVE": "Active",
+      "PAUSED": "Paused",
+      "FINISHED": "Finished"
+    },
+    "status": {
+      "ACTIVE": "Active",
+      "PAUSED": "Paused",
+      "FINISHED": "Finished"
+    },
+    "columns": {
+      "campaign": "Campaign",
+      "status": "Status",
+      "period": "Validity",
+      "zone": "Reach",
+      "offers": "Deals",
+      "price": "Price",
+      "actions": "Actions"
+    },
+    "seeOffer": "See deal",
+    "noneInFilter": "No campaigns with this status.",
+    "error": {
+      "title": "We could not load your campaigns",
+      "description": "It may be your connection or the service. Try again in a moment.",
+      "retry": "Retry"
     }
   },
   "forbiddenPage": {
@@ -185,7 +222,7 @@
     "validity": "Valid until",
     "category": "Category",
     "address": "Store",
-    "reserve": "Reserve · pay at the store",
+    "reserve": "Reserve",
     "notAvailable": "Not available",
     "payAtStore": "You pay at the store. We do not ask for your card.",
     "cannotReserve": "This offer expired and cannot be reserved.",
@@ -222,6 +259,17 @@
         "title": "We could not make the reservation",
         "description": "Try again in a moment."
       }
+    },
+    "breadcrumb": "Breadcrumb",
+    "includes": "What it includes",
+    "distance": "Distance",
+    "distanceValue": "{{meters}} m · {{minutes}} min walk",
+    "save": "Save to favorites",
+    "mapLabel": "Store location",
+    "others": "Other deals near you",
+    "promise": {
+      "title": "The deal is honored or the business drops in the ranking",
+      "description": "If you arrive in time and it is not honored, report it from your reservation."
     }
   },
   "reservation": {
@@ -233,7 +281,7 @@
     }
   },
   "reservationPage": {
-    "back": "My reservations",
+    "back": "My coupons",
     "title": "My reservation",
     "created": {
       "title": "Done, your offer is reserved",
@@ -291,10 +339,14 @@
       "title": "We could not load your reservation",
       "description": "It may be your connection or the service. Try again in a moment.",
       "retry": "Retry"
-    }
+    },
+    "expiresIn": "Ends in {{time}}",
+    "payAtStore": "You pay at the store",
+    "store": "Store",
+    "mapLabel": "Store location"
   },
   "reservationsPage": {
-    "title": "My reservations",
+    "title": "My coupons",
     "filterLabel": "Filter by status",
     "filters": {
       "ALL": "All",
@@ -310,13 +362,13 @@
     "redeemedAt": "Redeemed",
     "open": "See reservation",
     "empty": {
-      "title": "You have no reservations yet",
-      "description": "Reserve a nearby offer and pay at the store. Its code will show up here.",
-      "action": "See nearby offers"
+      "title": "You have no active coupons",
+      "description": "Reserve a nearby deal and pay at the store. Its code shows here.",
+      "action": "See deals"
     },
     "emptyFiltered": {
-      "title": "You have no reservations in this status",
-      "description": "Try another filter or see all your reservations.",
+      "title": "No coupons with this status",
+      "description": "Try another filter.",
       "action": "See all"
     },
     "error": {
@@ -324,5 +376,192 @@
       "description": "It may be your connection or the service. Try again in a moment.",
       "retry": "Retry"
     }
+  },
+  "nav": {
+    "label": "Main navigation",
+    "home": "Home",
+    "offers": "Deals",
+    "categories": "Categories",
+    "favorites": "Favorites",
+    "coupons": "My coupons",
+    "summary": "Summary",
+    "validate": "Validate code",
+    "campaigns": "Campaigns",
+    "create": "Create",
+    "reports": "Reports",
+    "comments": "Comments"
+  },
+  "search": {
+    "places": "Places:",
+    "changeDistrict": "Change district",
+    "radius": "Radius:",
+    "minutes": "{{minutes}} min walk",
+    "categories": "Categories",
+    "all": "All",
+    "otherDistrict": "Other district",
+    "searchIn": "Search in {{district}}",
+    "pickOne": "Pick a district",
+    "retryGps": "Retry with GPS"
+  },
+  "home": {
+    "eyebrow": "Welcome",
+    "greeting": "Hi, {{name}}",
+    "greetingVisitor": "Hi, see what is nearby",
+    "logInToReserve": "Log in to reserve",
+    "nearYou": "Near you",
+    "walking": "{{minutes}} minutes away on foot",
+    "seeMore": "See more"
+  },
+  "offersPage": {
+    "title": "Deals near you",
+    "resultsFor": "Results for “{{term}}”",
+    "noMatch": {
+      "title": "No deals match that filter",
+      "description": "Try another word, another category or a wider radius.",
+      "clear": "Clear search"
+    }
+  },
+  "categoriesPage": {
+    "title": "Deals near you",
+    "atMinutes": "within {{minutes}} min",
+    "categories": "categories",
+    "inRadius": "In your radius",
+    "seeAll": "See all {{total}} deals",
+    "orderBy": "Sort by",
+    "order": {
+      "distance": "Distance",
+      "price": "Lowest price",
+      "expiry": "Ending soon"
+    },
+    "legend": {
+      "title": "Legend",
+      "verified": "Affiliated business",
+      "you": "Your location · {{note}}",
+      "district": "District center"
+    }
+  },
+  "seal": {
+    "verified": "Verified"
+  },
+  "offerActions": {
+    "reserve": "Reserve",
+    "save": "Save",
+    "saved": "Saved to your favorites.",
+    "errors": {
+      "OFFER_NOT_AVAILABLE": "This deal can no longer be reserved.",
+      "OFFER_NOT_FOUND": "This deal cannot be saved yet. Try again later.",
+      "OFFER_EXPIRED": "This deal has ended.",
+      "CATALOG_UNAVAILABLE": "The catalog did not answer. Try again.",
+      "DEFAULT": "We could not complete that. Try again."
+    }
+  },
+  "favoritesPage": {
+    "title": "My favorites",
+    "count": "{{total}} saved deals",
+    "current": "Valid · you can use them now",
+    "expired": "No longer available",
+    "offers": "{{total}} deals",
+    "remove": "Remove",
+    "similar": "See similar",
+    "notice": {
+      "title": "We let you know when you are near",
+      "description": "Turn on notices and we write when a business you follow posts a deal in your area."
+    },
+    "empty": {
+      "title": "You have no saved deals yet",
+      "description": "Tap “Save” on a deal to keep it here.",
+      "action": "See deals"
+    },
+    "error": {
+      "title": "We could not load your favorites",
+      "description": "It may be your connection or the service. Try again in a moment.",
+      "retry": "Retry"
+    }
+  },
+  "businessSummary": {
+    "greeting": "Hi, {{name}}",
+    "subtitle": "How your campaigns are doing on GeoPS",
+    "ownerAccount": "Business account",
+    "metrics": {
+      "active": "Active campaigns",
+      "activeHint": "of {{total}} published",
+      "offers": "Published deals",
+      "offersHint": "visible to neighbors",
+      "reach": "Current reach",
+      "reachHint": "radius of your newest campaign",
+      "finished": "Finished campaigns",
+      "finishedHint": "no longer shown"
+    },
+    "activeCampaigns": "Your active campaigns",
+    "offerCount": "{{total}} deals",
+    "zone": "Your reach",
+    "zoneType": "Zone",
+    "walking": "Equals",
+    "create": "Create new campaign",
+    "seeCampaigns": "See my campaigns",
+    "offerCountOne": "1 deal"
+  },
+  "validatePage": {
+    "title": "Validate reservation code",
+    "hint": "Ask the customer for the code before charging.",
+    "code": "Code",
+    "placeholder": "e.g. K7P3XM9Q",
+    "validate": "Validate",
+    "checking": "Validating…",
+    "valid": "Valid code",
+    "offer": "Deal",
+    "expires": "Ends",
+    "left": "in {{time}}",
+    "reservedAt": "Reserved",
+    "another": "Validate another code",
+    "charge": "Charge the deal price. The customer paid nothing when reserving.",
+    "rejected": {
+      "MALFORMED": {
+        "title": "That code has the wrong format",
+        "description": "Codes have 8 letters and digits, without 0, O, 1, I or L."
+      },
+      "NOT_FOUND": {
+        "title": "We could not find that code",
+        "description": "Check the spelling. Codes of other businesses do not show here."
+      },
+      "OTHER_BUSINESS": {
+        "title": "This reservation is not for your business",
+        "description": "Code {{code}} belongs to another store."
+      },
+      "REDEEMED": {
+        "title": "This code was already redeemed",
+        "description": "{{code}} was redeemed on {{date}}."
+      },
+      "EXPIRED": {
+        "title": "The reservation has ended",
+        "description": "The time for {{code}} ended on {{date}}."
+      },
+      "REPORTED": {
+        "title": "This reservation has an open report",
+        "description": "Check it in Reports before charging."
+      },
+      "NETWORK": {
+        "title": "We could not validate the code",
+        "description": "Check your connection and try again."
+      }
+    },
+    "how": {
+      "title": "How to validate",
+      "step1": "The customer shows you an 8 character code.",
+      "step2": "Type it here and press Validate.",
+      "step3": "If it is valid, charge the deal price at the counter."
+    }
+  },
+  "reportsPage": {
+    "title": "Customer reports",
+    "emptyTitle": "You have no open reports",
+    "emptyDescription": "If a customer says a deal was not honored, you will see it here with the time to answer.",
+    "action": "Validate a code"
+  },
+  "commentsPage": {
+    "title": "Customer comments",
+    "emptyTitle": "No comments yet",
+    "emptyDescription": "Customers comment after redeeming a deal at your store.",
+    "action": "See my campaigns"
   }
 }

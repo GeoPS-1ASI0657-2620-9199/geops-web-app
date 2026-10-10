@@ -1,0 +1,98 @@
+<section class="page">
+  <div class="head">
+    <h1 class="title">{{ 'categoriesPage.title' | translate }}</h1>
+    @if (search.origin()) {
+      <button class="place" type="button" (click)="search.changeDistrict()" [attr.aria-label]="'search.changeDistrict' | translate">
+        <mat-icon aria-hidden="true">location_on</mat-icon>
+        {{ placeLabel() }}
+      </button>
+    }
+  </div>
+
+  <app-search-gate>
+    <div class="layout">
+      <div class="side">
+        <div class="box">
+          <app-radius-control [minutes]="search.radius()" (changed)="onRadius($event)" />
+        </div>
+
+        @if (search.categories().length) {
+          <div class="chips" role="group" [attr.aria-label]="'search.categories' | translate">
+            <button type="button" class="chip" [class.on]="!category()" (click)="category.set(null)">{{ 'search.all' | translate }}</button>
+            @for (item of search.categories(); track item) {
+              <button type="button" class="chip" [class.on]="category() === item" (click)="category.set(item)">{{ item }}</button>
+            }
+          </div>
+        }
+
+        <div class="counters">
+          <div class="counter">
+            <span class="figure green">{{ withinMin() }}</span>
+            <span class="caption">{{ 'categoriesPage.atMinutes' | translate: { minutes: minMinutes } }}</span>
+          </div>
+          <div class="counter">
+            <span class="figure">{{ inCategory().length }}</span>
+            <span class="caption">{{ 'categoriesPage.atMinutes' | translate: { minutes: search.radius() } }}</span>
+          </div>
+          <div class="counter">
+            <span class="figure purple">{{ search.categories().length }}</span>
+            <span class="caption">{{ 'categoriesPage.categories' | translate }}</span>
+          </div>
+        </div>
+
+        <h2 class="sub">{{ 'categoriesPage.inRadius' | translate }}</h2>
+        @if (search.state() === 'loading') {
+          <div class="skeleton"></div>
+          <div class="skeleton"></div>
+        }
+        <div class="list">
+          @for (offer of list(); track offer.offerId) {
+            <a class="item" [routerLink]="['/offers', offer.offerId]">
+              <span class="item-icon"><mat-icon aria-hidden="true">{{ icon(offer) }}</mat-icon></span>
+              <span class="item-text">
+                <span class="item-name">
+                  {{ offer.businessName }}
+                  @if (offer.verifiedSeal) {
+                    <mat-icon class="check" [attr.aria-label]="'seal.verified' | translate">check</mat-icon>
+                  }
+                </span>
+                <span class="item-meta">{{ offer.address || offer.category }} · {{ offer.distanceMeters }} m · {{ offer.walkMinutes }} min</span>
+              </span>
+              <span class="item-price geo-tabular"><small>S/</small> {{ offer.price | number: '1.2-2' }}</span>
+            </a>
+          }
+        </div>
+        @if (inCategory().length > list().length) {
+          <a class="see-all" routerLink="/offers">{{ 'categoriesPage.seeAll' | translate: { total: inCategory().length } }}</a>
+        }
+
+        <h2 class="sub">{{ 'categoriesPage.orderBy' | translate }}</h2>
+        <mat-radio-group class="orders" [value]="order()" (change)="order.set($event.value)">
+          @for (item of orders; track item) {
+            <mat-radio-button [value]="item">{{ 'categoriesPage.order.' + item | translate }}</mat-radio-button>
+          }
+        </mat-radio-group>
+      </div>
+
+      <geo-offers-map
+        class="map"
+        [center]="search.origin()?.point ?? null"
+        [radiusMeters]="radiusMeters()"
+        [pins]="pins()"
+        (pinSelected)="openOffer($event)">
+        <div class="legend">
+          <p class="legend-title">{{ 'categoriesPage.legend.title' | translate }}</p>
+          <p><span class="dot green"></span>{{ 'categoriesPage.legend.verified' | translate }}</p>
+          <p>
+            <span class="dot blue"></span>
+            @if (locationNote(); as note) {
+              {{ 'categoriesPage.legend.you' | translate: { note } }}
+            } @else {
+              {{ 'categoriesPage.legend.district' | translate }}
+            }
+          </p>
+        </div>
+      </geo-offers-map>
+    </div>
+  </app-search-gate>
+</section>
