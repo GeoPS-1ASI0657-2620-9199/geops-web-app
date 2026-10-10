@@ -29,6 +29,7 @@ describe('CreateCampaignPage', () => {
       price: 15,
       validTo: '2026-10-15',
       category: 'Gastronomía',
+      imageUrl: '',
     });
     page.onStorePoint({ latitude: -12.1211, longitude: -77.0297 });
     internals.zone.set({ type: 'RADIUS', center: { latitude: -12.1211, longitude: -77.0297 }, radiusMeters: 800 });

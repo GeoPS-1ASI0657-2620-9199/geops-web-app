@@ -6,21 +6,30 @@ import { UserRole } from '../../../iam/domain/model/user-role';
 import { GeoNav, NavItem } from '../geo-nav/geo-nav';
 import { GeoTopBar } from '../geo-top-bar/geo-top-bar';
 
-/** Tabs of each role, limited to the routes that exist in the sprint. */
-const NAV_BY_ROLE: Record<UserRole | 'VISITOR', NavItem[]> = {
-  VISITOR: [{ label: 'Ofertas cercanas', route: '/offers' }],
-  CONSUMER: [
-    { label: 'Ofertas cercanas', route: '/offers' },
-    { label: 'Mis reservas', route: '/reservations' },
-  ],
+const BUYER_TABS: NavItem[] = [
+  { label: 'nav.home', route: '/inicio' },
+  { label: 'nav.offers', route: '/offers', matchChildren: true },
+  { label: 'nav.categories', route: '/categories' },
+  { label: 'nav.favorites', route: '/favorites' },
+  { label: 'nav.coupons', route: '/reservations', matchChildren: true },
+];
+
+/** Tabs of each role, as the Figma names them (screens 1 and 34). */
+export const NAV_BY_ROLE: Record<UserRole | 'VISITOR', NavItem[]> = {
+  VISITOR: BUYER_TABS,
+  CONSUMER: BUYER_TABS,
   BUSINESS_OWNER: [
-    { label: 'Mis campañas', route: '/campaigns' },
-    { label: 'Publicar campaña', route: '/campaigns/new' },
+    { label: 'nav.summary', route: '/business' },
+    { label: 'nav.validate', route: '/validate' },
+    { label: 'nav.campaigns', route: '/campaigns' },
+    { label: 'nav.create', route: '/campaigns/new' },
+    { label: 'nav.reports', route: '/reports' },
+    { label: 'nav.comments', route: '/comments' },
   ],
-  ADMIN: [{ label: 'Ofertas cercanas', route: '/offers' }],
+  ADMIN: BUYER_TABS,
 };
 
-/** Shell of the signed-in area: top bar and tabs by role (Figma "Barra superior" and "Navegación"). */
+/** Shell of the app: top bar and tabs by role (Figma "Barra superior" and "Navegación"). */
 @Component({
   selector: 'app-layout',
   standalone: true,
@@ -31,6 +40,8 @@ const NAV_BY_ROLE: Record<UserRole | 'VISITOR', NavItem[]> = {
       [role]="role() ?? 'CONSUMER'"
       [userName]="sessions.displayName()"
       [showLogin]="true"
+      [showSearch]="role() !== 'BUSINESS_OWNER'"
+      (searched)="search($event)"
       (logOut)="logOut()" />
     <geo-nav [items]="navItems()" />
     <main class="content"><router-outlet /></main>
@@ -49,6 +60,10 @@ export class Layout {
 
   protected readonly role = computed(() => this.sessions.role());
   protected readonly navItems = computed(() => NAV_BY_ROLE[this.role() ?? 'VISITOR']);
+
+  search(term: string): void {
+    void this.router.navigate(['/offers'], { queryParams: term ? { q: term } : {} });
+  }
 
   logOut(): void {
     this.logOutUseCase.execute();

@@ -1,4 +1,10 @@
-import { CampaignDraft, CreatedCampaign } from '../domain/model/campaign';
+import {
+  CampaignDraft,
+  CampaignOffer,
+  CampaignStatus,
+  CreatedCampaign,
+  PublishedCampaign,
+} from '../domain/model/campaign';
 
 const CURRENCY = 'PEN';
 
@@ -13,7 +19,7 @@ export interface CreateCampaignRequest {
   zone:
     | { type: 'RADIUS'; center: { latitude: number; longitude: number }; radiusMeters: number }
     | { type: 'DISTRICT'; district: string; center: { latitude: number; longitude: number } };
-  offers: { title: string; conditions: string; price: number; validTo: string; category: string }[];
+  offers: { title: string; conditions: string; price: number; validTo: string; category: string; imageUrl?: string }[];
 }
 
 /** Body of the 201 answer. */
@@ -50,10 +56,64 @@ export function toCreateCampaignRequest(draft: CampaignDraft): CreateCampaignReq
       price: offer.price,
       validTo: offer.validTo,
       category: offer.category,
+      ...(offer.imageUrl ? { imageUrl: offer.imageUrl } : {}),
     })),
   };
 }
 
 export function toCreatedCampaign(response: CreatedCampaignResponse): CreatedCampaign {
   return { campaignId: response.campaignId, name: response.name, status: response.status };
+}
+
+/** Body of each item of GET /api/v1/campaigns (catalog-service CampaignResponse). */
+export interface CampaignResponse {
+  campaignId: number;
+  name: string;
+  description: string | null;
+  period: { start: string; end: string };
+  zone: {
+    type: 'RADIUS' | 'DISTRICT';
+    center: { latitude: number; longitude: number };
+    radiusMeters: number | null;
+    district: string | null;
+  };
+  status: CampaignStatus;
+}
+
+/** Body of each item of GET /api/v1/campaigns/{id}/offers (catalog-service OfferResponse). */
+export interface CampaignOfferResponse {
+  offerId: number;
+  title: string;
+  price: number;
+  validTo: string;
+  category: string;
+  imageUrl: string | null;
+  status: string;
+}
+
+export function toPublishedCampaign(response: CampaignResponse): Omit<PublishedCampaign, 'offers'> {
+  const center = response.zone.center;
+  return {
+    campaignId: response.campaignId,
+    name: response.name,
+    description: response.description ?? '',
+    period: response.period,
+    zone:
+      response.zone.type === 'DISTRICT'
+        ? { type: 'DISTRICT', district: response.zone.district ?? '', center }
+        : { type: 'RADIUS', center, radiusMeters: response.zone.radiusMeters ?? 0 },
+    status: response.status,
+  };
+}
+
+export function toCampaignOffer(response: CampaignOfferResponse): CampaignOffer {
+  return {
+    offerId: response.offerId,
+    title: response.title,
+    price: response.price,
+    validTo: response.validTo,
+    category: response.category,
+    imageUrl: response.imageUrl ?? null,
+    status: response.status,
+  };
 }

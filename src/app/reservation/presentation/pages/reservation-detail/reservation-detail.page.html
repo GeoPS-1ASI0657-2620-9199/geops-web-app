@@ -31,7 +31,7 @@
     }
     @case ('ready') {
       @if (reservation(); as r) {
-        <h1 class="geo-page-title">{{ 'reservationPage.title' | translate }}</h1>
+        <h1 class="title">{{ 'reservationPage.title' | translate }}</h1>
 
         @if (placed === 'new') {
           <geo-alert
@@ -54,7 +54,11 @@
                   {{ 'reservationPage.banner.' + r.status + '.description' | translate }}
                 </p>
               </div>
-              <geo-seal [kind]="seal()" [text]="'reservation.status.' + r.status | translate" />
+              @if (remaining(); as left) {
+                <span class="left">{{ 'reservationPage.expiresIn' | translate: { time: left } }}</span>
+              } @else {
+                <geo-seal [kind]="seal()" [text]="'reservation.status.' + r.status | translate" />
+              }
             </header>
 
             <div class="code-block">
@@ -67,6 +71,12 @@
               <dd>
                 <a [routerLink]="['/offers', r.offerId]">{{ r.offerTitle }}</a>
               </dd>
+              @if (offer(); as o) {
+                <dt>{{ 'reservationPage.payAtStore' | translate }}</dt>
+                <dd class="price geo-tabular">S/ {{ o.price | number: '1.2-2' }}</dd>
+                <dt>{{ 'reservationPage.store' | translate }}</dt>
+                <dd>{{ o.businessName }} · {{ o.address }}</dd>
+              }
               <dt>{{ 'reservationPage.reservedAt' | translate }}</dt>
               <dd>{{ limaDateTime(r.reservedAt) }}</dd>
               <dt>{{ 'reservationPage.validUntil' | translate }}</dt>
@@ -77,13 +87,18 @@
               }
             </dl>
 
-            <a mat-stroked-button class="full" [routerLink]="['/offers', r.offerId]">
-              <mat-icon>sell</mat-icon>
-              {{ 'reservationPage.seeOffer' | translate }}
-            </a>
+            <div class="buttons">
+              @if (directionsUrl(); as url) {
+                <a mat-stroked-button [href]="url" target="_blank" rel="noopener">{{ 'offerDetailPage.directions' | translate }}</a>
+              }
+              <a mat-stroked-button [routerLink]="['/offers', r.offerId]">{{ 'reservationPage.seeOffer' | translate }}</a>
+            </div>
           </article>
 
           <aside class="side">
+            @if (pins().length) {
+              <geo-offers-map class="map" [pins]="pins()" [showUser]="false" [ariaLabel]="'reservationPage.mapLabel' | translate" />
+            }
             <geo-alert
               kind="info"
               [title]="'reservationPage.howTo.title' | translate"

@@ -1,0 +1,78 @@
+<section class="page">
+  <h1 class="title">{{ 'validatePage.title' | translate }}</h1>
+
+  <div class="layout">
+    <div class="left">
+      <form class="card" (ngSubmit)="validate()">
+        <p class="hint">{{ 'validatePage.hint' | translate }}</p>
+        <label class="label" for="code">{{ 'validatePage.code' | translate }}</label>
+        <div class="row">
+          <input
+            id="code"
+            name="code"
+            class="input"
+            autocomplete="off"
+            maxlength="12"
+            [ngModel]="code()"
+            (ngModelChange)="code.set($event)"
+            [placeholder]="'validatePage.placeholder' | translate" />
+          <button mat-flat-button type="submit" [disabled]="!code().trim() || checking()">
+            {{ (checking() ? 'validatePage.checking' : 'validatePage.validate') | translate }}
+          </button>
+        </div>
+      </form>
+
+      @if (reservation(); as r) {
+        @if (!rejection()) {
+          <section class="result ok" role="status">
+            <h2 class="result-title">
+              {{ 'validatePage.valid' | translate }}
+              <geo-seal [kind]="seals[r.status]" [text]="'reservation.status.' + r.status | translate" />
+            </h2>
+            <dl class="facts">
+              <div><dt>{{ 'validatePage.offer' | translate }}</dt><dd>{{ r.offerTitle }}</dd></div>
+              <div><dt>{{ 'validatePage.code' | translate }}</dt><dd class="code">{{ r.code }}</dd></div>
+              <div>
+                <dt>{{ 'validatePage.expires' | translate }}</dt>
+                <dd>
+                  {{ limaDateTime(r.expiresAt) }}
+                  @if (remaining(); as left) {
+                    ({{ 'validatePage.left' | translate: { time: left } }})
+                  }
+                </dd>
+              </div>
+              <div><dt>{{ 'validatePage.reservedAt' | translate }}</dt><dd>{{ limaDateTime(r.reservedAt) }}</dd></div>
+            </dl>
+            <div class="actions">
+              <button mat-stroked-button type="button" (click)="clear()">{{ 'validatePage.another' | translate }}</button>
+            </div>
+            <p class="note">{{ 'validatePage.charge' | translate }}</p>
+          </section>
+        }
+      }
+      @if (rejection(); as reason) {
+        <section class="result bad" role="alert">
+          <h2 class="result-title">{{ 'validatePage.rejected.' + reason + '.title' | translate }}</h2>
+          <p class="note">
+            {{ 'validatePage.rejected.' + reason + '.description' | translate: {
+              code: reservation()?.code ?? code(),
+              date: reservation() ? limaDateTime(reservation()!.redeemedAt ?? reservation()!.expiresAt) : ''
+            } }}
+          </p>
+          <div class="actions">
+            <button mat-stroked-button type="button" (click)="clear()">{{ 'validatePage.another' | translate }}</button>
+          </div>
+        </section>
+      }
+    </div>
+
+    <aside class="card side">
+      <h2 class="side-title">{{ 'validatePage.how.title' | translate }}</h2>
+      <ol class="steps">
+        <li><span class="dot">1</span>{{ 'validatePage.how.step1' | translate }}</li>
+        <li><span class="dot">2</span>{{ 'validatePage.how.step2' | translate }}</li>
+        <li><span class="dot">3</span>{{ 'validatePage.how.step3' | translate }}</li>
+      </ol>
+    </aside>
+  </div>
+</section>

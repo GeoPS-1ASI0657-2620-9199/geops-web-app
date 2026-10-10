@@ -8,6 +8,9 @@ import { ApiError, NETWORK_ERROR } from '../../../../shared/domain/api-error';
 import { OfferDetail } from '../../../domain/model/offer-detail';
 import { OfferRepository } from '../../../domain/ports/offer.repository';
 import { OfferDetailPage } from './offer-detail.page';
+import { of } from 'rxjs';
+import { SavedOfferRepository } from '../../../../engagement/domain/ports/saved-offer.repository';
+import { LocationProvider } from '../../../domain/ports/location.provider';
 
 const OFFER: OfferDetail = {
   offerId: 1052,
@@ -52,6 +55,7 @@ describe('OfferDetailPage', () => {
   let fixture: ComponentFixture<OfferDetailPage>;
   let offers: jasmine.SpyObj<OfferRepository>;
   let reservations: jasmine.SpyObj<ReservationRepository>;
+  let savedOffers: jasmine.SpyObj<SavedOfferRepository>;
   let session: Session | null;
 
   const render = async (id = '1052') => {
@@ -63,7 +67,9 @@ describe('OfferDetailPage', () => {
         { provide: OfferRepository, useValue: offers },
         { provide: ReservationRepository, useValue: reservations },
         { provide: SessionStorage, useValue: new MemorySessionStorage(session) },
-        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap({ id }) } } },
+        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap({ id }) }, paramMap: of(convertToParamMap({ id })) } },
+        { provide: SavedOfferRepository, useValue: savedOffers },
+        { provide: LocationProvider, useValue: { locate: () => Promise.resolve({ status: 'DENIED' }) } },
       ],
     }).compileComponents();
     fixture = TestBed.createComponent(OfferDetailPage);
@@ -84,6 +90,7 @@ describe('OfferDetailPage', () => {
 
   beforeEach(() => {
     offers = jasmine.createSpyObj<OfferRepository>('OfferRepository', ['findNearby', 'findById']);
+    savedOffers = jasmine.createSpyObj<SavedOfferRepository>('SavedOfferRepository', ['findMine', 'save', 'remove']);
     reservations = jasmine.createSpyObj<ReservationRepository>('ReservationRepository', [
       'reserve',
       'findById',

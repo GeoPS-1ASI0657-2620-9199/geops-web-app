@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DecimalPipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,9 +11,14 @@ import { PLACED_PARAM } from '../../../../reservation/presentation/reservation-v
 import { ApiError } from '../../../../shared/domain/api-error';
 import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { GeoEmptyState } from '../../../../shared/ui/geo-empty-state/geo-empty-state';
-import { GeoLocationPicker } from '../../../../shared/ui/geo-location-picker/geo-location-picker';
+import { categoryIcon } from '../../../../shared/ui/category-icon';
+import { GeoOfferCard } from '../../../../shared/ui/geo-offer-card/geo-offer-card';
+import { GeoOffersMap, MapPin } from '../../../../shared/ui/geo-offers-map/geo-offers-map';
 import { GeoSeal } from '../../../../shared/ui/geo-seal/geo-seal';
+import { SaveOfferUseCase } from '../../../../engagement/application/saved-offers.use-cases';
 import { GetOfferDetailUseCase } from '../../../application/get-offer-detail.use-case';
+import { OfferSearchStore } from '../../../application/offer-search.store';
+import { OfferCardActions } from '../../components/offer-card-actions/offer-card-actions';
 import { OfferDetail } from '../../../domain/model/offer-detail';
 import { validityLabel } from '../../validity-label';
 
@@ -44,8 +50,10 @@ interface ReserveFailure {
     TranslateModule,
     GeoAlert,
     GeoEmptyState,
-    GeoLocationPicker,
+    GeoOfferCard,
+    GeoOffersMap,
     GeoSeal,
+    OfferCardActions,
   ],
   templateUrl: './offer-detail.page.html',
   styleUrl: './offer-detail.page.css',
@@ -56,7 +64,11 @@ export class OfferDetailPage implements OnInit {
   private readonly reserveOffer = inject(ReserveOfferUseCase);
   private readonly sessions = inject(SessionStore);
   private readonly router = inject(Router);
-  private readonly offerId = Number(inject(ActivatedRoute).snapshot.paramMap.get('id'));
+  private readonly route = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly saveOffer = inject(SaveOfferUseCase);
+  private readonly search = inject(OfferSearchStore);
+  private offerId = Number(this.route.snapshot.paramMap.get('id'));
 
   protected readonly state = signal<ViewState>('loading');
   protected readonly offer = signal<OfferDetail | null>(null);
@@ -83,8 +95,69 @@ export class OfferDetailPage implements OnInit {
     return `https://www.openstreetmap.org/directions?engine=fossgis_osrm_foot&route=%3B${latitude}%2C${longitude}`;
   });
 
+  protected readonly saving = signal(false);
+  /** i18n key of the answer to "Guardar en favoritos". */
+  protected readonly saveResult = signal<string | null>(null);
+  protected readonly icon = computed(() => categoryIcon(this.offer()?.category));
+  /** Each sentence of the conditions is one item of "Qué incluye" (Figma screen 2). */
+  protected readonly includes = computed(() =>
+    (this.offer()?.conditions ?? '')
+      .split(/(?<=\.)\s+|\n+/)
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0),
+  );
+  /** Distance and minutes as the nearby search measured them, when the consumer came from it. */
+  protected readonly distance = computed(() => {
+    const found = this.search.offers().find((o) => o.offerId === this.offer()?.offerId);
+    return found ? { meters: found.distanceMeters, minutes: found.walkMinutes } : null;
+  });
+  protected readonly consumerPoint = computed(() => this.search.origin()?.point ?? null);
+  protected readonly pin = computed<MapPin[]>(() => {
+    const offer = this.offer();
+    return offer
+      ? [{ id: offer.offerId, point: offer.location, icon: categoryIcon(offer.category), label: offer.businessName, kind: offer.source === 'PUBLIC_SOURCE' ? 'reference' : 'verified' }]
+      : [];
+  });
+  /** "Otras ofertas cerca de ti": the next four of the current search. */
+  protected readonly others = computed(() =>
+    this.search.offers().filter((o) => o.offerId !== this.offer()?.offerId).slice(0, 4),
+  );
+
   ngOnInit(): void {
-    void this.load();
+    // The same page shows another offer when the consumer opens one of "Otras ofertas cerca de ti".
+    this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      this.offerId = Number(params.get('id'));
+      this.saveResult.set(null);
+      this.reserveFailure.set(null);
+      void this.load();
+    });
+  }
+
+  protected validityOf(validTo: string): string {
+    return validityLabel(validTo);
+  }
+
+  async save(): Promise<void> {
+    if (!this.sessions.activeSession()) {
+      await this.goToLogin();
+      return;
+    }
+    this.saving.set(true);
+    try {
+      await this.saveOffer.execute(this.offerId);
+      this.saveResult.set('offerActions.saved');
+    } catch (error) {
+      const apiError = error instanceof ApiError ? error : null;
+      if (apiError?.code === UNAUTHORIZED) {
+        await this.goToLogin();
+        return;
+      }
+      this.saveResult.set(
+        apiError?.code === OFFER_NOT_FOUND ? 'offerActions.errors.OFFER_NOT_FOUND' : 'offerActions.errors.DEFAULT',
+      );
+    } finally {
+      this.saving.set(false);
+    }
   }
 
   async load(): Promise<void> {

@@ -1,0 +1,86 @@
+<section class="page">
+  <div class="welcome">
+    <div>
+      <p class="eyebrow">{{ 'home.eyebrow' | translate }}</p>
+      @if (sessions.displayName(); as name) {
+        <h1 class="greeting">{{ 'home.greeting' | translate: { name } }}</h1>
+      } @else {
+        <h1 class="greeting">{{ 'home.greetingVisitor' | translate }}</h1>
+      }
+    </div>
+    @if (!sessions.displayName()) {
+      <a class="welcome-link" routerLink="/login">{{ 'home.logInToReserve' | translate }}</a>
+    }
+  </div>
+
+  <app-search-gate>
+    <app-search-panel
+      [placeLabel]="placeLabel()"
+      [approximate]="!!search.origin()?.districtName"
+      [radius]="search.radius()"
+      [categories]="search.categories()"
+      [category]="category()"
+      (changeDistrict)="search.changeDistrict()"
+      (radiusChange)="onRadius($event)"
+      (categoryChange)="category.set($event)">
+      <div class="map-row">
+        <geo-offers-map
+          class="map"
+          [center]="search.origin()?.point ?? null"
+          [radiusMeters]="radiusMeters()"
+          [pins]="pins()"
+          [precisionLabel]="precisionLabel()"
+          (pinSelected)="openOffer($event)" />
+        <aside class="near">
+          <h2 class="near-title">{{ 'home.nearYou' | translate }}</h2>
+          @if (search.state() === 'loading') {
+            @for (s of skeletons; track s) {
+              <div class="near-skeleton"></div>
+            }
+          }
+          @for (offer of nearYou(); track offer.offerId) {
+            <a class="near-item" [routerLink]="['/offers', offer.offerId]">
+              <span class="near-icon"><mat-icon aria-hidden="true">{{ icon(offer) }}</mat-icon></span>
+              <span class="near-text">
+                <span class="near-name">{{ offer.businessName }}</span>
+                <span class="near-meta">{{ offer.address || offer.category }} · {{ offer.distanceMeters }} m</span>
+              </span>
+            </a>
+          }
+        </aside>
+      </div>
+    </app-search-panel>
+
+    <div class="section-head">
+      <h2 class="section-title">{{ 'home.walking' | translate: { minutes: search.radius() } }}</h2>
+      <a class="see-more" routerLink="/offers">{{ 'home.seeMore' | translate }}</a>
+    </div>
+    @if (search.state() === 'loading') {
+      <div class="grid" aria-busy="true">
+        @for (s of skeletons; track s) {
+          <div class="skeleton"></div>
+        }
+      </div>
+    } @else {
+      <div class="grid">
+        @for (offer of cards(); track offer.offerId; let i = $index) {
+          <a class="card-link" [routerLink]="['/offers', offer.offerId]">
+            <geo-offer-card
+              [kind]="offer.verifiedSeal ? 'verified' : 'standard'"
+              [title]="offer.title"
+              [merchant]="offer.businessName"
+              [imageUrl]="offer.imageUrl"
+              [category]="offer.category"
+              [validity]="validity(offer)"
+              [price]="offer.price"
+              [distanceMeters]="offer.distanceMeters"
+              [walkMinutes]="offer.walkMinutes"
+              [priority]="i < 3">
+              <app-offer-card-actions [offerId]="offer.offerId" />
+            </geo-offer-card>
+          </a>
+        }
+      </div>
+    }
+  </app-search-gate>
+</section>

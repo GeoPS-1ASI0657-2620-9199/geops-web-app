@@ -26,6 +26,8 @@ export interface OfferDraft {
   readonly price: number;
   readonly validTo: string;
   readonly category: string;
+  /** Public link to a photo of the product; optional (Catalog allows up to 500 characters). */
+  readonly imageUrl?: string | null;
 }
 
 /**
@@ -88,4 +90,36 @@ function isValidZone(zone: CampaignZone): boolean {
 /** Calendar day in Lima as yyyy-mm-dd. */
 export function todayInLima(now: Date = new Date()): string {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Lima' }).format(now);
+}
+
+/** Same values as CampaignStatus in catalog-service. */
+export type CampaignStatus = 'ACTIVE' | 'PAUSED' | 'FINISHED';
+
+/** An offer of a published campaign, as GET /campaigns/{id}/offers returns it. */
+export interface CampaignOffer {
+  readonly offerId: number;
+  readonly title: string;
+  readonly price: number;
+  readonly validTo: string;
+  readonly category: string;
+  readonly imageUrl: string | null;
+  readonly status: string;
+}
+
+/** A campaign the owner already published (GET /campaigns), with its offers. */
+export interface PublishedCampaign {
+  readonly campaignId: number;
+  readonly name: string;
+  readonly description: string;
+  readonly period: { readonly start: string; readonly end: string };
+  readonly zone: CampaignZone;
+  readonly status: CampaignStatus;
+  readonly offers: readonly CampaignOffer[];
+}
+
+/** Campaigns by status, the summary under "Mis campañas" (Figma screen 12). */
+export function countByStatus(campaigns: readonly PublishedCampaign[]): Record<CampaignStatus, number> {
+  const counts: Record<CampaignStatus, number> = { ACTIVE: 0, PAUSED: 0, FINISHED: 0 };
+  campaigns.forEach((campaign) => counts[campaign.status]++);
+  return counts;
 }
