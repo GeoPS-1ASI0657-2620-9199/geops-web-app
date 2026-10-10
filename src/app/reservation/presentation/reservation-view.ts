@@ -28,3 +28,22 @@ const LIMA_DATE_TIME = new Intl.DateTimeFormat('es-PE', {
 export function limaDateTime(instant: string): string {
   return LIMA_DATE_TIME.format(new Date(instant));
 }
+
+const MILLIS_PER_MINUTE = 60_000;
+const MINUTES_PER_HOUR = 60;
+const HOURS_PER_DAY = 24;
+/** Beyond two days the countdown reads in days, e.g. "60 días". */
+const HOURS_SHOWN_AS_DAYS = 48;
+
+/** "3 h 20 min", "45 min" or "12 días" until the reservation expires; null once it passed. */
+export function remainingTime(expiresAt: string, now: number): string | null {
+  const minutes = Math.floor((new Date(expiresAt).getTime() - now) / MILLIS_PER_MINUTE);
+  if (minutes <= 0) {
+    return null;
+  }
+  const hours = Math.floor(minutes / MINUTES_PER_HOUR);
+  if (hours >= HOURS_SHOWN_AS_DAYS) {
+    return `${Math.floor(hours / HOURS_PER_DAY)} días`;
+  }
+  return hours > 0 ? `${hours} h ${minutes % MINUTES_PER_HOUR} min` : `${minutes} min`;
+}

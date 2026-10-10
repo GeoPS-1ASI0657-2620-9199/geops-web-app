@@ -7,16 +7,17 @@ import { ApiError } from '../../../../shared/domain/api-error';
 import { GeoEmptyState } from '../../../../shared/ui/geo-empty-state/geo-empty-state';
 import { GeoSeal } from '../../../../shared/ui/geo-seal/geo-seal';
 import { ListMyReservationsUseCase } from '../../../application/list-my-reservations.use-case';
-import { RESERVATION_STATUSES, Reservation, ReservationStatus } from '../../../domain/model/reservation';
+import { Reservation, ReservationStatus } from '../../../domain/model/reservation';
 import { STATUS_SEAL, limaDateTime } from '../../reservation-view';
 
 type ViewState = 'loading' | 'ready' | 'empty' | 'error';
 type Filter = ReservationStatus | 'ALL';
 
-const FILTERS: readonly Filter[] = ['ALL', ...RESERVATION_STATUSES];
+/** Figma screen 4: Activos, Canjeados and Vencidos; the reported ones and all of them after. */
+const FILTERS: readonly Filter[] = ['ACTIVE', 'REDEEMED', 'EXPIRED', 'REPORTED', 'ALL'];
 const SKELETON_CARDS = [1, 2, 3];
 
-/** "Mis reservas": the reservations of the consumer with a status filter (US40, Figma screen 27). */
+/** "Mis Cupones": the reservations of the consumer by status (US40, Figma screens 4 and 27). */
 @Component({
   selector: 'app-my-reservations',
   standalone: true,
@@ -32,7 +33,7 @@ export class MyReservationsPage implements OnInit {
   protected readonly skeletons = SKELETON_CARDS;
   protected readonly seals = STATUS_SEAL;
   protected readonly limaDateTime = limaDateTime;
-  protected readonly filter = signal<Filter>('ALL');
+  protected readonly filter = signal<Filter>('ACTIVE');
   protected readonly state = signal<ViewState>('loading');
   protected readonly reservations = signal<Reservation[]>([]);
   protected readonly errorMessage = signal<string | null>(null);

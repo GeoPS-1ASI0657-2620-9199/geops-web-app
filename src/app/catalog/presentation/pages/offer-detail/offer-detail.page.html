@@ -1,8 +1,13 @@
 <section class="page">
-  <a class="back geo-meta" routerLink="/offers">
-    <mat-icon aria-hidden="true">chevron_left</mat-icon>
-    {{ 'offerDetailPage.back' | translate }}
-  </a>
+  <nav class="crumbs" [attr.aria-label]="'offerDetailPage.breadcrumb' | translate">
+    <a routerLink="/offers">{{ 'nav.offers' | translate }}</a>
+    @if (offer(); as o) {
+      <mat-icon aria-hidden="true">chevron_right</mat-icon>
+      <span>{{ o.category }}</span>
+      <mat-icon aria-hidden="true">chevron_right</mat-icon>
+      <span class="current">{{ o.title }}</span>
+    }
+  </nav>
 
   @switch (state()) {
     @case ('loading') {
@@ -32,14 +37,14 @@
         <div class="layout">
           <article class="main">
             @if (o.imageUrl) {
-              <img class="photo" [src]="o.imageUrl" [alt]="o.title" />
+              <img class="photo" [class.muted]="!o.available" [src]="o.imageUrl" [alt]="o.title" />
             } @else {
               <div class="photo placeholder" aria-hidden="true">
-                <mat-icon>sell</mat-icon>
+                <mat-icon>{{ icon() }}</mat-icon>
                 <span>{{ o.category }}</span>
               </div>
             }
-            <h1 class="geo-page-title">{{ o.title }}</h1>
+            <h1 class="title">{{ o.title }}</h1>
             <div class="merchant">
               <span class="name">{{ o.businessName }}</span>
               @if (o.source === 'PUBLIC_SOURCE') {
@@ -57,74 +62,94 @@
                 kind="error"
                 [title]="'offerDetailPage.unavailable.title' | translate"
                 [description]="'offerDetailPage.unavailable.description' | translate" />
+            } @else if (o.source === 'AFFILIATED') {
+              <geo-alert
+                kind="success"
+                [title]="'offerDetailPage.promise.title' | translate"
+                [description]="'offerDetailPage.promise.description' | translate" />
             }
 
-            <h2 class="geo-section-title">{{ 'offerDetailPage.conditions' | translate }}</h2>
-            <p class="geo-body conditions">{{ o.conditions }}</p>
+            <h2 class="sub">{{ 'offerDetailPage.includes' | translate }}</h2>
+            <ul class="includes">
+              @for (line of includes(); track $index) {
+                <li>{{ line }}</li>
+              }
+            </ul>
           </article>
 
           <aside class="side">
             <div class="panel">
-              <p class="price geo-tabular" [class.muted]="!o.available">
-                <small>S/</small> {{ o.price | number: '1.2-2' }}
-              </p>
+              <p class="price geo-tabular" [class.muted]="!o.available"><small>S/</small> {{ o.price | number: '1.2-2' }}</p>
               <dl class="facts">
-                <dt>{{ 'offerDetailPage.validity' | translate }}</dt>
-                <dd [class.expired]="!o.available">{{ validity() }}</dd>
-                <dt>{{ 'offerDetailPage.category' | translate }}</dt>
-                <dd>{{ o.category }}</dd>
-                <dt>{{ 'offerDetailPage.address' | translate }}</dt>
-                <dd>{{ o.address }}</dd>
+                <div><dt>{{ 'offerDetailPage.validity' | translate }}</dt><dd [class.expired]="!o.available">{{ validity() }}</dd></div>
+                @if (distance(); as d) {
+                  <div><dt>{{ 'offerDetailPage.distance' | translate }}</dt><dd class="green">{{ 'offerDetailPage.distanceValue' | translate: d }}</dd></div>
+                }
+                <div><dt>{{ 'offerDetailPage.address' | translate }}</dt><dd>{{ o.address }}</dd></div>
+                <div><dt>{{ 'offerDetailPage.category' | translate }}</dt><dd>{{ o.category }}</dd></div>
               </dl>
               @if (canReserve()) {
-                <button
-                  mat-flat-button
-                  type="button"
-                  class="full reserve"
-                  [disabled]="!o.available || reserving()"
-                  (click)="reserve()">
-                  <mat-icon>{{ o.available ? 'confirmation_number' : 'block' }}</mat-icon>
-                  {{
-                    (o.available
-                      ? reserving()
-                        ? 'offerDetailPage.reserving'
-                        : 'offerDetailPage.reserve'
-                      : 'offerDetailPage.notAvailable'
-                    ) | translate
-                  }}
+                <button mat-flat-button type="button" class="reserve" [disabled]="!o.available || reserving()" (click)="reserve()">
+                  <span class="reserve-main">
+                    {{ (o.available ? (reserving() ? 'offerDetailPage.reserving' : 'offerDetailPage.reserve') : 'offerDetailPage.notAvailable') | translate }}
+                  </span>
+                  <span class="reserve-sub">
+                    {{ (!o.available ? 'offerDetailPage.cannotReserve' : isVisitor() ? 'offerDetailPage.loginToReserve' : 'offerDetailPage.payAtStore') | translate }}
+                  </span>
                 </button>
                 @if (reserveFailure(); as failure) {
                   <geo-alert
                     kind="error"
                     [title]="'offerDetailPage.reserveError.' + failure.code + '.title' | translate"
-                    [description]="
-                      failure.message ?? ('offerDetailPage.reserveError.' + failure.code + '.description' | translate)
-                    " />
+                    [description]="failure.message ?? ('offerDetailPage.reserveError.' + failure.code + '.description' | translate)" />
                 }
-                <p class="geo-meta hint">
-                  {{
-                    (!o.available
-                      ? 'offerDetailPage.cannotReserve'
-                      : isVisitor()
-                        ? 'offerDetailPage.loginToReserve'
-                        : 'offerDetailPage.payAtStore'
-                    ) | translate
-                  }}
-                </p>
+                @if (o.available) {
+                  <button mat-stroked-button type="button" class="full" [disabled]="saving()" (click)="save()">
+                    {{ 'offerDetailPage.save' | translate }}
+                  </button>
+                }
+                @if (saveResult(); as key) {
+                  <p class="save-result" role="status">{{ key | translate }}</p>
+                }
               }
             </div>
 
-            <div class="panel map-panel">
-              <geo-location-picker class="map" [point]="o.location" [readOnly]="true" />
-              @if (directionsUrl(); as url) {
-                <a mat-stroked-button class="full" [href]="url" target="_blank" rel="noopener">
-                  <mat-icon>directions_walk</mat-icon>
-                  {{ 'offerDetailPage.directions' | translate }}
-                </a>
-              }
-            </div>
+            <geo-offers-map
+              class="map"
+              [center]="consumerPoint()"
+              [showUser]="!!consumerPoint()"
+              [pins]="pin()"
+              [ariaLabel]="'offerDetailPage.mapLabel' | translate" />
+            @if (directionsUrl(); as url) {
+              <a mat-stroked-button class="full" [href]="url" target="_blank" rel="noopener">{{ 'offerDetailPage.directions' | translate }}</a>
+            }
           </aside>
         </div>
+
+        @if (others().length) {
+          <div class="section-head">
+            <h2 class="section-title">{{ 'offerDetailPage.others' | translate }}</h2>
+            <a class="see-more" routerLink="/offers">{{ 'home.seeMore' | translate }}</a>
+          </div>
+          <div class="grid">
+            @for (other of others(); track other.offerId) {
+              <a class="card-link" [routerLink]="['/offers', other.offerId]">
+                <geo-offer-card
+                  [kind]="other.verifiedSeal ? 'verified' : 'standard'"
+                  [title]="other.title"
+                  [merchant]="other.businessName"
+                  [imageUrl]="other.imageUrl"
+                  [category]="other.category"
+                  [validity]="validityOf(other.validTo)"
+                  [price]="other.price"
+                  [distanceMeters]="other.distanceMeters"
+                  [walkMinutes]="other.walkMinutes">
+                  <app-offer-card-actions [offerId]="other.offerId" />
+                </geo-offer-card>
+              </a>
+            }
+          </div>
+        }
       }
     }
   }

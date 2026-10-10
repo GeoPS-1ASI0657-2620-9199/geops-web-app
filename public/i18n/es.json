@@ -2,7 +2,7 @@
   "header": {
     "logo": "GeoPs",
     "search": {
-      "placeholder": "Buscar y encuentra las mejores ofertas"
+      "placeholder": "Busca y encuentra las mejores ofertas"
     },
     "help": "Ayuda",
     "notifications": "Notificaciones",
@@ -13,6 +13,15 @@
         "settings": "Configuración",
         "logout": "Cerrar sesión"
       }
+    },
+    "logIn": "Iniciar sesión",
+    "accountMenu": "Menú de la cuenta",
+    "noNotices": "No tienes avisos nuevos.",
+    "helpMenu": {
+      "title": "Cómo funciona GeoPS",
+      "step1": "Elige tu distrito o comparte tu ubicación y mira las ofertas a pocos minutos a pie.",
+      "step2": "Reserva sin pagar: te damos un código.",
+      "step3": "Muestra el código en el local y paga ahí mismo."
     }
   },
   "registerPage": {
@@ -124,7 +133,7 @@
   },
   "campaignsPage": {
     "title": "Mis campañas",
-    "new": "Publicar campaña",
+    "new": "Nueva campaña",
     "created": {
       "title": "Campaña publicada",
       "description": "Ya se muestra a los clientes dentro de la zona que elegiste."
@@ -132,6 +141,34 @@
     "empty": {
       "title": "Publica una oferta para tu zona",
       "description": "Elige el producto, el precio con descuento, la vigencia y hasta dónde quieres llegar."
+    },
+    "summary": "{{active}} activas · {{paused}} pausadas · {{finished}} finalizadas",
+    "filters": {
+      "ALL": "Todas",
+      "ACTIVE": "Activas",
+      "PAUSED": "Pausadas",
+      "FINISHED": "Finalizadas"
+    },
+    "status": {
+      "ACTIVE": "Activa",
+      "PAUSED": "Pausada",
+      "FINISHED": "Finalizada"
+    },
+    "columns": {
+      "campaign": "Campaña",
+      "status": "Estado",
+      "period": "Vigencia",
+      "zone": "Alcance",
+      "offers": "Ofertas",
+      "price": "Precio",
+      "actions": "Acciones"
+    },
+    "seeOffer": "Ver oferta",
+    "noneInFilter": "No tienes campañas en este estado.",
+    "error": {
+      "title": "No pudimos cargar tus campañas",
+      "description": "Puede ser tu conexión o el servicio. Inténtalo de nuevo en un momento.",
+      "retry": "Reintentar"
     }
   },
   "forbiddenPage": {
@@ -185,7 +222,7 @@
     "validity": "Vigencia",
     "category": "Categoría",
     "address": "Local",
-    "reserve": "Reservar · pagas en el local",
+    "reserve": "Reservar",
     "notAvailable": "No disponible",
     "payAtStore": "Pagas en el local. No pedimos tu tarjeta.",
     "cannotReserve": "Esta oferta ya venció y no se puede reservar.",
@@ -222,6 +259,17 @@
         "title": "No pudimos hacer la reserva",
         "description": "Inténtalo de nuevo en un momento."
       }
+    },
+    "breadcrumb": "Ruta de navegación",
+    "includes": "Qué incluye",
+    "distance": "Distancia",
+    "distanceValue": "{{meters}} m · {{minutes}} min a pie",
+    "save": "Guardar en favoritos",
+    "mapLabel": "Ubicación del local",
+    "others": "Otras ofertas cerca de ti",
+    "promise": {
+      "title": "La oferta se respeta o el comercio baja en el ranking",
+      "description": "Si llegas dentro del plazo y no te la respetan, repórtalo desde tu reserva."
     }
   },
   "reservation": {
@@ -233,7 +281,7 @@
     }
   },
   "reservationPage": {
-    "back": "Mis reservas",
+    "back": "Mis Cupones",
     "title": "Mi reserva",
     "created": {
       "title": "Listo, tu oferta está reservada",
@@ -291,17 +339,21 @@
       "title": "No pudimos cargar tu reserva",
       "description": "Puede ser tu conexión o el servicio. Inténtalo de nuevo en un momento.",
       "retry": "Reintentar"
-    }
+    },
+    "expiresIn": "Vence en {{time}}",
+    "payAtStore": "Pagas en el local",
+    "store": "Local",
+    "mapLabel": "Ubicación del local"
   },
   "reservationsPage": {
-    "title": "Mis reservas",
+    "title": "Mis Cupones",
     "filterLabel": "Filtrar por estado",
     "filters": {
-      "ALL": "Todas",
-      "ACTIVE": "Activas",
-      "REDEEMED": "Canjeadas",
-      "EXPIRED": "Vencidas",
-      "REPORTED": "Reportadas"
+      "ALL": "Todos",
+      "ACTIVE": "Activos",
+      "REDEEMED": "Canjeados",
+      "EXPIRED": "Vencidos",
+      "REPORTED": "Reportados"
     },
     "code": "Código",
     "reservedAt": "Reservada",
@@ -310,19 +362,206 @@
     "redeemedAt": "Canjeada",
     "open": "Ver reserva",
     "empty": {
-      "title": "Todavía no tienes reservas",
+      "title": "No tienes cupones activos",
       "description": "Reserva una oferta cercana y paga en el local. Aquí verás su código.",
-      "action": "Ver ofertas cercanas"
+      "action": "Ver ofertas"
     },
     "emptyFiltered": {
-      "title": "No tienes reservas en este estado",
-      "description": "Prueba con otro filtro o mira todas tus reservas.",
-      "action": "Ver todas"
+      "title": "No tienes cupones en este estado",
+      "description": "Prueba con otro filtro.",
+      "action": "Ver todos"
     },
     "error": {
       "title": "No pudimos cargar tus reservas",
       "description": "Puede ser tu conexión o el servicio. Inténtalo de nuevo en un momento.",
       "retry": "Reintentar"
     }
+  },
+  "nav": {
+    "label": "Navegación principal",
+    "home": "Inicio",
+    "offers": "Ofertas",
+    "categories": "Categorías",
+    "favorites": "Favoritos",
+    "coupons": "Mis Cupones",
+    "summary": "Resumen",
+    "validate": "Validar código",
+    "campaigns": "Campañas",
+    "create": "Crear",
+    "reports": "Reportes",
+    "comments": "Comentarios"
+  },
+  "search": {
+    "places": "Lugares:",
+    "changeDistrict": "Cambiar distrito",
+    "radius": "Radio:",
+    "minutes": "{{minutes}} min a pie",
+    "categories": "Categorías",
+    "all": "Todos",
+    "otherDistrict": "Otro distrito",
+    "searchIn": "Buscar en {{district}}",
+    "pickOne": "Elige un distrito",
+    "retryGps": "Reintentar con GPS"
+  },
+  "home": {
+    "eyebrow": "Te damos la bienvenida",
+    "greeting": "Hola, {{name}}",
+    "greetingVisitor": "Hola, mira lo que hay cerca",
+    "logInToReserve": "Inicia sesión para reservar",
+    "nearYou": "Cerca de ti",
+    "walking": "A {{minutes}} minutos caminando",
+    "seeMore": "Ver más"
+  },
+  "offersPage": {
+    "title": "Ofertas cerca de ti",
+    "resultsFor": "Resultados para «{{term}}»",
+    "noMatch": {
+      "title": "No encontramos ofertas con ese filtro",
+      "description": "Prueba con otra palabra, otra categoría o amplía el radio.",
+      "clear": "Quitar la búsqueda"
+    }
+  },
+  "categoriesPage": {
+    "title": "Ofertas cerca de ti",
+    "atMinutes": "a {{minutes}} min",
+    "categories": "categorías",
+    "inRadius": "En tu radio",
+    "seeAll": "Ver las {{total}} ofertas",
+    "orderBy": "Ordenar por",
+    "order": {
+      "distance": "Distancia",
+      "price": "Precio más bajo",
+      "expiry": "Vencen pronto"
+    },
+    "legend": {
+      "title": "Leyenda",
+      "verified": "Comercio afiliado",
+      "you": "Tu ubicación · {{note}}",
+      "district": "Centro del distrito"
+    }
+  },
+  "seal": {
+    "verified": "Verificado"
+  },
+  "offerActions": {
+    "reserve": "Reservar",
+    "save": "Guardar",
+    "saved": "Guardamos la oferta en tus favoritos.",
+    "errors": {
+      "OFFER_NOT_AVAILABLE": "Esta oferta ya no se puede reservar.",
+      "OFFER_NOT_FOUND": "Todavía no podemos guardar esta oferta. Inténtalo más tarde.",
+      "OFFER_EXPIRED": "Esta oferta ya venció.",
+      "CATALOG_UNAVAILABLE": "El catálogo no respondió. Inténtalo de nuevo.",
+      "DEFAULT": "No pudimos completar la acción. Inténtalo de nuevo."
+    }
+  },
+  "favoritesPage": {
+    "title": "Mis Favoritos",
+    "count": "{{total}} ofertas guardadas",
+    "current": "Vigentes · puedes usarlas ahora",
+    "expired": "Ya no disponibles",
+    "offers": "{{total}} ofertas",
+    "remove": "Quitar",
+    "similar": "Ver similares",
+    "notice": {
+      "title": "Te avisamos cuando estés cerca",
+      "description": "Si activas los avisos, te escribimos cuando un comercio que sigues publique una oferta en tu zona."
+    },
+    "empty": {
+      "title": "Todavía no guardas ofertas",
+      "description": "Toca «Guardar» en una oferta para tenerla a mano aquí.",
+      "action": "Ver ofertas"
+    },
+    "error": {
+      "title": "No pudimos cargar tus favoritos",
+      "description": "Puede ser tu conexión o el servicio. Inténtalo de nuevo en un momento.",
+      "retry": "Reintentar"
+    }
+  },
+  "businessSummary": {
+    "greeting": "Hola, {{name}}",
+    "subtitle": "Así van tus campañas en GeoPS",
+    "ownerAccount": "Cuenta de comercio",
+    "metrics": {
+      "active": "Campañas activas",
+      "activeHint": "de {{total}} publicadas",
+      "offers": "Ofertas publicadas",
+      "offersHint": "visibles para los vecinos",
+      "reach": "Alcance actual",
+      "reachHint": "radio de tu campaña más reciente",
+      "finished": "Campañas finalizadas",
+      "finishedHint": "ya no se muestran"
+    },
+    "activeCampaigns": "Tus campañas activas",
+    "offerCount": "{{total}} ofertas",
+    "zone": "Tu zona de alcance",
+    "zoneType": "Zona",
+    "walking": "Equivale a",
+    "create": "Crear nueva campaña",
+    "seeCampaigns": "Ver mis campañas",
+    "offerCountOne": "1 oferta"
+  },
+  "validatePage": {
+    "title": "Validar código de reserva",
+    "hint": "Pide el código al cliente antes de cobrar.",
+    "code": "Código",
+    "placeholder": "Ej. K7P3XM9Q",
+    "validate": "Validar",
+    "checking": "Validando…",
+    "valid": "Código válido",
+    "offer": "Oferta",
+    "expires": "Vence",
+    "left": "en {{time}}",
+    "reservedAt": "Reservado",
+    "another": "Validar otro código",
+    "charge": "Cobra el precio de la oferta. El cliente no pagó nada al reservar.",
+    "rejected": {
+      "MALFORMED": {
+        "title": "Ese código no tiene el formato correcto",
+        "description": "El código tiene 8 letras y números, sin 0, O, 1, I ni L."
+      },
+      "NOT_FOUND": {
+        "title": "No encontramos ese código",
+        "description": "Revisa que esté bien escrito. Si es de otro comercio, no aparece aquí."
+      },
+      "OTHER_BUSINESS": {
+        "title": "La reserva no corresponde a tu comercio",
+        "description": "El código {{code}} es de otro local."
+      },
+      "REDEEMED": {
+        "title": "Este código ya se canjeó",
+        "description": "{{code}} se canjeó el {{date}}."
+      },
+      "EXPIRED": {
+        "title": "La reserva ya venció",
+        "description": "El plazo de {{code}} terminó el {{date}}."
+      },
+      "REPORTED": {
+        "title": "Esta reserva tiene un reporte abierto",
+        "description": "Revísalo en Reportes antes de cobrar."
+      },
+      "NETWORK": {
+        "title": "No pudimos validar el código",
+        "description": "Revisa tu conexión e inténtalo de nuevo."
+      }
+    },
+    "how": {
+      "title": "Cómo validar",
+      "step1": "El cliente te muestra su código de 8 caracteres.",
+      "step2": "Escríbelo aquí y pulsa Validar.",
+      "step3": "Si sale válido, cobra el precio de la oferta en caja."
+    }
+  },
+  "reportsPage": {
+    "title": "Reportes de clientes",
+    "emptyTitle": "No tienes reportes abiertos",
+    "emptyDescription": "Si un cliente indica que no se respetó una oferta, lo verás aquí con el plazo para responder.",
+    "action": "Validar un código"
+  },
+  "commentsPage": {
+    "title": "Comentarios de clientes",
+    "emptyTitle": "Aún no tienes comentarios",
+    "emptyDescription": "Los clientes comentan después de canjear una oferta en tu local.",
+    "action": "Ver mis campañas"
   }
 }

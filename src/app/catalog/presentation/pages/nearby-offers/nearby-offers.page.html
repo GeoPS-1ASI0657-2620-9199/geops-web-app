@@ -1,102 +1,74 @@
 <section class="page">
-  <h1 class="geo-page-title">{{ 'nearbyPage.title' | translate }}</h1>
-
-  @if (state() === 'locating') {
-    <geo-empty-state
-      icon="my_location"
-      [title]="'nearbyPage.locating.title' | translate"
-      [description]="'nearbyPage.locating.description' | translate" />
-  } @else if (state() === 'pick-district') {
-    @if (pickReason() === 'IMPRECISE') {
-      <geo-alert
-        kind="warning"
-        [title]="'nearbyPage.imprecise.title' | translate: { meters: (imprecision() | number: '1.0-0') }"
-        [description]="'nearbyPage.imprecise.description' | translate" />
+  <div class="head">
+    <div>
+      <h1 class="title">{{ 'offersPage.title' | translate }}</h1>
+      @if (search.state() === 'ready') {
+        <p class="subtitle">
+          {{ (search.total() === 1 ? 'nearbyPage.countOne' : 'nearbyPage.count') | translate: { total: search.total(), minutes: search.radius() } }}
+        </p>
+      }
+    </div>
+    @if (term()) {
+      <button class="term" type="button" (click)="clearTerm()">
+        {{ 'offersPage.resultsFor' | translate: { term: term() } }}
+        <mat-icon aria-hidden="true">close</mat-icon>
+      </button>
     }
-    <div class="panel pick">
-      @if (pickReason() === 'IMPRECISE' || !pickReason()) {
-        <h2 class="geo-section-title">{{ 'nearbyPage.pick.title' | translate }}</h2>
-      } @else {
-        <h2 class="geo-section-title">{{ 'nearbyPage.pick.noLocationTitle' | translate }}</h2>
-        <p class="geo-body dim">{{ 'nearbyPage.pick.reason.' + pickReason() | translate }}</p>
-      }
-      <app-district-selector
-        [selected]="origin()?.districtName ?? null"
-        (districtSelected)="onDistrictSelected($event)" />
-      @if (pickReason() !== 'INSECURE_CONTEXT') {
-        <button mat-stroked-button type="button" (click)="useDeviceLocation()">
-          <mat-icon>my_location</mat-icon>
-          {{ 'nearbyPage.pick.retryGps' | translate }}
-        </button>
-      }
-    </div>
-  } @else {
-    <div class="panel toolbar">
-      <div class="origin">
-        <span class="geo-body dim">{{ 'nearbyPage.places' | translate }}</span>
-        <span class="place">
-          <mat-icon aria-hidden="true">location_on</mat-icon>
-          @if (origin()?.districtName; as district) {
-            {{ district }}
-          } @else {
-            {{ 'nearbyPage.yourLocation' | translate }} · ±{{ origin()?.accuracyMeters }} m
-          }
-        </span>
-        <button mat-button type="button" (click)="changeDistrict()">{{ 'nearbyPage.changeDistrict' | translate }}</button>
-      </div>
-      <app-radius-control [minutes]="radius()" (changed)="onRadiusChanged($event)" />
-    </div>
+  </div>
 
-    @if (state() === 'loading') {
+  <app-search-gate>
+    <app-search-panel
+      [placeLabel]="placeLabel()"
+      [approximate]="!!search.origin()?.districtName"
+      [radius]="search.radius()"
+      [categories]="search.categories()"
+      [category]="category()"
+      (changeDistrict)="search.changeDistrict()"
+      (radiusChange)="onRadius($event)"
+      (categoryChange)="category.set($event)" />
+
+    @if (search.state() === 'loading') {
       <div class="grid" aria-busy="true" [attr.aria-label]="'nearbyPage.searching' | translate">
         @for (s of skeletons; track s) {
           <div class="skeleton"></div>
         }
       </div>
-    } @else if (state() === 'empty') {
+    } @else if (visible().length === 0) {
       <geo-empty-state
         icon="search_off"
-        [title]="'nearbyPage.empty.title' | translate: { minutes: radius() }"
-        [description]="'nearbyPage.empty.description' | translate">
-        @if (nextRadius(); as next) {
-          <button mat-flat-button type="button" (click)="widenRadius()">
-            {{ 'nearbyPage.empty.widen' | translate: { minutes: next } }}
-          </button>
+        [title]="'offersPage.noMatch.title' | translate"
+        [description]="'offersPage.noMatch.description' | translate">
+        @if (term()) {
+          <button mat-stroked-button type="button" (click)="clearTerm()">{{ 'offersPage.noMatch.clear' | translate }}</button>
         }
-        <button mat-stroked-button type="button" (click)="changeDistrict()">{{ 'nearbyPage.changeDistrict' | translate }}</button>
-      </geo-empty-state>
-    } @else if (state() === 'error') {
-      <geo-empty-state
-        icon="cloud_off"
-        [title]="'nearbyPage.error.title' | translate"
-        [description]="errorMessage() ?? ('nearbyPage.error.description' | translate)">
-        <button mat-flat-button type="button" (click)="retry()">{{ 'nearbyPage.error.retry' | translate }}</button>
       </geo-empty-state>
     } @else {
-      <p class="geo-meta count">{{ (lastPage()?.totalElements === 1 ? 'nearbyPage.countOne' : 'nearbyPage.count') | translate: { total: lastPage()?.totalElements, minutes: radius() } }}</p>
       <div class="grid">
-        @for (offer of offers(); track offer.offerId; let i = $index) {
+        @for (offer of visible(); track offer.offerId; let i = $index) {
           <a class="card-link" [routerLink]="['/offers', offer.offerId]">
             <geo-offer-card
               [kind]="offer.verifiedSeal ? 'verified' : 'standard'"
               [title]="offer.title"
               [merchant]="offer.businessName"
+              [imageUrl]="offer.imageUrl"
               [category]="offer.category"
               [validity]="validity(offer)"
               [price]="offer.price"
               [distanceMeters]="offer.distanceMeters"
               [walkMinutes]="offer.walkMinutes"
-              [priority]="i < 3" />
+              [priority]="i < 3">
+              <app-offer-card-actions [offerId]="offer.offerId" />
+            </geo-offer-card>
           </a>
         }
       </div>
-      @if (canLoadMore()) {
-        <div class="more">
-          <button mat-stroked-button type="button" (click)="loadMore()" [disabled]="loadingMore()">
-            {{ (loadingMore() ? 'nearbyPage.loadingMore' : 'nearbyPage.loadMore') | translate }}
-          </button>
-        </div>
-      }
     }
-  }
+    @if (search.canLoadMore()) {
+      <div class="more">
+        <button mat-stroked-button type="button" (click)="search.loadMore()" [disabled]="search.loadingMore()">
+          {{ (search.loadingMore() ? 'nearbyPage.loadingMore' : 'nearbyPage.loadMore') | translate }}
+        </button>
+      </div>
+    }
+  </app-search-gate>
 </section>

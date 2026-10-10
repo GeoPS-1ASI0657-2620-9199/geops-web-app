@@ -10,6 +10,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { iamProviders } from './iam/infrastructure/iam.providers';
 import { catalogProviders } from './catalog/infrastructure/catalog.providers';
+import { engagementProviders } from './engagement/infrastructure/engagement.providers';
 import { reservationProviders } from './reservation/infrastructure/reservation.providers';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './core/http/auth.interceptor';
@@ -29,6 +30,7 @@ export const appConfig: ApplicationConfig = {
     ...iamProviders,
     ...catalogProviders,
     ...reservationProviders,
+    ...engagementProviders,
     // Material Symbols Rounded, the same icon set as the Figma Icono/* components.
     provideAppInitializer(() => {
       inject(MatIconRegistry).setDefaultFontSetClass('material-symbols-rounded');

@@ -5,6 +5,7 @@ import { ApiError, NETWORK_ERROR } from '../../../../shared/domain/api-error';
 import { Reservation } from '../../../domain/model/reservation';
 import { ReservationRepository } from '../../../domain/ports/reservation.repository';
 import { ReservationDetailPage } from './reservation-detail.page';
+import { OfferRepository } from '../../../../catalog/domain/ports/offer.repository';
 
 const RESERVATION: Reservation = {
   reservationId: 15,
@@ -22,14 +23,18 @@ const RESERVATION: Reservation = {
 describe('ReservationDetailPage', () => {
   let fixture: ComponentFixture<ReservationDetailPage>;
   let reservations: jasmine.SpyObj<ReservationRepository>;
+  let offers: jasmine.SpyObj<OfferRepository>;
 
   const render = async (id = '15', query: Record<string, string> = {}) => {
+    offers = jasmine.createSpyObj<OfferRepository>('OfferRepository', ['findNearby', 'findById']);
+    offers.findById.and.rejectWith(new ApiError(NETWORK_ERROR, 'sin conexión'));
     await TestBed.configureTestingModule({
       imports: [ReservationDetailPage],
       providers: [
         provideRouter([]),
         provideTranslateService(),
         { provide: ReservationRepository, useValue: reservations },
+        { provide: OfferRepository, useValue: offers },
         {
           provide: ActivatedRoute,
           useValue: { snapshot: { paramMap: convertToParamMap({ id }), queryParamMap: convertToParamMap(query) } },

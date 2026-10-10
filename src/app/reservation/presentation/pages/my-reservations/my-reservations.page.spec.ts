@@ -63,30 +63,30 @@ describe('MyReservationsPage', () => {
     ]);
   });
 
-  it('lists every reservation with its code and status', async () => {
+  it('opens on the active coupons, each with its code and status (Figma 4)', async () => {
     reservations.findMine.and.resolveTo([ACTIVE, REDEEMED]);
 
     const page = await render();
 
-    expect(reservations.findMine).toHaveBeenCalledWith(null);
+    expect(reservations.findMine).toHaveBeenCalledWith('ACTIVE');
     expect(page.querySelectorAll('.card').length).toBe(2);
     expect(page.textContent).toContain('K7P3XM9Q');
     expect(page.textContent).toContain('Desayuno 2x1');
     expect(page.querySelectorAll('.code.void').length).toBe(1);
   });
 
-  it('offers one filter per status of the service plus all', async () => {
+  it('offers Activos, Canjeados and Vencidos first, then the reported ones and all', async () => {
     reservations.findMine.and.resolveTo([ACTIVE]);
 
     const page = await render();
 
     const labels = Array.from(page.querySelectorAll('.chip')).map((button) => button.textContent?.trim());
     expect(labels).toEqual([
-      'reservationsPage.filters.ALL',
       'reservationsPage.filters.ACTIVE',
       'reservationsPage.filters.REDEEMED',
       'reservationsPage.filters.EXPIRED',
       'reservationsPage.filters.REPORTED',
+      'reservationsPage.filters.ALL',
     ]);
   });
 

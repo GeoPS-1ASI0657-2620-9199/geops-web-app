@@ -1,3 +1,5 @@
+import { GeoPoint } from '../../../shared/domain/geo-point';
+
 /** Search limits of US02 and US03 (Informe 4.3.2.5, BRD-04): radius in walking minutes. */
 export const MIN_RADIUS_MINUTES = 5;
 export const MAX_RADIUS_MINUTES = 20;
@@ -16,6 +18,11 @@ export interface NearbyOffer {
   readonly distanceMeters: number;
   readonly walkMinutes: number;
   readonly category: string;
+  readonly address: string;
+  /** Photo of the offer, or null when the business did not upload one. */
+  readonly imageUrl: string | null;
+  /** Where the offer is redeemed, for the map pins. */
+  readonly location: GeoPoint;
   readonly price: number;
   /** Last valid day, ISO date (yyyy-mm-dd). */
   readonly validTo: string;

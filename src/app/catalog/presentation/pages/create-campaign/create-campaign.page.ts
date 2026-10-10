@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, Injector, afterNextRender, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, ElementRef, Injector, afterNextRender, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AbstractControl, FormArray, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -9,12 +9,15 @@ import { MatInputModule } from '@angular/material/input';
 import { SessionStore } from '../../../../iam/application/session.store';
 import { ApiError } from '../../../../shared/domain/api-error';
 import { GeoPoint } from '../../../../shared/domain/geo-point';
+import { GeoSeal } from '../../../../shared/ui/geo-seal/geo-seal';
 import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { GeoLocationPicker } from '../../../../shared/ui/geo-location-picker/geo-location-picker';
 import { CreateCampaignUseCase } from '../../../application/create-campaign.use-case';
 import { CampaignZone, todayInLima } from '../../../domain/model/campaign';
 import { ZoneSelector } from '../../components/zone-selector/zone-selector';
 
+/** Same limit as OfferJpaEntity.IMAGE_URL_LENGTH in catalog-service. */
+const IMAGE_URL_MAX_LENGTH = 500;
 const NAME_MAX_LENGTH = 150;
 const DESCRIPTION_MAX_LENGTH = 500;
 const ADDRESS_MAX_LENGTH = 255;
@@ -34,6 +37,7 @@ const END_DATE_CODES = ['CAMPAIGN_ALREADY_ENDED', 'INVALID_CAMPAIGN_PERIOD'];
     MatInputModule,
     GeoAlert,
     GeoLocationPicker,
+    GeoSeal,
     ZoneSelector,
   ],
   templateUrl: './create-campaign.page.html',
@@ -44,6 +48,7 @@ export class CreateCampaignPage {
   private readonly createCampaign = inject(CreateCampaignUseCase);
   private readonly router = inject(Router);
   private readonly sessions = inject(SessionStore);
+  protected readonly businessName = computed(() => this.sessions.session()?.businessName ?? null);
   private readonly fb = inject(FormBuilder).nonNullable;
   private readonly host = inject(ElementRef<HTMLElement>);
   private readonly injector = inject(Injector);
@@ -125,6 +130,7 @@ export class CreateCampaignPage {
           price: Number(offer.price),
           validTo: offer.validTo,
           category: offer.category,
+          imageUrl: offer.imageUrl?.trim() || null,
         })),
       });
       await this.router.navigate(['/campaigns'], { queryParams: { created: 1 } });
@@ -169,6 +175,7 @@ export class CreateCampaignPage {
       price: [null as number | null, [Validators.required, Validators.min(0.01)]],
       validTo: ['', Validators.required],
       category: ['', [Validators.required, Validators.maxLength(NAME_MAX_LENGTH)]],
+      imageUrl: ['', [Validators.maxLength(IMAGE_URL_MAX_LENGTH), Validators.pattern(/^https:\/\/\S+$/)]],
     });
   }
 }

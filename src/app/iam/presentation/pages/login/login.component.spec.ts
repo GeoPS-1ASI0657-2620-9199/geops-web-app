@@ -49,7 +49,7 @@ describe('LoginComponent', () => {
 
     await fixture.componentInstance.submit();
 
-    expect(router.navigateByUrl).toHaveBeenCalledWith('/campaigns');
+    expect(router.navigateByUrl).toHaveBeenCalledWith('/business');
   });
 
   it('sends a consumer to the nearby offers (US21)', async () => {
@@ -59,7 +59,7 @@ describe('LoginComponent', () => {
 
     await fixture.componentInstance.submit();
 
-    expect(router.navigateByUrl).toHaveBeenCalledWith('/offers');
+    expect(router.navigateByUrl).toHaveBeenCalledWith('/inicio');
   });
 
   it('goes back to the page that asked for login', async () => {

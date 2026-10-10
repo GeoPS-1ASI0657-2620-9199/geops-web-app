@@ -3,6 +3,7 @@ import { Router, provideRouter } from '@angular/router';
 import { Session } from '../../../iam/domain/model/session';
 import { SessionStorage } from '../../../iam/domain/ports/session.storage';
 import { Layout } from './layout';
+import { provideTranslateService } from '@ngx-translate/core';
 
 class MemorySessionStorage extends SessionStorage {
   constructor(public stored: Session | null) {
@@ -37,7 +38,7 @@ describe('Layout', () => {
     storage = new MemorySessionStorage(session);
     await TestBed.configureTestingModule({
       imports: [Layout],
-      providers: [provideRouter([]), { provide: SessionStorage, useValue: storage }],
+      providers: [provideRouter([]), provideTranslateService(), { provide: SessionStorage, useValue: storage }],
     }).compileComponents();
     fixture = TestBed.createComponent(Layout);
     fixture.detectChanges();
@@ -45,24 +46,24 @@ describe('Layout', () => {
   const tabs = () =>
     Array.from((fixture.nativeElement as HTMLElement).querySelectorAll('.tab')).map((a) => a.textContent?.trim());
 
-  it('shows the campaign tabs and the business name to an owner', async () => {
+  it('shows the six business tabs of the Figma and the business name to an owner', async () => {
     await create(OWNER);
 
-    expect(tabs()).toEqual(['Mis campañas', 'Publicar campaña']);
+    expect(tabs()).toEqual(['nav.summary', 'nav.validate', 'nav.campaigns', 'nav.create', 'nav.reports', 'nav.comments']);
     expect(fixture.nativeElement.textContent).toContain('Menús Doña Mirta');
   });
 
-  it('shows the offers and reservations tabs to a consumer', async () => {
+  it('shows the five buyer tabs of the Figma to a consumer', async () => {
     await create({ ...OWNER, role: 'CONSUMER', businessId: undefined, businessName: undefined, consumerId: 2001 });
 
-    expect(tabs()).toEqual(['Ofertas cercanas', 'Mis reservas']);
+    expect(tabs()).toEqual(['nav.home', 'nav.offers', 'nav.categories', 'nav.favorites', 'nav.coupons']);
   });
 
-  it('shows only the offers tab and the login link to a visitor', async () => {
+  it('shows the buyer tabs and the login link to a visitor', async () => {
     await create(null);
 
-    expect(tabs()).toEqual(['Ofertas cercanas']);
-    expect(fixture.nativeElement.textContent).toContain('Iniciar sesión');
+    expect(tabs()).toEqual(['nav.home', 'nav.offers', 'nav.categories', 'nav.favorites', 'nav.coupons']);
+    expect(fixture.nativeElement.textContent).toContain('header.logIn');
   });
 
   it('logs out and goes to login', async () => {

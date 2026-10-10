@@ -1,15 +1,16 @@
-<section class="panel">
+<section class="page">
   <header class="head">
     <div>
-      <h1 class="geo-page-title">{{ 'campaignsPage.title' | translate }}</h1>
-      @if (sessions.session()?.businessName; as business) {
-        <p class="geo-meta">{{ business }}</p>
+      <h1 class="title">{{ 'campaignsPage.title' | translate }}</h1>
+      @if (state() === 'ready') {
+        <p class="subtitle">
+          {{ 'campaignsPage.summary' | translate: { active: counts().ACTIVE, paused: counts().PAUSED, finished: counts().FINISHED } }}
+        </p>
+      } @else if (sessions.session()?.businessName; as business) {
+        <p class="subtitle">{{ business }}</p>
       }
     </div>
-    <a mat-flat-button routerLink="/campaigns/new">
-      <mat-icon>add</mat-icon>
-      {{ 'campaignsPage.new' | translate }}
-    </a>
+    <a mat-flat-button routerLink="/campaigns/new">+ {{ 'campaignsPage.new' | translate }}</a>
   </header>
 
   @if (justCreated) {
@@ -19,10 +20,77 @@
       [description]="'campaignsPage.created.description' | translate" />
   }
 
-  <geo-empty-state
-    icon="campaign"
-    [title]="'campaignsPage.empty.title' | translate"
-    [description]="'campaignsPage.empty.description' | translate">
-    <a mat-flat-button routerLink="/campaigns/new">{{ 'campaignsPage.new' | translate }}</a>
-  </geo-empty-state>
+  @switch (state()) {
+    @case ('loading') {
+      <div class="skeleton" aria-busy="true"></div>
+    }
+    @case ('empty') {
+      <geo-empty-state
+        icon="campaign"
+        [title]="'campaignsPage.empty.title' | translate"
+        [description]="'campaignsPage.empty.description' | translate">
+        <a mat-flat-button routerLink="/campaigns/new">{{ 'campaignsPage.new' | translate }}</a>
+      </geo-empty-state>
+    }
+    @case ('error') {
+      <geo-empty-state
+        icon="cloud_off"
+        [title]="'campaignsPage.error.title' | translate"
+        [description]="errorMessage() ?? ('campaignsPage.error.description' | translate)">
+        <button mat-flat-button type="button" (click)="load()">{{ 'campaignsPage.error.retry' | translate }}</button>
+      </geo-empty-state>
+    }
+    @case ('ready') {
+      <div class="chips" role="group">
+        @for (option of filters; track option) {
+          <button type="button" class="chip" [class.on]="filter() === option" [attr.aria-pressed]="filter() === option" (click)="filter.set(option)">
+            {{ 'campaignsPage.filters.' + option | translate }}
+          </button>
+        }
+      </div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>{{ 'campaignsPage.columns.campaign' | translate }}</th>
+              <th>{{ 'campaignsPage.columns.status' | translate }}</th>
+              <th>{{ 'campaignsPage.columns.period' | translate }}</th>
+              <th>{{ 'campaignsPage.columns.zone' | translate }}</th>
+              <th>{{ 'campaignsPage.columns.offers' | translate }}</th>
+              <th>{{ 'campaignsPage.columns.price' | translate }}</th>
+              <th class="right">{{ 'campaignsPage.columns.actions' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (campaign of visible(); track campaign.campaignId) {
+              <tr [class.ended]="campaign.status === 'FINISHED'">
+                <td>
+                  <span class="name">
+                    <span class="icon"><mat-icon aria-hidden="true">{{ icon(campaign) }}</mat-icon></span>
+                    {{ campaign.name }}
+                  </span>
+                </td>
+                <td><geo-seal [kind]="seals[campaign.status]" [text]="'campaignsPage.status.' + campaign.status | translate" /></td>
+                <td class="dim">{{ period(campaign) }}</td>
+                <td class="dim">{{ zone(campaign) }}</td>
+                <td class="green">{{ campaign.offers.length }}</td>
+                <td class="price">
+                  @if (campaign.offers[0]; as first) {
+                    S/ {{ first.price | number: '1.2-2' }}
+                  }
+                </td>
+                <td class="right">
+                  @if (campaign.offers[0]; as first) {
+                    <a class="action" [routerLink]="['/offers', first.offerId]">{{ 'campaignsPage.seeOffer' | translate }}</a>
+                  }
+                </td>
+              </tr>
+            } @empty {
+              <tr><td colspan="7" class="none">{{ 'campaignsPage.noneInFilter' | translate }}</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
 </section>
