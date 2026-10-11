@@ -10,7 +10,7 @@
         kind="error"
         data-testid="verify-load-error"
         [title]="'verifyBusiness.loadError' | translate"
-        [description]="errorMessage() ?? ('verifyBusiness.network' | translate)">
+        [description]="errorKey() | translate">
         <button mat-stroked-button type="button" class="inline-action" (click)="load()">{{ 'verifyBusiness.retry' | translate }}</button>
       </geo-alert>
     }
@@ -43,7 +43,7 @@
               kind="error"
               data-testid="verify-error"
               [title]="'verifyBusiness.verifyError' | translate"
-              [description]="errorMessage() ?? ('verifyBusiness.network' | translate)" />
+              [description]="errorKey() | translate" />
           }
           @if (result(); as r) {
             <section class="result" [class]="'result ' + tone()" data-testid="verify-result" [attr.role]="r.result === 'REJECTED' ? 'alert' : 'status'">

@@ -139,7 +139,7 @@ describe('VerifyBusinessPage', () => {
     await settle();
 
     expect(gateway.verify).toHaveBeenCalledWith(84, 'Av. José Larco 345, Miraflores');
-    expect(byTestId('verify-error')).not.toBeNull();
+    expect(byTestId('verify-error')?.textContent).toContain('verifyBusiness.error.NETWORK_ERROR');
     expect(host().querySelector<HTMLInputElement>('#address')!.value).toBe('Av. José Larco 345, Miraflores');
 
     gateway.verify.and.resolveTo(
@@ -170,10 +170,21 @@ describe('VerifyBusinessPage', () => {
     expect(byTestId('verify-business')).not.toBeNull();
   });
 
+  it('reads an unknown error code with the generic text', async () => {
+    await render();
+    gateway.verify.and.rejectWith(new ApiError('INTERNAL_ERROR', 'stack trace'));
+
+    await verify();
+
+    expect(byTestId('verify-error')?.textContent).toContain('verifyBusiness.error.GENERIC');
+    expect(byTestId('verify-error')?.textContent).not.toContain('stack trace');
+  });
+
   it('offers to retry when the profile cannot be read', async () => {
     await render(Promise.reject(new ApiError('FORBIDDEN', 'Solo el dueño del negocio puede hacer esta operación.')));
 
-    expect(byTestId('verify-load-error')?.textContent).toContain('Solo el dueño');
+    expect(byTestId('verify-load-error')?.textContent).toContain('verifyBusiness.error.FORBIDDEN');
+    expect(byTestId('verify-load-error')?.textContent).not.toContain('Solo el dueño');
 
     gateway.find.and.resolveTo(PROFILE);
     host().querySelector<HTMLButtonElement>('[data-testid="verify-load-error"] button')!.click();

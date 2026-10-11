@@ -9,10 +9,9 @@ import {
 import { BusinessProfileGateway } from '../domain/ports/business-profile.gateway';
 import { SessionStore } from './session.store';
 
+/** Codes of the checks made here; the screen turns every code into its text (verifyBusiness.error.<CODE>). */
 export const NO_BUSINESS = 'NO_BUSINESS';
 export const INVALID_ADDRESS = 'INVALID_ADDRESS';
-const NO_BUSINESS_MESSAGE = 'Tu sesión no corresponde a un comercio. Vuelve a iniciar sesión.';
-const INVALID_ADDRESS_MESSAGE = `Escribe la dirección del local, con calle y número, en hasta ${ADDRESS_MAX_LENGTH} caracteres.`;
 
 /**
  * The verification of the business of the owner in session (US38). It also keeps the last status it
@@ -42,7 +41,7 @@ export class VerifyBusinessUseCase {
   async verify(correctedAddress: string | null = null): Promise<RucVerification> {
     const address = correctedAddress?.trim() || null;
     if (correctedAddress !== null && (!address || address.length > ADDRESS_MAX_LENGTH)) {
-      throw new ApiError(INVALID_ADDRESS, INVALID_ADDRESS_MESSAGE);
+      throw new ApiError(INVALID_ADDRESS, INVALID_ADDRESS);
     }
     const businessId = this.businessId();
     const verification = await this.profiles.verify(businessId, address);
@@ -53,7 +52,7 @@ export class VerifyBusinessUseCase {
   private businessId(): number {
     const businessId = this.sessions.activeSession()?.businessId;
     if (!businessId) {
-      throw new ApiError(NO_BUSINESS, NO_BUSINESS_MESSAGE);
+      throw new ApiError(NO_BUSINESS, NO_BUSINESS);
     }
     return businessId;
   }

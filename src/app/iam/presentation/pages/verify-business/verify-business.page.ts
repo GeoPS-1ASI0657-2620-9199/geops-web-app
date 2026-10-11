@@ -7,7 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ApiError, NETWORK_ERROR } from '../../../../shared/domain/api-error';
 import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { GeoSeal, SealKind } from '../../../../shared/ui/geo-seal/geo-seal';
-import { VerifyBusinessUseCase } from '../../../application/verify-business.use-case';
+import { INVALID_ADDRESS, NO_BUSINESS, VerifyBusinessUseCase } from '../../../application/verify-business.use-case';
 import {
   ADDRESS_MAX_LENGTH,
   BusinessProfile,
@@ -17,6 +17,24 @@ import {
 } from '../../../domain/model/business-verification';
 
 type ViewState = 'loading' | 'ready' | 'error';
+
+/** Error codes with their own text in verifyBusiness.error.<CODE>; any other reads GENERIC. */
+const ERROR_CODES = [
+  NO_BUSINESS,
+  INVALID_ADDRESS,
+  NETWORK_ERROR,
+  'INVALID_REQUEST',
+  'FORBIDDEN',
+  'UNAUTHORIZED',
+  'BUSINESS_PROFILE_NOT_FOUND',
+  'TAXPAYER_REGISTRY_EMPTY',
+];
+
+/** Translation key of an error; the text never comes from the service or the code. */
+export function errorKeyOf(error: unknown): string {
+  const code = error instanceof ApiError ? error.code : '';
+  return `verifyBusiness.error.${ERROR_CODES.includes(code) ? code : 'GENERIC'}`;
+}
 
 /** Seal of each profile status; the label comes from verifyBusiness.status.<STATUS>. */
 export const STATUS_SEAL: Record<VerificationStatus, SealKind> = {
@@ -54,7 +72,8 @@ export class VerifyBusinessPage implements OnInit {
   protected readonly profile = signal<BusinessProfile | null>(null);
   protected readonly verifying = signal(false);
   protected readonly result = signal<RucVerification | null>(null);
-  protected readonly errorMessage = signal<string | null>(null);
+  /** Translation key of the last error. */
+  protected readonly errorKey = signal('verifyBusiness.error.GENERIC');
   /** The last attempt could not reach a result (network, validation or a refusal of Identity). */
   protected readonly failed = signal(false);
   /** The corrected address; once shown it keeps what the owner typed across attempts (QAS13). */
@@ -86,7 +105,7 @@ export class VerifyBusinessPage implements OnInit {
       }
       this.state.set('ready');
     } catch (error) {
-      this.errorMessage.set(this.messageOf(error));
+      this.errorKey.set(errorKeyOf(error));
       this.state.set('error');
     }
   }
@@ -97,7 +116,6 @@ export class VerifyBusinessPage implements OnInit {
     }
     this.verifying.set(true);
     this.failed.set(false);
-    this.errorMessage.set(null);
     try {
       const result = await this.verification.verify(this.correcting() ? this.address() : null);
       this.showResult(result);
@@ -105,7 +123,7 @@ export class VerifyBusinessPage implements OnInit {
         profile ? { ...profile, address: result.address, verificationStatus: result.verificationStatus } : profile,
       );
     } catch (error) {
-      this.errorMessage.set(this.messageOf(error));
+      this.errorKey.set(errorKeyOf(error));
       this.failed.set(true);
     } finally {
       this.verifying.set(false);
@@ -123,9 +141,5 @@ export class VerifyBusinessPage implements OnInit {
     } else if (result.result === 'APPROVED') {
       this.correcting.set(false);
     }
-  }
-
-  private messageOf(error: unknown): string | null {
-    return error instanceof ApiError && error.code !== NETWORK_ERROR ? error.message : null;
   }
 }
