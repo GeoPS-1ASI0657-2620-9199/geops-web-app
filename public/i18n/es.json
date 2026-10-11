@@ -587,5 +587,67 @@
   "publicSources": {
     "title": "Fuentes públicas, sin garantía",
     "description": "Estas ofertas las publicó una fuente pública y el comercio no está afiliado a GeoPS. Confirma el precio y la vigencia en el local."
+  },
+  "verifyBusiness": {
+    "title": "Verificar mi comercio",
+    "link": "Verificar mi comercio",
+    "hint": "Revisamos tu RUC en el padrón de SUNAT y ubicamos esta dirección en el mapa. Toma unos segundos.",
+    "ruc": "RUC",
+    "address": "Dirección del local",
+    "verify": "Verificar mi comercio",
+    "verifying": "Verificando…",
+    "retry": "Reintentar",
+    "loadError": "No pudimos cargar los datos de tu comercio",
+    "verifyError": "No pudimos completar la verificación",
+    "network": "Revisa tu conexión e inténtalo de nuevo.",
+    "status": {
+      "UNVERIFIED": "Sin verificar",
+      "PENDING": "Verificación pendiente",
+      "VERIFIED": "Verificado",
+      "REJECTED": "Verificación rechazada"
+    },
+    "result": {
+      "APPROVED": "Tu comercio quedó verificado",
+      "PENDING": "La verificación quedó pendiente",
+      "REJECTED": "No pudimos verificar tu comercio"
+    },
+    "reason": {
+      "RUC_NOT_FOUND": {
+        "title": "Tu RUC no figura en el padrón de SUNAT",
+        "fix": "Revisa en SUNAT que el RUC esté inscrito a tu nombre. Si el RUC de tu perfil está mal escrito, escríbenos para corregirlo."
+      },
+      "TAXPAYER_NOT_ACTIVE": {
+        "title": "Tu RUC figura de baja en SUNAT",
+        "fix": "Reactiva tu RUC en SUNAT y vuelve a verificar desde aquí."
+      },
+      "TAXPAYER_NOT_HABIDO": {
+        "title": "Tu RUC figura como no habido",
+        "fix": "Actualiza tu domicilio fiscal en SUNAT hasta figurar como habido y vuelve a verificar."
+      },
+      "ADDRESS_NOT_GEOCODABLE": {
+        "title": "No encontramos tu dirección en el mapa",
+        "fix": "Corrígela abajo con calle, número y distrito. Tu RUC y lo demás que registraste se mantienen."
+      },
+      "GEOCODER_UNAVAILABLE": {
+        "title": "El servicio de mapas no responde ahora",
+        "fix": "No tienes que hacer nada."
+      },
+      "INVALID_RUC": {
+        "title": "El RUC no es válido",
+        "fix": "Revisa los 11 dígitos del RUC de tu perfil."
+      }
+    },
+    "pendingNote": "Volvemos a intentarlo solos cada 10 minutos. El resultado aparecerá aquí y en tu panel; puedes seguir creando campañas mientras tanto.",
+    "correctAddress": "Dirección corregida",
+    "addressHint": "Ej. Av. José Larco 345, Miraflores",
+    "verifyAddress": "Verificar con esta dirección",
+    "toCampaign": "Crear una campaña",
+    "toPanel": "Ir a mi panel",
+    "how": {
+      "title": "Cómo funciona",
+      "step1": "Revisamos que tu RUC esté activo y habido en el padrón de SUNAT.",
+      "step2": "Ubicamos la dirección de tu local en el mapa.",
+      "step3": "Si todo está bien, tus ofertas muestran el sello de verificado."
+    }
   }
 }

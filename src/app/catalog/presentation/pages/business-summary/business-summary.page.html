@@ -4,7 +4,7 @@
       <h1 class="title">{{ 'businessSummary.greeting' | translate: { name: sessions.displayName() } }}</h1>
       <p class="subtitle">{{ 'businessSummary.subtitle' | translate }}</p>
     </div>
-    <geo-seal kind="active" [text]="'businessSummary.ownerAccount' | translate" />
+    <app-business-seal />
   </header>
 
   @switch (state()) {

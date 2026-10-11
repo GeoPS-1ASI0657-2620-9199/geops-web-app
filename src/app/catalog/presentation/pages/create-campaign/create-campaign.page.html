@@ -1,9 +1,7 @@
 <section class="page">
   <header class="head">
     <h1 class="title">Nueva campaña</h1>
-    @if (businessName(); as business) {
-      <geo-seal kind="verified" [text]="business" />
-    }
+    <app-business-seal [name]="businessName()" />
   </header>
 
   <geo-alert

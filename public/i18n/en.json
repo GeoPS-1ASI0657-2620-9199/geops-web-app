@@ -587,5 +587,67 @@
   "publicSources": {
     "title": "Public sources, no guarantee",
     "description": "A public source published these offers and the business is not affiliated with GeoPS. Check the price and validity at the store."
+  },
+  "verifyBusiness": {
+    "title": "Verify my business",
+    "link": "Verify my business",
+    "hint": "We check your RUC in the SUNAT registry and place this address on the map. It takes a few seconds.",
+    "ruc": "RUC",
+    "address": "Store address",
+    "verify": "Verify my business",
+    "verifying": "Verifying…",
+    "retry": "Retry",
+    "loadError": "We could not load your business details",
+    "verifyError": "We could not complete the verification",
+    "network": "Check your connection and try again.",
+    "status": {
+      "UNVERIFIED": "Not verified",
+      "PENDING": "Verification pending",
+      "VERIFIED": "Verified",
+      "REJECTED": "Verification rejected"
+    },
+    "result": {
+      "APPROVED": "Your business is verified",
+      "PENDING": "The verification is pending",
+      "REJECTED": "We could not verify your business"
+    },
+    "reason": {
+      "RUC_NOT_FOUND": {
+        "title": "Your RUC is not in the SUNAT registry",
+        "fix": "Check with SUNAT that the RUC is registered to you. If the RUC in your profile is mistyped, write to us to fix it."
+      },
+      "TAXPAYER_NOT_ACTIVE": {
+        "title": "Your RUC is deregistered at SUNAT",
+        "fix": "Reactivate your RUC at SUNAT and verify again from here."
+      },
+      "TAXPAYER_NOT_HABIDO": {
+        "title": "Your RUC is listed as not located (no habido)",
+        "fix": "Update your tax address at SUNAT until it is listed as located (habido) and verify again."
+      },
+      "ADDRESS_NOT_GEOCODABLE": {
+        "title": "We could not find your address on the map",
+        "fix": "Correct it below with street, number and district. Your RUC and everything else you registered are kept."
+      },
+      "GEOCODER_UNAVAILABLE": {
+        "title": "The map service is not answering right now",
+        "fix": "You do not have to do anything."
+      },
+      "INVALID_RUC": {
+        "title": "The RUC is not valid",
+        "fix": "Check the 11 digits of the RUC in your profile."
+      }
+    },
+    "pendingNote": "We retry on our own every 10 minutes. The result will show here and on your dashboard; you can keep creating campaigns meanwhile.",
+    "correctAddress": "Corrected address",
+    "addressHint": "E.g. Av. José Larco 345, Miraflores",
+    "verifyAddress": "Verify with this address",
+    "toCampaign": "Create a campaign",
+    "toPanel": "Go to my dashboard",
+    "how": {
+      "title": "How it works",
+      "step1": "We check that your RUC is active and located (habido) in the SUNAT registry.",
+      "step2": "We place your store address on the map.",
+      "step3": "If everything is fine, your offers show the verified seal."
+    }
   }
 }

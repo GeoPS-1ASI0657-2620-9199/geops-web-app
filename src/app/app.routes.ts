@@ -93,6 +93,13 @@ export const routes: Routes = [
         title: 'GeoPS - Resumen',
       },
       {
+        path: 'business/verify',
+        canActivate: owner,
+        loadComponent: () =>
+          import('./iam/presentation/pages/verify-business/verify-business.page').then((m) => m.VerifyBusinessPage),
+        title: 'GeoPS - Verificar mi comercio',
+      },
+      {
         path: 'validate',
         canActivate: owner,
         loadComponent: () =>

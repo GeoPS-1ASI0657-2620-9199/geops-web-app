@@ -9,9 +9,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslateModule } from '@ngx-translate/core';
 import { SessionStore } from '../../../../iam/application/session.store';
+import { BusinessSeal } from '../../../../iam/presentation/components/business-seal/business-seal';
 import { ApiError } from '../../../../shared/domain/api-error';
 import { GeoPoint } from '../../../../shared/domain/geo-point';
-import { GeoSeal } from '../../../../shared/ui/geo-seal/geo-seal';
 import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { GeoLocationPicker } from '../../../../shared/ui/geo-location-picker/geo-location-picker';
 import { CreateCampaignUseCase } from '../../../application/create-campaign.use-case';
@@ -42,7 +42,7 @@ const END_DATE_CODES = ['CAMPAIGN_ALREADY_ENDED', 'INVALID_CAMPAIGN_PERIOD'];
     TranslateModule,
     GeoAlert,
     GeoLocationPicker,
-    GeoSeal,
+    BusinessSeal,
     ZoneSelector,
   ],
   templateUrl: './create-campaign.page.html',

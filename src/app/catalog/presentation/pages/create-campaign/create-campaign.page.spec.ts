@@ -5,6 +5,7 @@ import { SessionStore } from '../../../../iam/application/session.store';
 import { ApiError } from '../../../../shared/domain/api-error';
 import { CreateCampaignUseCase } from '../../../application/create-campaign.use-case';
 import { ListOfferCategoriesUseCase } from '../../../application/list-offer-categories.use-case';
+import { VerifyBusinessUseCase } from '../../../../iam/application/verify-business.use-case';
 import { DistrictDirectory } from '../../../domain/ports/district.directory';
 import { CreateCampaignPage } from './create-campaign.page';
 
@@ -23,6 +24,7 @@ describe('CreateCampaignPage', () => {
   let useCase: jasmine.SpyObj<CreateCampaignUseCase>;
   let router: Router;
   let categories: jasmine.SpyObj<ListOfferCategoriesUseCase>;
+  const verification = { verificationStatus: () => 'PENDING', profile: () => Promise.resolve() };
 
   const fill = () => {
     internals.form.patchValue({ name: 'Almuerzos de octubre', start: '2026-10-05', end: '2026-10-31', address: 'Av. Larco 345, Miraflores' });
@@ -48,6 +50,7 @@ describe('CreateCampaignPage', () => {
         provideRouter([]),
         provideTranslateService(),
         { provide: ListOfferCategoriesUseCase, useValue: categories },
+        { provide: VerifyBusinessUseCase, useValue: verification },
         { provide: CreateCampaignUseCase, useValue: useCase },
         { provide: DistrictDirectory, useValue: { all: () => [] } },
         { provide: SessionStore, useValue: { session: () => ({ businessName: 'Restaurante Don Pepe' }) } },
@@ -91,6 +94,14 @@ describe('CreateCampaignPage', () => {
 
     expect((page as unknown as { categories(): string[] }).categories()).toEqual(['Gastronomía', 'Mascotas']);
     expect(fixture.nativeElement.querySelector('mat-select[data-testid="offer-category"]')).not.toBeNull();
+  });
+
+  it('shows the real status of the business instead of a fixed seal (E2-16)', async () => {
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('Restaurante Don Pepe');
+    expect(fixture.nativeElement.querySelector('[data-testid="business-seal"]')).toBeNull();
+    expect(fixture.nativeElement.textContent).toContain('verifyBusiness.status.PENDING');
   });
 
   it('warns when the list of categories cannot be read', async () => {
