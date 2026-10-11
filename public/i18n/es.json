@@ -207,7 +207,9 @@
     "empty": {
       "title": "No hay ofertas vigentes a {{minutes}} minutos",
       "description": "Puedes ampliar la distancia o elegir otro distrito.",
-      "widen": "Ampliar a {{minutes}} min a pie"
+      "widen": "Ampliar a {{minutes}} min a pie",
+      "categoryTitle": "No hay ofertas de {{category}} a {{minutes}} minutos",
+      "allCategories": "Ver todas las categorías"
     },
     "error": {
       "title": "No pudimos cargar las ofertas",
@@ -575,5 +577,10 @@
     "emptyTitle": "Aún no tienes comentarios",
     "emptyDescription": "Los clientes comentan después de canjear una oferta en tu local.",
     "action": "Ver mis campañas"
+  },
+  "createCampaign": {
+    "category": "Categoría",
+    "categoryError": "Elige la categoría.",
+    "categoriesUnavailable": "No pudimos cargar las categorías. Recarga la página para intentarlo de nuevo."
   }
 }

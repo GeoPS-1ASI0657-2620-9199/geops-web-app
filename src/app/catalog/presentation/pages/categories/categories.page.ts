@@ -45,15 +45,12 @@ export class CategoriesPage implements OnInit {
   protected readonly search = inject(OfferSearchStore);
   private readonly router = inject(Router);
 
-  protected readonly category = signal<string | null>(null);
   protected readonly order = signal<OfferOrder>('distance');
   protected readonly orders: OfferOrder[] = ['distance', 'price', 'expiry'];
   protected readonly minMinutes = MIN_RADIUS_MINUTES;
 
-  protected readonly inCategory = computed(() => {
-    const category = this.category();
-    return this.search.offers().filter((offer) => !category || offer.category === category);
-  });
+  /** Catalog already filtered them by the chosen category (US08). */
+  protected readonly inCategory = this.search.offers;
   protected readonly withinMin = computed(() => this.inCategory().filter((o) => o.walkMinutes <= MIN_RADIUS_MINUTES).length);
   /** True once the map tiles failed: the list then carries every offer (US09, QAS12). */
   protected readonly mapFailed = signal(false);
@@ -83,8 +80,12 @@ export class CategoriesPage implements OnInit {
   }
 
   protected async onRadius(minutes: number): Promise<void> {
-    this.category.set(null);
     await this.search.setRadius(minutes);
+    await this.search.loadAll();
+  }
+
+  protected async onCategory(category: string | null): Promise<void> {
+    await this.search.selectCategory(category);
     await this.search.loadAll();
   }
 }

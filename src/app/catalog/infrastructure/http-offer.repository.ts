@@ -20,18 +20,34 @@ export class HttpOfferRepository implements OfferRepository {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = inject(API_BASE_URL);
 
-  async findNearby(origin: GeoPoint, radiusMinutes: number, page: number): Promise<NearbyOfferPage> {
-    const params = new HttpParams()
+  async findNearby(
+    origin: GeoPoint,
+    radiusMinutes: number,
+    page: number,
+    category: string | null = null,
+  ): Promise<NearbyOfferPage> {
+    let params = new HttpParams()
       .set('lat', origin.latitude)
       .set('lng', origin.longitude)
       .set('radiusMinutes', radiusMinutes)
       .set('page', page)
       .set('size', PAGE_SIZE);
+    if (category) {
+      params = params.set('category', category);
+    }
     try {
       const response = await firstValueFrom(
         this.http.get<NearbyOffersResponse>(`${this.baseUrl}/offers/nearby`, { params }),
       );
       return toNearbyOfferPage(response);
+    } catch (error) {
+      throw toApiError(error);
+    }
+  }
+
+  async categories(): Promise<string[]> {
+    try {
+      return await firstValueFrom(this.http.get<string[]>(`${this.baseUrl}/offers/categories`));
     } catch (error) {
       throw toApiError(error);
     }

@@ -207,7 +207,9 @@
     "empty": {
       "title": "No valid offers within {{minutes}} minutes",
       "description": "You can widen the distance or choose another district.",
-      "widen": "Widen to {{minutes}} walking min"
+      "widen": "Widen to {{minutes}} walking min",
+      "categoryTitle": "No {{category}} offers within {{minutes}} minutes",
+      "allCategories": "See every category"
     },
     "error": {
       "title": "We could not load the offers",
@@ -575,5 +577,10 @@
     "emptyTitle": "No comments yet",
     "emptyDescription": "Customers comment after redeeming a deal at your store.",
     "action": "See my campaigns"
+  },
+  "createCampaign": {
+    "category": "Category",
+    "categoryError": "Choose the category.",
+    "categoriesUnavailable": "We could not load the categories. Reload the page to try again."
   }
 }

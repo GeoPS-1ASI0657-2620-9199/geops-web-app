@@ -42,12 +42,9 @@ export class HomePage implements OnInit {
   protected readonly sessions = inject(SessionStore);
   private readonly router = inject(Router);
 
-  protected readonly category = signal<string | null>(null);
   protected readonly skeletons = [1, 2, 3];
-  protected readonly filtered = computed(() => {
-    const category = this.category();
-    return this.search.offers().filter((offer) => !category || offer.category === category);
-  });
+  /** Catalog already filtered them by the chosen category (US08). */
+  protected readonly filtered = this.search.offers;
   /** True once the map tiles failed: the side list then carries every offer (US09, QAS12). */
   protected readonly mapFailed = signal(false);
   protected readonly nearYou = computed(() => (this.mapFailed() ? this.filtered() : this.filtered().slice(0, NEAR_YOU)));
@@ -74,7 +71,6 @@ export class HomePage implements OnInit {
   }
 
   protected async onRadius(minutes: number): Promise<void> {
-    this.category.set(null);
     await this.search.setRadius(minutes);
   }
 }

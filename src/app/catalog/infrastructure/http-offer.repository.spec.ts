@@ -88,6 +88,36 @@ describe('HttpOfferRepository', () => {
     );
   });
 
+  it('sends the category to Catalog only when one is chosen (US08, S2-07)', async () => {
+    const result = repository.findNearby(ORIGIN, 10, 0, 'Mascotas');
+
+    const request = http.expectOne((r) => r.url === `${BASE_URL}/offers/nearby`);
+    expect(request.request.params.get('category')).toBe('Mascotas');
+    request.flush({ content: [], page: 0, totalElements: 0, totalPages: 0 });
+    await result;
+
+    void repository.findNearby(ORIGIN, 10, 0, null);
+    const all = http.expectOne((r) => r.url === `${BASE_URL}/offers/nearby`);
+    expect(all.request.params.has('category')).toBeFalse();
+    all.flush({ content: [], page: 0, totalElements: 0, totalPages: 0 });
+  });
+
+  it('reads the closed list of categories (E2-06)', async () => {
+    const result = repository.categories();
+
+    http.expectOne(`${BASE_URL}/offers/categories`).flush(['Gastronomía', 'Mascotas']);
+
+    expect(await result).toEqual(['Gastronomía', 'Mascotas']);
+  });
+
+  it('rejects the list of categories with the code of Catalog', async () => {
+    const result = repository.categories();
+
+    http.expectOne(`${BASE_URL}/offers/categories`).flush(null, { status: 0, statusText: '' });
+
+    await expectAsync(result).toBeRejectedWith(jasmine.objectContaining<ApiError>({ code: 'NETWORK_ERROR' }));
+  });
+
   it('reads the offer detail of BRD-05 with its location as a point', async () => {
     const result = repository.findById(1052);
 

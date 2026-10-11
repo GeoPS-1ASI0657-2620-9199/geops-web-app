@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -44,15 +44,12 @@ export class NearbyOffersPage implements OnInit {
   protected readonly term = toSignal(inject(ActivatedRoute).queryParamMap.pipe(map((params) => params.get('q') ?? '')), {
     initialValue: '',
   });
-  protected readonly category = signal<string | null>(null);
   protected readonly skeletons = [1, 2, 3, 4, 5, 6];
   protected readonly placeLabel = computed(() => placeLabelOf(this.search.origin()));
+  /** Catalog filters by category (US08); the search box of the top bar filters what came. */
   protected readonly visible = computed(() => {
-    const category = this.category();
     const term = this.term();
-    return this.search
-      .offers()
-      .filter((offer) => (!category || offer.category === category) && matchesTerm(offer, term));
+    return this.search.offers().filter((offer) => matchesTerm(offer, term));
   });
 
   ngOnInit(): void {
@@ -68,7 +65,6 @@ export class NearbyOffersPage implements OnInit {
   }
 
   protected async onRadius(minutes: number): Promise<void> {
-    this.category.set(null);
     await this.search.setRadius(minutes);
   }
 }

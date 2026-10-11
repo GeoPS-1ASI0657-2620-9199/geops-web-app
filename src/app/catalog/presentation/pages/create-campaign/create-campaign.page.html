@@ -11,6 +11,10 @@
     title="Publica el descuento que a ti te convenga"
     description="No exigimos un porcentaje mínimo. Un menú de S/ 14 a S/ 12 ya es una campaña válida." />
 
+  @if (categoriesFailed()) {
+    <geo-alert kind="warning" [title]="'createCampaign.categoriesUnavailable' | translate" />
+  }
+
   @if (alert(); as a) {
     <geo-alert kind="error" [title]="a.title" [description]="a.description" />
   }
@@ -73,9 +77,13 @@
                 <mat-error>Elige hasta cuándo vale.</mat-error>
               </mat-form-field>
               <mat-form-field appearance="outline">
-                <mat-label>Categoría</mat-label>
-                <input matInput formControlName="category" />
-                <mat-error>Indica la categoría.</mat-error>
+                <mat-label>{{ 'createCampaign.category' | translate }}</mat-label>
+                <mat-select formControlName="category" data-testid="offer-category">
+                  @for (category of categories(); track category) {
+                    <mat-option [value]="category">{{ category }}</mat-option>
+                  }
+                </mat-select>
+                <mat-error>{{ 'createCampaign.categoryError' | translate }}</mat-error>
               </mat-form-field>
             </div>
             <mat-form-field appearance="outline">

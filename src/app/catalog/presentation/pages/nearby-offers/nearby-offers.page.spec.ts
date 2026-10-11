@@ -21,7 +21,9 @@ describe('NearbyOffersPage', () => {
 
   const render = async (q: string | null = null) => {
     const offers = jasmine.createSpyObj<OfferRepository>('OfferRepository', ['findNearby', 'findById']);
-    offers.findNearby.and.resolveTo(pageOf([CEVICHE, CORTE]));
+    offers.findNearby.and.callFake((_origin, _radius, _page, category) =>
+      Promise.resolve(pageOf([CEVICHE, CORTE].filter((offer) => !category || offer.category === category))),
+    );
     query = new BehaviorSubject(convertToParamMap(q ? { q } : {}));
     await TestBed.configureTestingModule({
       imports: [NearbyOffersPage],
@@ -67,13 +69,14 @@ describe('NearbyOffersPage', () => {
     expect(text()).not.toContain('Cevichería Mar');
   });
 
-  it('filters by the category chip', async () => {
+  it('filters by the category chip through Catalog (US08)', async () => {
     await render();
     const chip = [...(fixture.nativeElement as HTMLElement).querySelectorAll<HTMLButtonElement>('button.chip')].find(
       (b) => b.textContent?.trim() === 'Salud y belleza',
     )!;
 
     chip.click();
+    await fixture.whenStable();
     fixture.detectChanges();
 
     expect(cards().length).toBe(1);

@@ -25,9 +25,9 @@
 
         @if (search.categories().length) {
           <div class="chips" role="group" [attr.aria-label]="'search.categories' | translate">
-            <button type="button" class="chip" [class.on]="!category()" (click)="category.set(null)">{{ 'search.all' | translate }}</button>
+            <button type="button" class="chip" [class.on]="!search.category()" (click)="onCategory(null)">{{ 'search.all' | translate }}</button>
             @for (item of search.categories(); track item) {
-              <button type="button" class="chip" [class.on]="category() === item" (click)="category.set(item)">{{ item }}</button>
+              <button type="button" class="chip" [class.on]="search.category() === item" (click)="onCategory(item)">{{ item }}</button>
             }
           </div>
         }

@@ -1,8 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
+import { provideTranslateService } from '@ngx-translate/core';
 import { SessionStore } from '../../../../iam/application/session.store';
 import { ApiError } from '../../../../shared/domain/api-error';
 import { CreateCampaignUseCase } from '../../../application/create-campaign.use-case';
+import { ListOfferCategoriesUseCase } from '../../../application/list-offer-categories.use-case';
 import { DistrictDirectory } from '../../../domain/ports/district.directory';
 import { CreateCampaignPage } from './create-campaign.page';
 
@@ -20,6 +22,7 @@ describe('CreateCampaignPage', () => {
   let internals: PageInternals;
   let useCase: jasmine.SpyObj<CreateCampaignUseCase>;
   let router: Router;
+  let categories: jasmine.SpyObj<ListOfferCategoriesUseCase>;
 
   const fill = () => {
     internals.form.patchValue({ name: 'Almuerzos de octubre', start: '2026-10-05', end: '2026-10-31', address: 'Av. Larco 345, Miraflores' });
@@ -37,10 +40,14 @@ describe('CreateCampaignPage', () => {
 
   beforeEach(async () => {
     useCase = jasmine.createSpyObj<CreateCampaignUseCase>('CreateCampaignUseCase', ['execute']);
+    categories = jasmine.createSpyObj<ListOfferCategoriesUseCase>('ListOfferCategoriesUseCase', ['execute']);
+    categories.execute.and.resolveTo(['Gastronomía', 'Mascotas']);
     await TestBed.configureTestingModule({
       imports: [CreateCampaignPage],
       providers: [
         provideRouter([]),
+        provideTranslateService(),
+        { provide: ListOfferCategoriesUseCase, useValue: categories },
         { provide: CreateCampaignUseCase, useValue: useCase },
         { provide: DistrictDirectory, useValue: { all: () => [] } },
         { provide: SessionStore, useValue: { session: () => ({ businessName: 'Restaurante Don Pepe' }) } },
@@ -76,6 +83,24 @@ describe('CreateCampaignPage', () => {
     expect(internals.form.controls.end.hasError('rule')).toBeTrue();
     expect(fixture.nativeElement.textContent).toContain('La vigencia que elegiste ya pasó');
     expect(router.navigate).not.toHaveBeenCalled();
+  });
+
+  it('offers the closed list of Catalog as the category (US08, E2-06)', async () => {
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect((page as unknown as { categories(): string[] }).categories()).toEqual(['Gastronomía', 'Mascotas']);
+    expect(fixture.nativeElement.querySelector('mat-select[data-testid="offer-category"]')).not.toBeNull();
+  });
+
+  it('warns when the list of categories cannot be read', async () => {
+    categories.execute.and.rejectWith(new ApiError('NETWORK_ERROR', 'no'));
+    fixture = TestBed.createComponent(CreateCampaignPage);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('createCampaign.categoriesUnavailable');
   });
 
   it('asks for the zone before calling Catalog', async () => {

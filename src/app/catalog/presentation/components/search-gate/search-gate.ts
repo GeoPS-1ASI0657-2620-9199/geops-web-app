@@ -55,11 +55,19 @@ import { DistrictPicker } from '../district-picker/district-picker';
       @case ('empty') {
         <geo-empty-state
           icon="search_off"
-          [title]="'nearbyPage.empty.title' | translate: { minutes: search.radius() }"
+          data-testid="search-empty"
+          [title]="search.category()
+            ? ('nearbyPage.empty.categoryTitle' | translate: { category: search.category(), minutes: search.radius() })
+            : ('nearbyPage.empty.title' | translate: { minutes: search.radius() })"
           [description]="'nearbyPage.empty.description' | translate">
           @if (search.nextRadius(); as next) {
             <button mat-flat-button type="button" (click)="search.widenRadius()">
               {{ 'nearbyPage.empty.widen' | translate: { minutes: next } }}
+            </button>
+          }
+          @if (search.category()) {
+            <button mat-stroked-button type="button" data-testid="clear-category" (click)="search.selectCategory(null)">
+              {{ 'nearbyPage.empty.allCategories' | translate }}
             </button>
           }
           <button mat-stroked-button type="button" (click)="search.changeDistrict()">

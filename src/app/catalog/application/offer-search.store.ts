@@ -11,6 +11,7 @@ import {
   widerRadius,
 } from '../domain/model/nearby-offer';
 import { LocateConsumerUseCase, PickDistrictReason } from './locate-consumer.use-case';
+import { ListOfferCategoriesUseCase } from './list-offer-categories.use-case';
 import { SearchNearbyOffersUseCase } from './search-nearby-offers.use-case';
 import { SearchRadiusPreference } from './search-radius-preference';
 
@@ -32,6 +33,7 @@ export class OfferSearchStore {
   private readonly locate = inject(LocateConsumerUseCase);
   private readonly search = inject(SearchNearbyOffersUseCase);
   private readonly preference = inject(SearchRadiusPreference);
+  private readonly listCategories = inject(ListOfferCategoriesUseCase);
 
   readonly state = signal<SearchState>('idle');
   readonly origin = signal<SearchOrigin | null>(null);
@@ -45,6 +47,9 @@ export class OfferSearchStore {
   readonly lastPage = signal<NearbyOfferPage | null>(null);
   readonly loadingMore = signal(false);
   readonly errorMessage = signal<string | null>(null);
+  /** The category chip chosen; Catalog filters with it before paging (US08). */
+  readonly category = signal<string | null>(null);
+  private readonly categoryList = signal<string[]>([]);
 
   readonly canLoadMore = computed(() => {
     const page = this.lastPage();
@@ -54,8 +59,14 @@ export class OfferSearchStore {
   /** True while there is an imprecise reading the consumer can still confirm. */
   readonly canConfirmReading = computed(() => this.impreciseReading() !== null);
   readonly total = computed(() => this.lastPage()?.totalElements ?? 0);
-  /** Categories present in the results, in order of appearance, for the filter chips. */
-  readonly categories = computed(() => [...new Set(this.offers().map((offer) => offer.category))]);
+  /**
+   * The chips: the closed list of Catalog. If it could not be read, the categories present in the
+   * results, so the filter still works.
+   */
+  readonly categories = computed(() => {
+    const list = this.categoryList();
+    return list.length ? list : [...new Set(this.offers().map((offer) => offer.category))];
+  });
 
   /**
    * Starts the search the first time a tab opens; later visits keep the previous one, unless a
@@ -65,6 +76,7 @@ export class OfferSearchStore {
     if (this.state() === 'idle') {
       // Marked before the first await, so two tabs opening at once start a single search.
       this.state.set('locating');
+      void this.loadCategories();
       this.radius.set((await this.preference.resolve()).minutes);
       await this.useDeviceLocation();
       return;
@@ -122,6 +134,15 @@ export class OfferSearchStore {
     }
   }
 
+  /** Searches again from page 0 with the chosen category, or with every one for null. */
+  async selectCategory(category: string | null): Promise<void> {
+    if (category === this.category()) {
+      return;
+    }
+    this.category.set(category);
+    await this.runSearch();
+  }
+
   async retry(): Promise<void> {
     await this.runSearch();
   }
@@ -134,7 +155,7 @@ export class OfferSearchStore {
     }
     this.loadingMore.set(true);
     try {
-      const next = await this.search.execute(origin.point, this.radius(), page.page + 1);
+      const next = await this.search.execute(origin.point, this.radius(), page.page + 1, this.category());
       this.offers.update((current) => [...current, ...next.offers]);
       this.lastPage.set(next);
     } catch (error) {
@@ -172,12 +193,20 @@ export class OfferSearchStore {
     this.state.set('loading');
     this.offers.set([]);
     try {
-      const result = await this.search.execute(origin.point, this.radius());
+      const result = await this.search.execute(origin.point, this.radius(), 0, this.category());
       this.offers.set(result.offers);
       this.lastPage.set(result);
       this.state.set(result.totalElements === 0 ? 'empty' : 'ready');
     } catch (error) {
       this.showError(error);
+    }
+  }
+
+  private async loadCategories(): Promise<void> {
+    try {
+      this.categoryList.set(await this.listCategories.execute());
+    } catch {
+      // The chips fall back to the categories of the results.
     }
   }
 

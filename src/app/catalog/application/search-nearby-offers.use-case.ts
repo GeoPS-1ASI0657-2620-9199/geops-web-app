@@ -11,7 +11,7 @@ import { OfferRepository } from '../domain/ports/offer.repository';
 export class SearchNearbyOffersUseCase {
   private readonly offers = inject(OfferRepository);
 
-  execute(origin: GeoPoint, radiusMinutes: number, page = 0): Promise<NearbyOfferPage> {
-    return this.offers.findNearby(origin, clampRadius(radiusMinutes), Math.max(0, page));
+  execute(origin: GeoPoint, radiusMinutes: number, page = 0, category: string | null = null): Promise<NearbyOfferPage> {
+    return this.offers.findNearby(origin, clampRadius(radiusMinutes), Math.max(0, page), category);
   }
 }

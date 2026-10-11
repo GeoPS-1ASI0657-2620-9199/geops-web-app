@@ -6,6 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { TranslateModule } from '@ngx-translate/core';
 import { SessionStore } from '../../../../iam/application/session.store';
 import { ApiError } from '../../../../shared/domain/api-error';
 import { GeoPoint } from '../../../../shared/domain/geo-point';
@@ -13,6 +15,7 @@ import { GeoSeal } from '../../../../shared/ui/geo-seal/geo-seal';
 import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { GeoLocationPicker } from '../../../../shared/ui/geo-location-picker/geo-location-picker';
 import { CreateCampaignUseCase } from '../../../application/create-campaign.use-case';
+import { ListOfferCategoriesUseCase } from '../../../application/list-offer-categories.use-case';
 import { CampaignZone, todayInLima } from '../../../domain/model/campaign';
 import { ZoneSelector } from '../../components/zone-selector/zone-selector';
 
@@ -35,6 +38,8 @@ const END_DATE_CODES = ['CAMPAIGN_ALREADY_ENDED', 'INVALID_CAMPAIGN_PERIOD'];
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    MatSelectModule,
+    TranslateModule,
     GeoAlert,
     GeoLocationPicker,
     GeoSeal,
@@ -46,6 +51,7 @@ const END_DATE_CODES = ['CAMPAIGN_ALREADY_ENDED', 'INVALID_CAMPAIGN_PERIOD'];
 })
 export class CreateCampaignPage {
   private readonly createCampaign = inject(CreateCampaignUseCase);
+  private readonly listCategories = inject(ListOfferCategoriesUseCase);
   private readonly router = inject(Router);
   private readonly sessions = inject(SessionStore);
   protected readonly businessName = computed(() => this.sessions.session()?.businessName ?? null);
@@ -58,6 +64,9 @@ export class CreateCampaignPage {
   protected readonly zone = signal<CampaignZone | null>(null);
   protected readonly alert = signal<{ title: string; description: string } | null>(null);
   protected readonly submitting = signal(false);
+  /** The closed list of Catalog for the category selector (US08, E2-06). */
+  protected readonly categories = signal<string[]>([]);
+  protected readonly categoriesFailed = signal(false);
   /** The end date the server or the rules rejected; read by a validator so it survives redraws. */
   private readonly rejectedEnd = signal(false);
 
@@ -78,6 +87,15 @@ export class CreateCampaignPage {
         this.form.controls.end.updateValueAndValidity({ emitEvent: false });
       }
     });
+    void this.loadCategories();
+  }
+
+  private async loadCategories(): Promise<void> {
+    try {
+      this.categories.set(await this.listCategories.execute());
+    } catch {
+      this.categoriesFailed.set(true);
+    }
   }
 
   get offers(): FormArray {
