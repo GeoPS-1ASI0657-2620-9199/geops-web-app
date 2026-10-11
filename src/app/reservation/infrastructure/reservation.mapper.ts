@@ -1,4 +1,4 @@
-import { PlacedReservation, Reservation, ReservationStatus } from '../domain/model/reservation';
+import { PlacedReservation, RedeemedReservation, Reservation, ReservationStatus } from '../domain/model/reservation';
 
 /** Body of POST /api/v1/reservations. */
 export interface CreateReservationRequest {
@@ -24,6 +24,31 @@ export interface ReservationResponse {
   reservedAt: string;
   expiresAt: string;
   redeemedAt: string | null;
+}
+
+/** Body of POST /api/v1/reservations/redeem. */
+export interface RedeemReservationRequest {
+  code: string;
+}
+
+/** Body of the 200 answer of POST /api/v1/reservations/redeem (RedeemedReservationResponse). */
+export interface RedeemedReservationResponse {
+  reservationId: number;
+  code: string;
+  offerId: number;
+  offerTitle: string;
+  status: ReservationStatus;
+  redeemedAt: string;
+}
+
+export function toRedeemedReservation(response: RedeemedReservationResponse): RedeemedReservation {
+  return {
+    reservationId: response.reservationId,
+    code: response.code,
+    offerId: response.offerId,
+    offerTitle: response.offerTitle,
+    redeemedAt: response.redeemedAt,
+  };
 }
 
 export function toPlacedReservation(response: CreatedReservationResponse, isNew: boolean): PlacedReservation {

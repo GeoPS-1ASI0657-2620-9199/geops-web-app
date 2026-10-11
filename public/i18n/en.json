@@ -547,6 +547,10 @@
       "NETWORK": {
         "title": "We could not validate the code",
         "description": "Check your connection and try again."
+      },
+      "UNEXPECTED": {
+        "title": "We could not record the delivery",
+        "description": "Try again. If it keeps failing, validate the code again."
       }
     },
     "how": {
@@ -554,7 +558,10 @@
       "step1": "The customer shows you an 8 character code.",
       "step2": "Type it here and press Validate.",
       "step3": "If it is valid, charge the deal price at the counter."
-    }
+    },
+    "confirm": "Confirm delivery",
+    "confirming": "Recording…",
+    "delivered": "Delivery recorded on {{date}}. The code cannot be used again."
   },
   "reportsPage": {
     "title": "Customer reports",

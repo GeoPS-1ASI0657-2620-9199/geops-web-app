@@ -47,3 +47,5 @@
   .facts { grid-template-columns: repeat(2, auto); }
 }
 @media (max-width: 640px) { .page { padding: 16px; } }
+.delivered { display: flex; align-items: center; gap: 8px; margin: 0; font: 600 13px/1.4 var(--font-brand); }
+.delivered mat-icon { font-variation-settings: 'FILL' 1; }

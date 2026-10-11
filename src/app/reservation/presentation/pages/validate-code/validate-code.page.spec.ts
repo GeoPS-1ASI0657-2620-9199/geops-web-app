@@ -25,7 +25,7 @@ describe('ValidateCodePage', () => {
   type Internals = { code: { set(v: string): void }; rejection(): string | null };
 
   beforeEach(async () => {
-    reservations = jasmine.createSpyObj<ReservationRepository>('ReservationRepository', ['reserve', 'findById', 'findByCode', 'findMine']);
+    reservations = jasmine.createSpyObj<ReservationRepository>('ReservationRepository', ['reserve', 'findById', 'findByCode', 'redeem', 'findMine']);
     await TestBed.configureTestingModule({
       imports: [ValidateCodePage],
       providers: [provideTranslateService(), { provide: ReservationRepository, useValue: reservations }],
@@ -86,6 +86,72 @@ describe('ValidateCodePage', () => {
     fixture.detectChanges();
 
     expect((fixture.nativeElement as HTMLElement).querySelector('.result')).toBeNull();
+  });
+
+  const confirmButton = () =>
+    (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>('[data-testid="confirm-delivery"]');
+  const confirm = async () => {
+    confirmButton()!.click();
+    await fixture.whenStable();
+    fixture.detectChanges();
+  };
+
+  it('confirms the delivery of a valid code and shows its date (US41, CA-41.2)', async () => {
+    reservations.findByCode.and.resolveTo(RESERVATION);
+    reservations.redeem.and.resolveTo({
+      reservationId: 15,
+      code: 'K7P3XM9Q',
+      offerId: 1052,
+      offerTitle: 'Ceviche clásico',
+      redeemedAt: '2026-10-20T17:42:10Z',
+    });
+    await validate('K7P3XM9Q');
+
+    await confirm();
+
+    expect(reservations.redeem).toHaveBeenCalledWith('K7P3XM9Q');
+    expect(text()).toContain('validatePage.delivered');
+    expect(confirmButton()).toBeNull();
+  });
+
+  it('shows the 409 with its date as a delivery already recorded, not as an error', async () => {
+    reservations.findByCode.and.resolveTo(RESERVATION);
+    reservations.redeem.and.rejectWith(new ApiError('RESERVATION_ALREADY_REDEEMED', 'ya', '2026-10-20T17:42:10Z'));
+    await validate('K7P3XM9Q');
+
+    await confirm();
+
+    expect(rejection()).toBeNull();
+    expect((fixture.nativeElement as HTMLElement).querySelector('[data-testid="delivery-recorded"]')).not.toBeNull();
+  });
+
+  it('explains a code that expired or was reported before the delivery (410, 409)', async () => {
+    reservations.findByCode.and.resolveTo(RESERVATION);
+    reservations.redeem.and.rejectWith(new ApiError('RESERVATION_EXPIRED', 'vencida'));
+    await validate('K7P3XM9Q');
+    await confirm();
+    expect(rejection()).toBe('EXPIRED');
+
+    reservations.redeem.and.rejectWith(new ApiError('RESERVATION_REPORTED', 'reportada'));
+    await validate('K7P3XM9Q');
+    await confirm();
+    expect(rejection()).toBe('REPORTED');
+
+    reservations.redeem.and.rejectWith(new ApiError('INTERNAL_ERROR', 'falla'));
+    await validate('K7P3XM9Q');
+    await confirm();
+    expect(rejection()).toBe('UNEXPECTED');
+  });
+
+  it('offers no delivery for a code of another business or past its deadline', async () => {
+    reservations.findByCode.and.rejectWith(new ApiError('FORBIDDEN', 'no'));
+    await validate('K7P3XM9Q');
+    expect(confirmButton()).toBeNull();
+
+    reservations.findByCode.and.resolveTo({ ...RESERVATION, expiresAt: '2020-01-01T00:00:00Z' });
+    await validate('K7P3XM9Q');
+    expect(rejection()).toBe('EXPIRED');
+    expect(confirmButton()).toBeNull();
   });
 
   it('rejectionOf maps every status', () => {

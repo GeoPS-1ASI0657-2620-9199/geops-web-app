@@ -7,17 +7,39 @@ import { ApiError, NETWORK_ERROR } from '../../../../shared/domain/api-error';
 import { GeoSeal } from '../../../../shared/ui/geo-seal/geo-seal';
 import { FindReservationByCodeUseCase, MALFORMED_CODE } from '../../../application/find-reservation-by-code.use-case';
 import { RESERVATION_NOT_FOUND } from '../../../application/get-reservation.use-case';
-import { Reservation } from '../../../domain/model/reservation';
+import { RedeemReservationUseCase, Redemption } from '../../../application/redeem-reservation.use-case';
+import { Reservation, isPastDeadline } from '../../../domain/model/reservation';
 import { STATUS_SEAL, limaDateTime, remainingTime } from '../../reservation-view';
 
 /** Why a code cannot be charged; each one has its own text in validatePage.rejected.<REASON>. */
-export type Rejection = 'MALFORMED' | 'NOT_FOUND' | 'OTHER_BUSINESS' | 'REDEEMED' | 'EXPIRED' | 'REPORTED' | 'NETWORK';
+export type Rejection =
+  | 'MALFORMED'
+  | 'NOT_FOUND'
+  | 'OTHER_BUSINESS'
+  | 'REDEEMED'
+  | 'EXPIRED'
+  | 'REPORTED'
+  | 'NETWORK'
+  | 'UNEXPECTED';
 
-/** Outcome of a lookup: a reservation that can be charged, or the reason it cannot. */
-export function rejectionOf(reservation: Reservation): Rejection | null {
+/** Rejection of each error code of the lookup and of the delivery (E2-04). */
+const REJECTION_BY_CODE: Readonly<Record<string, Rejection>> = {
+  [MALFORMED_CODE]: 'MALFORMED',
+  [RESERVATION_NOT_FOUND]: 'NOT_FOUND',
+  FORBIDDEN: 'OTHER_BUSINESS',
+  RESERVATION_EXPIRED: 'EXPIRED',
+  RESERVATION_REPORTED: 'REPORTED',
+  [NETWORK_ERROR]: 'NETWORK',
+};
+
+/**
+ * Outcome of a lookup: a reservation that can be charged, or the reason it cannot. An ACTIVE
+ * reservation past its deadline is expired as well (E2-05).
+ */
+export function rejectionOf(reservation: Reservation, now: number = Date.now()): Rejection | null {
   switch (reservation.status) {
     case 'ACTIVE':
-      return null;
+      return isPastDeadline(reservation, now) ? 'EXPIRED' : null;
     case 'REDEEMED':
       return 'REDEEMED';
     case 'EXPIRED':
@@ -41,11 +63,15 @@ export function rejectionOf(reservation: Reservation): Rejection | null {
 })
 export class ValidateCodePage {
   private readonly findByCode = inject(FindReservationByCodeUseCase);
+  private readonly redeem = inject(RedeemReservationUseCase);
 
   protected readonly code = signal('');
   protected readonly checking = signal(false);
   protected readonly reservation = signal<Reservation | null>(null);
   protected readonly rejection = signal<Rejection | null>(null);
+  protected readonly redeeming = signal(false);
+  /** The delivery once it is recorded; the code no longer admits a second use (CA-41.2). */
+  protected readonly redemption = signal<Redemption | null>(null);
   protected readonly seals = STATUS_SEAL;
   protected readonly limaDateTime = limaDateTime;
   protected readonly remaining = computed(() => {
@@ -60,6 +86,7 @@ export class ValidateCodePage {
     this.checking.set(true);
     this.reservation.set(null);
     this.rejection.set(null);
+    this.redemption.set(null);
     try {
       const reservation = await this.findByCode.execute(this.code());
       this.reservation.set(reservation);
@@ -71,23 +98,32 @@ export class ValidateCodePage {
     }
   }
 
+  /** "Confirmar entrega": records the delivery of the valid code on screen (US41). */
+  async confirmDelivery(): Promise<void> {
+    const reservation = this.reservation();
+    if (!reservation || this.rejection() || this.redemption() || this.redeeming()) {
+      return;
+    }
+    this.redeeming.set(true);
+    try {
+      this.redemption.set(await this.redeem.execute(reservation.code));
+    } catch (error) {
+      this.rejection.set(this.rejectionFor(error, 'UNEXPECTED'));
+    } finally {
+      this.redeeming.set(false);
+    }
+  }
+
   clear(): void {
     this.code.set('');
     this.reservation.set(null);
     this.rejection.set(null);
+    this.redemption.set(null);
   }
 
-  private rejectionFor(error: unknown): Rejection {
-    const code = error instanceof ApiError ? error.code : null;
-    if (code === MALFORMED_CODE) {
-      return 'MALFORMED';
-    }
-    if (code === RESERVATION_NOT_FOUND) {
-      return 'NOT_FOUND';
-    }
-    if (code === 'FORBIDDEN') {
-      return 'OTHER_BUSINESS';
-    }
-    return code === NETWORK_ERROR ? 'NETWORK' : 'NOT_FOUND';
+  /** A lookup that fails for an unknown reason reads as not found, as in the Sprint 1. */
+  private rejectionFor(error: unknown, fallback: Rejection = 'NOT_FOUND'): Rejection {
+    const code = error instanceof ApiError ? error.code : '';
+    return REJECTION_BY_CODE[code] ?? fallback;
   }
 }

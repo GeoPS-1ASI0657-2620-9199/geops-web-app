@@ -547,6 +547,10 @@
       "NETWORK": {
         "title": "No pudimos validar el código",
         "description": "Revisa tu conexión e inténtalo de nuevo."
+      },
+      "UNEXPECTED": {
+        "title": "No pudimos registrar la entrega",
+        "description": "Inténtalo de nuevo. Si el problema sigue, valida el código otra vez."
       }
     },
     "how": {
@@ -554,7 +558,10 @@
       "step1": "El cliente te muestra su código de 8 caracteres.",
       "step2": "Escríbelo aquí y pulsa Validar.",
       "step3": "Si sale válido, cobra el precio de la oferta en caja."
-    }
+    },
+    "confirm": "Confirmar entrega",
+    "confirming": "Registrando…",
+    "delivered": "Entrega registrada el {{date}}. El código ya no admite otro uso."
   },
   "reportsPage": {
     "title": "Reportes de clientes",

@@ -3,13 +3,16 @@ import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { API_BASE_URL } from '../../core/config/api-base-url';
 import { toApiError } from '../../core/http/api-error.mapper';
-import { PlacedReservation, Reservation, ReservationStatus } from '../domain/model/reservation';
+import { PlacedReservation, RedeemedReservation, Reservation, ReservationStatus } from '../domain/model/reservation';
 import { ReservationRepository } from '../domain/ports/reservation.repository';
 import {
   CreateReservationRequest,
   CreatedReservationResponse,
+  RedeemReservationRequest,
+  RedeemedReservationResponse,
   ReservationResponse,
   toPlacedReservation,
+  toRedeemedReservation,
   toReservation,
 } from './reservation.mapper';
 
@@ -48,6 +51,18 @@ export class HttpReservationRepository implements ReservationRepository {
         this.http.get<ReservationResponse>(`${this.url}/code/${encodeURIComponent(code)}`),
       );
       return toReservation(response);
+    } catch (error) {
+      throw toApiError(error);
+    }
+  }
+
+  async redeem(code: string): Promise<RedeemedReservation> {
+    const body: RedeemReservationRequest = { code };
+    try {
+      const response = await firstValueFrom(
+        this.http.post<RedeemedReservationResponse>(`${this.url}/redeem`, body),
+      );
+      return toRedeemedReservation(response);
     } catch (error) {
       throw toApiError(error);
     }
