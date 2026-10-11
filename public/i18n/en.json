@@ -565,7 +565,8 @@
     },
     "confirm": "Confirm delivery",
     "confirming": "Recording…",
-    "delivered": "Delivery recorded on {{date}}; the code cannot be used again"
+    "delivered": "Delivery recorded on {{date}}; the code cannot be used again",
+    "alreadyDelivered": "This code was already delivered at {{time}} ({{date}}). Do not hand over the product again."
   },
   "reportsPage": {
     "title": "Customer reports",

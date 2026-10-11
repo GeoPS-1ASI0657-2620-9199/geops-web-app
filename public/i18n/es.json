@@ -565,7 +565,8 @@
     },
     "confirm": "Confirmar entrega",
     "confirming": "Registrando…",
-    "delivered": "El {{date}} quedó registrada la entrega y el código ya no admite otro uso"
+    "delivered": "El {{date}} quedó registrada la entrega y el código ya no admite otro uso",
+    "alreadyDelivered": "Este código ya se entregó a las {{time}} ({{date}}). No vuelvas a entregar el producto."
   },
   "reportsPage": {
     "title": "Reportes de clientes",

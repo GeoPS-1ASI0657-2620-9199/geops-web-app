@@ -9,7 +9,7 @@ import { FindReservationByCodeUseCase, MALFORMED_CODE } from '../../../applicati
 import { RESERVATION_NOT_FOUND } from '../../../application/get-reservation.use-case';
 import { RedeemReservationUseCase, Redemption } from '../../../application/redeem-reservation.use-case';
 import { Reservation, isPastDeadline } from '../../../domain/model/reservation';
-import { STATUS_SEAL, limaDateTime, remainingTime } from '../../reservation-view';
+import { STATUS_SEAL, limaDateTime, limaTime, remainingTime } from '../../reservation-view';
 
 /** Why a code cannot be charged; each one has its own text in validatePage.rejected.<REASON>. */
 export type Rejection =
@@ -74,6 +74,7 @@ export class ValidateCodePage {
   protected readonly redemption = signal<Redemption | null>(null);
   protected readonly seals = STATUS_SEAL;
   protected readonly limaDateTime = limaDateTime;
+  protected readonly limaTime = limaTime;
   protected readonly remaining = computed(() => {
     const reservation = this.reservation();
     return reservation ? remainingTime(reservation.expiresAt, Date.now()) : null;

@@ -112,18 +112,25 @@ describe('ValidateCodePage', () => {
     expect(reservations.redeem).toHaveBeenCalledWith('K7P3XM9Q');
     expect(text()).toContain('validatePage.delivered');
     expect(text()).toContain('reservation.status.REDEEMED');
+    expect((fixture.nativeElement as HTMLElement).querySelector('.result.ok')).not.toBeNull();
+    expect((fixture.nativeElement as HTMLElement).querySelector('[data-testid="already-delivered"]')).toBeNull();
     expect(confirmButton()).toBeNull();
   });
 
-  it('shows the 409 with its date as a delivery already recorded, not as an error', async () => {
+  it('warns that a code answered with 409 was already delivered, without the tone of a new delivery', async () => {
     reservations.findByCode.and.resolveTo(RESERVATION);
     reservations.redeem.and.rejectWith(new ApiError('RESERVATION_ALREADY_REDEEMED', 'ya', '2026-10-20T17:42:10Z'));
     await validate('K7P3XM9Q');
 
     await confirm();
 
+    const host = fixture.nativeElement as HTMLElement;
     expect(rejection()).toBeNull();
-    expect((fixture.nativeElement as HTMLElement).querySelector('[data-testid="delivery-recorded"]')).not.toBeNull();
+    expect(host.querySelector('[data-testid="already-delivered"]')?.textContent).toContain('validatePage.alreadyDelivered');
+    expect(host.querySelector('[data-testid="delivery-recorded"]')).toBeNull();
+    expect(host.querySelector('.result.warn')).not.toBeNull();
+    expect(host.querySelector('.result.ok')).toBeNull();
+    expect(confirmButton()).toBeNull();
   });
 
   it('explains a code that expired or was reported before the delivery (410, 409)', async () => {

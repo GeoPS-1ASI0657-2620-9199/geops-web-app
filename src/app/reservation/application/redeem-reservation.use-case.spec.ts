@@ -19,14 +19,14 @@ describe('RedeemReservationUseCase', () => {
   it('normalizes the code and records the delivery (US41)', async () => {
     reservations.redeem.and.resolveTo({ reservationId: 15, code: 'K7P3XM9Q', offerId: 1052, offerTitle: 'Menú', redeemedAt: REDEEMED_AT });
 
-    expect(await useCase.execute(' k7p3-xm9q ')).toEqual({ code: 'K7P3XM9Q', redeemedAt: REDEEMED_AT });
+    expect(await useCase.execute(' k7p3-xm9q ')).toEqual({ code: 'K7P3XM9Q', redeemedAt: REDEEMED_AT, alreadyRedeemed: false });
     expect(reservations.redeem).toHaveBeenCalledWith('K7P3XM9Q');
   });
 
-  it('takes the 409 with its date as the delivery already recorded by this business', async () => {
+  it('reports the 409 with its date as a code delivered before, not as a new delivery', async () => {
     reservations.redeem.and.rejectWith(new ApiError('RESERVATION_ALREADY_REDEEMED', 'ya', REDEEMED_AT));
 
-    expect(await useCase.execute('K7P3XM9Q')).toEqual({ code: 'K7P3XM9Q', redeemedAt: REDEEMED_AT });
+    expect(await useCase.execute('K7P3XM9Q')).toEqual({ code: 'K7P3XM9Q', redeemedAt: REDEEMED_AT, alreadyRedeemed: true });
   });
 
   it('passes on every other rejection', async () => {
