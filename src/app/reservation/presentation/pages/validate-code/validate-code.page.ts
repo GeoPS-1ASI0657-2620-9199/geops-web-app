@@ -106,7 +106,9 @@ export class ValidateCodePage {
     }
     this.redeeming.set(true);
     try {
-      this.redemption.set(await this.redeem.execute(reservation.code));
+      const redemption = await this.redeem.execute(reservation.code);
+      this.redemption.set(redemption);
+      this.reservation.set({ ...reservation, status: 'REDEEMED', redeemedAt: redemption.redeemedAt });
     } catch (error) {
       this.rejection.set(this.rejectionFor(error, 'UNEXPECTED'));
     } finally {

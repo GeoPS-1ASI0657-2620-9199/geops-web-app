@@ -23,7 +23,7 @@
                 <h2 class="card-title">{{ p.businessName }}</h2>
                 <geo-seal [kind]="seals[status()]" [text]="'verifyBusiness.status.' + status() | translate" />
               </div>
-              <p class="hint">{{ 'verifyBusiness.hint' | translate }}</p>
+              <p class="hint">{{ (status() === 'VERIFIED' ? 'verifyBusiness.hintVerified' : 'verifyBusiness.hint') | translate }}</p>
               <dl class="facts">
                 <div><dt>{{ 'verifyBusiness.ruc' | translate }}</dt><dd class="geo-tabular">{{ p.ruc }}</dd></div>
                 <div><dt>{{ 'verifyBusiness.address' | translate }}</dt><dd>{{ p.address }}</dd></div>

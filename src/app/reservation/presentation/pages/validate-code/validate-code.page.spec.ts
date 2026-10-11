@@ -111,6 +111,7 @@ describe('ValidateCodePage', () => {
 
     expect(reservations.redeem).toHaveBeenCalledWith('K7P3XM9Q');
     expect(text()).toContain('validatePage.delivered');
+    expect(text()).toContain('reservation.status.REDEEMED');
     expect(confirmButton()).toBeNull();
   });
 

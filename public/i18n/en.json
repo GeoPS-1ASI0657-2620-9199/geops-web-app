@@ -538,11 +538,11 @@
       },
       "REDEEMED": {
         "title": "This code was already redeemed",
-        "description": "{{code}} was redeemed on {{date}}."
+        "description": "{{code}} was redeemed on {{date}}"
       },
       "EXPIRED": {
         "title": "The reservation has ended",
-        "description": "The time for {{code}} ended on {{date}}."
+        "description": "The time for {{code}} ended on {{date}}"
       },
       "REPORTED": {
         "title": "This reservation has an open report",
@@ -565,7 +565,7 @@
     },
     "confirm": "Confirm delivery",
     "confirming": "Recording…",
-    "delivered": "Delivery recorded on {{date}}. The code cannot be used again."
+    "delivered": "Delivery recorded on {{date}}; the code cannot be used again"
   },
   "reportsPage": {
     "title": "Customer reports",
@@ -648,6 +648,7 @@
       "step1": "We check that your RUC is active and located (habido) in the SUNAT registry.",
       "step2": "We place your store address on the map.",
       "step3": "If everything is fine, your offers show the verified seal."
-    }
+    },
+    "hintVerified": "Your business is verified and your offers show the seal. If you move, verify it again from here."
   }
 }

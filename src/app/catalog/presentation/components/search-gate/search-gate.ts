@@ -88,7 +88,7 @@ import { DistrictPicker } from '../district-picker/district-picker';
       }
     }
   `,
-  styles: [`:host { display: flex; flex-direction: column; gap: 18px; } .confirm-reading { margin-top: 8px; }`],
+  styles: [`:host { display: flex; flex-direction: column; gap: 18px; } .confirm-reading { align-self: flex-start; margin-top: 8px; }`],
 })
 export class SearchGate {
   protected readonly search = inject(OfferSearchStore);

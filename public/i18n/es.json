@@ -538,11 +538,11 @@
       },
       "REDEEMED": {
         "title": "Este código ya se canjeó",
-        "description": "{{code}} se canjeó el {{date}}."
+        "description": "{{code}} se canjeó el {{date}}"
       },
       "EXPIRED": {
         "title": "La reserva ya venció",
-        "description": "El plazo de {{code}} terminó el {{date}}."
+        "description": "El plazo de {{code}} terminó el {{date}}"
       },
       "REPORTED": {
         "title": "Esta reserva tiene un reporte abierto",
@@ -565,7 +565,7 @@
     },
     "confirm": "Confirmar entrega",
     "confirming": "Registrando…",
-    "delivered": "Entrega registrada el {{date}}. El código ya no admite otro uso."
+    "delivered": "El {{date}} quedó registrada la entrega y el código ya no admite otro uso"
   },
   "reportsPage": {
     "title": "Reportes de clientes",
@@ -648,6 +648,7 @@
       "step1": "Revisamos que tu RUC esté activo y habido en el padrón de SUNAT.",
       "step2": "Ubicamos la dirección de tu local en el mapa.",
       "step3": "Si todo está bien, tus ofertas muestran el sello de verificado."
-    }
+    },
+    "hintVerified": "Tu comercio está verificado y tus ofertas muestran el sello. Si cambias de local, vuelve a verificarlo desde aquí."
   }
 }
