@@ -94,6 +94,7 @@ describe('HomePage', () => {
 
     expect(host.querySelector('geo-offers-map')).toBeNull();
     expect(host.querySelector('[data-testid="map-fallback"]')?.textContent).toContain('search.mapFailed.title');
+    expect(host.querySelector('[data-testid="map-fallback"] [role="status"]')).not.toBeNull();
     expect(host.querySelectorAll('.near-item').length).toBe(7);
   });
 });

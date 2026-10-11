@@ -53,9 +53,11 @@ export class GeoAlert {
   readonly kind = input<AlertKind>('info');
   readonly title = input.required<string>();
   readonly description = input<string | null>(null);
+  /** Overrides how screen readers announce it; "status" for a notice that must not interrupt. */
+  readonly announce = input<'alert' | 'status' | null>(null);
   protected readonly icon = computed(() => ICONS[this.kind()]);
   /** Errors and warnings are announced by screen readers as they appear. */
-  protected readonly role = computed(() =>
-    this.kind() === 'error' || this.kind() === 'warning' ? 'alert' : 'status',
+  protected readonly role = computed(
+    () => this.announce() ?? (this.kind() === 'error' || this.kind() === 'warning' ? 'alert' : 'status'),
   );
 }
