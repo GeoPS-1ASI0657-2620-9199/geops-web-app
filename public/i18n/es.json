@@ -408,7 +408,8 @@
     "mapFailed": {
       "title": "El mapa no cargó",
       "description": "Estas son las mismas ofertas en lista."
-    }
+    },
+    "mapLabel": "Mapa de ofertas cercanas"
   },
   "home": {
     "eyebrow": "Te damos la bienvenida",
@@ -507,7 +508,8 @@
     "walking": "Equivale a",
     "create": "Crear nueva campaña",
     "seeCampaigns": "Ver mis campañas",
-    "offerCountOne": "1 oferta"
+    "offerCountOne": "1 oferta",
+    "mapLabel": "Zona de tu campaña activa"
   },
   "validatePage": {
     "title": "Validar código de reserva",

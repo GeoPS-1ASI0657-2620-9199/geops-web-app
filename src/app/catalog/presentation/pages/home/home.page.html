@@ -38,6 +38,7 @@
             [radiusMeters]="radiusMeters()"
             [pins]="pins()"
             [precisionLabel]="precisionLabel()"
+            [ariaLabel]="'search.mapLabel' | translate"
             (pinSelected)="openOffer($event)"
             (failed)="mapFailed.set(true)" />
         }

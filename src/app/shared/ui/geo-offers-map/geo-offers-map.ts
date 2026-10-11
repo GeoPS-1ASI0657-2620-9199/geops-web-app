@@ -99,7 +99,8 @@ export class GeoOffersMap implements AfterViewInit, OnDestroy {
   readonly pins = input<readonly MapPin[]>([]);
   /** Precision label shown at the bottom left, e.g. "Precisión ±12 m". */
   readonly precisionLabel = input<string | null>(null);
-  readonly ariaLabel = input('Mapa de ofertas cercanas');
+  /** Already translated by the screen that places the map, e.g. search.mapLabel. */
+  readonly ariaLabel = input.required<string>();
   /** Draws the user's dot; off when the map shows a business location only. */
   readonly showUser = input(true);
   readonly pinSelected = output<number>();

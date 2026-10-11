@@ -408,7 +408,8 @@
     "mapFailed": {
       "title": "The map did not load",
       "description": "These are the same offers as a list."
-    }
+    },
+    "mapLabel": "Map of nearby offers"
   },
   "home": {
     "eyebrow": "Welcome",
@@ -507,7 +508,8 @@
     "walking": "Equals",
     "create": "Create new campaign",
     "seeCampaigns": "See my campaigns",
-    "offerCountOne": "1 deal"
+    "offerCountOne": "1 deal",
+    "mapLabel": "Zone of your active campaign"
   },
   "validatePage": {
     "title": "Validate reservation code",

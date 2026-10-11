@@ -10,6 +10,7 @@ describe('GeoOffersMap', () => {
     await TestBed.configureTestingModule({ imports: [GeoOffersMap] }).compileComponents();
     fixture = TestBed.createComponent(GeoOffersMap);
     fixture.componentRef.setInput('loadTimeoutMs', timeoutMs);
+    fixture.componentRef.setInput('ariaLabel', 'Mapa de ofertas cercanas');
     fixture.componentRef.setInput('center', { latitude: -12.12, longitude: -77.03 });
     failures = 0;
     fixture.componentInstance.failed.subscribe(() => failures++);
@@ -26,6 +27,14 @@ describe('GeoOffersMap', () => {
   };
 
   afterEach(() => fixture.destroy());
+
+  it('names the map with the label the screen translated', async () => {
+    await create(60_000);
+
+    expect((fixture.nativeElement as HTMLElement).querySelector('[role="region"]')?.getAttribute('aria-label')).toBe(
+      'Mapa de ofertas cercanas',
+    );
+  });
 
   it('emits failed once when the tiles answer with an error (US09, QAS12)', async () => {
     await create(60_000);

@@ -87,6 +87,7 @@
           [center]="search.origin()?.point ?? null"
           [radiusMeters]="radiusMeters()"
           [pins]="pins()"
+          [ariaLabel]="'search.mapLabel' | translate"
           (pinSelected)="openOffer($event)"
           (failed)="mapFailed.set(true)">
           <div class="legend">
