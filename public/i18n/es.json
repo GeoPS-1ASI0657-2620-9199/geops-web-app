@@ -401,7 +401,11 @@
     "otherDistrict": "Otro distrito",
     "searchIn": "Buscar en {{district}}",
     "pickOne": "Elige un distrito",
-    "retryGps": "Reintentar con GPS"
+    "retryGps": "Reintentar con GPS",
+    "mapFailed": {
+      "title": "El mapa no cargó",
+      "description": "Estas son las mismas ofertas en lista."
+    }
   },
   "home": {
     "eyebrow": "Te damos la bienvenida",

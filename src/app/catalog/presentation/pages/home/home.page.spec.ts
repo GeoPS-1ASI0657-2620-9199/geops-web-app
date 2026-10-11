@@ -1,5 +1,6 @@
 import { Type } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import { SavedOfferRepository } from '../../../../engagement/domain/ports/saved-offer.repository';
@@ -9,6 +10,7 @@ import { ReservationRepository } from '../../../../reservation/domain/ports/rese
 import { DistrictDirectory } from '../../../domain/ports/district.directory';
 import { LocationProvider } from '../../../domain/ports/location.provider';
 import { OfferRepository } from '../../../domain/ports/offer.repository';
+import { GeoOffersMap } from '../../../../shared/ui/geo-offers-map/geo-offers-map';
 import { nearbyOffer, pageOf } from '../../../testing/nearby-offer.testing';
 import { CategoriesPage } from '../categories/categories.page';
 import { HomePage } from './home.page';
@@ -73,6 +75,18 @@ describe('HomePage', () => {
 
     expect(host.querySelectorAll('geo-offer-card').length).toBe(3);
   });
+
+  it('shows the same offers as a list when the map does not load (US09, QAS12)', async () => {
+    const fixture = await setUp(HomePage, CONSUMER);
+    const host = fixture.nativeElement as HTMLElement;
+
+    fixture.debugElement.query(By.directive(GeoOffersMap)).componentInstance.failed.emit();
+    fixture.detectChanges();
+
+    expect(host.querySelector('geo-offers-map')).toBeNull();
+    expect(host.querySelector('[data-testid="map-fallback"]')?.textContent).toContain('search.mapFailed.title');
+    expect(host.querySelectorAll('.near-item').length).toBe(7);
+  });
 });
 
 describe('CategoriesPage', () => {
@@ -85,5 +99,17 @@ describe('CategoriesPage', () => {
     expect(host.querySelectorAll('.item').length).toBe(6);
     expect(host.querySelector('.item-name')?.textContent).toContain('Comercio 1');
     expect(host.textContent).toContain('categoriesPage.seeAll');
+  });
+
+  it('lists every offer when the map does not load (US09, QAS12)', async () => {
+    const fixture = await setUp(CategoriesPage, CONSUMER);
+    const host = fixture.nativeElement as HTMLElement;
+
+    fixture.debugElement.query(By.directive(GeoOffersMap)).componentInstance.failed.emit();
+    fixture.detectChanges();
+
+    expect(host.querySelector('geo-offers-map')).toBeNull();
+    expect(host.querySelector('[data-testid="map-fallback"]')).not.toBeNull();
+    expect(host.querySelectorAll('.item').length).toBe(7);
   });
 });

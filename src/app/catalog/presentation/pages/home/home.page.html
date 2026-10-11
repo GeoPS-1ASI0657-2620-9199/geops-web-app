@@ -23,14 +23,24 @@
       (changeDistrict)="search.changeDistrict()"
       (radiusChange)="onRadius($event)"
       (categoryChange)="category.set($event)">
-      <div class="map-row">
-        <geo-offers-map
-          class="map"
-          [center]="search.origin()?.point ?? null"
-          [radiusMeters]="radiusMeters()"
-          [pins]="pins()"
-          [precisionLabel]="precisionLabel()"
-          (pinSelected)="openOffer($event)" />
+      @if (mapFailed()) {
+        <geo-alert
+          kind="warning"
+          data-testid="map-fallback"
+          [title]="'search.mapFailed.title' | translate"
+          [description]="'search.mapFailed.description' | translate" />
+      }
+      <div class="map-row" [class.no-map]="mapFailed()">
+        @if (!mapFailed()) {
+          <geo-offers-map
+            class="map"
+            [center]="search.origin()?.point ?? null"
+            [radiusMeters]="radiusMeters()"
+            [pins]="pins()"
+            [precisionLabel]="precisionLabel()"
+            (pinSelected)="openOffer($event)"
+            (failed)="mapFailed.set(true)" />
+        }
         <aside class="near">
           <h2 class="near-title">{{ 'home.nearYou' | translate }}</h2>
           @if (search.state() === 'loading') {

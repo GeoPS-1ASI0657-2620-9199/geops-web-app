@@ -10,7 +10,14 @@
   </div>
 
   <app-search-gate>
-    <div class="layout">
+    @if (mapFailed()) {
+      <geo-alert
+        kind="warning"
+        data-testid="map-fallback"
+        [title]="'search.mapFailed.title' | translate"
+        [description]="'search.mapFailed.description' | translate" />
+    }
+    <div class="layout" [class.no-map]="mapFailed()">
       <div class="side">
         <div class="box">
           <app-radius-control [minutes]="search.radius()" (changed)="onRadius($event)" />
@@ -74,25 +81,28 @@
         </mat-radio-group>
       </div>
 
-      <geo-offers-map
-        class="map"
-        [center]="search.origin()?.point ?? null"
-        [radiusMeters]="radiusMeters()"
-        [pins]="pins()"
-        (pinSelected)="openOffer($event)">
-        <div class="legend">
-          <p class="legend-title">{{ 'categoriesPage.legend.title' | translate }}</p>
-          <p><span class="dot green"></span>{{ 'categoriesPage.legend.verified' | translate }}</p>
-          <p>
-            <span class="dot blue"></span>
-            @if (locationNote(); as note) {
-              {{ 'categoriesPage.legend.you' | translate: { note } }}
-            } @else {
-              {{ 'categoriesPage.legend.district' | translate }}
-            }
-          </p>
-        </div>
-      </geo-offers-map>
+      @if (!mapFailed()) {
+        <geo-offers-map
+          class="map"
+          [center]="search.origin()?.point ?? null"
+          [radiusMeters]="radiusMeters()"
+          [pins]="pins()"
+          (pinSelected)="openOffer($event)"
+          (failed)="mapFailed.set(true)">
+          <div class="legend">
+            <p class="legend-title">{{ 'categoriesPage.legend.title' | translate }}</p>
+            <p><span class="dot green"></span>{{ 'categoriesPage.legend.verified' | translate }}</p>
+            <p>
+              <span class="dot blue"></span>
+              @if (locationNote(); as note) {
+                {{ 'categoriesPage.legend.you' | translate: { note } }}
+              } @else {
+                {{ 'categoriesPage.legend.district' | translate }}
+              }
+            </p>
+          </div>
+        </geo-offers-map>
+      }
     </div>
   </app-search-gate>
 </section>

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } 
 import { Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
+import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { SessionStore } from '../../../../iam/application/session.store';
 import { categoryIcon } from '../../../../shared/ui/category-icon';
 import { GeoOfferCard } from '../../../../shared/ui/geo-offer-card/geo-offer-card';
@@ -25,6 +26,7 @@ const CARDS = 6;
     RouterLink,
     MatIconModule,
     TranslateModule,
+    GeoAlert,
     GeoOfferCard,
     GeoOffersMap,
     OfferCardActions,
@@ -46,7 +48,9 @@ export class HomePage implements OnInit {
     const category = this.category();
     return this.search.offers().filter((offer) => !category || offer.category === category);
   });
-  protected readonly nearYou = computed(() => this.filtered().slice(0, NEAR_YOU));
+  /** True once the map tiles failed: the side list then carries every offer (US09, QAS12). */
+  protected readonly mapFailed = signal(false);
+  protected readonly nearYou = computed(() => (this.mapFailed() ? this.filtered() : this.filtered().slice(0, NEAR_YOU)));
   protected readonly cards = computed(() => this.filtered().slice(0, CARDS));
   protected readonly pins = computed<MapPin[]>(() => toPins(this.filtered()));
   protected readonly placeLabel = computed(() => placeLabelOf(this.search.origin()));
