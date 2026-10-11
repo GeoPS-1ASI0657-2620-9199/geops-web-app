@@ -10,6 +10,7 @@ import { LocationProvider } from '../../../domain/ports/location.provider';
 import { OfferRepository } from '../../../domain/ports/offer.repository';
 import { NearbyOffersPage } from './nearby-offers.page';
 import { SessionStorage } from '../../../../iam/domain/ports/session.storage';
+import { radiusPreferenceTestingProviders } from '../../../testing/radius-preference.testing';
 
 const CEVICHE = nearbyOffer({ offerId: 1, title: 'Ceviche clásico', businessName: 'Cevichería Mar', category: 'Gastronomía' });
 const CORTE = nearbyOffer({ offerId: 2, title: 'Corte clásico', businessName: 'Barbería Velarde', category: 'Salud y belleza', imageUrl: null });
@@ -25,6 +26,7 @@ describe('NearbyOffersPage', () => {
     await TestBed.configureTestingModule({
       imports: [NearbyOffersPage],
       providers: [
+        ...radiusPreferenceTestingProviders(),
         provideRouter([]),
         provideTranslateService(),
         { provide: ActivatedRoute, useValue: { queryParamMap: query } },

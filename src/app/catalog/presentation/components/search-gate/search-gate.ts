@@ -31,7 +31,18 @@ import { DistrictPicker } from '../district-picker/district-picker';
           <geo-alert
             kind="warning"
             [title]="'nearbyPage.imprecise.title' | translate: { meters: (search.imprecision() | number: '1.0-0') }"
-            [description]="'nearbyPage.imprecise.description' | translate" />
+            [description]="'nearbyPage.imprecise.description' | translate">
+            @if (search.canConfirmReading()) {
+              <button
+                mat-stroked-button
+                type="button"
+                class="confirm-reading"
+                data-testid="confirm-reading"
+                (click)="search.confirmImpreciseReading()">
+                {{ 'nearbyPage.imprecise.confirm' | translate: { meters: (search.imprecision() | number: '1.0-0') } }}
+              </button>
+            }
+          </geo-alert>
         }
         <app-district-picker
           [title]="pickTitle() | translate"
@@ -69,7 +80,7 @@ import { DistrictPicker } from '../district-picker/district-picker';
       }
     }
   `,
-  styles: [`:host { display: flex; flex-direction: column; gap: 18px; }`],
+  styles: [`:host { display: flex; flex-direction: column; gap: 18px; } .confirm-reading { margin-top: 8px; }`],
 })
 export class SearchGate {
   protected readonly search = inject(OfferSearchStore);

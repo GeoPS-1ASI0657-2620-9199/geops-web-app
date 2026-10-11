@@ -1,14 +1,19 @@
 import { Injectable, inject } from '@angular/core';
-import { LocationReading, isPrecise } from '../domain/model/location-reading';
+import { GrantedReading, isPrecise } from '../domain/model/location-reading';
 import { LocationProvider } from '../domain/ports/location.provider';
 
-type GrantedReading = Extract<LocationReading, { status: 'GRANTED' }>;
 export type PickDistrictReason = 'DENIED' | 'UNAVAILABLE' | 'INSECURE_CONTEXT' | 'IMPRECISE';
 
 /** Where the search starts: the reading if it is precise, otherwise the reason to pick a district. */
 export type SearchStart =
   | { readonly kind: 'POINT'; readonly reading: GrantedReading }
-  | { readonly kind: 'PICK_DISTRICT'; readonly reason: PickDistrictReason; readonly accuracyMeters?: number };
+  | {
+      readonly kind: 'PICK_DISTRICT';
+      readonly reason: PickDistrictReason;
+      readonly accuracyMeters?: number;
+      /** The imprecise reading, which the consumer may still confirm (QAS14). */
+      readonly reading?: GrantedReading;
+    };
 
 /** Asks the device for the location and decides if it is good enough to search from (US03, US46). */
 @Injectable({ providedIn: 'root' })
@@ -22,6 +27,6 @@ export class LocateConsumerUseCase {
     }
     return isPrecise(reading)
       ? { kind: 'POINT', reading }
-      : { kind: 'PICK_DISTRICT', reason: 'IMPRECISE', accuracyMeters: Math.round(reading.accuracyMeters) };
+      : { kind: 'PICK_DISTRICT', reason: 'IMPRECISE', accuracyMeters: Math.round(reading.accuracyMeters), reading };
   }
 }

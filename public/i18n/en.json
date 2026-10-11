@@ -191,7 +191,8 @@
     },
     "imprecise": {
       "title": "Your location has a ±{{meters}} m margin",
-      "description": "With that margin distances can be off by several blocks. Choose your district or try again with GPS on."
+      "description": "With more than 100 m of margin distances can be off by a block or two. Confirm the point if you are there, choose your district or try again with GPS on.",
+      "confirm": "Search from this point (±{{meters}} m)"
     },
     "pick": {
       "title": "Choose your district",

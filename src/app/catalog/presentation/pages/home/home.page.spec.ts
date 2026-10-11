@@ -14,6 +14,7 @@ import { GeoOffersMap } from '../../../../shared/ui/geo-offers-map/geo-offers-ma
 import { nearbyOffer, pageOf } from '../../../testing/nearby-offer.testing';
 import { CategoriesPage } from '../categories/categories.page';
 import { HomePage } from './home.page';
+import { radiusPreferenceTestingProviders } from '../../../testing/radius-preference.testing';
 
 const CONSUMER: Session = {
   accessToken: 't',
@@ -33,6 +34,7 @@ async function setUp<T>(component: Type<T>, session: Session | null): Promise<Co
   await TestBed.configureTestingModule({
     imports: [component],
     providers: [
+      ...radiusPreferenceTestingProviders(),
       provideRouter([]),
       provideTranslateService(),
       { provide: OfferRepository, useValue: offers },

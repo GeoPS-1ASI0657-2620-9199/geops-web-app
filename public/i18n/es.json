@@ -191,7 +191,8 @@
     },
     "imprecise": {
       "title": "Tu ubicación tiene un margen de ±{{meters}} m",
-      "description": "Con ese margen las distancias pueden fallar por varias cuadras. Elige tu distrito o vuelve a intentar con el GPS activado."
+      "description": "Con más de 100 m de margen las distancias pueden fallar por una o dos cuadras. Confirma el punto si estás ahí, elige tu distrito o vuelve a intentar con el GPS activado.",
+      "confirm": "Buscar desde este punto (±{{meters}} m)"
     },
     "pick": {
       "title": "Elige tu distrito",

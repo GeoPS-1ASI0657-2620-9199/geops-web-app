@@ -2,8 +2,8 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { ApiError, NETWORK_ERROR } from '../../shared/domain/api-error';
 import { GeoPoint } from '../../shared/domain/geo-point';
 import { LimaDistrict } from '../domain/model/lima-district';
+import { GrantedReading } from '../domain/model/location-reading';
 import {
-  DEFAULT_RADIUS_MINUTES,
   NearbyOffer,
   NearbyOfferPage,
   clampRadius,
@@ -12,6 +12,7 @@ import {
 } from '../domain/model/nearby-offer';
 import { LocateConsumerUseCase, PickDistrictReason } from './locate-consumer.use-case';
 import { SearchNearbyOffersUseCase } from './search-nearby-offers.use-case';
+import { SearchRadiusPreference } from './search-radius-preference';
 
 export type SearchState = 'idle' | 'locating' | 'pick-district' | 'loading' | 'ready' | 'empty' | 'error';
 
@@ -30,12 +31,16 @@ export interface SearchOrigin {
 export class OfferSearchStore {
   private readonly locate = inject(LocateConsumerUseCase);
   private readonly search = inject(SearchNearbyOffersUseCase);
+  private readonly preference = inject(SearchRadiusPreference);
 
   readonly state = signal<SearchState>('idle');
   readonly origin = signal<SearchOrigin | null>(null);
   readonly pickReason = signal<PickDistrictReason | null>(null);
   readonly imprecision = signal<number | null>(null);
-  readonly radius = signal(DEFAULT_RADIUS_MINUTES);
+  /** Starts at the last radius chosen in this browser (US46). */
+  readonly radius = signal(this.preference.current());
+  /** The imprecise reading the consumer may confirm instead of picking a district (QAS14). */
+  private readonly impreciseReading = signal<GrantedReading | null>(null);
   readonly offers = signal<NearbyOffer[]>([]);
   readonly lastPage = signal<NearbyOfferPage | null>(null);
   readonly loadingMore = signal(false);
@@ -46,14 +51,28 @@ export class OfferSearchStore {
     return !!page && hasMorePages(page);
   });
   readonly nextRadius = computed(() => widerRadius(this.radius()));
+  /** True while there is an imprecise reading the consumer can still confirm. */
+  readonly canConfirmReading = computed(() => this.impreciseReading() !== null);
   readonly total = computed(() => this.lastPage()?.totalElements ?? 0);
   /** Categories present in the results, in order of appearance, for the filter chips. */
   readonly categories = computed(() => [...new Set(this.offers().map((offer) => offer.category))]);
 
-  /** Starts the search the first time a tab opens; later visits keep the previous one. */
+  /**
+   * Starts the search the first time a tab opens; later visits keep the previous one, unless a
+   * consumer just logged in with another radius saved in the profile (US46, scenario 4).
+   */
   async ensureStarted(): Promise<void> {
     if (this.state() === 'idle') {
+      // Marked before the first await, so two tabs opening at once start a single search.
+      this.state.set('locating');
+      this.radius.set((await this.preference.resolve()).minutes);
       await this.useDeviceLocation();
+      return;
+    }
+    const saved = await this.preference.resolve();
+    if (saved.fromProfile && saved.minutes !== this.radius()) {
+      this.radius.set(saved.minutes);
+      await this.runSearch();
     }
   }
 
@@ -61,19 +80,26 @@ export class OfferSearchStore {
     this.state.set('locating');
     const start = await this.locate.execute();
     if (start.kind === 'POINT') {
-      this.pickReason.set(null);
-      this.imprecision.set(null);
-      this.origin.set({ point: start.reading.point, accuracyMeters: Math.round(start.reading.accuracyMeters) });
-      await this.runSearch();
+      await this.searchFrom(start.reading);
       return;
     }
     this.pickReason.set(start.reason);
     this.imprecision.set(start.accuracyMeters ?? null);
+    this.impreciseReading.set(start.reading ?? null);
     this.state.set('pick-district');
+  }
+
+  /** The consumer accepts the imprecise point after the warning (QAS14). */
+  async confirmImpreciseReading(): Promise<void> {
+    const reading = this.impreciseReading();
+    if (reading) {
+      await this.searchFrom(reading);
+    }
   }
 
   async chooseDistrict(district: LimaDistrict): Promise<void> {
     this.pickReason.set(null);
+    this.impreciseReading.set(null);
     this.origin.set({ point: district.center, districtName: district.name });
     await this.runSearch();
   }
@@ -84,14 +110,14 @@ export class OfferSearchStore {
   }
 
   async setRadius(minutes: number): Promise<void> {
-    this.radius.set(clampRadius(minutes));
+    this.chooseRadius(clampRadius(minutes));
     await this.runSearch();
   }
 
   async widenRadius(): Promise<void> {
     const next = this.nextRadius();
     if (next !== null) {
-      this.radius.set(next);
+      this.chooseRadius(next);
       await this.runSearch();
     }
   }
@@ -123,6 +149,19 @@ export class OfferSearchStore {
     while (this.canLoadMore() && this.state() === 'ready') {
       await this.loadMore();
     }
+  }
+
+  private chooseRadius(minutes: number): void {
+    this.radius.set(minutes);
+    this.preference.remember(minutes);
+  }
+
+  private async searchFrom(reading: GrantedReading): Promise<void> {
+    this.pickReason.set(null);
+    this.imprecision.set(null);
+    this.impreciseReading.set(null);
+    this.origin.set({ point: reading.point, accuracyMeters: Math.round(reading.accuracyMeters) });
+    await this.runSearch();
   }
 
   private async runSearch(): Promise<void> {

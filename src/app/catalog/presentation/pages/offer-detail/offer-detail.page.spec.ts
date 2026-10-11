@@ -11,6 +11,7 @@ import { OfferDetailPage } from './offer-detail.page';
 import { of } from 'rxjs';
 import { SavedOfferRepository } from '../../../../engagement/domain/ports/saved-offer.repository';
 import { LocationProvider } from '../../../domain/ports/location.provider';
+import { radiusPreferenceTestingProviders } from '../../../testing/radius-preference.testing';
 
 const OFFER: OfferDetail = {
   offerId: 1052,
@@ -62,6 +63,7 @@ describe('OfferDetailPage', () => {
     await TestBed.configureTestingModule({
       imports: [OfferDetailPage],
       providers: [
+        ...radiusPreferenceTestingProviders(),
         provideRouter([]),
         provideTranslateService(),
         { provide: OfferRepository, useValue: offers },
