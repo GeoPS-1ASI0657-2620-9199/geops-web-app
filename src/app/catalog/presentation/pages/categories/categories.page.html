@@ -92,6 +92,9 @@
           <div class="legend">
             <p class="legend-title">{{ 'categoriesPage.legend.title' | translate }}</p>
             <p><span class="dot green"></span>{{ 'categoriesPage.legend.verified' | translate }}</p>
+            @if (search.publicOffers().length) {
+              <p><span class="dot amber"></span>{{ 'categoriesPage.legend.publicSource' | translate }}</p>
+            }
             <p>
               <span class="dot blue"></span>
               @if (locationNote(); as note) {

@@ -102,6 +102,49 @@ describe('HttpOfferRepository', () => {
     all.flush({ content: [], page: 0, totalElements: 0, totalPages: 0 });
   });
 
+  it('asks for the public sources apart, with the same origin, radius and category (US39, E2-08)', async () => {
+    const result = repository.findPublicSourcesNearby(ORIGIN, 10, 'Librería y útiles');
+
+    const request = http.expectOne((r) => r.url === `${BASE_URL}/offers/nearby/public-sources`);
+    expect(request.request.params.get('radiusMinutes')).toBe('10');
+    expect(request.request.params.get('category')).toBe('Librería y útiles');
+    request.flush({
+      content: [
+        {
+          offerId: 9001,
+          title: 'Feria de libros usados',
+          sourceName: 'Municipalidad de Lima',
+          distanceMeters: 420,
+          walkMinutes: 6,
+          category: 'Librería y útiles',
+          address: 'Jr. de la Unión 300, Cercado de Lima',
+          imageUrl: null,
+          latitude: -12.0464,
+          longitude: -77.0306,
+          price: 0.0,
+          validTo: '2026-10-30',
+        },
+      ],
+      page: 0,
+      totalElements: 1,
+      totalPages: 1,
+    });
+
+    expect(await result).toEqual([
+      jasmine.objectContaining({ offerId: 9001, sourceName: 'Municipalidad de Lima', location: { latitude: -12.0464, longitude: -77.0306 } }),
+    ]);
+  });
+
+  it('rejects the public sources with the code of Catalog', async () => {
+    const result = repository.findPublicSourcesNearby(ORIGIN, 25);
+
+    http
+      .expectOne((r) => r.url === `${BASE_URL}/offers/nearby/public-sources`)
+      .flush({ code: 'RADIUS_OUT_OF_RANGE', message: 'no' }, { status: 400, statusText: 'Bad Request' });
+
+    await expectAsync(result).toBeRejectedWith(jasmine.objectContaining<ApiError>({ code: 'RADIUS_OUT_OF_RANGE' }));
+  });
+
   it('reads the closed list of categories (E2-06)', async () => {
     const result = repository.categories();
 

@@ -10,6 +10,7 @@ import { GeoOffersMap, MapPin } from '../../../../shared/ui/geo-offers-map/geo-o
 import { OfferSearchStore } from '../../../application/offer-search.store';
 import { NearbyOffer } from '../../../domain/model/nearby-offer';
 import { OfferCardActions } from '../../components/offer-card-actions/offer-card-actions';
+import { PublicSourceOffers } from '../../components/public-source-offers/public-source-offers';
 import { SearchGate } from '../../components/search-gate/search-gate';
 import { SearchPanel } from '../../components/search-panel/search-panel';
 import { METERS_PER_WALK_MINUTE, placeLabelOf, precisionLabelOf, toPins } from '../../search-view';
@@ -30,6 +31,7 @@ const CARDS = 6;
     GeoOfferCard,
     GeoOffersMap,
     OfferCardActions,
+    PublicSourceOffers,
     SearchGate,
     SearchPanel,
   ],
@@ -49,7 +51,7 @@ export class HomePage implements OnInit {
   protected readonly mapFailed = signal(false);
   protected readonly nearYou = computed(() => (this.mapFailed() ? this.filtered() : this.filtered().slice(0, NEAR_YOU)));
   protected readonly cards = computed(() => this.filtered().slice(0, CARDS));
-  protected readonly pins = computed<MapPin[]>(() => toPins(this.filtered()));
+  protected readonly pins = computed<MapPin[]>(() => toPins(this.filtered(), this.search.publicOffers()));
   protected readonly placeLabel = computed(() => placeLabelOf(this.search.origin()));
   protected readonly precisionLabel = computed(() => precisionLabelOf(this.search.origin()));
   protected readonly radiusMeters = computed(() => this.search.radius() * METERS_PER_WALK_MINUTE);

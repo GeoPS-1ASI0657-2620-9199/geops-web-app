@@ -444,7 +444,8 @@
       "title": "Leyenda",
       "verified": "Comercio afiliado",
       "you": "Tu ubicación · {{note}}",
-      "district": "Centro del distrito"
+      "district": "Centro del distrito",
+      "publicSource": "Fuente pública, sin garantía"
     }
   },
   "seal": {
@@ -582,5 +583,9 @@
     "category": "Categoría",
     "categoryError": "Elige la categoría.",
     "categoriesUnavailable": "No pudimos cargar las categorías. Recarga la página para intentarlo de nuevo."
+  },
+  "publicSources": {
+    "title": "Fuentes públicas, sin garantía",
+    "description": "Estas ofertas las publicó una fuente pública y el comercio no está afiliado a GeoPS. Confirma el precio y la vigencia en el local."
   }
 }

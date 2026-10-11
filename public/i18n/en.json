@@ -444,7 +444,8 @@
       "title": "Legend",
       "verified": "Affiliated business",
       "you": "Your location · {{note}}",
-      "district": "District center"
+      "district": "District center",
+      "publicSource": "Public source, no guarantee"
     }
   },
   "seal": {
@@ -582,5 +583,9 @@
     "category": "Category",
     "categoryError": "Choose the category.",
     "categoriesUnavailable": "We could not load the categories. Reload the page to try again."
+  },
+  "publicSources": {
+    "title": "Public sources, no guarantee",
+    "description": "A public source published these offers and the business is not affiliated with GeoPS. Check the price and validity at the store."
   }
 }

@@ -58,7 +58,7 @@ export class CategoriesPage implements OnInit {
     const sorted = sortOffers(this.inCategory(), this.order());
     return this.mapFailed() ? sorted : sorted.slice(0, LIST_SIZE);
   });
-  protected readonly pins = computed<MapPin[]>(() => toPins(this.inCategory()));
+  protected readonly pins = computed<MapPin[]>(() => toPins(this.inCategory(), this.search.publicOffers()));
   protected readonly placeLabel = computed(() => placeLabelOf(this.search.origin()));
   protected readonly radiusMeters = computed(() => this.search.radius() * METERS_PER_WALK_MINUTE);
   protected readonly locationNote = computed(() => {

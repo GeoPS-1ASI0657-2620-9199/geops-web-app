@@ -89,6 +89,7 @@
 .dot { width: 9px; height: 9px; border-radius: 50%; }
 .dot.green { background: var(--status-verified); }
 .dot.blue { background: var(--status-user); }
+.dot.amber { background: var(--status-reference); }
 @media (max-width: 1000px) {
   .layout { grid-template-columns: 1fr; }
   .map { height: 420px; position: static; }

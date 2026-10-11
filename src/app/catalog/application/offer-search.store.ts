@@ -10,6 +10,7 @@ import {
   hasMorePages,
   widerRadius,
 } from '../domain/model/nearby-offer';
+import { PublicSourceOffer } from '../domain/model/public-source-offer';
 import { LocateConsumerUseCase, PickDistrictReason } from './locate-consumer.use-case';
 import { ListOfferCategoriesUseCase } from './list-offer-categories.use-case';
 import { SearchNearbyOffersUseCase } from './search-nearby-offers.use-case';
@@ -44,6 +45,8 @@ export class OfferSearchStore {
   /** The imprecise reading the consumer may confirm instead of picking a district (QAS14). */
   private readonly impreciseReading = signal<GrantedReading | null>(null);
   readonly offers = signal<NearbyOffer[]>([]);
+  /** Offers of public sources, kept apart and never mixed with the affiliated ones (US39). */
+  readonly publicOffers = signal<PublicSourceOffer[]>([]);
   readonly lastPage = signal<NearbyOfferPage | null>(null);
   readonly loadingMore = signal(false);
   readonly errorMessage = signal<string | null>(null);
@@ -192,9 +195,14 @@ export class OfferSearchStore {
     }
     this.state.set('loading');
     this.offers.set([]);
+    this.publicOffers.set([]);
     try {
-      const result = await this.search.execute(origin.point, this.radius(), 0, this.category());
+      const [result, publicOffers] = await Promise.all([
+        this.search.execute(origin.point, this.radius(), 0, this.category()),
+        this.search.publicSources(origin.point, this.radius(), this.category()),
+      ]);
       this.offers.set(result.offers);
+      this.publicOffers.set(publicOffers);
       this.lastPage.set(result);
       this.state.set(result.totalElements === 0 ? 'empty' : 'ready');
     } catch (error) {

@@ -8,6 +8,7 @@ import { RadiusPreferenceStore } from '../domain/ports/radius-preference.store';
 import { Session } from '../../iam/domain/model/session';
 import { SessionStorage } from '../../iam/domain/ports/session.storage';
 import { MemoryRadiusPreferenceStore } from '../testing/radius-preference.testing';
+import { publicSourceOffer } from '../testing/public-source-offer.testing';
 import { OfferSearchStore } from './offer-search.store';
 import { nearbyOffer, pageOf } from '../testing/nearby-offer.testing';
 
@@ -21,8 +22,9 @@ describe('OfferSearchStore', () => {
   let profile: jasmine.SpyObj<RadiusPreferenceGateway>;
 
   const create = (reading: LocationReading, options: { saved?: number | null; session?: Session | null } = {}) => {
-    offers = jasmine.createSpyObj<OfferRepository>('OfferRepository', ['findNearby', 'findById', 'categories']);
+    offers = jasmine.createSpyObj<OfferRepository>('OfferRepository', ['findNearby', 'findById', 'categories', 'findPublicSourcesNearby']);
     offers.categories.and.resolveTo(['Gastronomía', 'Mascotas']);
+    offers.findPublicSourcesNearby.and.resolveTo([]);
     saved = new MemoryRadiusPreferenceStore(options.saved ?? null);
     profile = jasmine.createSpyObj<RadiusPreferenceGateway>('RadiusPreferenceGateway', ['fetch', 'save']);
     profile.fetch.and.resolveTo(10);
@@ -66,6 +68,29 @@ describe('OfferSearchStore', () => {
     offers.findNearby.calls.reset();
     await store.selectCategory('Mascotas');
     expect(offers.findNearby).not.toHaveBeenCalled();
+  });
+
+  it('loads the public sources with the same origin and radius and keeps them apart (US39)', async () => {
+    create({ status: 'GRANTED', point: POINT, accuracyMeters: 12 });
+    offers.findNearby.and.resolveTo(pageOf([nearbyOffer()]));
+    offers.findPublicSourcesNearby.and.resolveTo([publicSourceOffer()]);
+
+    await store.ensureStarted();
+
+    expect(offers.findPublicSourcesNearby).toHaveBeenCalledWith(POINT, 10, null);
+    expect(store.offers().map((o) => o.offerId)).toEqual([1052]);
+    expect(store.publicOffers().map((o) => o.offerId)).toEqual([9001]);
+  });
+
+  it('goes on with the affiliated offers when the public sources fail', async () => {
+    create({ status: 'GRANTED', point: POINT, accuracyMeters: 12 });
+    offers.findNearby.and.resolveTo(pageOf([nearbyOffer()]));
+    offers.findPublicSourcesNearby.and.rejectWith(new ApiError(NETWORK_ERROR, 'no'));
+
+    await store.ensureStarted();
+
+    expect(store.state()).toBe('ready');
+    expect(store.publicOffers()).toEqual([]);
   });
 
   it('builds the chips from the results when the list of Catalog cannot be read', async () => {

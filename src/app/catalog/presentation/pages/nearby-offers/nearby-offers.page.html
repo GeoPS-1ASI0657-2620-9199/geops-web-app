@@ -70,5 +70,8 @@
         </button>
       </div>
     }
+    @if (search.state() !== 'loading') {
+      <app-public-source-offers [offers]="search.publicOffers()" />
+    }
   </app-search-gate>
 </section>

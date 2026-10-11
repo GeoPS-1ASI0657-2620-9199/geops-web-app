@@ -10,6 +10,7 @@ import { GeoOfferCard } from '../../../../shared/ui/geo-offer-card/geo-offer-car
 import { OfferSearchStore } from '../../../application/offer-search.store';
 import { NearbyOffer } from '../../../domain/model/nearby-offer';
 import { OfferCardActions } from '../../components/offer-card-actions/offer-card-actions';
+import { PublicSourceOffers } from '../../components/public-source-offers/public-source-offers';
 import { SearchGate } from '../../components/search-gate/search-gate';
 import { SearchPanel } from '../../components/search-panel/search-panel';
 import { matchesTerm, placeLabelOf } from '../../search-view';
@@ -30,6 +31,7 @@ import { validityLabel } from '../../validity-label';
     GeoEmptyState,
     GeoOfferCard,
     OfferCardActions,
+    PublicSourceOffers,
     SearchGate,
     SearchPanel,
   ],
