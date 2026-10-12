@@ -31,6 +31,28 @@ export interface PlacedReservation {
   readonly isNew: boolean;
 }
 
+/** Answer to the delivery of a code at the counter (US41). */
+export interface RedeemedReservation {
+  readonly reservationId: number;
+  readonly code: string;
+  readonly offerId: number;
+  readonly offerTitle: string;
+  readonly redeemedAt: string;
+}
+
+/** What the owner types, as reservation-service reads it: no spaces or dashes, in capitals. */
+export function normalizeCode(typed: string): string {
+  return typed.replace(/[\s-]/g, '').toUpperCase();
+}
+
+/**
+ * A reservation past its deadline can still read ACTIVE, because no task marks it EXPIRED yet (E2-05);
+ * the counter compares the deadline itself.
+ */
+export function isPastDeadline(reservation: Pick<Reservation, 'expiresAt'>, now: number): boolean {
+  return new Date(reservation.expiresAt).getTime() <= now;
+}
+
 export function isReservationStatus(value: string | null | undefined): value is ReservationStatus {
   return RESERVATION_STATUSES.includes(value as ReservationStatus);
 }

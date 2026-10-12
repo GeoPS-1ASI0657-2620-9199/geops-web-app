@@ -10,6 +10,9 @@ import { LocationProvider } from '../../../domain/ports/location.provider';
 import { OfferRepository } from '../../../domain/ports/offer.repository';
 import { NearbyOffersPage } from './nearby-offers.page';
 import { SessionStorage } from '../../../../iam/domain/ports/session.storage';
+import { radiusPreferenceTestingProviders } from '../../../testing/radius-preference.testing';
+import { publicSourceOffer } from '../../../testing/public-source-offer.testing';
+import { PublicSourceOffer } from '../../../domain/model/public-source-offer';
 
 const CEVICHE = nearbyOffer({ offerId: 1, title: 'Ceviche clásico', businessName: 'Cevichería Mar', category: 'Gastronomía' });
 const CORTE = nearbyOffer({ offerId: 2, title: 'Corte clásico', businessName: 'Barbería Velarde', category: 'Salud y belleza', imageUrl: null });
@@ -18,13 +21,17 @@ describe('NearbyOffersPage', () => {
   let fixture: ComponentFixture<NearbyOffersPage>;
   let query: BehaviorSubject<ReturnType<typeof convertToParamMap>>;
 
-  const render = async (q: string | null = null) => {
-    const offers = jasmine.createSpyObj<OfferRepository>('OfferRepository', ['findNearby', 'findById']);
-    offers.findNearby.and.resolveTo(pageOf([CEVICHE, CORTE]));
+  const render = async (q: string | null = null, publicOffers: PublicSourceOffer[] = []) => {
+    const offers = jasmine.createSpyObj<OfferRepository>('OfferRepository', ['findNearby', 'findById', 'findPublicSourcesNearby']);
+    offers.findPublicSourcesNearby.and.resolveTo(publicOffers);
+    offers.findNearby.and.callFake((_origin, _radius, _page, category) =>
+      Promise.resolve(pageOf([CEVICHE, CORTE].filter((offer) => !category || offer.category === category))),
+    );
     query = new BehaviorSubject(convertToParamMap(q ? { q } : {}));
     await TestBed.configureTestingModule({
       imports: [NearbyOffersPage],
       providers: [
+        ...radiusPreferenceTestingProviders(),
         provideRouter([]),
         provideTranslateService(),
         { provide: ActivatedRoute, useValue: { queryParamMap: query } },
@@ -65,13 +72,25 @@ describe('NearbyOffersPage', () => {
     expect(text()).not.toContain('Cevichería Mar');
   });
 
-  it('filters by the category chip', async () => {
+  it('lists the public sources in their own section, without guarantee and with the source name (US39)', async () => {
+    await render(null, [publicSourceOffer()]);
+    const section = (fixture.nativeElement as HTMLElement).querySelector('[data-testid="public-sources"]')!;
+
+    expect(section.textContent).toContain('publicSources.title');
+    expect(section.textContent).toContain('Municipalidad de Lima');
+    expect(section.querySelector('.card.reference')).not.toBeNull();
+    expect(section.querySelector('app-offer-card-actions')).toBeNull();
+    expect(cards().length).toBe(3);
+  });
+
+  it('filters by the category chip through Catalog (US08)', async () => {
     await render();
     const chip = [...(fixture.nativeElement as HTMLElement).querySelectorAll<HTMLButtonElement>('button.chip')].find(
       (b) => b.textContent?.trim() === 'Salud y belleza',
     )!;
 
     chip.click();
+    await fixture.whenStable();
     fixture.detectChanges();
 
     expect(cards().length).toBe(1);

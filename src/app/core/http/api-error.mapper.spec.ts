@@ -15,6 +15,17 @@ describe('toApiError', () => {
     expect(error.message).toBe('Ese correo ya tiene una cuenta.');
   });
 
+  it('keeps the redeemedAt of a code already redeemed (E2-04)', () => {
+    const error = toApiError(
+      new HttpErrorResponse({
+        status: 409,
+        error: { code: 'RESERVATION_ALREADY_REDEEMED', message: 'ya', redeemedAt: '2026-10-20T17:42:10Z' },
+      }),
+    );
+
+    expect(error.redeemedAt).toBe('2026-10-20T17:42:10Z');
+  });
+
   it('reports a network error when the gateway cannot be reached', () => {
     expect(toApiError(new HttpErrorResponse({ status: 0 })).code).toBe(NETWORK_ERROR);
   });

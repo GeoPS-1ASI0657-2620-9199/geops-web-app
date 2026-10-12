@@ -21,6 +21,18 @@ const LIMA_DATE_TIME = new Intl.DateTimeFormat('es-PE', {
   minute: '2-digit',
 });
 
+const LIMA_TIME = new Intl.DateTimeFormat('es-PE', {
+  timeZone: LIMA_TIME_ZONE,
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false,
+});
+
+/** Hour and minute in Lima, e.g. "13:42", for what happened today at the counter. */
+export function limaTime(instant: string): string {
+  return LIMA_TIME.format(new Date(instant));
+}
+
 /**
  * Instant of the service (UTC) as the consumer reads it in Lima, e.g. "14 oct, 11:59 p. m.".
  * The offer ends at the last second of its day in Lima, which is already the next day in UTC.

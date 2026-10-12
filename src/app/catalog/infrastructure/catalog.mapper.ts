@@ -1,5 +1,6 @@
 import { NearbyOffer, NearbyOfferPage } from '../domain/model/nearby-offer';
 import { OfferDetail, OfferSource } from '../domain/model/offer-detail';
+import { PublicSourceOffer } from '../domain/model/public-source-offer';
 
 /** Body of GET /api/v1/offers/nearby (BRD-04 §6, Informe 4.3.2.5). */
 export interface NearbyOffersResponse {
@@ -51,6 +52,45 @@ function toNearbyOffer(offer: NearbyOfferResponse): NearbyOffer {
     price: offer.price,
     validTo: offer.validTo,
   };
+}
+
+/** Body of GET /api/v1/offers/nearby/public-sources: the same page, items without business or seal. */
+export interface PublicSourceOffersResponse {
+  content: PublicSourceOfferResponse[];
+  page: number;
+  totalElements: number;
+  totalPages: number;
+}
+
+export interface PublicSourceOfferResponse {
+  offerId: number;
+  title: string;
+  sourceName: string;
+  distanceMeters: number;
+  walkMinutes: number;
+  category: string;
+  address?: string | null;
+  imageUrl?: string | null;
+  latitude: number;
+  longitude: number;
+  price: number;
+  validTo: string;
+}
+
+export function toPublicSourceOffers(response: PublicSourceOffersResponse): PublicSourceOffer[] {
+  return response.content.map((offer) => ({
+    offerId: offer.offerId,
+    title: offer.title,
+    sourceName: offer.sourceName,
+    distanceMeters: offer.distanceMeters,
+    walkMinutes: offer.walkMinutes,
+    category: offer.category,
+    address: offer.address ?? '',
+    imageUrl: offer.imageUrl ?? null,
+    location: { latitude: offer.latitude, longitude: offer.longitude },
+    price: offer.price,
+    validTo: offer.validTo,
+  }));
 }
 
 /** Body of GET /api/v1/offers/{id} (BRD-05 §7.2). */

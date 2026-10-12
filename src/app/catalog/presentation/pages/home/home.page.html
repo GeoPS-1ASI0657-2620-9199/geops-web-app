@@ -19,18 +19,30 @@
       [approximate]="!!search.origin()?.districtName"
       [radius]="search.radius()"
       [categories]="search.categories()"
-      [category]="category()"
+      [category]="search.category()"
       (changeDistrict)="search.changeDistrict()"
       (radiusChange)="onRadius($event)"
-      (categoryChange)="category.set($event)">
-      <div class="map-row">
-        <geo-offers-map
-          class="map"
-          [center]="search.origin()?.point ?? null"
-          [radiusMeters]="radiusMeters()"
-          [pins]="pins()"
-          [precisionLabel]="precisionLabel()"
-          (pinSelected)="openOffer($event)" />
+      (categoryChange)="search.selectCategory($event)">
+      @if (mapFailed()) {
+        <geo-alert
+          kind="warning"
+          data-testid="map-fallback"
+          announce="status"
+          [title]="'search.mapFailed.title' | translate"
+          [description]="'search.mapFailed.description' | translate" />
+      }
+      <div class="map-row" [class.no-map]="mapFailed()">
+        @if (!mapFailed()) {
+          <geo-offers-map
+            class="map"
+            [center]="search.origin()?.point ?? null"
+            [radiusMeters]="radiusMeters()"
+            [pins]="pins()"
+            [precisionLabel]="precisionLabel()"
+            [ariaLabel]="'search.mapLabel' | translate"
+            (pinSelected)="openOffer($event)"
+            (failed)="mapFailed.set(true)" />
+        }
         <aside class="near">
           <h2 class="near-title">{{ 'home.nearYou' | translate }}</h2>
           @if (search.state() === 'loading') {
@@ -81,6 +93,7 @@
           </a>
         }
       </div>
+      <app-public-source-offers [offers]="search.publicOffers()" />
     }
   </app-search-gate>
 </section>

@@ -22,10 +22,10 @@
       [approximate]="!!search.origin()?.districtName"
       [radius]="search.radius()"
       [categories]="search.categories()"
-      [category]="category()"
+      [category]="search.category()"
       (changeDistrict)="search.changeDistrict()"
       (radiusChange)="onRadius($event)"
-      (categoryChange)="category.set($event)" />
+      (categoryChange)="search.selectCategory($event)" />
 
     @if (search.state() === 'loading') {
       <div class="grid" aria-busy="true" [attr.aria-label]="'nearbyPage.searching' | translate">
@@ -69,6 +69,9 @@
           {{ (search.loadingMore() ? 'nearbyPage.loadingMore' : 'nearbyPage.loadMore') | translate }}
         </button>
       </div>
+    }
+    @if (search.state() !== 'loading') {
+      <app-public-source-offers [offers]="search.publicOffers()" />
     }
   </app-search-gate>
 </section>

@@ -191,7 +191,8 @@
     },
     "imprecise": {
       "title": "Your location has a ±{{meters}} m margin",
-      "description": "With that margin distances can be off by several blocks. Choose your district or try again with GPS on."
+      "description": "With more than 100 m of margin distances can be off by a block or two. Confirm the point if you are there, choose your district or try again with GPS on.",
+      "confirm": "Search from this point (±{{meters}} m)"
     },
     "pick": {
       "title": "Choose your district",
@@ -206,7 +207,9 @@
     "empty": {
       "title": "No valid offers within {{minutes}} minutes",
       "description": "You can widen the distance or choose another district.",
-      "widen": "Widen to {{minutes}} walking min"
+      "widen": "Widen to {{minutes}} walking min",
+      "categoryTitle": "No {{category}} offers within {{minutes}} minutes",
+      "allCategories": "See every category"
     },
     "error": {
       "title": "We could not load the offers",
@@ -401,7 +404,12 @@
     "otherDistrict": "Other district",
     "searchIn": "Search in {{district}}",
     "pickOne": "Pick a district",
-    "retryGps": "Retry with GPS"
+    "retryGps": "Retry with GPS",
+    "mapFailed": {
+      "title": "The map did not load",
+      "description": "These are the same offers as a list."
+    },
+    "mapLabel": "Map of nearby offers"
   },
   "home": {
     "eyebrow": "Welcome",
@@ -437,7 +445,8 @@
       "title": "Legend",
       "verified": "Affiliated business",
       "you": "Your location · {{note}}",
-      "district": "District center"
+      "district": "District center",
+      "publicSource": "Public source, no guarantee"
     }
   },
   "seal": {
@@ -499,7 +508,8 @@
     "walking": "Equals",
     "create": "Create new campaign",
     "seeCampaigns": "See my campaigns",
-    "offerCountOne": "1 deal"
+    "offerCountOne": "1 deal",
+    "mapLabel": "Zone of your active campaign"
   },
   "validatePage": {
     "title": "Validate reservation code",
@@ -530,11 +540,11 @@
       },
       "REDEEMED": {
         "title": "This code was already redeemed",
-        "description": "{{code}} was redeemed on {{date}}."
+        "description": "{{code}} was redeemed on {{date}}"
       },
       "EXPIRED": {
         "title": "The reservation has ended",
-        "description": "The time for {{code}} ended on {{date}}."
+        "description": "The time for {{code}} ended on {{date}}"
       },
       "REPORTED": {
         "title": "This reservation has an open report",
@@ -543,6 +553,10 @@
       "NETWORK": {
         "title": "We could not validate the code",
         "description": "Check your connection and try again."
+      },
+      "UNEXPECTED": {
+        "title": "We could not record the delivery",
+        "description": "Try again. If it keeps failing, validate the code again."
       }
     },
     "how": {
@@ -550,7 +564,11 @@
       "step1": "The customer shows you an 8 character code.",
       "step2": "Type it here and press Validate.",
       "step3": "If it is valid, charge the deal price at the counter."
-    }
+    },
+    "confirm": "Confirm delivery",
+    "confirming": "Recording…",
+    "delivered": "Delivery recorded on {{date}}; the code cannot be used again",
+    "alreadyDelivered": "This code was already delivered at {{time}} ({{date}}). Do not hand over the product again."
   },
   "reportsPage": {
     "title": "Customer reports",
@@ -563,5 +581,87 @@
     "emptyTitle": "No comments yet",
     "emptyDescription": "Customers comment after redeeming a deal at your store.",
     "action": "See my campaigns"
+  },
+  "createCampaign": {
+    "category": "Category",
+    "categoryError": "Choose the category.",
+    "categoriesUnavailable": "We could not load the categories. Reload the page to try again."
+  },
+  "publicSources": {
+    "title": "Public sources, no guarantee",
+    "description": "A public source published these offers and the business is not affiliated with GeoPS. Check the price and validity at the store."
+  },
+  "verifyBusiness": {
+    "title": "Verify my business",
+    "link": "Verify my business",
+    "hint": "We check your RUC in the SUNAT registry and place this address on the map. It takes a few seconds.",
+    "ruc": "RUC",
+    "address": "Store address",
+    "verify": "Verify my business",
+    "verifying": "Verifying…",
+    "retry": "Retry",
+    "loadError": "We could not load your business details",
+    "verifyError": "We could not complete the verification",
+    "status": {
+      "UNVERIFIED": "Not verified",
+      "PENDING": "Verification pending",
+      "VERIFIED": "Verified",
+      "REJECTED": "Verification rejected"
+    },
+    "result": {
+      "APPROVED": "Your business is verified",
+      "PENDING": "The verification is pending",
+      "REJECTED": "We could not verify your business"
+    },
+    "reason": {
+      "RUC_NOT_FOUND": {
+        "title": "Your RUC is not in the SUNAT registry",
+        "fix": "Check with SUNAT that the RUC is registered to you. If the RUC in your profile is mistyped, write to us to fix it."
+      },
+      "TAXPAYER_NOT_ACTIVE": {
+        "title": "Your RUC is deregistered at SUNAT",
+        "fix": "Reactivate your RUC at SUNAT and verify again from here."
+      },
+      "TAXPAYER_NOT_HABIDO": {
+        "title": "Your RUC is listed as not located (no habido)",
+        "fix": "Update your tax address at SUNAT until it is listed as located (habido) and verify again."
+      },
+      "ADDRESS_NOT_GEOCODABLE": {
+        "title": "We could not find your address on the map",
+        "fix": "Correct it below with street, number and district. Your RUC and everything else you registered are kept."
+      },
+      "GEOCODER_UNAVAILABLE": {
+        "title": "The map service is not answering right now",
+        "fix": "You do not have to do anything."
+      },
+      "INVALID_RUC": {
+        "title": "The RUC is not valid",
+        "fix": "Check the 11 digits of the RUC in your profile."
+      }
+    },
+    "pendingNote": "We retry on our own every 10 minutes. The result will show here and on your dashboard; you can keep creating campaigns meanwhile.",
+    "correctAddress": "Corrected address",
+    "addressHint": "E.g. Av. José Larco 345, Miraflores",
+    "verifyAddress": "Verify with this address",
+    "toCampaign": "Create a campaign",
+    "toPanel": "Go to my dashboard",
+    "how": {
+      "title": "How it works",
+      "step1": "We check that your RUC is active and located (habido) in the SUNAT registry.",
+      "step2": "We place your store address on the map.",
+      "step3": "If everything is fine, your offers show the verified seal."
+    },
+    "hintVerified": "Your business is verified and your offers show the seal. If you move, verify it again from here.",
+    "error": {
+      "GENERIC": "Try again in a moment. If it keeps failing, write to us.",
+      "NO_BUSINESS": "Your session does not belong to a business. Log in again.",
+      "INVALID_ADDRESS": "Write the store address with street, number and district, in up to 255 characters.",
+      "NETWORK_ERROR": "Check your connection and try again.",
+      "INVALID_REQUEST": "Check the address and try again.",
+      "FORBIDDEN": "Only the owner of the business can verify it.",
+      "UNAUTHORIZED": "Your session expired. Log in again.",
+      "BUSINESS_PROFILE_NOT_FOUND": "We could not find the profile of your business.",
+      "TAXPAYER_REGISTRY_EMPTY": "The SUNAT registry is still loading. Try again in a few minutes."
+    }
   }
 }

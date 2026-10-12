@@ -10,7 +10,15 @@
   </div>
 
   <app-search-gate>
-    <div class="layout">
+    @if (mapFailed()) {
+      <geo-alert
+        kind="warning"
+        data-testid="map-fallback"
+          announce="status"
+        [title]="'search.mapFailed.title' | translate"
+        [description]="'search.mapFailed.description' | translate" />
+    }
+    <div class="layout" [class.no-map]="mapFailed()">
       <div class="side">
         <div class="box">
           <app-radius-control [minutes]="search.radius()" (changed)="onRadius($event)" />
@@ -18,9 +26,9 @@
 
         @if (search.categories().length) {
           <div class="chips" role="group" [attr.aria-label]="'search.categories' | translate">
-            <button type="button" class="chip" [class.on]="!category()" (click)="category.set(null)">{{ 'search.all' | translate }}</button>
+            <button type="button" class="chip" [class.on]="!search.category()" (click)="onCategory(null)">{{ 'search.all' | translate }}</button>
             @for (item of search.categories(); track item) {
-              <button type="button" class="chip" [class.on]="category() === item" (click)="category.set(item)">{{ item }}</button>
+              <button type="button" class="chip" [class.on]="search.category() === item" (click)="onCategory(item)">{{ item }}</button>
             }
           </div>
         }
@@ -74,25 +82,32 @@
         </mat-radio-group>
       </div>
 
-      <geo-offers-map
-        class="map"
-        [center]="search.origin()?.point ?? null"
-        [radiusMeters]="radiusMeters()"
-        [pins]="pins()"
-        (pinSelected)="openOffer($event)">
-        <div class="legend">
-          <p class="legend-title">{{ 'categoriesPage.legend.title' | translate }}</p>
-          <p><span class="dot green"></span>{{ 'categoriesPage.legend.verified' | translate }}</p>
-          <p>
-            <span class="dot blue"></span>
-            @if (locationNote(); as note) {
-              {{ 'categoriesPage.legend.you' | translate: { note } }}
-            } @else {
-              {{ 'categoriesPage.legend.district' | translate }}
+      @if (!mapFailed()) {
+        <geo-offers-map
+          class="map"
+          [center]="search.origin()?.point ?? null"
+          [radiusMeters]="radiusMeters()"
+          [pins]="pins()"
+          [ariaLabel]="'search.mapLabel' | translate"
+          (pinSelected)="openOffer($event)"
+          (failed)="mapFailed.set(true)">
+          <div class="legend">
+            <p class="legend-title">{{ 'categoriesPage.legend.title' | translate }}</p>
+            <p><span class="dot green"></span>{{ 'categoriesPage.legend.verified' | translate }}</p>
+            @if (search.publicOffers().length) {
+              <p><span class="dot amber"></span>{{ 'categoriesPage.legend.publicSource' | translate }}</p>
             }
-          </p>
-        </div>
-      </geo-offers-map>
+            <p>
+              <span class="dot blue"></span>
+              @if (locationNote(); as note) {
+                {{ 'categoriesPage.legend.you' | translate: { note } }}
+              } @else {
+                {{ 'categoriesPage.legend.district' | translate }}
+              }
+            </p>
+          </div>
+        </geo-offers-map>
+      }
     </div>
   </app-search-gate>
 </section>

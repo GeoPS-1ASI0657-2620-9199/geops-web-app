@@ -1,0 +1,102 @@
+<section class="page">
+  <h1 class="title">{{ 'verifyBusiness.title' | translate }}</h1>
+
+  @switch (state()) {
+    @case ('loading') {
+      <div class="skeleton" aria-busy="true" data-testid="verify-loading"></div>
+    }
+    @case ('error') {
+      <geo-alert
+        kind="error"
+        data-testid="verify-load-error"
+        [title]="'verifyBusiness.loadError' | translate"
+        [description]="errorKey() | translate">
+        <button mat-stroked-button type="button" class="inline-action" (click)="load()">{{ 'verifyBusiness.retry' | translate }}</button>
+      </geo-alert>
+    }
+    @default {
+      <div class="layout">
+        <div class="left">
+          @if (profile(); as p) {
+            <div class="card">
+              <div class="card-head">
+                <h2 class="card-title">{{ p.businessName }}</h2>
+                <geo-seal [kind]="seals[status()]" [text]="'verifyBusiness.status.' + status() | translate" />
+              </div>
+              <p class="hint">{{ (status() === 'VERIFIED' ? 'verifyBusiness.hintVerified' : 'verifyBusiness.hint') | translate }}</p>
+              <dl class="facts">
+                <div><dt>{{ 'verifyBusiness.ruc' | translate }}</dt><dd class="geo-tabular">{{ p.ruc }}</dd></div>
+                <div><dt>{{ 'verifyBusiness.address' | translate }}</dt><dd>{{ p.address }}</dd></div>
+              </dl>
+              @if (canVerify() && !correcting()) {
+                <div class="actions">
+                  <button mat-flat-button type="button" data-testid="verify-business" [disabled]="verifying()" (click)="verify()">
+                    {{ (verifying() ? 'verifyBusiness.verifying' : 'verifyBusiness.verify') | translate }}
+                  </button>
+                </div>
+              }
+            </div>
+          }
+
+          @if (failed()) {
+            <geo-alert
+              kind="error"
+              data-testid="verify-error"
+              [title]="'verifyBusiness.verifyError' | translate"
+              [description]="errorKey() | translate" />
+          }
+          @if (result(); as r) {
+            <section class="result" [class]="'result ' + tone()" data-testid="verify-result" [attr.role]="r.result === 'REJECTED' ? 'alert' : 'status'">
+              <h2 class="result-title">
+                <mat-icon aria-hidden="true">{{ r.result === 'APPROVED' ? 'verified' : r.result === 'PENDING' ? 'schedule' : 'error' }}</mat-icon>
+                {{ (r.reason ? 'verifyBusiness.reason.' + r.reason + '.title' : 'verifyBusiness.result.' + r.result) | translate }}
+              </h2>
+              @if (r.reason) {
+                <p class="fix" data-testid="verify-fix">{{ 'verifyBusiness.reason.' + r.reason + '.fix' | translate }}</p>
+              }
+              @if (r.result === 'PENDING') {
+                <p class="note">{{ 'verifyBusiness.pendingNote' | translate }}</p>
+              }
+              <p class="note">{{ r.message }}</p>
+              @if (r.result === 'APPROVED') {
+                <div class="actions">
+                  <a mat-flat-button routerLink="/campaigns/new">{{ 'verifyBusiness.toCampaign' | translate }}</a>
+                  <a mat-stroked-button routerLink="/business">{{ 'verifyBusiness.toPanel' | translate }}</a>
+                </div>
+              }
+            </section>
+          }
+
+          @if (correcting()) {
+            <form class="card" data-testid="address-form" (ngSubmit)="verify()">
+              <label class="label" for="address">{{ 'verifyBusiness.correctAddress' | translate }}</label>
+              <input
+                id="address"
+                name="address"
+                class="input"
+                autocomplete="street-address"
+                [maxlength]="maxAddress"
+                [ngModel]="address()"
+                (ngModelChange)="address.set($event)" />
+              <p class="hint">{{ 'verifyBusiness.addressHint' | translate }}</p>
+              <div class="actions">
+                <button mat-flat-button type="submit" data-testid="verify-address" [disabled]="verifying() || !address().trim()">
+                  {{ (verifying() ? 'verifyBusiness.verifying' : 'verifyBusiness.verifyAddress') | translate }}
+                </button>
+              </div>
+            </form>
+          }
+        </div>
+
+        <aside class="card side">
+          <h2 class="side-title">{{ 'verifyBusiness.how.title' | translate }}</h2>
+          <ol class="steps">
+            <li><span class="dot">1</span>{{ 'verifyBusiness.how.step1' | translate }}</li>
+            <li><span class="dot">2</span>{{ 'verifyBusiness.how.step2' | translate }}</li>
+            <li><span class="dot">3</span>{{ 'verifyBusiness.how.step3' | translate }}</li>
+          </ol>
+        </aside>
+      </div>
+    }
+  }
+</section>

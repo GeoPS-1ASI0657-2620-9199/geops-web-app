@@ -2,16 +2,19 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { ApiError, NETWORK_ERROR } from '../../shared/domain/api-error';
 import { GeoPoint } from '../../shared/domain/geo-point';
 import { LimaDistrict } from '../domain/model/lima-district';
+import { GrantedReading } from '../domain/model/location-reading';
 import {
-  DEFAULT_RADIUS_MINUTES,
   NearbyOffer,
   NearbyOfferPage,
   clampRadius,
   hasMorePages,
   widerRadius,
 } from '../domain/model/nearby-offer';
+import { PublicSourceOffer } from '../domain/model/public-source-offer';
 import { LocateConsumerUseCase, PickDistrictReason } from './locate-consumer.use-case';
+import { ListOfferCategoriesUseCase } from './list-offer-categories.use-case';
 import { SearchNearbyOffersUseCase } from './search-nearby-offers.use-case';
+import { SearchRadiusPreference } from './search-radius-preference';
 
 export type SearchState = 'idle' | 'locating' | 'pick-district' | 'loading' | 'ready' | 'empty' | 'error';
 
@@ -30,30 +33,61 @@ export interface SearchOrigin {
 export class OfferSearchStore {
   private readonly locate = inject(LocateConsumerUseCase);
   private readonly search = inject(SearchNearbyOffersUseCase);
+  private readonly preference = inject(SearchRadiusPreference);
+  private readonly listCategories = inject(ListOfferCategoriesUseCase);
 
   readonly state = signal<SearchState>('idle');
   readonly origin = signal<SearchOrigin | null>(null);
   readonly pickReason = signal<PickDistrictReason | null>(null);
   readonly imprecision = signal<number | null>(null);
-  readonly radius = signal(DEFAULT_RADIUS_MINUTES);
+  /** Starts at the last radius chosen in this browser (US46). */
+  readonly radius = signal(this.preference.current());
+  /** The imprecise reading the consumer may confirm instead of picking a district (QAS14). */
+  private readonly impreciseReading = signal<GrantedReading | null>(null);
   readonly offers = signal<NearbyOffer[]>([]);
+  /** Offers of public sources, kept apart and never mixed with the affiliated ones (US39). */
+  readonly publicOffers = signal<PublicSourceOffer[]>([]);
   readonly lastPage = signal<NearbyOfferPage | null>(null);
   readonly loadingMore = signal(false);
   readonly errorMessage = signal<string | null>(null);
+  /** The category chip chosen; Catalog filters with it before paging (US08). */
+  readonly category = signal<string | null>(null);
+  private readonly categoryList = signal<string[]>([]);
 
   readonly canLoadMore = computed(() => {
     const page = this.lastPage();
     return !!page && hasMorePages(page);
   });
   readonly nextRadius = computed(() => widerRadius(this.radius()));
+  /** True while there is an imprecise reading the consumer can still confirm. */
+  readonly canConfirmReading = computed(() => this.impreciseReading() !== null);
   readonly total = computed(() => this.lastPage()?.totalElements ?? 0);
-  /** Categories present in the results, in order of appearance, for the filter chips. */
-  readonly categories = computed(() => [...new Set(this.offers().map((offer) => offer.category))]);
+  /**
+   * The chips: the closed list of Catalog. If it could not be read, the categories present in the
+   * results, so the filter still works.
+   */
+  readonly categories = computed(() => {
+    const list = this.categoryList();
+    return list.length ? list : [...new Set(this.offers().map((offer) => offer.category))];
+  });
 
-  /** Starts the search the first time a tab opens; later visits keep the previous one. */
+  /**
+   * Starts the search the first time a tab opens; later visits keep the previous one, unless a
+   * consumer just logged in with another radius saved in the profile (US46, scenario 4).
+   */
   async ensureStarted(): Promise<void> {
     if (this.state() === 'idle') {
+      // Marked before the first await, so two tabs opening at once start a single search.
+      this.state.set('locating');
+      void this.loadCategories();
+      this.radius.set((await this.preference.resolve()).minutes);
       await this.useDeviceLocation();
+      return;
+    }
+    const saved = await this.preference.resolve();
+    if (saved.fromProfile && saved.minutes !== this.radius()) {
+      this.radius.set(saved.minutes);
+      await this.runSearch();
     }
   }
 
@@ -61,19 +95,26 @@ export class OfferSearchStore {
     this.state.set('locating');
     const start = await this.locate.execute();
     if (start.kind === 'POINT') {
-      this.pickReason.set(null);
-      this.imprecision.set(null);
-      this.origin.set({ point: start.reading.point, accuracyMeters: Math.round(start.reading.accuracyMeters) });
-      await this.runSearch();
+      await this.searchFrom(start.reading);
       return;
     }
     this.pickReason.set(start.reason);
     this.imprecision.set(start.accuracyMeters ?? null);
+    this.impreciseReading.set(start.reading ?? null);
     this.state.set('pick-district');
+  }
+
+  /** The consumer accepts the imprecise point after the warning (QAS14). */
+  async confirmImpreciseReading(): Promise<void> {
+    const reading = this.impreciseReading();
+    if (reading) {
+      await this.searchFrom(reading);
+    }
   }
 
   async chooseDistrict(district: LimaDistrict): Promise<void> {
     this.pickReason.set(null);
+    this.impreciseReading.set(null);
     this.origin.set({ point: district.center, districtName: district.name });
     await this.runSearch();
   }
@@ -84,16 +125,25 @@ export class OfferSearchStore {
   }
 
   async setRadius(minutes: number): Promise<void> {
-    this.radius.set(clampRadius(minutes));
+    this.chooseRadius(clampRadius(minutes));
     await this.runSearch();
   }
 
   async widenRadius(): Promise<void> {
     const next = this.nextRadius();
     if (next !== null) {
-      this.radius.set(next);
+      this.chooseRadius(next);
       await this.runSearch();
     }
+  }
+
+  /** Searches again from page 0 with the chosen category, or with every one for null. */
+  async selectCategory(category: string | null): Promise<void> {
+    if (category === this.category()) {
+      return;
+    }
+    this.category.set(category);
+    await this.runSearch();
   }
 
   async retry(): Promise<void> {
@@ -108,7 +158,7 @@ export class OfferSearchStore {
     }
     this.loadingMore.set(true);
     try {
-      const next = await this.search.execute(origin.point, this.radius(), page.page + 1);
+      const next = await this.search.execute(origin.point, this.radius(), page.page + 1, this.category());
       this.offers.update((current) => [...current, ...next.offers]);
       this.lastPage.set(next);
     } catch (error) {
@@ -125,6 +175,19 @@ export class OfferSearchStore {
     }
   }
 
+  private chooseRadius(minutes: number): void {
+    this.radius.set(minutes);
+    this.preference.remember(minutes);
+  }
+
+  private async searchFrom(reading: GrantedReading): Promise<void> {
+    this.pickReason.set(null);
+    this.imprecision.set(null);
+    this.impreciseReading.set(null);
+    this.origin.set({ point: reading.point, accuracyMeters: Math.round(reading.accuracyMeters) });
+    await this.runSearch();
+  }
+
   private async runSearch(): Promise<void> {
     const origin = this.origin();
     if (!origin) {
@@ -132,13 +195,26 @@ export class OfferSearchStore {
     }
     this.state.set('loading');
     this.offers.set([]);
+    this.publicOffers.set([]);
     try {
-      const result = await this.search.execute(origin.point, this.radius());
+      const [result, publicOffers] = await Promise.all([
+        this.search.execute(origin.point, this.radius(), 0, this.category()),
+        this.search.publicSources(origin.point, this.radius(), this.category()),
+      ]);
       this.offers.set(result.offers);
+      this.publicOffers.set(publicOffers);
       this.lastPage.set(result);
       this.state.set(result.totalElements === 0 ? 'empty' : 'ready');
     } catch (error) {
       this.showError(error);
+    }
+  }
+
+  private async loadCategories(): Promise<void> {
+    try {
+      this.categoryList.set(await this.listCategories.execute());
+    } catch {
+      // The chips fall back to the categories of the results.
     }
   }
 

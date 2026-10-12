@@ -22,12 +22,13 @@ describe('LocateConsumerUseCase', () => {
     expect(await run({ status: 'DENIED' })).toEqual({ kind: 'PICK_DISTRICT', reason: 'DENIED' });
   });
 
-  it('asks for a district and reports the margin when the reading is imprecise (US46)', async () => {
-    expect(await run({ status: 'GRANTED', point, accuracyMeters: 1203.6 })).toEqual({
-      kind: 'PICK_DISTRICT',
-      reason: 'IMPRECISE',
-      accuracyMeters: 1204,
-    });
+  it('asks for a district above 100 m and keeps the reading to confirm it (US46, QAS14)', async () => {
+    const reading = { status: 'GRANTED' as const, point, accuracyMeters: 150.4 };
+    expect(await run(reading)).toEqual({ kind: 'PICK_DISTRICT', reason: 'IMPRECISE', accuracyMeters: 150, reading });
+  });
+
+  it('searches from a reading of 80 m (S2-06)', async () => {
+    expect((await run({ status: 'GRANTED', point, accuracyMeters: 80 })).kind).toBe('POINT');
   });
 
   it('asks for a district outside HTTPS', async () => {
