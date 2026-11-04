@@ -206,3 +206,7 @@
 }
 
 @media (max-width: 1000px) { .layout { grid-template-columns: 1fr; } }
+
+.report { display: flex; flex-direction: column; gap: 6px; margin: 16px 0; padding: 16px; background: var(--feedback-amber-bg); border: 1px solid var(--feedback-amber-border); border-radius: var(--radius-panel); }
+.report p { margin: 0; }
+.report-note { margin: 12px 0; font: 500 13px/1.4 var(--font-brand); }

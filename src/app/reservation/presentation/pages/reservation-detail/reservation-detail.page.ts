@@ -12,7 +12,10 @@ import { GeoOffersMap, MapPin } from '../../../../shared/ui/geo-offers-map/geo-o
 import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { GeoEmptyState } from '../../../../shared/ui/geo-empty-state/geo-empty-state';
 import { GeoSeal } from '../../../../shared/ui/geo-seal/geo-seal';
+import { GetReportUseCase } from '../../../application/get-report.use-case';
 import { GetReservationUseCase, RESERVATION_NOT_FOUND } from '../../../application/get-reservation.use-case';
+import { NonComplianceReport } from '../../../domain/model/noncompliance-report';
+import { ReportForm } from '../../components/report-form/report-form';
 import { Reservation } from '../../../domain/model/reservation';
 import { PLACED_PARAM, STATUS_SEAL, limaDateTime, remainingTime } from '../../reservation-view';
 
@@ -26,7 +29,7 @@ type Placed = 'new' | 'existing' | null;
 @Component({
   selector: 'app-reservation-detail',
   standalone: true,
-  imports: [DecimalPipe, RouterLink, MatButtonModule, MatIconModule, TranslateModule, GeoAlert, GeoEmptyState, GeoOffersMap, GeoSeal],
+  imports: [DecimalPipe, RouterLink, MatButtonModule, MatIconModule, TranslateModule, GeoAlert, GeoEmptyState, GeoOffersMap, GeoSeal, ReportForm],
   templateUrl: './reservation-detail.page.html',
   styleUrl: './reservation-detail.page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,6 +37,7 @@ type Placed = 'new' | 'existing' | null;
 export class ReservationDetailPage implements OnInit {
   private readonly getReservation = inject(GetReservationUseCase);
   private readonly getOffer = inject(GetOfferDetailUseCase);
+  private readonly getReport = inject(GetReportUseCase);
   private readonly route = inject(ActivatedRoute).snapshot;
   private readonly reservationId = Number(this.route.paramMap.get('id'));
 
@@ -43,6 +47,11 @@ export class ReservationDetailPage implements OnInit {
   protected readonly errorMessage = signal<string | null>(null);
   protected readonly seal = computed(() => STATUS_SEAL[this.reservation()?.status ?? 'ACTIVE']);
   protected readonly isActive = computed(() => this.reservation()?.status === 'ACTIVE');
+  /** The report of this reservation and what the business answered, once there is one (US42, US43). */
+  protected readonly report = signal<NonComplianceReport | null>(null);
+  protected readonly reporting = signal(false);
+  /** An ACTIVE reservation that has not reached its deadline can still be reported. */
+  protected readonly canReport = computed(() => this.isActive() && this.remaining() !== null && !this.report());
   protected readonly limaDateTime = limaDateTime;
   /** The reserved offer, for the price, the address and the map; the reservation still shows without it. */
   protected readonly offer = signal<OfferDetail | null>(null);
@@ -76,8 +85,28 @@ export class ReservationDetailPage implements OnInit {
       this.reservation.set(reservation);
       this.state.set('ready');
       void this.loadOffer(reservation.offerId);
+      void this.loadReport(reservation.report?.reportId);
     } catch (error) {
       this.showFailure(error);
+    }
+  }
+
+  protected onReported(report: NonComplianceReport): void {
+    this.report.set(report);
+    this.reporting.set(false);
+    void this.load();
+  }
+
+  /** The reservation lists the report in short; the detail brings the answer of the business. */
+  private async loadReport(reportId: number | undefined): Promise<void> {
+    if (reportId === undefined) {
+      this.report.set(null);
+      return;
+    }
+    try {
+      this.report.set(await this.getReport.execute(reportId));
+    } catch {
+      this.report.set(null);
     }
   }
 

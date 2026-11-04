@@ -346,7 +346,19 @@
     "expiresIn": "Ends in {{time}}",
     "payAtStore": "You pay at the store",
     "store": "Store",
-    "mapLabel": "Store location"
+    "mapLabel": "Store location",
+    "report": {
+      "button": "Report a problem",
+      "title": "Your report",
+      "reason": "Reason",
+      "deadline": "The business has until {{date}} to answer.",
+      "answer": "Answer of the business",
+      "inReview": "The business answered and the case is under review.",
+      "closed": {
+        "CONSUMER_FAVOR": "The case was closed in your favor on {{date}}.",
+        "BUSINESS_FAVOR": "The case was closed in favor of the business on {{date}}."
+      }
+    }
   },
   "reservationsPage": {
     "title": "My coupons",
@@ -574,7 +586,49 @@
     "title": "Customer reports",
     "emptyTitle": "You have no open reports",
     "emptyDescription": "If a customer says a deal was not honored, you will see it here with the time to answer.",
-    "action": "Validate a code"
+    "action": "Validate a code",
+    "tabs": {
+      "OPEN": "Open",
+      "IN_REVIEW": "In review",
+      "CLOSED": "Closed"
+    },
+    "empty": {
+      "OPEN": {
+        "title": "You have no open reports",
+        "description": "If a customer says an offer was not honored, you will see it here with the time to answer."
+      },
+      "IN_REVIEW": {
+        "title": "Nothing in review",
+        "description": "The reports you answer move here."
+      },
+      "CLOSED": {
+        "title": "No closed reports yet",
+        "description": "Resolved or expired cases appear here."
+      }
+    },
+    "code": "Code",
+    "reason": "Customer's reason",
+    "yourAnswer": "Your answer",
+    "timeLeft": "{{time}} left to answer",
+    "deadlinePassed": "Deadline passed",
+    "answerLabel": "Your answer",
+    "answerPlaceholder": "Explain what happened (at least 10 characters)",
+    "send": "Send answer",
+    "resolve": "Resolve in favor of the customer",
+    "confirmResolve": "The report closes and stops affecting your position.",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "closed": {
+      "CONSUMER_FAVOR": "Closed in favor of the customer.",
+      "BUSINESS_FAVOR": "Closed in your favor."
+    },
+    "actionError": "We could not complete the action",
+    "actionErrorRetry": "Try again in a moment.",
+    "error": {
+      "title": "We could not load the reports",
+      "description": "It may be your connection or the service.",
+      "retry": "Retry"
+    }
   },
   "commentsPage": {
     "title": "Customer comments",
@@ -663,5 +717,17 @@
       "BUSINESS_PROFILE_NOT_FOUND": "We could not find the profile of your business.",
       "TAXPAYER_REGISTRY_EMPTY": "The SUNAT registry is still loading. Try again in a few minutes."
     }
+  },
+  "reportForm": {
+    "title": "Report a problem",
+    "hint": "Tell us what happened. The business will see your report and has 48 hours to answer.",
+    "reason": "What was not honored?",
+    "placeholder": "E.g. The 2x1 was not applied and I was charged both dishes.",
+    "counter": "{{length}} of {{max}} characters (minimum {{min}})",
+    "send": "Send report",
+    "sending": "Sending...",
+    "cancel": "Cancel",
+    "error": "We could not send your report",
+    "errorRetry": "Try again in a moment."
   }
 }

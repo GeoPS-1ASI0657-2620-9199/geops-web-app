@@ -346,7 +346,19 @@
     "expiresIn": "Vence en {{time}}",
     "payAtStore": "Pagas en el local",
     "store": "Local",
-    "mapLabel": "Ubicación del local"
+    "mapLabel": "Ubicación del local",
+    "report": {
+      "button": "Reportar incumplimiento",
+      "title": "Tu reporte",
+      "reason": "Motivo",
+      "deadline": "El comercio tiene hasta el {{date}} para responder.",
+      "answer": "Respuesta del comercio",
+      "inReview": "El comercio respondió y el caso está en revisión.",
+      "closed": {
+        "CONSUMER_FAVOR": "El caso se cerró a tu favor el {{date}}.",
+        "BUSINESS_FAVOR": "El caso se cerró a favor del comercio el {{date}}."
+      }
+    }
   },
   "reservationsPage": {
     "title": "Mis Cupones",
@@ -574,7 +586,49 @@
     "title": "Reportes de clientes",
     "emptyTitle": "No tienes reportes abiertos",
     "emptyDescription": "Si un cliente indica que no se respetó una oferta, lo verás aquí con el plazo para responder.",
-    "action": "Validar un código"
+    "action": "Validar un código",
+    "tabs": {
+      "OPEN": "Abiertos",
+      "IN_REVIEW": "En revisión",
+      "CLOSED": "Cerrados"
+    },
+    "empty": {
+      "OPEN": {
+        "title": "No tienes reportes abiertos",
+        "description": "Si un cliente indica que no se respetó una oferta, lo verás aquí con el plazo para responder."
+      },
+      "IN_REVIEW": {
+        "title": "Nada en revisión",
+        "description": "Los reportes que respondas pasan aquí."
+      },
+      "CLOSED": {
+        "title": "Aún no hay reportes cerrados",
+        "description": "Los casos resueltos o vencidos aparecen aquí."
+      }
+    },
+    "code": "Código",
+    "reason": "Motivo del cliente",
+    "yourAnswer": "Tu respuesta",
+    "timeLeft": "Te quedan {{time}} para responder",
+    "deadlinePassed": "Venció el plazo",
+    "answerLabel": "Tu respuesta",
+    "answerPlaceholder": "Explica qué ocurrió (mínimo 10 caracteres)",
+    "send": "Enviar respuesta",
+    "resolve": "Resolver a favor del cliente",
+    "confirmResolve": "El reporte se cierra y deja de afectar tu posición.",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "closed": {
+      "CONSUMER_FAVOR": "Cerrado a favor del cliente.",
+      "BUSINESS_FAVOR": "Cerrado a tu favor."
+    },
+    "actionError": "No pudimos completar la acción",
+    "actionErrorRetry": "Inténtalo de nuevo en un momento.",
+    "error": {
+      "title": "No pudimos cargar los reportes",
+      "description": "Puede ser tu conexión o el servicio.",
+      "retry": "Reintentar"
+    }
   },
   "commentsPage": {
     "title": "Comentarios de clientes",
@@ -663,5 +717,17 @@
       "BUSINESS_PROFILE_NOT_FOUND": "No encontramos el perfil de tu comercio.",
       "TAXPAYER_REGISTRY_EMPTY": "El padrón de SUNAT aún se está cargando. Inténtalo en unos minutos."
     }
+  },
+  "reportForm": {
+    "title": "Reportar incumplimiento",
+    "hint": "Cuéntanos qué pasó. El comercio verá tu reporte y tendrá 48 horas para responder.",
+    "reason": "¿Qué no se respetó?",
+    "placeholder": "Ej.: No me aplicaron el 2x1 y me cobraron los dos platos.",
+    "counter": "{{length}} de {{max}} caracteres (mínimo {{min}})",
+    "send": "Enviar reporte",
+    "sending": "Enviando...",
+    "cancel": "Cancelar",
+    "error": "No pudimos enviar tu reporte",
+    "errorRetry": "Inténtalo de nuevo en un momento."
   }
 }
