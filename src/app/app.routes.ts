@@ -123,8 +123,8 @@ export const routes: Routes = [
       {
         path: 'reports',
         canActivate: owner,
-        loadComponent: () => import('./core/layout/section-empty/section-empty').then((m) => m.SectionEmpty),
-        data: { i18n: 'reportsPage', icon: 'flag', actionRoute: '/validate' } satisfies SectionEmptyData,
+        loadComponent: () =>
+          import('./reservation/presentation/pages/reports/reports.page').then((m) => m.ReportsPage),
         title: 'GeoPS - Reportes',
       },
       {

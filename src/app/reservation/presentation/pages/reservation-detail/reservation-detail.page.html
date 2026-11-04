@@ -87,7 +87,43 @@
               }
             </dl>
 
+            @if (report(); as rep) {
+              <section class="report" data-testid="report">
+                <h2 class="geo-body-strong">{{ 'reservationPage.report.title' | translate }}</h2>
+                <p class="geo-meta">{{ 'reservationPage.report.reason' | translate }}</p>
+                <p>{{ rep.reason }}</p>
+                @if (rep.status === 'OPEN') {
+                  <p data-testid="report-deadline">
+                    {{ 'reservationPage.report.deadline' | translate: { date: limaDateTime(rep.responseDeadline) } }}
+                  </p>
+                } @else if (rep.response) {
+                  <p class="geo-meta">{{ 'reservationPage.report.answer' | translate }}</p>
+                  <p data-testid="report-answer">{{ rep.response.text }}</p>
+                }
+                @if (rep.status === 'CLOSED' && rep.resolvedAt) {
+                  <p data-testid="report-closed">
+                    {{ 'reservationPage.report.closed.' + rep.resolution | translate: { date: limaDateTime(rep.resolvedAt) } }}
+                  </p>
+                } @else if (rep.status === 'IN_REVIEW') {
+                  <p data-testid="report-review">{{ 'reservationPage.report.inReview' | translate }}</p>
+                }
+              </section>
+            } @else if (r.report) {
+              <p class="report-note" data-testid="report-deadline">
+                {{ 'reservationPage.report.deadline' | translate: { date: limaDateTime(r.report.responseDeadline) } }}
+              </p>
+            }
+
+            @if (reporting()) {
+              <app-report-form [reservationId]="r.reservationId" (reported)="onReported($event)" (cancelled)="reporting.set(false)" />
+            }
+
             <div class="buttons">
+              @if (canReport() && !reporting()) {
+                <button mat-stroked-button type="button" data-testid="report-button" (click)="reporting.set(true)">
+                  {{ 'reservationPage.report.button' | translate }}
+                </button>
+              }
               @if (directionsUrl(); as url) {
                 <a mat-stroked-button [href]="url" target="_blank" rel="noopener">{{ 'offerDetailPage.directions' | translate }}</a>
               }

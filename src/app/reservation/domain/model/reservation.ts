@@ -1,3 +1,5 @@
+import { ReservationReport } from './noncompliance-report';
+
 /** Same values as the ReservationStatus enum of reservation-service. */
 export const RESERVATION_STATUSES = ['ACTIVE', 'REDEEMED', 'EXPIRED', 'REPORTED'] as const;
 export type ReservationStatus = (typeof RESERVATION_STATUSES)[number];
@@ -18,6 +20,8 @@ export interface Reservation {
   readonly reservedAt: string;
   readonly expiresAt: string;
   readonly redeemedAt: string | null;
+  /** The report of the consumer, when there is one (US42). */
+  readonly report?: ReservationReport | null;
 }
 
 /**

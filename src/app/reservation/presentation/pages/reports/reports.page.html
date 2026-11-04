@@ -1,0 +1,112 @@
+<section class="page">
+  <h1 class="title">{{ 'reportsPage.title' | translate }}</h1>
+
+  <div class="tabs" role="tablist">
+    @for (status of tabs; track status) {
+      <button
+        type="button"
+        role="tab"
+        class="tab"
+        [class.active]="tab() === status"
+        [attr.aria-selected]="tab() === status"
+        [attr.data-testid]="'tab-' + status"
+        (click)="tab.set(status)">
+        {{ 'reportsPage.tabs.' + status | translate }} ({{ count(status) }})
+      </button>
+    }
+  </div>
+
+  @if (actionError() !== null) {
+    <geo-alert
+      kind="error"
+      [title]="'reportsPage.actionError' | translate"
+      [description]="actionError() || ('reportsPage.actionErrorRetry' | translate)" />
+  }
+
+  @switch (state()) {
+    @case ('loading') {
+      <div class="skeleton" aria-busy="true"></div>
+    }
+    @case ('error') {
+      <geo-empty-state
+        icon="cloud_off"
+        [title]="'reportsPage.error.title' | translate"
+        [description]="errorMessage() ?? ('reportsPage.error.description' | translate)">
+        <button mat-flat-button type="button" (click)="load()">{{ 'reportsPage.error.retry' | translate }}</button>
+      </geo-empty-state>
+    }
+    @case ('ready') {
+      @if (visible().length === 0) {
+        <geo-empty-state
+          icon="flag"
+          [title]="'reportsPage.empty.' + tab() + '.title' | translate"
+          [description]="'reportsPage.empty.' + tab() + '.description' | translate" />
+      }
+      @for (report of visible(); track report.reportId) {
+        <article class="card" [attr.data-testid]="'report-' + report.reportId">
+          <header class="head">
+            <div>
+              <p class="offer">{{ report.offerTitle }}</p>
+              <p class="geo-meta">
+                {{ 'reportsPage.code' | translate }}
+                <span class="code geo-tabular">{{ report.reservationCode }}</span>
+                · {{ limaDateTime(report.openedAt) }}
+              </p>
+            </div>
+            @if (report.status === 'OPEN') {
+              @if (timeToAnswer(report.responseDeadline, now()); as left) {
+                <span class="left" data-testid="time-left">{{ 'reportsPage.timeLeft' | translate: { time: left } }}</span>
+              } @else {
+                <span class="left late">{{ 'reportsPage.deadlinePassed' | translate }}</span>
+              }
+            }
+          </header>
+
+          <p class="geo-meta">{{ 'reportsPage.reason' | translate }}</p>
+          <p class="reason">{{ report.reason }}</p>
+
+          @if (report.response; as answer) {
+            <p class="geo-meta">{{ 'reportsPage.yourAnswer' | translate }} · {{ limaDateTime(answer.respondedAt) }}</p>
+            <p class="reason">{{ answer.text }}</p>
+          }
+
+          @if (report.status === 'CLOSED') {
+            <p class="geo-meta" data-testid="closed-note">
+              {{ 'reportsPage.closed.' + report.resolution | translate }}
+            </p>
+          } @else {
+            @if (report.status === 'OPEN') {
+              <label class="label" [for]="'answer-' + report.reportId">{{ 'reportsPage.answerLabel' | translate }}</label>
+              <textarea
+                class="input"
+                rows="3"
+                [id]="'answer-' + report.reportId"
+                [maxlength]="max"
+                [ngModel]="draft(report.reportId)"
+                (ngModelChange)="setDraft(report.reportId, $event)"
+                [placeholder]="'reportsPage.answerPlaceholder' | translate"></textarea>
+            }
+            <div class="actions">
+              @if (confirming() === report.reportId) {
+                <span class="geo-meta">{{ 'reportsPage.confirmResolve' | translate }}</span>
+                <button mat-stroked-button type="button" (click)="confirming.set(null)">{{ 'reportsPage.cancel' | translate }}</button>
+                <button mat-flat-button type="button" data-testid="confirm-resolve" [disabled]="working() !== null" (click)="resolve(report)">
+                  {{ 'reportsPage.confirm' | translate }}
+                </button>
+              } @else {
+                <button mat-stroked-button type="button" data-testid="resolve" (click)="confirming.set(report.reportId)">
+                  {{ 'reportsPage.resolve' | translate }}
+                </button>
+                @if (report.status === 'OPEN') {
+                  <button mat-flat-button type="button" data-testid="answer" [disabled]="!canSend(report.reportId)" (click)="answer(report)">
+                    {{ 'reportsPage.send' | translate }}
+                  </button>
+                }
+              }
+            </div>
+          }
+        </article>
+      }
+    }
+  }
+</section>
