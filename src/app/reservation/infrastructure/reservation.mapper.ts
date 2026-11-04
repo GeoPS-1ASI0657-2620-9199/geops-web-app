@@ -1,3 +1,4 @@
+import { ReservationReportResponse, toReservationReport } from './report.mapper';
 import { PlacedReservation, RedeemedReservation, Reservation, ReservationStatus } from '../domain/model/reservation';
 
 /** Body of POST /api/v1/reservations. */
@@ -24,6 +25,7 @@ export interface ReservationResponse {
   reservedAt: string;
   expiresAt: string;
   redeemedAt: string | null;
+  report?: ReservationReportResponse | null;
 }
 
 /** Body of POST /api/v1/reservations/redeem. */
@@ -72,5 +74,6 @@ export function toReservation(response: ReservationResponse): Reservation {
     reservedAt: response.reservedAt,
     expiresAt: response.expiresAt,
     redeemedAt: response.redeemedAt ?? null,
+    report: toReservationReport(response.report),
   };
 }
