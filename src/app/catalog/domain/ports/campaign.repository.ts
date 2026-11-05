@@ -1,4 +1,10 @@
-import { CampaignDraft, CreatedCampaign, CampaignOffer, PublishedCampaign } from '../model/campaign';
+import {
+  CampaignDraft,
+  CampaignOffer,
+  CreatedCampaign,
+  PublishedCampaign,
+  RequestableCampaignStatus,
+} from '../model/campaign';
 
 /** Port to the campaigns of Catalog. The business comes from the token the interceptor adds. */
 export abstract class CampaignRepository {
@@ -6,4 +12,9 @@ export abstract class CampaignRepository {
   /** The campaigns of the business in the token, without their offers. */
   abstract findMine(): Promise<Omit<PublishedCampaign, 'offers'>[]>;
   abstract findOffers(campaignId: number): Promise<CampaignOffer[]>;
+  /** Pauses or reactivates a campaign of the token's business and returns it with its new status. */
+  abstract changeStatus(
+    campaignId: number,
+    status: RequestableCampaignStatus,
+  ): Promise<Omit<PublishedCampaign, 'offers'>>;
 }

@@ -95,6 +95,9 @@ export function todayInLima(now: Date = new Date()): string {
 /** Same values as CampaignStatus in catalog-service. */
 export type CampaignStatus = 'ACTIVE' | 'PAUSED' | 'FINISHED';
 
+/** The statuses the owner can ask for with PATCH /campaigns/{id}/status (US10). */
+export type RequestableCampaignStatus = Exclude<CampaignStatus, 'FINISHED'>;
+
 /** An offer of a published campaign, as GET /campaigns/{id}/offers returns it. */
 export interface CampaignOffer {
   readonly offerId: number;
@@ -115,6 +118,14 @@ export interface PublishedCampaign {
   readonly zone: CampaignZone;
   readonly status: CampaignStatus;
   readonly offers: readonly CampaignOffer[];
+}
+
+/**
+ * A campaign whose validity ended can no longer be paused or reactivated; Catalog answers
+ * CAMPAIGN_ALREADY_ENDED (409). today is the current day in Lima, like todayInLima().
+ */
+export function hasEnded(campaign: Pick<PublishedCampaign, 'period'>, today: string): boolean {
+  return campaign.period.end < today;
 }
 
 /** Campaigns by status, the summary under "Mis campañas" (Figma screen 12). */

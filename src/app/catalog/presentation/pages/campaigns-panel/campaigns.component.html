@@ -41,6 +41,9 @@
       </geo-empty-state>
     }
     @case ('ready') {
+      @if (statusError(); as message) {
+        <geo-alert kind="error" [title]="message" />
+      }
       <div class="chips" role="group">
         @for (option of filters; track option) {
           <button type="button" class="chip" [class.on]="filter() === option" [attr.aria-pressed]="filter() === option" (click)="filter.set(option)">
@@ -80,9 +83,33 @@
                   }
                 </td>
                 <td class="right">
-                  @if (campaign.offers[0]; as first) {
-                    <a class="action" [routerLink]="['/offers', first.offerId]">{{ 'campaignsPage.seeOffer' | translate }}</a>
-                  }
+                  <span class="actions">
+                    @if (campaign.status === 'ACTIVE') {
+                      <button
+                        type="button"
+                        class="action"
+                        data-testid="pause"
+                        [disabled]="changing() === campaign.campaignId"
+                        (click)="changeStatus(campaign, 'PAUSED')">
+                        {{ 'campaignsPage.pause' | translate }}
+                      </button>
+                    } @else if (campaign.status === 'PAUSED') {
+                      @if (ended(campaign)) {
+                        <span class="hint">{{ 'campaignsPage.validityEnded' | translate }}</span>
+                      }
+                      <button
+                        type="button"
+                        class="action"
+                        data-testid="reactivate"
+                        [disabled]="ended(campaign) || changing() === campaign.campaignId"
+                        (click)="changeStatus(campaign, 'ACTIVE')">
+                        {{ 'campaignsPage.reactivate' | translate }}
+                      </button>
+                    }
+                    @if (campaign.offers[0]; as first) {
+                      <a class="action" [routerLink]="['/offers', first.offerId]">{{ 'campaignsPage.seeOffer' | translate }}</a>
+                    }
+                  </span>
                 </td>
               </tr>
             } @empty {

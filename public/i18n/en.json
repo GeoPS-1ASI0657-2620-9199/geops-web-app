@@ -164,6 +164,23 @@
       "actions": "Actions"
     },
     "seeOffer": "See deal",
+    "pause": "Pause",
+    "reactivate": "Reactivate",
+    "validityEnded": "The validity ended",
+    "statusDialog": {
+      "cancel": "Cancel",
+      "PAUSED": {
+        "title": "Pause “{{name}}”?",
+        "description": "Your deal will stop being shown until you reactivate it.",
+        "confirm": "Pause"
+      },
+      "ACTIVE": {
+        "title": "Reactivate “{{name}}”?",
+        "description": "Your deal will be shown again to customers in your zone until its validity ends.",
+        "confirm": "Reactivate"
+      }
+    },
+    "statusError": "We could not change the status of the campaign. Try again.",
     "noneInFilter": "No campaigns with this status.",
     "error": {
       "title": "We could not load your campaigns",
