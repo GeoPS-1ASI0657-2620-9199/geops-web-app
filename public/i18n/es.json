@@ -758,5 +758,19 @@
     "doneFollowed": "Ya no te enviaremos correos de ofertas de comercios seguidos. Tu cuenta sigue activa.",
     "missing": "Abre el enlace de baja incluido en un correo de GeoPS.",
     "error": "No pudimos confirmar la baja. Revisa el enlace e inténtalo de nuevo."
+  },
+  "pushPage": {
+    "title": "Avisos en este navegador",
+    "hint": "Actívalos aquí después de elegir tus preferencias. Puedes desactivarlos en cada dispositivo.",
+    "active": "Este navegador está registrado para recibir avisos.",
+    "disable": "Desactivar en este navegador",
+    "enable": "Activar avisos en este navegador",
+    "busy": "Activando…",
+    "needsInstall": "En iPhone, agrega GeoPS a tu pantalla de inicio: Compartir → Agregar a inicio. Mientras tanto puedes recibir avisos por correo.",
+    "useEmail": "Activar avisos por correo",
+    "notSupported": "Este navegador no permite estos avisos. Puedes elegir el correo electrónico.",
+    "denied": "No se concedió permiso. Puedes cambiarlo en los ajustes del navegador o elegir el correo.",
+    "unavailable": "Los avisos del navegador todavía no están disponibles aquí. Puedes activar el correo.",
+    "error": "No pudimos registrar este navegador. Inténtalo de nuevo."
   }
 }

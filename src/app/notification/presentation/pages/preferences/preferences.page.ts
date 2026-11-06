@@ -1,3 +1,4 @@
+import { PushControls } from '../../components/push-controls/push-controls';
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,7 +10,7 @@ import { GetNotificationPreferencesUseCase, UpdateNotificationPreferencesUseCase
 import { ApiError } from '../../../../shared/domain/api-error';
 @Component({
   selector: 'app-preferences',
-  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSlideToggleModule, TranslateModule],
+  imports: [PushControls, ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSlideToggleModule, TranslateModule],
   templateUrl: './preferences.page.html', styleUrl: './preferences.page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -22,6 +23,8 @@ export class PreferencesPage implements OnInit {
   readonly saved = signal(false);
   readonly error = signal<string | null>(null);
   readonly form = new FormGroup({ pushEnabled: new FormControl(false, { nonNullable: true }), emailEnabled: new FormControl(false, { nonNullable: true }), dailyLimit: new FormControl(3, { nonNullable: true, validators: [Validators.required, Validators.min(1), Validators.max(10), Validators.pattern(/^\d+$/)] }) });
+  async enableEmail() { this.form.controls.emailEnabled.setValue(true); await this.save(); }
+  async pushEnabled() { this.form.controls.pushEnabled.setValue(true); await this.save(); }
   ngOnInit() { void this.load(); }
   async load() {
     this.loading.set(true); this.error.set(null); this.loaded.set(false);
