@@ -118,8 +118,8 @@
               <app-report-form [reservationId]="r.reservationId" (reported)="onReported($event)" (cancelled)="reporting.set(false)" />
             }
 
+            <section class="review-section">@if (reservation()?.status === 'REDEEMED') { @if (offer(); as redeemedOffer) { @if (redeemedOffer.businessId !== null) { <app-review-form [businessId]="redeemedOffer.businessId" /> } } }</section>
             <div class="buttons">
-              @if (reservation()?.status === 'REDEEMED') { @if (offer(); as redeemedOffer) { @if (redeemedOffer.businessId !== null) { <app-review-form [businessId]="redeemedOffer.businessId" /> } } }
               @if (canReport() && !reporting()) {
                 <button mat-stroked-button type="button" data-testid="report-button" (click)="reporting.set(true)">
                   {{ 'reservationPage.report.button' | translate }}

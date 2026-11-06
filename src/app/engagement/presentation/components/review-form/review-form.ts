@@ -25,7 +25,7 @@ import { ApiError } from '../../../../shared/domain/api-error';
         <button mat-flat-button type="submit" [disabled]="busy() || form.invalid">{{ (busy() ? 'reviewsPage.publishing' : 'reviewsPage.publish') | translate }}</button>
       </form>
     }`,
-  styles: [`form { display: grid; gap: var(--space-lg); max-width: 640px; margin-block: var(--space-xl); } h2, p { margin: 0; } p { color: var(--text-dim); line-height: 1.6; } button { justify-self: start; }`],
+  styles: [`form { display: grid; gap: var(--space-lg); max-width: 640px; width: 100%; margin-block: var(--space-xl); } h2, p { margin: 0; } p { color: var(--text-dim); line-height: 1.6; } button { justify-self: start; } button[mat-flat-button]:not(:disabled) { background-color: var(--brand-deep); color: var(--neutral-bg); }`],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReviewForm {
