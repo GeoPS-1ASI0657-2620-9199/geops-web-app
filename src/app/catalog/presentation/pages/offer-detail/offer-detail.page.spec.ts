@@ -1,3 +1,4 @@
+import { ReviewRepository } from '../../../../engagement/domain/ports/review.repository';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router, convertToParamMap, provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
@@ -65,6 +66,7 @@ describe('OfferDetailPage', () => {
       providers: [
         ...radiusPreferenceTestingProviders(),
         provideRouter([]),
+        { provide: ReviewRepository, useValue: { findByBusiness: () => Promise.resolve([]), create: () => Promise.resolve({}), reply: () => Promise.resolve() } },
         provideTranslateService(),
         { provide: OfferRepository, useValue: offers },
         { provide: ReservationRepository, useValue: reservations },

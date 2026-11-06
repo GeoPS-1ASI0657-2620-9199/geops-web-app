@@ -1,3 +1,4 @@
+import { BusinessReviews } from '../../../../engagement/presentation/components/business-reviews/business-reviews';
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DecimalPipe } from '@angular/common';
@@ -54,6 +55,7 @@ interface ReserveFailure {
     GeoOffersMap,
     GeoSeal,
     OfferCardActions,
+    BusinessReviews,
   ],
   templateUrl: './offer-detail.page.html',
   styleUrl: './offer-detail.page.css',
