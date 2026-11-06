@@ -47,7 +47,7 @@
             <h1 class="title">{{ o.title }}</h1>
             <div class="merchant">
               <span class="name">{{ o.businessName }}</span>
-              @if (isConsumer() && o.source !== 'PUBLIC_SOURCE') { <app-follow-business [businessId]="o.businessId" /> }
+              @if (isConsumer() && o.source !== 'PUBLIC_SOURCE' && o.businessId !== null) { <app-follow-business [businessId]="o.businessId" /> }
               @if (o.source === 'PUBLIC_SOURCE') {
                 <geo-seal kind="reference" />
               } @else if (o.verifiedSeal) {
