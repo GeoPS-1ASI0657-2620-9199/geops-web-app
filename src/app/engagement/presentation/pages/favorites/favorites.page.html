@@ -48,7 +48,7 @@
         </div>
         <div class="grid">
           @for (card of current(); track card.saved.offerId) {
-            <a class="card-link" [routerLink]="['/offers', card.saved.offerId]">
+            <div class="card-link">
               <geo-offer-card
                 kind="standard"
                 [title]="card.saved.title"
@@ -57,12 +57,12 @@
                 [category]="card.detail?.category ?? null"
                 [validity]="validity(card)"
                 [price]="card.detail?.price ?? 0">
-                <a mat-flat-button class="small" [routerLink]="['/offers', card.saved.offerId]">{{ 'offerActions.reserve' | translate }}</a>
+                <a mat-flat-button class="small" [routerLink]="['/offers', card.saved.offerId]">{{ 'savedBusinesses.viewOffer' | translate }}</a>
                 <button mat-stroked-button class="small" type="button" (click)="remove($event, card.saved.offerId)">
                   {{ 'favoritesPage.remove' | translate }}
                 </button>
               </geo-offer-card>
-            </a>
+            </div>
           }
         </div>
       }

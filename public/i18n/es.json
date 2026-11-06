@@ -740,6 +740,7 @@
     "remove": "Quitar de guardados",
     "saved": "Comercio guardado",
     "save": "Guardar comercio",
-    "error": "No pudimos actualizar tus comercios. Inténtalo de nuevo."
+    "error": "No pudimos actualizar tus comercios. Inténtalo de nuevo.",
+    "viewOffer": "Ver oferta"
   }
 }

@@ -740,6 +740,7 @@
     "remove": "Remove saved business",
     "saved": "Business saved",
     "save": "Save business",
-    "error": "We could not update your businesses. Please try again."
+    "error": "We could not update your businesses. Please try again.",
+    "viewOffer": "View offer"
   }
 }
