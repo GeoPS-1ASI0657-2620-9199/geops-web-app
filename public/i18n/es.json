@@ -404,7 +404,8 @@
     "campaigns": "Campañas",
     "create": "Crear",
     "reports": "Reportes",
-    "comments": "Comentarios"
+    "comments": "Comentarios",
+    "preferences": "Preferencias de avisos"
   },
   "search": {
     "places": "Lugares:",
@@ -729,5 +730,33 @@
     "cancel": "Cancelar",
     "error": "No pudimos enviar tu reporte",
     "errorRetry": "Inténtalo de nuevo en un momento."
+  },
+  "notificationPage": {
+    "title": "Preferencias de avisos",
+    "description": "Elige tus canales y un máximo diario compartido. Tú decides cuándo recibir ofertas.",
+    "loading": "Cargando preferencias…",
+    "retry": "Reintentar",
+    "channels": "Canales de ofertas",
+    "push": "Avisos en el navegador",
+    "pushHint": "También debes activar los avisos en cada navegador que quieras usar.",
+    "email": "Correo electrónico",
+    "emailHint": "Agrupamos las ofertas en un solo correo por franja. Tu correo debe estar confirmado.",
+    "dailyLimit": "Máximo de avisos al día",
+    "limitHint": "De 1 a 10, entre todos los canales. El día se cuenta con la hora de Lima.",
+    "invalidLimit": "Elige un número entero de 1 a 10.",
+    "save": "Guardar preferencias",
+    "saving": "Guardando…",
+    "saved": "Tus próximos avisos respetarán estas preferencias.",
+    "error": "No pudimos guardar tus preferencias. Inténtalo de nuevo."
+  },
+  "unsubscribePage": {
+    "title": "Preferencias de correo",
+    "confirmHint": "Confirma que quieres dejar de recibir este tipo de correo de ofertas. Tu cuenta seguirá activa.",
+    "confirm": "Confirmar baja de estos correos",
+    "busy": "Confirmando…",
+    "done": "Ya no te enviaremos correos de ofertas cercanas. Tu cuenta sigue activa.",
+    "doneFollowed": "Ya no te enviaremos correos de ofertas de comercios seguidos. Tu cuenta sigue activa.",
+    "missing": "Abre el enlace de baja incluido en un correo de GeoPS.",
+    "error": "No pudimos confirmar la baja. Revisa el enlace e inténtalo de nuevo."
   }
 }
