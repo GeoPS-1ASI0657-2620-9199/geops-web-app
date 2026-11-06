@@ -10,3 +10,5 @@ a { color: var(--brand-deep); text-underline-offset: 4px; }
 .empty { padding-block: var(--space-3xl); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 @media (max-width: 600px) { .page { padding: var(--space-xl) var(--space-lg); } .business-head { flex-direction: column; } }
+
+.page a[mat-flat-button]:not([aria-disabled='true']) { background-color: var(--brand-deep); color: var(--neutral-bg); }
