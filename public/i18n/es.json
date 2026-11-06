@@ -729,5 +729,17 @@
     "cancel": "Cancelar",
     "error": "No pudimos enviar tu reporte",
     "errorRetry": "Inténtalo de nuevo en un momento."
+  },
+  "savedBusinesses": {
+    "title": "Comercios",
+    "tabs": "Tipo de favorito",
+    "paused": "Pausada",
+    "loading": "Cargando comercios…",
+    "retry": "Reintentar",
+    "empty": "Todavía no guardaste comercios. Puedes guardarlos desde el detalle de una oferta.",
+    "remove": "Quitar de guardados",
+    "saved": "Comercio guardado",
+    "save": "Guardar comercio",
+    "error": "No pudimos actualizar tus comercios. Inténtalo de nuevo."
   }
 }

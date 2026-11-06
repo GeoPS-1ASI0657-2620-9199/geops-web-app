@@ -10,6 +10,12 @@
 
   <geo-alert kind="info" [title]="'favoritesPage.notice.title' | translate" [description]="'favoritesPage.notice.description' | translate" />
 
+  <nav class="favorite-tabs" [attr.aria-label]="'savedBusinesses.tabs' | translate">
+    <button mat-stroked-button [attr.aria-pressed]="tab() === 'offers'" (click)="tab.set('offers')">{{ 'nav.offers' | translate }}</button>
+    <button mat-stroked-button [attr.aria-pressed]="tab() === 'businesses'" (click)="tab.set('businesses')">{{ 'savedBusinesses.title' | translate }}</button>
+  </nav>
+  @if (tab() === 'businesses') { <app-saved-businesses /> }
+  @else {
   @switch (state()) {
     @case ('loading') {
       <div class="grid" aria-busy="true">
@@ -60,6 +66,31 @@
           }
         </div>
       }
+      @if (paused().length) {
+        <div class="section-head">
+          <h2 class="section-title">{{ 'savedBusinesses.paused' | translate }}</h2>
+          <span class="section-count">{{ 'favoritesPage.offers' | translate: { total: paused().length } }}</span>
+        </div>
+        <div class="grid">
+          @for (card of paused(); track card.saved.offerId) {
+            <div class="card-link ended">
+              <geo-offer-card
+                kind="standard"
+                [title]="card.saved.title"
+                [merchant]="card.saved.businessName"
+                [imageUrl]="card.detail?.imageUrl ?? null"
+                [category]="card.detail?.category ?? null"
+                [validity]="'savedBusinesses.paused' | translate"
+                [price]="card.detail?.price ?? 0">
+                <a mat-stroked-button class="small" routerLink="/offers">{{ 'favoritesPage.similar' | translate }}</a>
+                <button mat-stroked-button class="small" type="button" (click)="remove($event, card.saved.offerId)">
+                  {{ 'favoritesPage.remove' | translate }}
+                </button>
+              </geo-offer-card>
+            </div>
+          }
+        </div>
+      }
       @if (expired().length) {
         <div class="section-head">
           <h2 class="section-title">{{ 'favoritesPage.expired' | translate }}</h2>
@@ -86,5 +117,6 @@
         </div>
       }
     }
+  }
   }
 </section>

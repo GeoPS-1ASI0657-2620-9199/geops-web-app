@@ -1,3 +1,4 @@
+import { SaveBusiness } from '../../../../engagement/presentation/components/save-business/save-business';
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DecimalPipe } from '@angular/common';
@@ -54,6 +55,7 @@ interface ReserveFailure {
     GeoOffersMap,
     GeoSeal,
     OfferCardActions,
+    SaveBusiness,
   ],
   templateUrl: './offer-detail.page.html',
   styleUrl: './offer-detail.page.css',
@@ -80,6 +82,7 @@ export class OfferDetailPage implements OnInit {
     const role = this.sessions.role();
     return role === null || role === 'CONSUMER';
   });
+  protected readonly isConsumer = computed(() => this.sessions.role() === 'CONSUMER');
   protected readonly isVisitor = computed(() => this.sessions.role() === null);
   protected readonly validity = computed(() => {
     const offer = this.offer();

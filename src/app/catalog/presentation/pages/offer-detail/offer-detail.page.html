@@ -47,6 +47,7 @@
             <h1 class="title">{{ o.title }}</h1>
             <div class="merchant">
               <span class="name">{{ o.businessName }}</span>
+              @if (isConsumer() && o.businessId !== null) { <app-save-business [businessId]="o.businessId" /> }
               @if (o.source === 'PUBLIC_SOURCE') {
                 <geo-seal kind="reference" />
               } @else if (o.verifiedSeal) {

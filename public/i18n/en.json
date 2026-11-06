@@ -729,5 +729,17 @@
     "cancel": "Cancel",
     "error": "We could not send your report",
     "errorRetry": "Try again in a moment."
+  },
+  "savedBusinesses": {
+    "title": "Businesses",
+    "tabs": "Favorite type",
+    "paused": "Paused",
+    "loading": "Loading businesses…",
+    "retry": "Retry",
+    "empty": "No saved businesses yet. Save them from an offer detail.",
+    "remove": "Remove saved business",
+    "saved": "Business saved",
+    "save": "Save business",
+    "error": "We could not update your businesses. Please try again."
   }
 }

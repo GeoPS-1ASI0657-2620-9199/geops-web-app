@@ -1,3 +1,4 @@
+import { SavedBusinessRepository } from '../../../../engagement/domain/ports/saved-business.repository';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router, convertToParamMap, provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
@@ -65,6 +66,7 @@ describe('OfferDetailPage', () => {
       providers: [
         ...radiusPreferenceTestingProviders(),
         provideRouter([]),
+        { provide: SavedBusinessRepository, useValue: { findMine: () => Promise.resolve([]), save: () => Promise.resolve(), remove: () => Promise.resolve() } },
         provideTranslateService(),
         { provide: OfferRepository, useValue: offers },
         { provide: ReservationRepository, useValue: reservations },

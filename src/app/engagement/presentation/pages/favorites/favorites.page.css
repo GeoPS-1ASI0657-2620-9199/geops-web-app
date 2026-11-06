@@ -16,3 +16,5 @@
   .page { padding: 16px; }
   .grid { grid-template-columns: 1fr; }
 }
+
+.favorite-tabs { display: flex; flex-wrap: wrap; gap: var(--space-md); }
