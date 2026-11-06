@@ -11,7 +11,7 @@ import { ApiError } from '../../../../shared/domain/api-error';
     @else { <p>{{ 'unsubscribePage.confirmHint' | translate }}</p><button mat-flat-button [disabled]="busy() || !token" (click)="confirm()">{{ (busy() ? 'unsubscribePage.busy' : 'unsubscribePage.confirm') | translate }}</button> }
     @if (error(); as message) { <p role="alert">{{ message | translate }}</p> }
   </main>`,
-  styles: [`main { max-width: 680px; margin-inline: auto; padding: var(--space-3xl) var(--space-xl); } h1 { font: 600 24px/1.3 var(--font-brand); } p { color: var(--text-dim); line-height: 1.6; }`],
+  styles: [`main { max-width: 680px; margin-inline: auto; padding: var(--space-3xl) var(--space-xl); } h1 { font: 600 24px/1.3 var(--font-brand); } p { color: var(--text-dim); line-height: 1.6; } button[mat-flat-button]:not(:disabled) { background-color: var(--brand-deep); color: var(--neutral-bg); }`],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UnsubscribePage {

@@ -10,3 +10,5 @@ fieldset p { margin: 0 0 var(--space-lg); }
 mat-form-field { max-width: 340px; width: 100%; }
 button { justify-self: start; }
 @media (max-width: 600px) { .page { padding: var(--space-xl) var(--space-lg); } }
+
+.page button[mat-flat-button]:not(:disabled) { background-color: var(--brand-deep); color: var(--neutral-bg); }
