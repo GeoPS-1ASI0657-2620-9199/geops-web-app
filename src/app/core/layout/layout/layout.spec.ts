@@ -53,10 +53,10 @@ describe('Layout', () => {
     expect(fixture.nativeElement.textContent).toContain('Menús Doña Mirta');
   });
 
-  it('shows the five buyer tabs of the Figma to a consumer', async () => {
+  it('shows the buyer tabs and follows to a consumer', async () => {
     await create({ ...OWNER, role: 'CONSUMER', businessId: undefined, businessName: undefined, consumerId: 2001 });
 
-    expect(tabs()).toEqual(['nav.home', 'nav.offers', 'nav.categories', 'nav.favorites', 'nav.coupons']);
+    expect(tabs()).toEqual(['nav.home', 'nav.offers', 'nav.categories', 'nav.favorites', 'nav.coupons', 'nav.follows']);
   });
 
   it('shows the buyer tabs and the login link to a visitor', async () => {

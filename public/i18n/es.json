@@ -404,7 +404,8 @@
     "campaigns": "Campañas",
     "create": "Crear",
     "reports": "Reportes",
-    "comments": "Comentarios"
+    "comments": "Comentarios",
+    "follows": "Comercios seguidos"
   },
   "search": {
     "places": "Lugares:",
@@ -729,5 +730,18 @@
     "cancel": "Cancelar",
     "error": "No pudimos enviar tu reporte",
     "errorRetry": "Inténtalo de nuevo en un momento."
+  },
+  "followsPage": {
+    "title": "Comercios seguidos",
+    "description": "Las ofertas vigentes de los comercios que sigues, en un solo lugar.",
+    "retry": "Reintentar",
+    "loading": "Cargando comercios…",
+    "empty": "Todavía no sigues comercios",
+    "emptyHint": "Abre una oferta y sigue al comercio para enterarte de sus próximas promociones.",
+    "count": "{{count}} ofertas vigentes",
+    "unfollow": "Dejar de seguir",
+    "following": "Siguiendo",
+    "follow": "Seguir comercio",
+    "error": "No pudimos cargar tus comercios. Inténtalo de nuevo."
   }
 }
