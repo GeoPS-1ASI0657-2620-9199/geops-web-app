@@ -421,7 +421,8 @@
     "campaigns": "Campaigns",
     "create": "Create",
     "reports": "Reports",
-    "comments": "Comments"
+    "comments": "Comments",
+    "follows": "Followed businesses"
   },
   "search": {
     "places": "Places:",
@@ -746,5 +747,18 @@
     "cancel": "Cancel",
     "error": "We could not send your report",
     "errorRetry": "Try again in a moment."
+  },
+  "followsPage": {
+    "title": "Followed businesses",
+    "description": "Current offers from the businesses you follow, all in one place.",
+    "retry": "Retry",
+    "loading": "Loading businesses…",
+    "empty": "You are not following any business yet",
+    "emptyHint": "Open an offer and follow the business to hear about its next promotions.",
+    "count": "{{count}} active offers",
+    "unfollow": "Unfollow",
+    "following": "Following",
+    "follow": "Follow business",
+    "error": "We could not load your businesses. Please try again."
   }
 }

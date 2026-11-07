@@ -17,7 +17,7 @@ const BUYER_TABS: NavItem[] = [
 /** Tabs of each role, as the Figma names them (screens 1 and 34). */
 export const NAV_BY_ROLE: Record<UserRole | 'VISITOR', NavItem[]> = {
   VISITOR: BUYER_TABS,
-  CONSUMER: BUYER_TABS,
+  CONSUMER: [...BUYER_TABS, { label: 'nav.follows', route: '/follows' }],
   BUSINESS_OWNER: [
     { label: 'nav.summary', route: '/business' },
     { label: 'nav.validate', route: '/validate' },
@@ -29,7 +29,7 @@ export const NAV_BY_ROLE: Record<UserRole | 'VISITOR', NavItem[]> = {
   ADMIN: BUYER_TABS,
 };
 
-/** Shell of the app: top bar and tabs by role (Figma "Barra superior" and "Navegación"). */
+/** Shell of the app: top bar and tabs by role (Figma "Barra superior" and "NavegaciÃ³n"). */
 @Component({
   selector: 'app-layout',
   standalone: true,
