@@ -213,3 +213,4 @@
 
 .review-section { margin: var(--space-xl); padding-top: var(--space-xl); border-top: 1px solid var(--neutral-line); }
 .facts dd a { color: var(--brand-deep); }
+.danger { color: var(--status-expired); border-color: var(--feedback-red-border); }

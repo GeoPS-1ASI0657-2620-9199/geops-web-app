@@ -366,7 +366,7 @@
     "store": "Local",
     "mapLabel": "Ubicación del local",
     "report": {
-      "button": "Reportar incumplimiento",
+      "button": "No me la respetaron",
       "title": "Tu reporte",
       "reason": "Motivo",
       "deadline": "El comercio tiene hasta el {{date}} para responder.",
@@ -853,5 +853,54 @@
     "offers": "Ofertas guardadas",
     "businesses": "Comercios guardados",
     "follows": "Comercios que sigo"
+  },
+  "reportPage": {
+    "crumbs": "Ruta de navegación",
+    "crumb": "Reportar un problema",
+    "loading": "Cargando tu reserva…",
+    "title": "¿Qué pasó en el local?",
+    "error": "No pudimos cargar tu reserva",
+    "notice": {
+      "title": "Tu reporte afecta la posición del comercio",
+      "description": "Baja en los resultados mientras el caso siga abierto. Por eso te preguntamos qué ocurrió exactamente."
+    },
+    "reasons": {
+      "expired": {
+        "title": "La promoción ya no estaba vigente",
+        "hint": "Llegué dentro del plazo publicado y no me la aceptaron"
+      },
+      "regularPrice": {
+        "title": "Me cobraron el precio regular",
+        "hint": "Pagué más de lo que decía la oferta"
+      },
+      "closed": {
+        "title": "El local estaba cerrado",
+        "hint": "En el horario publicado como abierto"
+      },
+      "other": {
+        "title": "Otra razón",
+        "hint": "Cuéntanos qué ocurrió"
+      }
+    },
+    "more": "Cuéntanos más (opcional)",
+    "moreRequired": "Cuéntanos qué ocurrió (obligatorio)",
+    "placeholder": "Ej.: Llegué a las 3:40 p. m. y me dijeron que la promoción había terminado.",
+    "yourReservation": "Tu reserva",
+    "state": "Estado",
+    "active": "Activa",
+    "next": {
+      "title": "Qué pasa después",
+      "step1": "Se envía al comercio",
+      "step1Hint": "Tiene 48 horas para responder",
+      "step2": "Baja en el ranking",
+      "step2Hint": "Mientras el caso siga abierto",
+      "step3": "Te avisamos",
+      "step3Hint": "Si lo resuelve o si el fallo se repite"
+    },
+    "unavailable": {
+      "title": "Esta reserva ya no se puede reportar",
+      "description": "Solo se reporta una reserva activa y una sola vez.",
+      "action": "Volver a mi reserva"
+    }
   }
 }

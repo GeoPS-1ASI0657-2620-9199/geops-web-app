@@ -366,7 +366,7 @@
     "store": "Store",
     "mapLabel": "Store location",
     "report": {
-      "button": "Report a problem",
+      "button": "They did not honor it",
       "title": "Your report",
       "reason": "Reason",
       "deadline": "The business has until {{date}} to answer.",
@@ -853,5 +853,54 @@
     "offers": "Saved offers",
     "businesses": "Saved businesses",
     "follows": "Businesses I follow"
+  },
+  "reportPage": {
+    "crumbs": "Breadcrumb",
+    "crumb": "Report a problem",
+    "loading": "Loading your reservation…",
+    "title": "What happened at the store?",
+    "error": "We could not load your reservation",
+    "notice": {
+      "title": "Your report affects the business position",
+      "description": "It drops in the results while the case stays open. That is why we ask what exactly happened."
+    },
+    "reasons": {
+      "expired": {
+        "title": "The promotion was no longer valid",
+        "hint": "I arrived within the published period and they did not accept it"
+      },
+      "regularPrice": {
+        "title": "They charged the regular price",
+        "hint": "I paid more than the offer said"
+      },
+      "closed": {
+        "title": "The store was closed",
+        "hint": "During the published opening hours"
+      },
+      "other": {
+        "title": "Other reason",
+        "hint": "Tell us what happened"
+      }
+    },
+    "more": "Tell us more (optional)",
+    "moreRequired": "Tell us what happened (required)",
+    "placeholder": "E.g.: I arrived at 3:40 p.m. and they told me the promotion had ended.",
+    "yourReservation": "Your reservation",
+    "state": "Status",
+    "active": "Active",
+    "next": {
+      "title": "What happens next",
+      "step1": "It is sent to the business",
+      "step1Hint": "It has 48 hours to answer",
+      "step2": "It drops in the ranking",
+      "step2Hint": "While the case stays open",
+      "step3": "We notify you",
+      "step3Hint": "If it is resolved or the failure repeats"
+    },
+    "unavailable": {
+      "title": "This reservation can no longer be reported",
+      "description": "Only an active reservation can be reported, and only once.",
+      "action": "Back to my reservation"
+    }
   }
 }

@@ -1,0 +1,71 @@
+<section class="page">
+  <nav class="crumbs" [attr.aria-label]="'reportPage.crumbs' | translate">
+    <a routerLink="/reservations">{{ 'reservationPage.back' | translate }}</a>
+    <span aria-hidden="true">›</span>
+    <span aria-current="page">{{ 'reportPage.crumb' | translate }}</span>
+  </nav>
+
+  @switch (state()) {
+    @case ('loading') { <p role="status" class="status">{{ 'reportPage.loading' | translate }}</p> }
+    @case ('unavailable') {
+      <geo-empty-state icon="report_off" [title]="'reportPage.unavailable.title' | translate" [description]="'reportPage.unavailable.description' | translate">
+        <a mat-flat-button [routerLink]="['/reservations', reservationId]">{{ 'reportPage.unavailable.action' | translate }}</a>
+      </geo-empty-state>
+    }
+    @case ('error') {
+      <geo-alert kind="error" [title]="'reportPage.error' | translate" [description]="'reportForm.errorRetry' | translate" />
+    }
+    @case ('ready') {
+      @if (reservation(); as r) {
+        <div class="layout">
+          <form class="form" (ngSubmit)="submit()">
+            <h1 class="title">{{ 'reportPage.title' | translate }}</h1>
+            <geo-alert kind="error" [title]="'reportPage.notice.title' | translate" [description]="'reportPage.notice.description' | translate" />
+            <div class="choices" role="radiogroup" [attr.aria-label]="'reportPage.title' | translate">
+              @for (item of choices; track item) {
+                <label class="choice" [class.selected]="choice() === item">
+                  <input type="radio" name="choice" [value]="item" [checked]="choice() === item" (change)="choose(item)" />
+                  <span class="dot" aria-hidden="true"></span>
+                  <span class="choice-text">
+                    <span class="choice-title">{{ 'reportPage.reasons.' + item + '.title' | translate }}</span>
+                    <span class="choice-hint">{{ 'reportPage.reasons.' + item + '.hint' | translate }}</span>
+                  </span>
+                </label>
+              }
+            </div>
+            <label class="more">
+              <span class="more-label">{{ (choice() === 'other' ? 'reportPage.moreRequired' : 'reportPage.more') | translate }}</span>
+              <textarea name="detail" rows="3" [maxlength]="detailMax" [ngModel]="detail()" (ngModelChange)="detail.set($event)"
+                        [placeholder]="'reportPage.placeholder' | translate"></textarea>
+            </label>
+            @if (errorMessage() !== null) {
+              <geo-alert kind="error" [title]="'reportForm.error' | translate" [description]="errorMessage() || ('reportForm.errorRetry' | translate)" />
+            }
+            <button mat-flat-button type="submit" class="send" [disabled]="!valid() || sending()">
+              {{ (sending() ? 'reportForm.sending' : 'reportForm.send') | translate }}
+            </button>
+          </form>
+
+          <aside class="side">
+            <section class="card">
+              <h2>{{ 'reportPage.yourReservation' | translate }}</h2>
+              <p class="offer">{{ r.offerTitle }}</p>
+              <p class="meta">{{ r.code }}</p>
+              <dl>
+                <div><dt>{{ 'reportPage.state' | translate }}</dt><dd>{{ 'reportPage.active' | translate }}</dd></div>
+              </dl>
+            </section>
+            <section>
+              <h2>{{ 'reportPage.next.title' | translate }}</h2>
+              <ol class="steps">
+                <li><span class="num on">1</span><span><b>{{ 'reportPage.next.step1' | translate }}</b><small>{{ 'reportPage.next.step1Hint' | translate }}</small></span></li>
+                <li><span class="num">2</span><span><b>{{ 'reportPage.next.step2' | translate }}</b><small>{{ 'reportPage.next.step2Hint' | translate }}</small></span></li>
+                <li><span class="num">3</span><span><b>{{ 'reportPage.next.step3' | translate }}</b><small>{{ 'reportPage.next.step3Hint' | translate }}</small></span></li>
+              </ol>
+            </section>
+          </aside>
+        </div>
+      }
+    }
+  }
+</section>

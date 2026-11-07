@@ -94,6 +94,13 @@ export const routes: Routes = [
           ),
         title: 'GeoPS - Mi reserva',
       },
+      {
+        path: 'reservations/:id/report',
+        canActivate: consumer,
+        loadComponent: () =>
+          import('./reservation/presentation/pages/report/report.page').then((m) => m.ReportPage),
+        title: 'GeoPS - Reportar un problema',
+      },
       // Business tabs (Figma screens 7, 11, 12, 13, 34 and 36).
       {
         path: 'business',

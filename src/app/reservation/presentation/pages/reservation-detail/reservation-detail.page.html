@@ -114,16 +114,12 @@
               </p>
             }
 
-            @if (reporting()) {
-              <app-report-form [reservationId]="r.reservationId" (reported)="onReported($event)" (cancelled)="reporting.set(false)" />
-            }
-
             @if (reservation()?.status === 'REDEEMED') { @if (offer(); as redeemedOffer) { @if (redeemedOffer.businessId !== null) { <section class="review-section"><app-review-form [businessId]="redeemedOffer.businessId" /></section> } } }
             <div class="buttons">
-              @if (canReport() && !reporting()) {
-                <button mat-stroked-button type="button" data-testid="report-button" (click)="reporting.set(true)">
+              @if (canReport()) {
+                <a mat-stroked-button class="danger" data-testid="report-button" [routerLink]="['/reservations', r.reservationId, 'report']">
                   {{ 'reservationPage.report.button' | translate }}
-                </button>
+                </a>
               }
               @if (directionsUrl(); as url) {
                 <a mat-stroked-button [href]="url" target="_blank" rel="noopener">{{ 'offerDetailPage.directions' | translate }}</a>
