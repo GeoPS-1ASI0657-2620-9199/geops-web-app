@@ -1,10 +1,11 @@
+import { WebPushUseCase } from '../../../application/web-push.use-case';
 import { TestBed } from '@angular/core/testing';
 import { provideTranslateService } from '@ngx-translate/core';
 import { NotificationRepository } from '../../../domain/ports/notification.repository';
 import { PreferencesPage } from './preferences.page';
 describe('PreferencesPage', () => {
   let repository: jasmine.SpyObj<NotificationRepository>;
-  beforeEach(() => { repository = jasmine.createSpyObj('NotificationRepository', ['preferences', 'update']); repository.preferences.and.resolveTo({ pushEnabled: false, emailEnabled: true, dailyLimit: 2 }); TestBed.configureTestingModule({ providers: [provideTranslateService(), { provide: NotificationRepository, useValue: repository }] }); });
+  beforeEach(() => { repository = jasmine.createSpyObj('NotificationRepository', ['preferences', 'update']); repository.preferences.and.resolveTo({ pushEnabled: false, emailEnabled: true, dailyLimit: 2 }); TestBed.configureTestingModule({ providers: [{ provide: WebPushUseCase, useValue: { isActive: () => false, enable: () => Promise.resolve(), disable: () => Promise.resolve() } }, provideTranslateService(), { provide: NotificationRepository, useValue: repository }] }); });
   it('reads and saves the selected channels and limit', async () => {
     const fixture = TestBed.createComponent(PreferencesPage); fixture.detectChanges(); await fixture.whenStable();
     expect(fixture.componentInstance.form.getRawValue()).toEqual({ pushEnabled: false, emailEnabled: true, dailyLimit: 2 });

@@ -789,5 +789,19 @@
     "doneFollowed": "You will no longer receive followed business offer emails. Your account stays active.",
     "missing": "Open the unsubscribe link in a GeoPS email.",
     "error": "We could not confirm your request. Check the link and try again."
+  },
+  "pushPage": {
+    "title": "Notices in this browser",
+    "hint": "Enable them here after choosing your preferences. You can turn them off on each device.",
+    "active": "This browser is registered for notifications.",
+    "disable": "Disable in this browser",
+    "enable": "Enable notices in this browser",
+    "busy": "Enabling…",
+    "needsInstall": "On iPhone, add GeoPS to your home screen: Share → Add to Home Screen. You can receive email notices in the meantime.",
+    "useEmail": "Enable email notices",
+    "notSupported": "This browser does not support these notices. You can choose email instead.",
+    "denied": "Permission was not granted. Change it in your browser settings or choose email.",
+    "unavailable": "Browser notices are not available here yet. You can enable email.",
+    "error": "We could not register this browser. Please try again."
   }
 }

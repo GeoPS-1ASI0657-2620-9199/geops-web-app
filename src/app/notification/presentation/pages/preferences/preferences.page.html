@@ -12,5 +12,6 @@
       <button mat-flat-button type="submit" [disabled]="busy() || form.invalid">{{ (busy() ? 'notificationPage.saving' : 'notificationPage.save') | translate }}</button>
       @if (saved()) { <p role="status">{{ 'notificationPage.saved' | translate }}</p> }
     </form>
+    <app-push-controls (enabled)="pushEnabled()" (emailRequested)="enableEmail()" />
   }
 </section>
