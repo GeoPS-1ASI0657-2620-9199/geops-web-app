@@ -1,6 +1,6 @@
 .page { display: flex; flex-direction: column; gap: 20px; padding: 22px 26px 40px; }
-.crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; font: 400 11.5px/1.3 var(--font-brand); color: var(--text-faint); }
-.crumbs a { color: var(--text-faint); text-decoration: none; }
+.crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; font: 400 11.5px/1.3 var(--font-brand); color: var(--text-dim); }
+.crumbs a { color: var(--text-dim); text-decoration: none; }
 .crumbs a:hover { color: var(--brand-deep); }
 .crumbs mat-icon { width: 14px; height: 14px; font-size: 14px; }
 .crumbs .current { color: var(--brand-deep); font-weight: 500; }
@@ -21,11 +21,11 @@
 .placeholder mat-icon { width: 40px; height: 40px; font-size: 40px; }
 .title { margin: 4px 0 0; font: 600 26px/1.2 var(--font-brand); color: var(--text-primary); }
 .merchant { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-.name { font: 500 13px/1.3 var(--font-brand); color: var(--brand-action); }
+.name { font: 500 13px/1.3 var(--font-brand); color: var(--brand-deep); }
 .sub { margin: 6px 0 0; font: 600 15px/1.3 var(--font-brand); }
 .includes { margin: 0; padding-left: 18px; font: 400 12.5px/1.45 var(--font-brand); color: var(--text-primary); }
 .includes li { margin: 4px 0; }
-.includes li::marker { color: var(--brand-action); }
+.includes li::marker { color: var(--brand-deep); }
 .side { display: flex; flex-direction: column; gap: 16px; }
 .panel {
   display: flex;
@@ -36,9 +36,9 @@
   border: 1px solid var(--neutral-line);
   border-radius: var(--radius-panel);
 }
-.price { margin: 0; font: 700 34px/1.12 var(--font-brand); color: var(--brand-action); }
+.price { margin: 0; font: 700 34px/1.12 var(--font-brand); color: var(--brand-deep); }
 .price small { font-size: 18px; font-weight: 500; }
-.price.muted { color: var(--text-faint); }
+.price.muted { color: var(--text-dim); }
 .facts { display: flex; flex-direction: column; margin: 0; }
 .facts div { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--neutral-line-soft); }
 .facts dt { font: 400 12.5px/1.4 var(--font-brand); color: var(--text-dim); }
@@ -54,7 +54,7 @@
 .map { height: 230px; }
 .section-head { display: flex; align-items: baseline; justify-content: space-between; margin-top: 12px; }
 .section-title { margin: 0; font: 600 19px/1.3 var(--font-brand); }
-.see-more { font: 600 12px/1 var(--font-brand); color: var(--brand-action); text-decoration: none; text-transform: uppercase; }
+.see-more { font: 600 12px/1 var(--font-brand); color: var(--brand-deep); text-decoration: none; text-transform: uppercase; }
 .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
 .card-link { color: inherit; text-decoration: none; }
 .skeleton { height: 360px; border-radius: var(--radius-card); background: var(--neutral-line-soft); }

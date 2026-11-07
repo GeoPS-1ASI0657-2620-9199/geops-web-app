@@ -48,6 +48,7 @@
             <div class="merchant">
               <span class="name">{{ o.businessName }}</span>
               @if (isConsumer() && o.businessId !== null) { <app-save-business [businessId]="o.businessId" /> }
+              @if (isConsumer() && o.source !== 'PUBLIC_SOURCE' && o.businessId !== null) { <app-follow-business [businessId]="o.businessId" /> }
               @if (o.source === 'PUBLIC_SOURCE') {
                 <geo-seal kind="reference" />
               } @else if (o.verifiedSeal) {
@@ -76,6 +77,7 @@
                 <li>{{ line }}</li>
               }
             </ul>
+          @if (!isVisitor() && o.source !== 'PUBLIC_SOURCE' && o.businessId !== null) { <app-business-reviews [businessId]="o.businessId" /> }
           </article>
 
           <aside class="side">

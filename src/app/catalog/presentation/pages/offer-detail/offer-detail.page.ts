@@ -1,4 +1,6 @@
 import { SaveBusiness } from '../../../../engagement/presentation/components/save-business/save-business';
+import { BusinessReviews } from '../../../../engagement/presentation/components/business-reviews/business-reviews';
+import { FollowBusiness } from '../../../../engagement/presentation/components/follow-business/follow-business';
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DecimalPipe } from '@angular/common';
@@ -56,6 +58,8 @@ interface ReserveFailure {
     GeoSeal,
     OfferCardActions,
     SaveBusiness,
+    BusinessReviews,
+    FollowBusiness,
   ],
   templateUrl: './offer-detail.page.html',
   styleUrl: './offer-detail.page.css',
@@ -102,7 +106,7 @@ export class OfferDetailPage implements OnInit {
   /** i18n key of the answer to "Guardar en favoritos". */
   protected readonly saveResult = signal<string | null>(null);
   protected readonly icon = computed(() => categoryIcon(this.offer()?.category));
-  /** Each sentence of the conditions is one item of "Qué incluye" (Figma screen 2). */
+  /** Each sentence of the conditions is one item of "QuÃ© incluye" (Figma screen 2). */
   protected readonly includes = computed(() =>
     (this.offer()?.conditions ?? '')
       .split(/(?<=\.)\s+|\n+/)

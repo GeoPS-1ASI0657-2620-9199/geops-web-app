@@ -164,6 +164,23 @@
       "actions": "Actions"
     },
     "seeOffer": "See deal",
+    "pause": "Pause",
+    "reactivate": "Reactivate",
+    "validityEnded": "The validity ended",
+    "statusDialog": {
+      "cancel": "Cancel",
+      "PAUSED": {
+        "title": "Pause “{{name}}”?",
+        "description": "Your deal will stop being shown until you reactivate it.",
+        "confirm": "Pause"
+      },
+      "ACTIVE": {
+        "title": "Reactivate “{{name}}”?",
+        "description": "Your deal will be shown again to customers in your zone until its validity ends.",
+        "confirm": "Reactivate"
+      }
+    },
+    "statusError": "We could not change the status of the campaign. Try again.",
     "noneInFilter": "No campaigns with this status.",
     "error": {
       "title": "We could not load your campaigns",
@@ -404,7 +421,9 @@
     "campaigns": "Campaigns",
     "create": "Create",
     "reports": "Reports",
-    "comments": "Comments"
+    "comments": "Comments",
+    "follows": "Followed businesses",
+    "preferences": "Notification preferences"
   },
   "search": {
     "places": "Places:",
@@ -729,6 +748,83 @@
     "cancel": "Cancel",
     "error": "We could not send your report",
     "errorRetry": "Try again in a moment."
+  },
+  "followsPage": {
+    "title": "Followed businesses",
+    "description": "Current offers from the businesses you follow, all in one place.",
+    "retry": "Retry",
+    "loading": "Loading businesses…",
+    "empty": "You are not following any business yet",
+    "emptyHint": "Open an offer and follow the business to hear about its next promotions.",
+    "count": "{{count}} active offers",
+    "unfollow": "Unfollow",
+    "following": "Following",
+    "follow": "Follow business",
+    "error": "We could not load your businesses. Please try again."
+  },
+  "notificationPage": {
+    "title": "Notification preferences",
+    "description": "Choose your channels and a shared daily limit. You decide when to hear about offers.",
+    "loading": "Loading preferences…",
+    "retry": "Retry",
+    "channels": "Offer channels",
+    "push": "Browser notifications",
+    "pushHint": "Enable notifications separately in each browser you want to use.",
+    "email": "Email",
+    "emailHint": "Offers are grouped into one email per window. Your email must be confirmed.",
+    "dailyLimit": "Maximum notices per day",
+    "limitHint": "From 1 to 10 across all channels. The day follows Lima time.",
+    "invalidLimit": "Choose a whole number from 1 to 10.",
+    "save": "Save preferences",
+    "saving": "Saving…",
+    "saved": "Your next notices will follow these preferences.",
+    "error": "We could not save your preferences. Please try again."
+  },
+  "unsubscribePage": {
+    "title": "Email preferences",
+    "confirmHint": "Confirm you want to stop this type of offer email. Your account will stay active.",
+    "confirm": "Unsubscribe from these emails",
+    "busy": "Confirming…",
+    "done": "You will no longer receive nearby offer emails. Your account stays active.",
+    "doneFollowed": "You will no longer receive followed business offer emails. Your account stays active.",
+    "missing": "Open the unsubscribe link in a GeoPS email.",
+    "error": "We could not confirm your request. Check the link and try again."
+  },
+  "pushPage": {
+    "title": "Notices in this browser",
+    "hint": "Enable them here after choosing your preferences. You can turn them off on each device.",
+    "active": "This browser is registered for notifications.",
+    "disable": "Disable in this browser",
+    "enable": "Enable notices in this browser",
+    "busy": "Enabling…",
+    "needsInstall": "On iPhone, add GeoPS to your home screen: Share → Add to Home Screen. You can receive email notices in the meantime.",
+    "useEmail": "Enable email notices",
+    "notSupported": "This browser does not support these notices. You can choose email instead.",
+    "denied": "Permission was not granted. Change it in your browser settings or choose email.",
+    "unavailable": "Browser notices are not available here yet. You can enable email.",
+    "error": "We could not register this browser. Please try again."
+  },
+  "reviewsPage": {
+    "title": "Verified redemption reviews",
+    "panelTitle": "Your business reviews",
+    "panelHint": "Reply once to each review. Your reply stays beside the original experience.",
+    "missingBusiness": "Your session has no business. Please log in again.",
+    "write": "Review your experience",
+    "verifiedHint": "Your review will carry the verified redemption mark.",
+    "rating": "Rating",
+    "stars": "{{count}} stars",
+    "experience": "How was your experience?",
+    "publish": "Publish review",
+    "publishing": "Publishing…",
+    "published": "Your verified review is now published.",
+    "loading": "Loading reviews…",
+    "empty": "This business has no reviews yet.",
+    "retry": "Retry",
+    "verified": "Verified redemption",
+    "businessReply": "Business reply",
+    "replyLabel": "Your reply",
+    "reply": "Publish reply",
+    "error": "We could not complete the operation. Please try again."
   },
   "savedBusinesses": {
     "title": "Businesses",

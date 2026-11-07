@@ -1,3 +1,4 @@
+import { ReviewForm } from '../../../../engagement/presentation/components/review-form/review-form';
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -29,7 +30,7 @@ type Placed = 'new' | 'existing' | null;
 @Component({
   selector: 'app-reservation-detail',
   standalone: true,
-  imports: [DecimalPipe, RouterLink, MatButtonModule, MatIconModule, TranslateModule, GeoAlert, GeoEmptyState, GeoOffersMap, GeoSeal, ReportForm],
+  imports: [ReviewForm, DecimalPipe, RouterLink, MatButtonModule, MatIconModule, TranslateModule, GeoAlert, GeoEmptyState, GeoOffersMap, GeoSeal, ReportForm],
   templateUrl: './reservation-detail.page.html',
   styleUrl: './reservation-detail.page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
