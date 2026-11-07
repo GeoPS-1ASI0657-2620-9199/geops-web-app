@@ -1,18 +1,35 @@
 <section class="page" [attr.aria-busy]="loading()">
-  <header><h1>{{ 'followsPage.title' | translate }}</h1><p>{{ 'followsPage.description' | translate }}</p></header>
+  <h1 class="title">{{ 'favoritesPage.title' | translate }}</h1>
+  <app-favorites-tabs active="follows" />
   @if (error(); as message) {
-    <div role="alert"><p>{{ message | translate }}</p><button mat-stroked-button (click)="load()">{{ 'followsPage.retry' | translate }}</button></div>
+    <geo-alert kind="error" [title]="message | translate">
+      <button mat-stroked-button type="button" (click)="load()">{{ 'followsPage.retry' | translate }}</button>
+    </geo-alert>
   }
-  @if (loading()) { <p role="status">{{ 'followsPage.loading' | translate }}</p> }
+  @if (loading()) { <p role="status" class="status">{{ 'followsPage.loading' | translate }}</p> }
   @else if (!error() && businesses().length === 0) {
-    <div class="empty"><h2>{{ 'followsPage.empty' | translate }}</h2><p>{{ 'followsPage.emptyHint' | translate }}</p><a mat-flat-button routerLink="/offers">{{ 'nav.offers' | translate }}</a></div>
+    <geo-empty-state icon="storefront" [title]="'followsPage.empty' | translate" [description]="'followsPage.emptyHint' | translate">
+      <a mat-flat-button routerLink="/offers">{{ 'nav.offers' | translate }}</a>
+    </geo-empty-state>
   }
-  @for (business of businesses(); track business.businessId) {
-    <article class="business">
-      <div class="business-head"><div><h2>{{ business.businessName }}</h2><p>{{ 'followsPage.count' | translate:{count: business.activeOffersCount} }}</p></div>
-        <button mat-stroked-button [disabled]="removing() !== null" (click)="remove(business.businessId)">{{ 'followsPage.unfollow' | translate }}<span class="sr-only"> {{ business.businessName }}</span></button>
-      </div>
-      <ul>@for (offer of business.activeOffers; track offer.offerId) { <li><a [routerLink]="['/offers', offer.offerId]">{{ offer.title }}</a></li> }</ul>
-    </article>
+  @if (businesses().length > 0) {
+    <ul class="list">
+      @for (business of businesses(); track business.businessId) {
+        <li class="row">
+          <span class="avatar" aria-hidden="true">{{ initial(business.businessName) }}</span>
+          <div class="name"><h2>{{ business.businessName }}</h2></div>
+          @if (business.activeOffersCount > 0) {
+            <span class="count">{{ (business.activeOffersCount === 1 ? 'followsPage.countOne' : 'followsPage.count') | translate: { count: business.activeOffersCount } }}</span>
+            <a mat-stroked-button class="view" [routerLink]="['/offers', business.activeOffers[0].offerId]">{{ 'followsPage.viewOffers' | translate }}</a>
+          } @else {
+            <span class="count none">{{ 'followsPage.noOffers' | translate }}</span>
+          }
+          <button class="unfollow" type="button" [disabled]="removing() !== null" (click)="remove(business.businessId)">
+            {{ 'followsPage.unfollow' | translate }}<span class="sr-only"> {{ business.businessName }}</span>
+          </button>
+        </li>
+      }
+    </ul>
+    <geo-alert kind="info" [title]="'followsPage.noticeTitle' | translate" [description]="'followsPage.noticeHint' | translate" />
   }
 </section>

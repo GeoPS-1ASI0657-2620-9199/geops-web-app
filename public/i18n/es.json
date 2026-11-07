@@ -11,7 +11,8 @@
       "menu": {
         "myProfile": "Mi perfil",
         "settings": "Configuración",
-        "logout": "Cerrar sesión"
+        "logout": "Cerrar sesión",
+        "preferences": "Preferencias de avisos"
       }
     },
     "logIn": "Iniciar sesión",
@@ -760,25 +761,34 @@
     "unfollow": "Dejar de seguir",
     "following": "Siguiendo",
     "follow": "Seguir comercio",
-    "error": "No pudimos cargar tus comercios. Inténtalo de nuevo."
+    "error": "No pudimos cargar tus comercios. Inténtalo de nuevo.",
+    "countOne": "{{count}} oferta vigente",
+    "viewOffers": "Ver ofertas",
+    "noOffers": "Sin ofertas vigentes por ahora",
+    "noticeTitle": "Te avisamos cuando estés cerca",
+    "noticeHint": "Las ofertas nuevas de estos comercios te llegan por los canales que activaste en tus preferencias de avisos."
   },
   "notificationPage": {
     "title": "Preferencias de avisos",
-    "description": "Elige tus canales y un máximo diario compartido. Tú decides cuándo recibir ofertas.",
+    "description": "Elige por dónde y cuántas veces te avisamos de ofertas cerca de donde estuviste en la última hora.",
     "loading": "Cargando preferencias…",
     "retry": "Reintentar",
     "channels": "Canales de ofertas",
     "push": "Avisos en el navegador",
-    "pushHint": "También debes activar los avisos en cada navegador que quieras usar.",
+    "pushHint": "Llegan aunque no tengas GeoPS abierto.",
     "email": "Correo electrónico",
-    "emailHint": "Agrupamos las ofertas en un solo correo por franja. Tu correo debe estar confirmado.",
+    "emailHint": "Agrupados: un solo correo por franja horaria, no uno por oferta.",
     "dailyLimit": "Máximo de avisos al día",
-    "limitHint": "De 1 a 10, entre todos los canales. El día se cuenta con la hora de Lima.",
+    "limitHint": "Al llegar al máximo no te avisamos más ese día, por ningún canal.",
     "invalidLimit": "Elige un número entero de 1 a 10.",
     "save": "Guardar preferencias",
     "saving": "Guardando…",
     "saved": "Tus próximos avisos respetarán estas preferencias.",
-    "error": "No pudimos guardar tus preferencias. Inténtalo de nuevo."
+    "error": "No pudimos guardar tus preferencias. Inténtalo de nuevo.",
+    "iphoneTitle": "En iPhone primero instala GeoPS",
+    "iphoneHint": "Safari solo envía avisos a sitios agregados a la pantalla de inicio. Toca Compartir y luego Agregar a inicio. Mientras tanto te avisamos por correo.",
+    "locationTitle": "Usamos tu última ubicación de la última hora",
+    "locationHint": "Si no abriste GeoPS en los últimos 60 minutos no te enviamos avisos de cercanía."
   },
   "unsubscribePage": {
     "title": "Preferencias de correo",
@@ -838,5 +848,10 @@
     "save": "Guardar comercio",
     "error": "No pudimos actualizar tus comercios. Inténtalo de nuevo.",
     "viewOffer": "Ver oferta"
+  },
+  "favoritesTabs": {
+    "offers": "Ofertas guardadas",
+    "businesses": "Comercios guardados",
+    "follows": "Comercios que sigo"
   }
 }

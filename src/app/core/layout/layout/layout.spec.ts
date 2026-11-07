@@ -62,8 +62,6 @@ describe('Layout', () => {
       'nav.categories',
       'nav.favorites',
       'nav.coupons',
-      'nav.follows',
-      'nav.preferences',
     ]);
   });
 

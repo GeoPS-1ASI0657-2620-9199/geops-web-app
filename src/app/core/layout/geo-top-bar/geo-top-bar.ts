@@ -58,6 +58,12 @@ export type ShellRole = 'CONSUMER' | 'BUSINESS_OWNER' | 'ADMIN';
           {{ userName() }}
         </button>
         <mat-menu #menu="matMenu">
+          @if (role() === 'CONSUMER') {
+            <a mat-menu-item routerLink="/preferences">
+              <mat-icon>notifications_active</mat-icon>
+              <span>{{ 'header.profile.menu.preferences' | translate }}</span>
+            </a>
+          }
           <button mat-menu-item type="button" (click)="logOut.emit()">
             <mat-icon>logout</mat-icon>
             <span>{{ 'header.profile.menu.logout' | translate }}</span>

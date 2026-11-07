@@ -5,10 +5,13 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ListFollowedBusinessesUseCase, UnfollowBusinessUseCase } from '../../../application/follows.use-cases';
 import { FollowedBusiness } from '../../../domain/model/followed-business';
 import { ApiError } from '../../../../shared/domain/api-error';
+import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
+import { GeoEmptyState } from '../../../../shared/ui/geo-empty-state/geo-empty-state';
+import { FavoritesTabs } from '../../components/favorites-tabs/favorites-tabs';
 
 @Component({
   selector: 'app-follows',
-  imports: [RouterLink, MatButtonModule, TranslateModule],
+  imports: [RouterLink, MatButtonModule, TranslateModule, FavoritesTabs, GeoAlert, GeoEmptyState],
   templateUrl: './follows.page.html',
   styleUrl: './follows.page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -20,6 +23,8 @@ export class FollowsPage implements OnInit {
   readonly loading = signal(true);
   readonly removing = signal<number | null>(null);
   readonly error = signal<string | null>(null);
+
+  initial(name: string): string { return name.trim().charAt(0).toUpperCase(); }
 
   ngOnInit() { void this.load(); }
 

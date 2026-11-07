@@ -11,7 +11,8 @@
       "menu": {
         "myProfile": "My Profile",
         "settings": "Settings",
-        "logout": "Logout"
+        "logout": "Logout",
+        "preferences": "Notice preferences"
       }
     },
     "logIn": "Log in",
@@ -760,25 +761,34 @@
     "unfollow": "Unfollow",
     "following": "Following",
     "follow": "Follow business",
-    "error": "We could not load your businesses. Please try again."
+    "error": "We could not load your businesses. Please try again.",
+    "countOne": "{{count}} active offer",
+    "viewOffers": "View offers",
+    "noOffers": "No active offers right now",
+    "noticeTitle": "We notify you when you are near",
+    "noticeHint": "New offers from these businesses reach you on the channels you turned on in your notice preferences."
   },
   "notificationPage": {
     "title": "Notification preferences",
-    "description": "Choose your channels and a shared daily limit. You decide when to hear about offers.",
+    "description": "Choose where and how often we notify you about offers near where you were in the last hour.",
     "loading": "Loading preferences…",
     "retry": "Retry",
     "channels": "Offer channels",
     "push": "Browser notifications",
-    "pushHint": "Enable notifications separately in each browser you want to use.",
+    "pushHint": "They arrive even when GeoPS is not open.",
     "email": "Email",
-    "emailHint": "Offers are grouped into one email per window. Your email must be confirmed.",
+    "emailHint": "Grouped: one email per time window, not one per offer.",
     "dailyLimit": "Maximum notices per day",
-    "limitHint": "From 1 to 10 across all channels. The day follows Lima time.",
+    "limitHint": "Once you reach the maximum we send no more that day, on any channel.",
     "invalidLimit": "Choose a whole number from 1 to 10.",
     "save": "Save preferences",
     "saving": "Saving…",
     "saved": "Your next notices will follow these preferences.",
-    "error": "We could not save your preferences. Please try again."
+    "error": "We could not save your preferences. Please try again.",
+    "iphoneTitle": "On iPhone, install GeoPS first",
+    "iphoneHint": "Safari only sends notices to sites added to the home screen. Tap Share and then Add to Home Screen. Meanwhile we notify you by email.",
+    "locationTitle": "We use your last location from the last hour",
+    "locationHint": "If you did not open GeoPS in the last 60 minutes we send no nearby notices."
   },
   "unsubscribePage": {
     "title": "Email preferences",
@@ -838,5 +848,10 @@
     "save": "Save business",
     "error": "We could not update your businesses. Please try again.",
     "viewOffer": "View offer"
+  },
+  "favoritesTabs": {
+    "offers": "Saved offers",
+    "businesses": "Saved businesses",
+    "follows": "Businesses I follow"
   }
 }

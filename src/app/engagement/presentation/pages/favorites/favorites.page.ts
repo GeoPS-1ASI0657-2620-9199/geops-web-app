@@ -1,3 +1,7 @@
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ActivatedRoute } from '@angular/router';
+import { map } from 'rxjs';
+import { FavoritesTabs } from '../../components/favorites-tabs/favorites-tabs';
 import { SavedBusinesses } from '../../components/saved-businesses/saved-businesses';
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
@@ -28,7 +32,7 @@ interface FavoriteCard {
 @Component({
   selector: 'app-favorites',
   standalone: true,
-  imports: [SavedBusinesses, RouterLink, MatButtonModule, TranslateModule, GeoAlert, GeoEmptyState, GeoOfferCard],
+  imports: [FavoritesTabs, SavedBusinesses, RouterLink, MatButtonModule, TranslateModule, GeoAlert, GeoEmptyState, GeoOfferCard],
   templateUrl: './favorites.page.html',
   styleUrl: './favorites.page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,7 +42,11 @@ export class FavoritesPage implements OnInit {
   private readonly removeSaved = inject(RemoveSavedOfferUseCase);
   private readonly getOffer = inject(GetOfferDetailUseCase);
 
-  protected readonly tab = signal<'offers' | 'businesses'>('offers');
+  private readonly route = inject(ActivatedRoute);
+  protected readonly tab = toSignal(
+    this.route.queryParamMap.pipe(map((params): 'offers' | 'businesses' => (params.get('tab') === 'businesses' ? 'businesses' : 'offers'))),
+    { initialValue: 'offers' as 'offers' | 'businesses' },
+  );
   protected readonly state = signal<ViewState>('loading');
   protected readonly cards = signal<FavoriteCard[]>([]);
   protected readonly errorMessage = signal<string | null>(null);
