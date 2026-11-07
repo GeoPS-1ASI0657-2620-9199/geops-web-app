@@ -803,5 +803,27 @@
     "denied": "No se concedió permiso. Puedes cambiarlo en los ajustes del navegador o elegir el correo.",
     "unavailable": "Los avisos del navegador todavía no están disponibles aquí. Puedes activar el correo.",
     "error": "No pudimos registrar este navegador. Inténtalo de nuevo."
+  },
+  "reviewsPage": {
+    "title": "Opiniones con canje verificado",
+    "panelTitle": "Comentarios de tu comercio",
+    "panelHint": "Responde una vez a cada opinión y mantén la conversación junto al comentario original.",
+    "missingBusiness": "No encontramos tu comercio en la sesión. Vuelve a iniciar sesión.",
+    "write": "Comenta tu experiencia",
+    "verifiedHint": "Tu opinión se publicará con la marca de canje verificado.",
+    "rating": "Valoración",
+    "stars": "{{count}} estrellas",
+    "experience": "¿Cómo fue tu experiencia?",
+    "publish": "Publicar comentario",
+    "publishing": "Publicando…",
+    "published": "Tu comentario ya está publicado con canje verificado.",
+    "loading": "Cargando comentarios…",
+    "empty": "Este comercio todavía no tiene comentarios.",
+    "retry": "Reintentar",
+    "verified": "Canje verificado",
+    "businessReply": "Respuesta del comercio",
+    "replyLabel": "Tu respuesta",
+    "reply": "Publicar respuesta",
+    "error": "No pudimos completar la operación. Inténtalo de nuevo."
   }
 }

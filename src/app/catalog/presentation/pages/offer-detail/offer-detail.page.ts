@@ -1,3 +1,4 @@
+import { BusinessReviews } from '../../../../engagement/presentation/components/business-reviews/business-reviews';
 import { FollowBusiness } from '../../../../engagement/presentation/components/follow-business/follow-business';
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -55,6 +56,7 @@ interface ReserveFailure {
     GeoOffersMap,
     GeoSeal,
     OfferCardActions,
+    BusinessReviews,
     FollowBusiness,
   ],
   templateUrl: './offer-detail.page.html',

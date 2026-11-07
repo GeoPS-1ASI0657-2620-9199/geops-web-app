@@ -1,3 +1,4 @@
+import { ReviewRepository } from '../../../../engagement/domain/ports/review.repository';
 import { FollowRepository } from '../../../../engagement/domain/ports/follow.repository';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router, convertToParamMap, provideRouter } from '@angular/router';
@@ -66,6 +67,7 @@ describe('OfferDetailPage', () => {
       providers: [
         ...radiusPreferenceTestingProviders(),
         provideRouter([]),
+        { provide: ReviewRepository, useValue: { findByBusiness: () => Promise.resolve([]), create: () => Promise.resolve({}), reply: () => Promise.resolve() } },
         { provide: FollowRepository, useValue: { findMine: () => Promise.resolve([]), follow: () => Promise.resolve({}), unfollow: () => Promise.resolve() } },
         provideTranslateService(),
         { provide: OfferRepository, useValue: offers },

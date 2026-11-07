@@ -803,5 +803,27 @@
     "denied": "Permission was not granted. Change it in your browser settings or choose email.",
     "unavailable": "Browser notices are not available here yet. You can enable email.",
     "error": "We could not register this browser. Please try again."
+  },
+  "reviewsPage": {
+    "title": "Verified redemption reviews",
+    "panelTitle": "Your business reviews",
+    "panelHint": "Reply once to each review. Your reply stays beside the original experience.",
+    "missingBusiness": "Your session has no business. Please log in again.",
+    "write": "Review your experience",
+    "verifiedHint": "Your review will carry the verified redemption mark.",
+    "rating": "Rating",
+    "stars": "{{count}} stars",
+    "experience": "How was your experience?",
+    "publish": "Publish review",
+    "publishing": "Publishing…",
+    "published": "Your verified review is now published.",
+    "loading": "Loading reviews…",
+    "empty": "This business has no reviews yet.",
+    "retry": "Retry",
+    "verified": "Verified redemption",
+    "businessReply": "Business reply",
+    "replyLabel": "Your reply",
+    "reply": "Publish reply",
+    "error": "We could not complete the operation. Please try again."
   }
 }

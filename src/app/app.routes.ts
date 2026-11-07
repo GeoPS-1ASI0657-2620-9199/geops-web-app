@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { Layout } from './core/layout/layout/layout';
-import { SectionEmptyData } from './core/layout/section-empty/section-empty';
 import { authGuard } from './iam/infrastructure/auth.guard';
 import { roleGuard } from './iam/infrastructure/role.guard';
 
@@ -143,8 +142,7 @@ export const routes: Routes = [
       {
         path: 'comments',
         canActivate: owner,
-        loadComponent: () => import('./core/layout/section-empty/section-empty').then((m) => m.SectionEmpty),
-        data: { i18n: 'commentsPage', icon: 'forum', actionRoute: '/campaigns' } satisfies SectionEmptyData,
+        loadComponent: () => import('./engagement/presentation/pages/business-comments/business-comments.page').then(m => m.BusinessCommentsPage),
         title: 'GeoPS - Comentarios',
       },
       {

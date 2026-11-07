@@ -76,6 +76,7 @@
                 <li>{{ line }}</li>
               }
             </ul>
+          @if (!isVisitor() && o.source !== 'PUBLIC_SOURCE' && o.businessId !== null) { <app-business-reviews [businessId]="o.businessId" /> }
           </article>
 
           <aside class="side">
