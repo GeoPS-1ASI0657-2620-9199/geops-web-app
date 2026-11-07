@@ -85,6 +85,39 @@ describe('HttpCampaignRepository', () => {
     expect(body.estimatedBudget).toBeUndefined();
   });
 
+  it('pauses a campaign with PATCH /campaigns/{id}/status and reads its new status (US10)', async () => {
+    const result = repository.changeStatus(77, 'PAUSED');
+
+    const request = http.expectOne(`${BASE_URL}/campaigns/77/status`);
+    expect(request.request.method).toBe('PATCH');
+    expect(request.request.body).toEqual({ status: 'PAUSED' });
+    request.flush({
+      campaignId: 77,
+      businessId: 84,
+      name: 'Almuerzos de noviembre',
+      description: 'Menú ejecutivo 2x1',
+      period: { start: '2026-10-27', end: '2026-11-15' },
+      zone: { type: 'RADIUS', center: { latitude: -12.1211, longitude: -77.0297 }, radiusMeters: 1200, district: null },
+      status: 'PAUSED',
+      estimatedBudget: { amount: 300, currency: 'PEN' },
+    });
+
+    expect(await result).toEqual(jasmine.objectContaining({ campaignId: 77, status: 'PAUSED' }));
+  });
+
+  it('rejects a reactivation after the end of the validity with CAMPAIGN_ALREADY_ENDED', async () => {
+    const result = repository.changeStatus(77, 'ACTIVE');
+
+    http.expectOne(`${BASE_URL}/campaigns/77/status`).flush(
+      { code: 'CAMPAIGN_ALREADY_ENDED', message: 'La campaña terminó el 2026-11-15. Ya no se puede pausar ni reactivar.' },
+      { status: 409, statusText: 'Conflict' },
+    );
+
+    await expectAsync(result).toBeRejectedWith(
+      new ApiError('CAMPAIGN_ALREADY_ENDED', 'La campaña terminó el 2026-11-15. Ya no se puede pausar ni reactivar.'),
+    );
+  });
+
   it('rejects with the code Catalog answers', async () => {
     const result = repository.create(DRAFT);
 

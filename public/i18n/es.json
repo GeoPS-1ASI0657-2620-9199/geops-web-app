@@ -164,6 +164,23 @@
       "actions": "Acciones"
     },
     "seeOffer": "Ver oferta",
+    "pause": "Pausar",
+    "reactivate": "Reactivar",
+    "validityEnded": "La vigencia terminó",
+    "statusDialog": {
+      "cancel": "Cancelar",
+      "PAUSED": {
+        "title": "¿Pausar «{{name}}»?",
+        "description": "Tu oferta dejará de mostrarse hasta que la reactives.",
+        "confirm": "Pausar"
+      },
+      "ACTIVE": {
+        "title": "¿Reactivar «{{name}}»?",
+        "description": "Tu oferta volverá a mostrarse a los clientes de tu zona hasta el fin de su vigencia.",
+        "confirm": "Reactivar"
+      }
+    },
+    "statusError": "No pudimos cambiar el estado de la campaña. Inténtalo de nuevo.",
     "noneInFilter": "No tienes campañas en este estado.",
     "error": {
       "title": "No pudimos cargar tus campañas",

@@ -39,6 +39,10 @@
   color: var(--text-primary);
   text-decoration: none;
 }
+button.action { background: var(--neutral-bg); cursor: pointer; }
+button.action:disabled { color: var(--text-faint); cursor: not-allowed; }
+.actions { display: inline-flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: var(--space-sm); }
+.hint { font: 400 11px/1.3 var(--font-brand); color: var(--text-dim); }
 .ended td { color: var(--text-faint); }
 .ended .icon { background: var(--neutral-line-soft); color: var(--text-dim); }
 .none { color: var(--text-dim); text-align: center; }

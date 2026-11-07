@@ -3,7 +3,13 @@ import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { API_BASE_URL } from '../../core/config/api-base-url';
 import { toApiError } from '../../core/http/api-error.mapper';
-import { CampaignDraft, CampaignOffer, CreatedCampaign, PublishedCampaign } from '../domain/model/campaign';
+import {
+  CampaignDraft,
+  CampaignOffer,
+  CreatedCampaign,
+  PublishedCampaign,
+  RequestableCampaignStatus,
+} from '../domain/model/campaign';
 import { CampaignRepository } from '../domain/ports/campaign.repository';
 import {
   CampaignOfferResponse,
@@ -47,6 +53,20 @@ export class HttpCampaignRepository implements CampaignRepository {
         this.http.get<CampaignOfferResponse[]>(`${this.baseUrl}/campaigns/${campaignId}/offers`),
       );
       return response.map(toCampaignOffer);
+    } catch (error) {
+      throw toApiError(error);
+    }
+  }
+
+  async changeStatus(
+    campaignId: number,
+    status: RequestableCampaignStatus,
+  ): Promise<Omit<PublishedCampaign, 'offers'>> {
+    try {
+      const response = await firstValueFrom(
+        this.http.patch<CampaignResponse>(`${this.baseUrl}/campaigns/${campaignId}/status`, { status }),
+      );
+      return toPublishedCampaign(response);
     } catch (error) {
       throw toApiError(error);
     }
