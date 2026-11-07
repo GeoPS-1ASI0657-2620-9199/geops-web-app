@@ -1,3 +1,4 @@
+import { SaveBusiness } from '../../../../engagement/presentation/components/save-business/save-business';
 import { BusinessReviews } from '../../../../engagement/presentation/components/business-reviews/business-reviews';
 import { FollowBusiness } from '../../../../engagement/presentation/components/follow-business/follow-business';
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
@@ -56,6 +57,7 @@ interface ReserveFailure {
     GeoOffersMap,
     GeoSeal,
     OfferCardActions,
+    SaveBusiness,
     BusinessReviews,
     FollowBusiness,
   ],

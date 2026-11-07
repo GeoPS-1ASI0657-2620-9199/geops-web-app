@@ -1,3 +1,4 @@
+import { SavedBusinessRepository } from '../../../../engagement/domain/ports/saved-business.repository';
 import { ReviewRepository } from '../../../../engagement/domain/ports/review.repository';
 import { FollowRepository } from '../../../../engagement/domain/ports/follow.repository';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -67,6 +68,7 @@ describe('OfferDetailPage', () => {
       providers: [
         ...radiusPreferenceTestingProviders(),
         provideRouter([]),
+        { provide: SavedBusinessRepository, useValue: { findMine: () => Promise.resolve([]), save: () => Promise.resolve(), remove: () => Promise.resolve() } },
         { provide: ReviewRepository, useValue: { findByBusiness: () => Promise.resolve([]), create: () => Promise.resolve({}), reply: () => Promise.resolve() } },
         { provide: FollowRepository, useValue: { findMine: () => Promise.resolve([]), follow: () => Promise.resolve({}), unfollow: () => Promise.resolve() } },
         provideTranslateService(),

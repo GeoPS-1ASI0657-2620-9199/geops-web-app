@@ -15,6 +15,7 @@ export interface SavedOfferResponse {
   title: string;
   validTo: string;
   expired: boolean;
+  status?: SavedOffer['status'];
   savedAt: string;
 }
 

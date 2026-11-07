@@ -1,3 +1,4 @@
+import { SavedBusinesses } from '../../components/saved-businesses/saved-businesses';
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -27,7 +28,7 @@ interface FavoriteCard {
 @Component({
   selector: 'app-favorites',
   standalone: true,
-  imports: [RouterLink, MatButtonModule, TranslateModule, GeoAlert, GeoEmptyState, GeoOfferCard],
+  imports: [SavedBusinesses, RouterLink, MatButtonModule, TranslateModule, GeoAlert, GeoEmptyState, GeoOfferCard],
   templateUrl: './favorites.page.html',
   styleUrl: './favorites.page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,10 +38,12 @@ export class FavoritesPage implements OnInit {
   private readonly removeSaved = inject(RemoveSavedOfferUseCase);
   private readonly getOffer = inject(GetOfferDetailUseCase);
 
+  protected readonly tab = signal<'offers' | 'businesses'>('offers');
   protected readonly state = signal<ViewState>('loading');
   protected readonly cards = signal<FavoriteCard[]>([]);
   protected readonly errorMessage = signal<string | null>(null);
-  protected readonly current = computed(() => this.cards().filter((card) => !card.saved.expired));
+  protected readonly current = computed(() => this.cards().filter((card) => !card.saved.expired && card.saved.status !== 'PAUSED'));
+  protected readonly paused = computed(() => this.cards().filter(card => !card.saved.expired && card.saved.status === 'PAUSED'));
   protected readonly expired = computed(() => this.cards().filter((card) => card.saved.expired));
 
   ngOnInit(): void {
@@ -51,8 +54,8 @@ export class FavoritesPage implements OnInit {
     this.state.set('loading');
     try {
       const saved = await this.listSaved.execute();
-      const { current, expired } = splitByValidity(saved);
-      const cards = await Promise.all([...current, ...expired].map((offer) => this.withDetail(offer)));
+      const { current, paused, expired } = splitByValidity(saved);
+      const cards = await Promise.all([...current, ...paused, ...expired].map((offer) => this.withDetail(offer)));
       this.cards.set(cards);
       this.state.set(cards.length ? 'ready' : 'empty');
     } catch (error) {

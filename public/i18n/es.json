@@ -825,5 +825,18 @@
     "replyLabel": "Tu respuesta",
     "reply": "Publicar respuesta",
     "error": "No pudimos completar la operación. Inténtalo de nuevo."
+  },
+  "savedBusinesses": {
+    "title": "Comercios",
+    "tabs": "Tipo de favorito",
+    "paused": "Pausada",
+    "loading": "Cargando comercios…",
+    "retry": "Reintentar",
+    "empty": "Todavía no guardaste comercios. Puedes guardarlos desde el detalle de una oferta.",
+    "remove": "Quitar de guardados",
+    "saved": "Comercio guardado",
+    "save": "Guardar comercio",
+    "error": "No pudimos actualizar tus comercios. Inténtalo de nuevo.",
+    "viewOffer": "Ver oferta"
   }
 }

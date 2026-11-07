@@ -825,5 +825,18 @@
     "replyLabel": "Your reply",
     "reply": "Publish reply",
     "error": "We could not complete the operation. Please try again."
+  },
+  "savedBusinesses": {
+    "title": "Businesses",
+    "tabs": "Favorite type",
+    "paused": "Paused",
+    "loading": "Loading businesses…",
+    "retry": "Retry",
+    "empty": "No saved businesses yet. Save them from an offer detail.",
+    "remove": "Remove saved business",
+    "saved": "Business saved",
+    "save": "Save business",
+    "error": "We could not update your businesses. Please try again.",
+    "viewOffer": "View offer"
   }
 }
