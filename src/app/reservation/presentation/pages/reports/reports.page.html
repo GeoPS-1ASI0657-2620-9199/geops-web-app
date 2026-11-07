@@ -1,20 +1,23 @@
 <section class="page">
-  <h1 class="title">{{ 'reportsPage.title' | translate }}</h1>
+  <header class="head">
+    <h1 class="title">{{ 'reportsPage.title' | translate }}</h1>
+    <div class="chips" role="tablist">
+      @for (status of tabs; track status) {
+        <button
+          type="button"
+          role="tab"
+          class="chip"
+          [class.active]="tab() === status"
+          [attr.aria-selected]="tab() === status"
+          [attr.data-testid]="'tab-' + status"
+          (click)="tab.set(status)">
+          {{ 'reportsPage.tabs.' + status | translate }} ({{ count(status) }})
+        </button>
+      }
+    </div>
+  </header>
 
-  <div class="tabs" role="tablist">
-    @for (status of tabs; track status) {
-      <button
-        type="button"
-        role="tab"
-        class="tab"
-        [class.active]="tab() === status"
-        [attr.aria-selected]="tab() === status"
-        [attr.data-testid]="'tab-' + status"
-        (click)="tab.set(status)">
-        {{ 'reportsPage.tabs.' + status | translate }} ({{ count(status) }})
-      </button>
-    }
-  </div>
+  <geo-alert kind="warning" [title]="'reportsPage.notice.title' | translate" [description]="'reportsPage.notice.description' | translate" />
 
   @if (actionError() !== null) {
     <geo-alert
@@ -42,70 +45,100 @@
           [title]="'reportsPage.empty.' + tab() + '.title' | translate"
           [description]="'reportsPage.empty.' + tab() + '.description' | translate" />
       }
-      @for (report of visible(); track report.reportId) {
-        <article class="card" [attr.data-testid]="'report-' + report.reportId">
-          <header class="head">
-            <div>
-              <p class="offer">{{ report.offerTitle }}</p>
-              <p class="geo-meta">
-                {{ 'reportsPage.code' | translate }}
-                <span class="code geo-tabular">{{ report.reservationCode }}</span>
-                · {{ limaDateTime(report.openedAt) }}
-              </p>
-            </div>
-            @if (report.status === 'OPEN') {
-              @if (timeToAnswer(report.responseDeadline, now()); as left) {
-                <span class="left" data-testid="time-left">{{ 'reportsPage.timeLeft' | translate: { time: left } }}</span>
-              } @else {
-                <span class="left late">{{ 'reportsPage.deadlinePassed' | translate }}</span>
+      @if (current(); as report) {
+        <div class="layout">
+          <ul class="list" [attr.aria-label]="'reportsPage.title' | translate">
+            @for (item of visible(); track item.reportId) {
+              <li>
+                <button type="button" class="item" [class.selected]="item.reportId === report.reportId"
+                        [attr.aria-current]="item.reportId === report.reportId ? 'true' : null"
+                        [attr.data-testid]="'item-' + item.reportId" (click)="select(item.reportId)">
+                  <span class="item-top">{{ item.reservationCode }}</span>
+                  <span class="item-reason">{{ headline(item.reason) }}</span>
+                  @if (item.status === 'OPEN') {
+                    @if (timeToAnswer(item.responseDeadline, now()); as left) {
+                      <span class="item-left">{{ 'reportsPage.timeLeft' | translate: { time: left } }}</span>
+                    } @else {
+                      <span class="item-left late">{{ 'reportsPage.deadlinePassed' | translate }}</span>
+                    }
+                  } @else {
+                    <span class="item-since">{{ limaDateTime(item.openedAt) }}</span>
+                  }
+                </button>
+              </li>
+            }
+          </ul>
+
+          <article class="card" [attr.data-testid]="'report-' + report.reportId">
+            <header class="card-head">
+              <h2 class="card-title">{{ headline(report.reason) }}</h2>
+              <span class="badge" [class]="'badge ' + report.status">{{ 'reportsPage.badge.' + report.status | translate }}</span>
+            </header>
+
+            <dl class="facts">
+              <div><dt>{{ 'reportsPage.reservation' | translate }}</dt><dd><span class="code geo-tabular">{{ report.reservationCode }}</span> · {{ report.offerTitle }}</dd></div>
+              <div><dt>{{ 'reportsPage.reportedAt' | translate }}</dt><dd>{{ limaDateTime(report.openedAt) }}</dd></div>
+              @if (report.status === 'OPEN') {
+                <div>
+                  <dt>{{ 'reportsPage.deadline' | translate }}</dt>
+                  @if (timeToAnswer(report.responseDeadline, now()); as left) {
+                    <dd class="left" data-testid="time-left">{{ 'reportsPage.timeLeft' | translate: { time: left } }}</dd>
+                  } @else {
+                    <dd class="left late">{{ 'reportsPage.deadlinePassed' | translate }}</dd>
+                  }
+                </div>
               }
+            </dl>
+
+            <div class="written">
+              <p class="written-label">{{ 'reportsPage.reason' | translate }}</p>
+              <p class="reason">{{ report.reason }}</p>
+            </div>
+
+            @if (report.response; as answer) {
+              <div class="written mine">
+                <p class="written-label">{{ 'reportsPage.yourAnswer' | translate }} · {{ limaDateTime(answer.respondedAt) }}</p>
+                <p class="reason">{{ answer.text }}</p>
+              </div>
             }
-          </header>
 
-          <p class="geo-meta">{{ 'reportsPage.reason' | translate }}</p>
-          <p class="reason">{{ report.reason }}</p>
-
-          @if (report.response; as answer) {
-            <p class="geo-meta">{{ 'reportsPage.yourAnswer' | translate }} · {{ limaDateTime(answer.respondedAt) }}</p>
-            <p class="reason">{{ answer.text }}</p>
-          }
-
-          @if (report.status === 'CLOSED') {
-            <p class="geo-meta" data-testid="closed-note">
-              {{ 'reportsPage.closed.' + report.resolution | translate }}
-            </p>
-          } @else {
-            @if (report.status === 'OPEN') {
-              <label class="label" [for]="'answer-' + report.reportId">{{ 'reportsPage.answerLabel' | translate }}</label>
-              <textarea
-                class="input"
-                rows="3"
-                [id]="'answer-' + report.reportId"
-                [maxlength]="max"
-                [ngModel]="draft(report.reportId)"
-                (ngModelChange)="setDraft(report.reportId, $event)"
-                [placeholder]="'reportsPage.answerPlaceholder' | translate"></textarea>
-            }
-            <div class="actions">
-              @if (confirming() === report.reportId) {
-                <span class="geo-meta">{{ 'reportsPage.confirmResolve' | translate }}</span>
-                <button mat-stroked-button type="button" (click)="confirming.set(null)">{{ 'reportsPage.cancel' | translate }}</button>
-                <button mat-flat-button type="button" data-testid="confirm-resolve" [disabled]="working() !== null" (click)="resolve(report)">
-                  {{ 'reportsPage.confirm' | translate }}
-                </button>
-              } @else {
-                <button mat-stroked-button type="button" data-testid="resolve" (click)="confirming.set(report.reportId)">
-                  {{ 'reportsPage.resolve' | translate }}
-                </button>
-                @if (report.status === 'OPEN') {
-                  <button mat-flat-button type="button" data-testid="answer" [disabled]="!canSend(report.reportId)" (click)="answer(report)">
-                    {{ 'reportsPage.send' | translate }}
+            @if (report.status === 'CLOSED') {
+              <p class="note" data-testid="closed-note">{{ 'reportsPage.closed.' + report.resolution | translate }}</p>
+            } @else {
+              @if (report.status === 'OPEN') {
+                <label class="label" [for]="'answer-' + report.reportId">{{ 'reportsPage.answerLabel' | translate }}</label>
+                <textarea
+                  class="input"
+                  rows="3"
+                  [id]="'answer-' + report.reportId"
+                  [maxlength]="max"
+                  [ngModel]="draft(report.reportId)"
+                  (ngModelChange)="setDraft(report.reportId, $event)"
+                  [placeholder]="'reportsPage.answerPlaceholder' | translate"></textarea>
+                <p class="hint">{{ 'reportsPage.answerHint' | translate }}</p>
+              }
+              <div class="actions">
+                @if (confirming() === report.reportId) {
+                  <span class="note">{{ 'reportsPage.confirmResolve' | translate }}</span>
+                  <button mat-stroked-button type="button" (click)="confirming.set(null)">{{ 'reportsPage.cancel' | translate }}</button>
+                  <button mat-flat-button type="button" data-testid="confirm-resolve" [disabled]="working() !== null" (click)="resolve(report)">
+                    {{ 'reportsPage.confirm' | translate }}
+                  </button>
+                } @else {
+                  @if (report.status === 'OPEN') {
+                    <button mat-flat-button type="button" data-testid="answer" [disabled]="!canSend(report.reportId)" (click)="answer(report)">
+                      {{ 'reportsPage.send' | translate }}
+                    </button>
+                  }
+                  <button mat-stroked-button type="button" class="give" data-testid="resolve" (click)="confirming.set(report.reportId)">
+                    {{ 'reportsPage.resolve' | translate }}
                   </button>
                 }
-              }
-            </div>
-          }
-        </article>
+              </div>
+              <p class="hint">{{ 'reportsPage.resolveHint' | translate }}</p>
+            }
+          </article>
+        </div>
       }
     }
   }

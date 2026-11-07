@@ -627,14 +627,14 @@
       }
     },
     "code": "Code",
-    "reason": "Customer's reason",
+    "reason": "What the customer wrote",
     "yourAnswer": "Your answer",
     "timeLeft": "{{time}} left to answer",
     "deadlinePassed": "Deadline passed",
-    "answerLabel": "Your answer",
+    "answerLabel": "Your version",
     "answerPlaceholder": "Explain what happened (at least 10 characters)",
-    "send": "Send answer",
-    "resolve": "Resolve in favor of the customer",
+    "send": "Send my version",
+    "resolve": "Agree with the customer",
     "confirmResolve": "The report closes and stops affecting your position.",
     "confirm": "Confirm",
     "cancel": "Cancel",
@@ -648,7 +648,21 @@
       "title": "We could not load the reports",
       "description": "It may be your connection or the service.",
       "retry": "Retry"
-    }
+    },
+    "notice": {
+      "title": "While a report stays open you drop in the results",
+      "description": "If you do not answer within 48 hours, the case is resolved in favor of the customer."
+    },
+    "badge": {
+      "OPEN": "Pending",
+      "IN_REVIEW": "In review",
+      "CLOSED": "Closed"
+    },
+    "reservation": "Reservation",
+    "reportedAt": "Reported",
+    "deadline": "Time to answer",
+    "answerHint": "The customer receives your answer and the case goes to review.",
+    "resolveHint": "If you agree, the report closes and stops affecting your position."
   },
   "commentsPage": {
     "title": "Customer comments",

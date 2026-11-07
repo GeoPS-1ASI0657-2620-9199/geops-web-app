@@ -57,6 +57,12 @@ export class ReportsPage implements OnInit {
   protected readonly tab = signal<ReportStatus>('OPEN');
   protected readonly reports = signal<NonComplianceReport[]>([]);
   protected readonly visible = computed(() => this.reports().filter((report) => report.status === this.tab()));
+  protected readonly selectedId = signal<number | null>(null);
+  /** The report shown in the detail: the one chosen in the list, or the first of the tab. */
+  protected readonly current = computed(() => {
+    const visible = this.visible();
+    return visible.find((report) => report.reportId === this.selectedId()) ?? visible[0] ?? null;
+  });
   protected readonly drafts = signal<Record<number, string>>({});
   protected readonly confirming = signal<number | null>(null);
   protected readonly working = signal<number | null>(null);
@@ -65,6 +71,17 @@ export class ReportsPage implements OnInit {
 
   ngOnInit(): void {
     void this.load();
+  }
+
+  select(reportId: number): void {
+    this.selectedId.set(reportId);
+    this.confirming.set(null);
+  }
+
+  /** The first sentence of the reason: the label the consumer chose, as in the list of the Figma. */
+  headline(reason: string): string {
+    const end = reason.indexOf('. ');
+    return end > 0 ? reason.slice(0, end) : reason;
   }
 
   count(status: ReportStatus): number {

@@ -627,14 +627,14 @@
       }
     },
     "code": "Código",
-    "reason": "Motivo del cliente",
+    "reason": "Lo que escribió el cliente",
     "yourAnswer": "Tu respuesta",
     "timeLeft": "Te quedan {{time}} para responder",
     "deadlinePassed": "Venció el plazo",
-    "answerLabel": "Tu respuesta",
+    "answerLabel": "Tu versión",
     "answerPlaceholder": "Explica qué ocurrió (mínimo 10 caracteres)",
-    "send": "Enviar respuesta",
-    "resolve": "Resolver a favor del cliente",
+    "send": "Enviar mi versión",
+    "resolve": "Darle la razón al cliente",
     "confirmResolve": "El reporte se cierra y deja de afectar tu posición.",
     "confirm": "Confirmar",
     "cancel": "Cancelar",
@@ -648,7 +648,21 @@
       "title": "No pudimos cargar los reportes",
       "description": "Puede ser tu conexión o el servicio.",
       "retry": "Reintentar"
-    }
+    },
+    "notice": {
+      "title": "Mientras un reporte siga abierto bajas en los resultados",
+      "description": "Si no respondes dentro de las 48 horas, el caso se resuelve a favor del cliente."
+    },
+    "badge": {
+      "OPEN": "Pendiente",
+      "IN_REVIEW": "En revisión",
+      "CLOSED": "Cerrado"
+    },
+    "reservation": "Reserva",
+    "reportedAt": "Reportado",
+    "deadline": "Plazo para responder",
+    "answerHint": "El cliente recibe tu respuesta y el caso pasa a revisión.",
+    "resolveHint": "Si le das la razón, el reporte se cierra y deja de afectar tu posición."
   },
   "commentsPage": {
     "title": "Comentarios de clientes",
