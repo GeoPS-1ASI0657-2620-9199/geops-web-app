@@ -422,7 +422,8 @@
     "create": "Create",
     "reports": "Reports",
     "comments": "Comments",
-    "follows": "Followed businesses"
+    "follows": "Followed businesses",
+    "preferences": "Notification preferences"
   },
   "search": {
     "places": "Places:",
@@ -760,5 +761,33 @@
     "following": "Following",
     "follow": "Follow business",
     "error": "We could not load your businesses. Please try again."
+  },
+  "notificationPage": {
+    "title": "Notification preferences",
+    "description": "Choose your channels and a shared daily limit. You decide when to hear about offers.",
+    "loading": "Loading preferences…",
+    "retry": "Retry",
+    "channels": "Offer channels",
+    "push": "Browser notifications",
+    "pushHint": "Enable notifications separately in each browser you want to use.",
+    "email": "Email",
+    "emailHint": "Offers are grouped into one email per window. Your email must be confirmed.",
+    "dailyLimit": "Maximum notices per day",
+    "limitHint": "From 1 to 10 across all channels. The day follows Lima time.",
+    "invalidLimit": "Choose a whole number from 1 to 10.",
+    "save": "Save preferences",
+    "saving": "Saving…",
+    "saved": "Your next notices will follow these preferences.",
+    "error": "We could not save your preferences. Please try again."
+  },
+  "unsubscribePage": {
+    "title": "Email preferences",
+    "confirmHint": "Confirm you want to stop this type of offer email. Your account will stay active.",
+    "confirm": "Unsubscribe from these emails",
+    "busy": "Confirming…",
+    "done": "You will no longer receive nearby offer emails. Your account stays active.",
+    "doneFollowed": "You will no longer receive followed business offer emails. Your account stays active.",
+    "missing": "Open the unsubscribe link in a GeoPS email.",
+    "error": "We could not confirm your request. Check the link and try again."
   }
 }

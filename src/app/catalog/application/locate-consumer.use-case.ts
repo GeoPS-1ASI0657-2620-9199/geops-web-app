@@ -1,3 +1,4 @@
+import { LOCATION_READING_OBSERVER } from './location-reading-observer';
 import { Injectable, inject } from '@angular/core';
 import { GrantedReading, isPrecise } from '../domain/model/location-reading';
 import { LocationProvider } from '../domain/ports/location.provider';
@@ -19,12 +20,14 @@ export type SearchStart =
 @Injectable({ providedIn: 'root' })
 export class LocateConsumerUseCase {
   private readonly location = inject(LocationProvider);
+  private readonly observe = inject(LOCATION_READING_OBSERVER);
 
   async execute(): Promise<SearchStart> {
     const reading = await this.location.locate();
     if (reading.status !== 'GRANTED') {
       return { kind: 'PICK_DISTRICT', reason: reading.status };
     }
+    void this.observe(reading).catch(() => {});
     return isPrecise(reading)
       ? { kind: 'POINT', reading }
       : { kind: 'PICK_DISTRICT', reason: 'IMPRECISE', accuracyMeters: Math.round(reading.accuracyMeters), reading };

@@ -56,7 +56,15 @@ describe('Layout', () => {
   it('shows the buyer tabs and follows to a consumer', async () => {
     await create({ ...OWNER, role: 'CONSUMER', businessId: undefined, businessName: undefined, consumerId: 2001 });
 
-    expect(tabs()).toEqual(['nav.home', 'nav.offers', 'nav.categories', 'nav.favorites', 'nav.coupons', 'nav.follows']);
+    expect(tabs()).toEqual([
+      'nav.home',
+      'nav.offers',
+      'nav.categories',
+      'nav.favorites',
+      'nav.coupons',
+      'nav.follows',
+      'nav.preferences',
+    ]);
   });
 
   it('shows the buyer tabs and the login link to a visitor', async () => {

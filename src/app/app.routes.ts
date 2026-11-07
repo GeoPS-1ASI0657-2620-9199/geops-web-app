@@ -9,6 +9,7 @@ const consumer = [authGuard, roleGuard('CONSUMER')];
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/inicio' },
+  { path: 'baja', loadComponent: () => import('./notification/presentation/pages/unsubscribe/unsubscribe.page').then(m => m.UnsubscribePage), title: 'GeoPS - Preferencias de correo' },
   {
     path: 'login',
     loadComponent: () =>
@@ -62,6 +63,12 @@ export const routes: Routes = [
         canActivate: consumer,
         loadComponent: () => import('./engagement/presentation/pages/follows/follows.page').then(m => m.FollowsPage),
         title: 'GeoPS - Comercios seguidos',
+      },
+      {
+        path: 'preferences',
+        canActivate: consumer,
+        loadComponent: () => import('./notification/presentation/pages/preferences/preferences.page').then(m => m.PreferencesPage),
+        title: 'GeoPS - Preferencias de avisos',
       },
       {
         path: 'favorites',

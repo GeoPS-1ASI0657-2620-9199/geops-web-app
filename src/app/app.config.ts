@@ -1,3 +1,4 @@
+import { notificationProviders } from './notification/infrastructure/notification.providers';
 import {
   ApplicationConfig,
   inject,
@@ -31,6 +32,7 @@ export const appConfig: ApplicationConfig = {
     ...catalogProviders,
     ...reservationProviders,
     ...engagementProviders,
+    ...notificationProviders,
     // Material Symbols Rounded, the same icon set as the Figma Icono/* components.
     provideAppInitializer(() => {
       inject(MatIconRegistry).setDefaultFontSetClass('material-symbols-rounded');
