@@ -809,10 +809,13 @@
     "confirmHint": "Confirma que quieres dejar de recibir este tipo de correo de ofertas. Tu cuenta seguirá activa.",
     "confirm": "Confirmar baja de estos correos",
     "busy": "Confirmando…",
-    "done": "Ya no te enviaremos correos de ofertas cercanas. Tu cuenta sigue activa.",
-    "doneFollowed": "Ya no te enviaremos correos de ofertas de comercios seguidos. Tu cuenta sigue activa.",
+    "done": "Dejaste de recibir avisos de ofertas cercanas. Tu cuenta, tus favoritos y tus reservas siguen igual.",
+    "doneFollowed": "Dejaste de recibir avisos de ofertas de comercios que sigues. Tu cuenta, tus favoritos y tus reservas siguen igual.",
     "missing": "Abre el enlace de baja incluido en un correo de GeoPS.",
-    "error": "No pudimos confirmar la baja. Revisa el enlace e inténtalo de nuevo."
+    "error": "No pudimos confirmar la baja. Revisa el enlace e inténtalo de nuevo.",
+    "doneTitle": "Listo, ya no te enviaremos estos correos",
+    "reactivate": "Volver a activarlos",
+    "goHome": "Ir a GeoPS"
   },
   "pushPage": {
     "title": "Avisos en este navegador",
@@ -833,12 +836,12 @@
     "panelTitle": "Comentarios de tus clientes",
     "panelHint": "Responde una vez a cada opinión y mantén la conversación junto al comentario original.",
     "missingBusiness": "No encontramos tu comercio en la sesión. Vuelve a iniciar sesión.",
-    "write": "Comenta tu experiencia",
-    "verifiedHint": "Tu opinión se publicará con la marca de canje verificado.",
-    "rating": "Valoración",
+    "write": "¿Cómo te fue en este comercio?",
+    "verifiedHint": "Canjeaste tu reserva en este comercio.",
+    "rating": "Tu valoración",
     "stars": "{{count}} estrellas",
-    "experience": "¿Cómo fue tu experiencia?",
-    "publish": "Publicar comentario",
+    "experience": "Tu comentario",
+    "publish": "Publicar opinión",
     "publishing": "Publicando…",
     "published": "Tu comentario ya está publicado con canje verificado.",
     "loading": "Cargando comentarios…",
@@ -854,7 +857,8 @@
     "pendingHint": "Responder los comentarios negativos en menos de 48 horas mejora tu posición en los resultados.",
     "yourRating": "Tu valoración",
     "verifiedCount": "{{total}} comentarios de clientes con canje verificado",
-    "pendingOne": "1 comentario espera tu respuesta"
+    "pendingOne": "1 comentario espera tu respuesta",
+    "publishedWith": "Se publica con tu nombre y la marca de canje verificado."
   },
   "savedBusinesses": {
     "title": "Comercios",
@@ -922,5 +926,10 @@
       "description": "Solo se reporta una reserva activa y una sola vez.",
       "action": "Volver a mi reserva"
     }
+  },
+  "notFoundPage": {
+    "title": "No encontramos esta página",
+    "description": "La dirección no existe o cambió. Vuelve al inicio para seguir buscando ofertas.",
+    "back": "Ir al inicio"
   }
 }
