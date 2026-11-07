@@ -1,0 +1,18 @@
+<section class="page" [attr.aria-busy]="loading()">
+  <header><h1>{{ 'followsPage.title' | translate }}</h1><p>{{ 'followsPage.description' | translate }}</p></header>
+  @if (error(); as message) {
+    <div role="alert"><p>{{ message | translate }}</p><button mat-stroked-button (click)="load()">{{ 'followsPage.retry' | translate }}</button></div>
+  }
+  @if (loading()) { <p role="status">{{ 'followsPage.loading' | translate }}</p> }
+  @else if (!error() && businesses().length === 0) {
+    <div class="empty"><h2>{{ 'followsPage.empty' | translate }}</h2><p>{{ 'followsPage.emptyHint' | translate }}</p><a mat-flat-button routerLink="/offers">{{ 'nav.offers' | translate }}</a></div>
+  }
+  @for (business of businesses(); track business.businessId) {
+    <article class="business">
+      <div class="business-head"><div><h2>{{ business.businessName }}</h2><p>{{ 'followsPage.count' | translate:{count: business.activeOffersCount} }}</p></div>
+        <button mat-stroked-button [disabled]="removing() !== null" (click)="remove(business.businessId)">{{ 'followsPage.unfollow' | translate }}<span class="sr-only"> {{ business.businessName }}</span></button>
+      </div>
+      <ul>@for (offer of business.activeOffers; track offer.offerId) { <li><a [routerLink]="['/offers', offer.offerId]">{{ offer.title }}</a></li> }</ul>
+    </article>
+  }
+</section>

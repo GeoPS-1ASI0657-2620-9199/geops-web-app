@@ -78,3 +78,25 @@ grep -rlE "@angular|rxjs|HttpClient" src/app/*/domain && echo REVISAR || echo LI
 grep -rlE "HttpClient|/infrastructure/" src/app/*/application && echo REVISAR || echo LIMPIO
 grep -rl "/infrastructure/" src/app/*/presentation && echo REVISAR || echo LIMPIO
 ```
+
+
+## Browser notifications (Sprint 3)
+
+The preferences page supports notification channels and a shared daily limit, signed email
+unsubscription, and opt-in browser registration. Firebase Messaging is loaded only when browser
+activation is requested. The service worker and SDK both use version 13.2.0.
+
+Set the public Firebase web configuration and VAPID key in the `firebase` field of both
+`src/environments/environment.ts` and `environment.prod.ts` after creating the team web app.
+The required fields are `apiKey`, `authDomain`, `projectId`, `messagingSenderId`, `appId` and
+`vapidKey`. These are browser configuration values. A private service account belongs only in
+the backend environment and must never be added to this repository.
+
+With `firebase: null`, activation explains that browser notices are unavailable and offers email.
+The browser requests permission after an explicit activation click, registers the FCM token with
+Notification, and can remove its own subscription. On iPhone without installation, the interface
+explains Add to Home Screen and provides an email alternative; the manifest uses standalone mode.
+Use HTTPS in production (localhost is supported for local browser development).
+
+Frontend tests verify subscription calls, settings, denied/unavailable states and iPhone recovery.
+Real provider delivery additionally requires the Firebase project and backend service account.

@@ -1,4 +1,5 @@
 import { ReviewRepository } from '../../../../engagement/domain/ports/review.repository';
+import { FollowRepository } from '../../../../engagement/domain/ports/follow.repository';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router, convertToParamMap, provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
@@ -17,10 +18,10 @@ import { radiusPreferenceTestingProviders } from '../../../testing/radius-prefer
 const OFFER: OfferDetail = {
   offerId: 1052,
   title: '2x1 en almuerzos ejecutivos',
-  conditions: 'Válido de lunes a viernes de 12:00 a 15:00. Un cupón por mesa.',
+  conditions: 'VÃ¡lido de lunes a viernes de 12:00 a 15:00. Un cupÃ³n por mesa.',
   price: 15,
   validTo: '2099-10-15',
-  category: 'Gastronomía',
+  category: 'GastronomÃ­a',
   address: 'Av. Larco 345, Miraflores',
   location: { latitude: -12.1211, longitude: -77.0297 },
   imageUrl: null,
@@ -67,6 +68,7 @@ describe('OfferDetailPage', () => {
         ...radiusPreferenceTestingProviders(),
         provideRouter([]),
         { provide: ReviewRepository, useValue: { findByBusiness: () => Promise.resolve([]), create: () => Promise.resolve({}), reply: () => Promise.resolve() } },
+        { provide: FollowRepository, useValue: { findMine: () => Promise.resolve([]), follow: () => Promise.resolve({}), unfollow: () => Promise.resolve() } },
         provideTranslateService(),
         { provide: OfferRepository, useValue: offers },
         { provide: ReservationRepository, useValue: reservations },
@@ -111,7 +113,7 @@ describe('OfferDetailPage', () => {
     expect(offers.findById).toHaveBeenCalledWith(1052);
     expect(text).toContain('2x1 en almuerzos ejecutivos');
     expect(text).toContain('15.00');
-    expect(text).toContain('Un cupón por mesa.');
+    expect(text).toContain('Un cupÃ³n por mesa.');
     expect(text).toContain('Restaurante Don Pepe');
     expect(text).toContain('Verificado');
   });
