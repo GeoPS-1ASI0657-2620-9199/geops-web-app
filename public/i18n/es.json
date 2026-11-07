@@ -830,7 +830,7 @@
   },
   "reviewsPage": {
     "title": "Opiniones con canje verificado",
-    "panelTitle": "Comentarios de tu comercio",
+    "panelTitle": "Comentarios de tus clientes",
     "panelHint": "Responde una vez a cada opinión y mantén la conversación junto al comentario original.",
     "missingBusiness": "No encontramos tu comercio en la sesión. Vuelve a iniciar sesión.",
     "write": "Comenta tu experiencia",
@@ -847,8 +847,14 @@
     "verified": "Canje verificado",
     "businessReply": "Respuesta del comercio",
     "replyLabel": "Tu respuesta",
-    "reply": "Publicar respuesta",
-    "error": "No pudimos completar la operación. Inténtalo de nuevo."
+    "reply": "Responder",
+    "error": "No pudimos completar la operación. Inténtalo de nuevo.",
+    "summaryLine": "{{total}} comentarios · valoración media {{average}} de 5",
+    "pending": "{{count}} comentarios esperan tu respuesta",
+    "pendingHint": "Responder los comentarios negativos en menos de 48 horas mejora tu posición en los resultados.",
+    "yourRating": "Tu valoración",
+    "verifiedCount": "{{total}} comentarios de clientes con canje verificado",
+    "pendingOne": "1 comentario espera tu respuesta"
   },
   "savedBusinesses": {
     "title": "Comercios",

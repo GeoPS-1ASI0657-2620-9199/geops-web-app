@@ -830,7 +830,7 @@
   },
   "reviewsPage": {
     "title": "Verified redemption reviews",
-    "panelTitle": "Your business reviews",
+    "panelTitle": "Comments from your customers",
     "panelHint": "Reply once to each review. Your reply stays beside the original experience.",
     "missingBusiness": "Your session has no business. Please log in again.",
     "write": "Review your experience",
@@ -847,8 +847,14 @@
     "verified": "Verified redemption",
     "businessReply": "Business reply",
     "replyLabel": "Your reply",
-    "reply": "Publish reply",
-    "error": "We could not complete the operation. Please try again."
+    "reply": "Reply",
+    "error": "We could not complete the operation. Please try again.",
+    "summaryLine": "{{total}} comments · average rating {{average}} of 5",
+    "pending": "{{count}} comments are waiting for your answer",
+    "pendingHint": "Answering negative comments within 48 hours improves your position in the results.",
+    "yourRating": "Your rating",
+    "verifiedCount": "{{total}} comments from customers with a verified redemption",
+    "pendingOne": "1 comment is waiting for your answer"
   },
   "savedBusinesses": {
     "title": "Businesses",
