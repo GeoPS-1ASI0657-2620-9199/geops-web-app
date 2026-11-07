@@ -1,0 +1,17 @@
+{
+  "id": "/",
+  "name": "GeoPS",
+  "short_name": "GeoPS",
+  "start_url": "/inicio",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f7f5f9",
+  "theme_color": "#4a0072",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ]
+}

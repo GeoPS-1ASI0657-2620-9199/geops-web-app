@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { Layout } from './core/layout/layout/layout';
-import { SectionEmptyData } from './core/layout/section-empty/section-empty';
 import { authGuard } from './iam/infrastructure/auth.guard';
 import { roleGuard } from './iam/infrastructure/role.guard';
 
@@ -9,6 +8,7 @@ const consumer = [authGuard, roleGuard('CONSUMER')];
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/inicio' },
+  { path: 'baja', loadComponent: () => import('./notification/presentation/pages/unsubscribe/unsubscribe.page').then(m => m.UnsubscribePage), title: 'GeoPS - Preferencias de correo' },
   {
     path: 'login',
     loadComponent: () =>
@@ -62,6 +62,12 @@ export const routes: Routes = [
         canActivate: consumer,
         loadComponent: () => import('./engagement/presentation/pages/follows/follows.page').then(m => m.FollowsPage),
         title: 'GeoPS - Comercios seguidos',
+      },
+      {
+        path: 'preferences',
+        canActivate: consumer,
+        loadComponent: () => import('./notification/presentation/pages/preferences/preferences.page').then(m => m.PreferencesPage),
+        title: 'GeoPS - Preferencias de avisos',
       },
       {
         path: 'favorites',
@@ -136,8 +142,7 @@ export const routes: Routes = [
       {
         path: 'comments',
         canActivate: owner,
-        loadComponent: () => import('./core/layout/section-empty/section-empty').then((m) => m.SectionEmpty),
-        data: { i18n: 'commentsPage', icon: 'forum', actionRoute: '/campaigns' } satisfies SectionEmptyData,
+        loadComponent: () => import('./engagement/presentation/pages/business-comments/business-comments.page').then(m => m.BusinessCommentsPage),
         title: 'GeoPS - Comentarios',
       },
       {
