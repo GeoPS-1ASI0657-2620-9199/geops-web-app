@@ -92,14 +92,24 @@
                 <div><dt>{{ 'offerDetailPage.category' | translate }}</dt><dd>{{ o.category }}</dd></div>
               </dl>
               @if (canReserve()) {
-                <button mat-flat-button type="button" class="reserve" [disabled]="!o.available || reserving()" (click)="reserve()">
-                  <span class="reserve-main">
-                    {{ (o.available ? (reserving() ? 'offerDetailPage.reserving' : 'offerDetailPage.reserve') : 'offerDetailPage.notAvailable') | translate }}
-                  </span>
-                  <span class="reserve-sub">
-                    {{ (!o.available ? 'offerDetailPage.cannotReserve' : isVisitor() ? 'offerDetailPage.loginToReserve' : 'offerDetailPage.payAtStore') | translate }}
-                  </span>
-                </button>
+                @if (activeReservationId(); as reservationId) {
+                  <button mat-flat-button type="button" class="reserve" disabled>
+                    <span class="reserve-main">{{ 'offerDetailPage.alreadyReserved' | translate }}</span>
+                    <span class="reserve-sub">{{ 'offerDetailPage.alreadyReservedHint' | translate }}</span>
+                  </button>
+                  <a mat-stroked-button class="full" [routerLink]="['/reservations', reservationId]">
+                    {{ 'offerDetailPage.viewReservation' | translate }}
+                  </a>
+                } @else {
+                  <button mat-flat-button type="button" class="reserve" [disabled]="!o.available || reserving()" (click)="reserve()">
+                    <span class="reserve-main">
+                      {{ (o.available ? (reserving() ? 'offerDetailPage.reserving' : 'offerDetailPage.reserve') : 'offerDetailPage.notAvailable') | translate }}
+                    </span>
+                    <span class="reserve-sub">
+                      {{ (!o.available ? 'offerDetailPage.cannotReserve' : isVisitor() ? 'offerDetailPage.loginToReserve' : 'offerDetailPage.payAtStore') | translate }}
+                    </span>
+                  </button>
+                }
                 @if (reserveFailure(); as failure) {
                   <geo-alert
                     kind="error"

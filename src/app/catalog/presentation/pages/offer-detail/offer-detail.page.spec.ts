@@ -42,6 +42,18 @@ const sessionOf = (role: Session['role']): Session => ({
   email: 'ana@correo.pe',
   consumerId: 2001,
 });
+const ACTIVE_RESERVATION = {
+  reservationId: 15,
+  code: 'K7P3XM9Q',
+  consumerId: 4,
+  offerId: 1052,
+  businessId: 8,
+  offerTitle: '2x1 en almuerzos ejecutivos',
+  status: 'ACTIVE' as const,
+  reservedAt: '2026-10-14T15:00:00Z',
+  expiresAt: '2026-10-15T04:59:59Z',
+  redeemedAt: null,
+};
 const PLACED = { reservationId: 15, code: 'K7P3XM9Q', expiresAt: '2026-10-15T04:59:59Z', isNew: true };
 
 class MemorySessionStorage extends SessionStorage {
@@ -104,6 +116,7 @@ describe('OfferDetailPage', () => {
       'findById',
       'findMine',
     ]);
+    reservations.findMine.and.resolveTo([]);
     session = sessionOf('CONSUMER');
   });
 
@@ -174,6 +187,27 @@ describe('OfferDetailPage', () => {
       await clickReserve();
 
       expect(navigate).toHaveBeenCalledWith(['/reservations', 15], { queryParams: { placed: 'existing' } });
+    });
+
+    it('disables the button and links to the reservation when the consumer already has it active', async () => {
+      offers.findById.and.resolveTo(OFFER);
+      reservations.findMine.and.resolveTo([{ ...ACTIVE_RESERVATION, offerId: 1052, reservationId: 77 }]);
+
+      const text = await render();
+
+      expect(reserveButton()!.disabled).toBeTrue();
+      expect(text).toContain('offerDetailPage.alreadyReserved');
+      const link = (fixture.nativeElement as HTMLElement).querySelector<HTMLAnchorElement>('a.full');
+      expect(link!.getAttribute('href')).toBe('/reservations/77');
+    });
+
+    it('keeps the button enabled when the active reservations are of other offers', async () => {
+      offers.findById.and.resolveTo(OFFER);
+      reservations.findMine.and.resolveTo([{ ...ACTIVE_RESERVATION, offerId: 9999 }]);
+
+      await render();
+
+      expect(reserveButton()!.disabled).toBeFalse();
     });
 
     it('explains that the offer can no longer be reserved on OFFER_NOT_AVAILABLE', async () => {

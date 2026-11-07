@@ -290,7 +290,10 @@
     "promise": {
       "title": "The deal is honored or the business drops in the ranking",
       "description": "If you arrive in time and it is not honored, report it from your reservation."
-    }
+    },
+    "alreadyReserved": "You already reserved this offer",
+    "alreadyReservedHint": "Show your code at the store.",
+    "viewReservation": "View my reservation"
   },
   "reservation": {
     "status": {
