@@ -164,6 +164,23 @@
       "actions": "Actions"
     },
     "seeOffer": "See deal",
+    "pause": "Pause",
+    "reactivate": "Reactivate",
+    "validityEnded": "The validity ended",
+    "statusDialog": {
+      "cancel": "Cancel",
+      "PAUSED": {
+        "title": "Pause “{{name}}”?",
+        "description": "Your deal will stop being shown until you reactivate it.",
+        "confirm": "Pause"
+      },
+      "ACTIVE": {
+        "title": "Reactivate “{{name}}”?",
+        "description": "Your deal will be shown again to customers in your zone until its validity ends.",
+        "confirm": "Reactivate"
+      }
+    },
+    "statusError": "We could not change the status of the campaign. Try again.",
     "noneInFilter": "No campaigns with this status.",
     "error": {
       "title": "We could not load your campaigns",
@@ -405,6 +422,7 @@
     "create": "Create",
     "reports": "Reports",
     "comments": "Comments",
+    "follows": "Followed businesses",
     "preferences": "Notification preferences"
   },
   "search": {
@@ -730,6 +748,19 @@
     "cancel": "Cancel",
     "error": "We could not send your report",
     "errorRetry": "Try again in a moment."
+  },
+  "followsPage": {
+    "title": "Followed businesses",
+    "description": "Current offers from the businesses you follow, all in one place.",
+    "retry": "Retry",
+    "loading": "Loading businesses…",
+    "empty": "You are not following any business yet",
+    "emptyHint": "Open an offer and follow the business to hear about its next promotions.",
+    "count": "{{count}} active offers",
+    "unfollow": "Unfollow",
+    "following": "Following",
+    "follow": "Follow business",
+    "error": "We could not load your businesses. Please try again."
   },
   "notificationPage": {
     "title": "Notification preferences",
