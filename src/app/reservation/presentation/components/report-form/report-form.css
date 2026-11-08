@@ -1,9 +1,0 @@
-.form { display: flex; flex-direction: column; gap: 10px; padding: 24px; background: var(--neutral-bg); border: 1px solid var(--neutral-line); border-radius: var(--radius-panel); }
-.title { margin: 0; font: 600 18px/1.3 var(--font-brand); }
-.hint { margin: 0; font: 400 12.5px/1.4 var(--font-brand); color: var(--text-dim); }
-.label { font: 500 13px/1.3 var(--font-brand); }
-.input { padding: 10px 12px; border: 1.5px solid var(--brand-action); border-radius: var(--radius-input); font: 400 13px/1.4 var(--font-brand); resize: vertical; }
-.input:focus { outline: 2px solid var(--brand-mist); }
-.counter { margin: 0; font: 400 11.5px/1.3 var(--font-brand); color: var(--text-dim); }
-.counter.bad { color: var(--feedback-red-ink); }
-.actions { display: flex; justify-content: flex-end; gap: 12px; }

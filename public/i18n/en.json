@@ -11,7 +11,8 @@
       "menu": {
         "myProfile": "My Profile",
         "settings": "Settings",
-        "logout": "Logout"
+        "logout": "Logout",
+        "preferences": "Notice preferences"
       }
     },
     "logIn": "Log in",
@@ -368,7 +369,7 @@
     "store": "Store",
     "mapLabel": "Store location",
     "report": {
-      "button": "Report a problem",
+      "button": "They did not honor it",
       "title": "Your report",
       "reason": "Reason",
       "deadline": "The business has until {{date}} to answer.",
@@ -629,14 +630,14 @@
       }
     },
     "code": "Code",
-    "reason": "Customer's reason",
+    "reason": "What the customer wrote",
     "yourAnswer": "Your answer",
     "timeLeft": "{{time}} left to answer",
     "deadlinePassed": "Deadline passed",
-    "answerLabel": "Your answer",
+    "answerLabel": "Your version",
     "answerPlaceholder": "Explain what happened (at least 10 characters)",
-    "send": "Send answer",
-    "resolve": "Resolve in favor of the customer",
+    "send": "Send my version",
+    "resolve": "Agree with the customer",
     "confirmResolve": "The report closes and stops affecting your position.",
     "confirm": "Confirm",
     "cancel": "Cancel",
@@ -650,7 +651,21 @@
       "title": "We could not load the reports",
       "description": "It may be your connection or the service.",
       "retry": "Retry"
-    }
+    },
+    "notice": {
+      "title": "While a report stays open you drop in the results",
+      "description": "If you do not answer within 48 hours, the case is resolved in favor of the customer."
+    },
+    "badge": {
+      "OPEN": "Pending",
+      "IN_REVIEW": "In review",
+      "CLOSED": "Closed"
+    },
+    "reservation": "Reservation",
+    "reportedAt": "Reported",
+    "deadline": "Time to answer",
+    "answerHint": "The customer receives your answer and the case goes to review.",
+    "resolveHint": "If you agree, the report closes and stops affecting your position."
   },
   "commentsPage": {
     "title": "Customer comments",
@@ -763,35 +778,47 @@
     "unfollow": "Unfollow",
     "following": "Following",
     "follow": "Follow business",
-    "error": "We could not load your businesses. Please try again."
+    "error": "We could not load your businesses. Please try again.",
+    "countOne": "{{count}} active offer",
+    "viewOffers": "View offers",
+    "noOffers": "No active offers right now",
+    "noticeTitle": "We notify you when you are near",
+    "noticeHint": "New offers from these businesses reach you on the channels you turned on in your notice preferences."
   },
   "notificationPage": {
     "title": "Notification preferences",
-    "description": "Choose your channels and a shared daily limit. You decide when to hear about offers.",
+    "description": "Choose where and how often we notify you about offers near where you were in the last hour.",
     "loading": "Loading preferences…",
     "retry": "Retry",
     "channels": "Offer channels",
     "push": "Browser notifications",
-    "pushHint": "Enable notifications separately in each browser you want to use.",
+    "pushHint": "They arrive even when GeoPS is not open.",
     "email": "Email",
-    "emailHint": "Offers are grouped into one email per window. Your email must be confirmed.",
+    "emailHint": "Grouped: one email per time window, not one per offer.",
     "dailyLimit": "Maximum notices per day",
-    "limitHint": "From 1 to 10 across all channels. The day follows Lima time.",
+    "limitHint": "Once you reach the maximum we send no more that day, on any channel.",
     "invalidLimit": "Choose a whole number from 1 to 10.",
     "save": "Save preferences",
     "saving": "Saving…",
     "saved": "Your next notices will follow these preferences.",
-    "error": "We could not save your preferences. Please try again."
+    "error": "We could not save your preferences. Please try again.",
+    "iphoneTitle": "On iPhone, install GeoPS first",
+    "iphoneHint": "Safari only sends notices to sites added to the home screen. Tap Share and then Add to Home Screen. Meanwhile we notify you by email.",
+    "locationTitle": "We use your last location from the last hour",
+    "locationHint": "If you did not open GeoPS in the last 60 minutes we send no nearby notices."
   },
   "unsubscribePage": {
     "title": "Email preferences",
     "confirmHint": "Confirm you want to stop this type of offer email. Your account will stay active.",
     "confirm": "Unsubscribe from these emails",
     "busy": "Confirming…",
-    "done": "You will no longer receive nearby offer emails. Your account stays active.",
-    "doneFollowed": "You will no longer receive followed business offer emails. Your account stays active.",
+    "done": "You stopped receiving nearby offer notices. Your account, favorites and reservations stay the same.",
+    "doneFollowed": "You stopped receiving notices from the businesses you follow. Your account, favorites and reservations stay the same.",
     "missing": "Open the unsubscribe link in a GeoPS email.",
-    "error": "We could not confirm your request. Check the link and try again."
+    "error": "We could not confirm your request. Check the link and try again.",
+    "doneTitle": "Done, we will not send you these emails",
+    "reactivate": "Turn them back on",
+    "goHome": "Go to GeoPS"
   },
   "pushPage": {
     "title": "Notices in this browser",
@@ -809,14 +836,14 @@
   },
   "reviewsPage": {
     "title": "Verified redemption reviews",
-    "panelTitle": "Your business reviews",
+    "panelTitle": "Comments from your customers",
     "panelHint": "Reply once to each review. Your reply stays beside the original experience.",
     "missingBusiness": "Your session has no business. Please log in again.",
-    "write": "Review your experience",
-    "verifiedHint": "Your review will carry the verified redemption mark.",
-    "rating": "Rating",
+    "write": "How was it at this business?",
+    "verifiedHint": "You redeemed your reservation at this business.",
+    "rating": "Your rating",
     "stars": "{{count}} stars",
-    "experience": "How was your experience?",
+    "experience": "Your comment",
     "publish": "Publish review",
     "publishing": "Publishing…",
     "published": "Your verified review is now published.",
@@ -826,8 +853,15 @@
     "verified": "Verified redemption",
     "businessReply": "Business reply",
     "replyLabel": "Your reply",
-    "reply": "Publish reply",
-    "error": "We could not complete the operation. Please try again."
+    "reply": "Reply",
+    "error": "We could not complete the operation. Please try again.",
+    "summaryLine": "{{total}} comments · average rating {{average}} of 5",
+    "pending": "{{count}} comments are waiting for your answer",
+    "pendingHint": "Answering negative comments within 48 hours improves your position in the results.",
+    "yourRating": "Your rating",
+    "verifiedCount": "{{total}} comments from customers with a verified redemption",
+    "pendingOne": "1 comment is waiting for your answer",
+    "publishedWith": "It is published with your name and the verified redemption badge."
   },
   "savedBusinesses": {
     "title": "Businesses",
@@ -841,5 +875,64 @@
     "save": "Save business",
     "error": "We could not update your businesses. Please try again.",
     "viewOffer": "View offer"
+  },
+  "favoritesTabs": {
+    "offers": "Saved offers",
+    "businesses": "Saved businesses",
+    "follows": "Businesses I follow"
+  },
+  "reportPage": {
+    "crumbs": "Breadcrumb",
+    "crumb": "Report a problem",
+    "loading": "Loading your reservation…",
+    "title": "What happened at the store?",
+    "error": "We could not load your reservation",
+    "notice": {
+      "title": "Your report affects the business position",
+      "description": "It drops in the results while the case stays open. That is why we ask what exactly happened."
+    },
+    "reasons": {
+      "expired": {
+        "title": "The promotion was no longer valid",
+        "hint": "I arrived within the published period and they did not accept it"
+      },
+      "regularPrice": {
+        "title": "They charged the regular price",
+        "hint": "I paid more than the offer said"
+      },
+      "closed": {
+        "title": "The store was closed",
+        "hint": "During the published opening hours"
+      },
+      "other": {
+        "title": "Other reason",
+        "hint": "Tell us what happened"
+      }
+    },
+    "more": "Tell us more (optional)",
+    "moreRequired": "Tell us what happened (required)",
+    "placeholder": "E.g.: I arrived at 3:40 p.m. and they told me the promotion had ended.",
+    "yourReservation": "Your reservation",
+    "state": "Status",
+    "active": "Active",
+    "next": {
+      "title": "What happens next",
+      "step1": "It is sent to the business",
+      "step1Hint": "It has 48 hours to answer",
+      "step2": "It drops in the ranking",
+      "step2Hint": "While the case stays open",
+      "step3": "We notify you",
+      "step3Hint": "If it is resolved or the failure repeats"
+    },
+    "unavailable": {
+      "title": "This reservation can no longer be reported",
+      "description": "Only an active reservation can be reported, and only once.",
+      "action": "Back to my reservation"
+    }
+  },
+  "notFoundPage": {
+    "title": "We could not find this page",
+    "description": "The address does not exist or has changed. Go back to the start to keep looking for offers.",
+    "back": "Go to the start"
   }
 }

@@ -12,7 +12,7 @@ import { ApiError } from '../../../../shared/domain/api-error';
     @if (error(); as message) { <p role="alert">{{ message | translate }}</p> }
     @if (needsInstall()) { <button mat-stroked-button type="button" (click)="emailRequested.emit()">{{ 'pushPage.useEmail' | translate }}</button> }
   </section>`,
-  styles: [`section { display: grid; gap: var(--space-md); border-top: 1px solid var(--neutral-line); padding-block: var(--space-xl); margin-top: var(--space-xl); } h2 { font: 600 18px/1.4 var(--font-brand); margin: 0; } p { color: var(--text-dim); line-height: 1.6; margin: 0; } button { justify-self: start; white-space: normal; height: auto; min-height: 40px; padding-block: var(--space-sm); text-align: start; }`],
+  styles: [`section { display: grid; gap: var(--space-sm); border-top: 1px solid var(--neutral-line-soft); padding-block: var(--space-lg); } h2 { font: 500 14px/1.4 var(--font-brand); margin: 0; color: var(--text-primary); } p { color: var(--text-dim); font: 400 12px/1.4 var(--font-brand); margin: 0; } button { justify-self: start; white-space: normal; height: auto; min-height: 40px; padding-block: var(--space-sm); text-align: start; }`],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PushControls {

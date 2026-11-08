@@ -11,7 +11,8 @@
       "menu": {
         "myProfile": "Mi perfil",
         "settings": "Configuración",
-        "logout": "Cerrar sesión"
+        "logout": "Cerrar sesión",
+        "preferences": "Preferencias de avisos"
       }
     },
     "logIn": "Iniciar sesión",
@@ -368,7 +369,7 @@
     "store": "Local",
     "mapLabel": "Ubicación del local",
     "report": {
-      "button": "Reportar incumplimiento",
+      "button": "No me la respetaron",
       "title": "Tu reporte",
       "reason": "Motivo",
       "deadline": "El comercio tiene hasta el {{date}} para responder.",
@@ -629,14 +630,14 @@
       }
     },
     "code": "Código",
-    "reason": "Motivo del cliente",
+    "reason": "Lo que escribió el cliente",
     "yourAnswer": "Tu respuesta",
     "timeLeft": "Te quedan {{time}} para responder",
     "deadlinePassed": "Venció el plazo",
-    "answerLabel": "Tu respuesta",
+    "answerLabel": "Tu versión",
     "answerPlaceholder": "Explica qué ocurrió (mínimo 10 caracteres)",
-    "send": "Enviar respuesta",
-    "resolve": "Resolver a favor del cliente",
+    "send": "Enviar mi versión",
+    "resolve": "Darle la razón al cliente",
     "confirmResolve": "El reporte se cierra y deja de afectar tu posición.",
     "confirm": "Confirmar",
     "cancel": "Cancelar",
@@ -650,7 +651,21 @@
       "title": "No pudimos cargar los reportes",
       "description": "Puede ser tu conexión o el servicio.",
       "retry": "Reintentar"
-    }
+    },
+    "notice": {
+      "title": "Mientras un reporte siga abierto bajas en los resultados",
+      "description": "Si no respondes dentro de las 48 horas, el caso se resuelve a favor del cliente."
+    },
+    "badge": {
+      "OPEN": "Pendiente",
+      "IN_REVIEW": "En revisión",
+      "CLOSED": "Cerrado"
+    },
+    "reservation": "Reserva",
+    "reportedAt": "Reportado",
+    "deadline": "Plazo para responder",
+    "answerHint": "El cliente recibe tu respuesta y el caso pasa a revisión.",
+    "resolveHint": "Si le das la razón, el reporte se cierra y deja de afectar tu posición."
   },
   "commentsPage": {
     "title": "Comentarios de clientes",
@@ -763,35 +778,47 @@
     "unfollow": "Dejar de seguir",
     "following": "Siguiendo",
     "follow": "Seguir comercio",
-    "error": "No pudimos cargar tus comercios. Inténtalo de nuevo."
+    "error": "No pudimos cargar tus comercios. Inténtalo de nuevo.",
+    "countOne": "{{count}} oferta vigente",
+    "viewOffers": "Ver ofertas",
+    "noOffers": "Sin ofertas vigentes por ahora",
+    "noticeTitle": "Te avisamos cuando estés cerca",
+    "noticeHint": "Las ofertas nuevas de estos comercios te llegan por los canales que activaste en tus preferencias de avisos."
   },
   "notificationPage": {
     "title": "Preferencias de avisos",
-    "description": "Elige tus canales y un máximo diario compartido. Tú decides cuándo recibir ofertas.",
+    "description": "Elige por dónde y cuántas veces te avisamos de ofertas cerca de donde estuviste en la última hora.",
     "loading": "Cargando preferencias…",
     "retry": "Reintentar",
     "channels": "Canales de ofertas",
     "push": "Avisos en el navegador",
-    "pushHint": "También debes activar los avisos en cada navegador que quieras usar.",
+    "pushHint": "Llegan aunque no tengas GeoPS abierto.",
     "email": "Correo electrónico",
-    "emailHint": "Agrupamos las ofertas en un solo correo por franja. Tu correo debe estar confirmado.",
+    "emailHint": "Agrupados: un solo correo por franja horaria, no uno por oferta.",
     "dailyLimit": "Máximo de avisos al día",
-    "limitHint": "De 1 a 10, entre todos los canales. El día se cuenta con la hora de Lima.",
+    "limitHint": "Al llegar al máximo no te avisamos más ese día, por ningún canal.",
     "invalidLimit": "Elige un número entero de 1 a 10.",
     "save": "Guardar preferencias",
     "saving": "Guardando…",
     "saved": "Tus próximos avisos respetarán estas preferencias.",
-    "error": "No pudimos guardar tus preferencias. Inténtalo de nuevo."
+    "error": "No pudimos guardar tus preferencias. Inténtalo de nuevo.",
+    "iphoneTitle": "En iPhone primero instala GeoPS",
+    "iphoneHint": "Safari solo envía avisos a sitios agregados a la pantalla de inicio. Toca Compartir y luego Agregar a inicio. Mientras tanto te avisamos por correo.",
+    "locationTitle": "Usamos tu última ubicación de la última hora",
+    "locationHint": "Si no abriste GeoPS en los últimos 60 minutos no te enviamos avisos de cercanía."
   },
   "unsubscribePage": {
     "title": "Preferencias de correo",
     "confirmHint": "Confirma que quieres dejar de recibir este tipo de correo de ofertas. Tu cuenta seguirá activa.",
     "confirm": "Confirmar baja de estos correos",
     "busy": "Confirmando…",
-    "done": "Ya no te enviaremos correos de ofertas cercanas. Tu cuenta sigue activa.",
-    "doneFollowed": "Ya no te enviaremos correos de ofertas de comercios seguidos. Tu cuenta sigue activa.",
+    "done": "Dejaste de recibir avisos de ofertas cercanas. Tu cuenta, tus favoritos y tus reservas siguen igual.",
+    "doneFollowed": "Dejaste de recibir avisos de ofertas de comercios que sigues. Tu cuenta, tus favoritos y tus reservas siguen igual.",
     "missing": "Abre el enlace de baja incluido en un correo de GeoPS.",
-    "error": "No pudimos confirmar la baja. Revisa el enlace e inténtalo de nuevo."
+    "error": "No pudimos confirmar la baja. Revisa el enlace e inténtalo de nuevo.",
+    "doneTitle": "Listo, ya no te enviaremos estos correos",
+    "reactivate": "Volver a activarlos",
+    "goHome": "Ir a GeoPS"
   },
   "pushPage": {
     "title": "Avisos en este navegador",
@@ -809,15 +836,15 @@
   },
   "reviewsPage": {
     "title": "Opiniones con canje verificado",
-    "panelTitle": "Comentarios de tu comercio",
+    "panelTitle": "Comentarios de tus clientes",
     "panelHint": "Responde una vez a cada opinión y mantén la conversación junto al comentario original.",
     "missingBusiness": "No encontramos tu comercio en la sesión. Vuelve a iniciar sesión.",
-    "write": "Comenta tu experiencia",
-    "verifiedHint": "Tu opinión se publicará con la marca de canje verificado.",
-    "rating": "Valoración",
+    "write": "¿Cómo te fue en este comercio?",
+    "verifiedHint": "Canjeaste tu reserva en este comercio.",
+    "rating": "Tu valoración",
     "stars": "{{count}} estrellas",
-    "experience": "¿Cómo fue tu experiencia?",
-    "publish": "Publicar comentario",
+    "experience": "Tu comentario",
+    "publish": "Publicar opinión",
     "publishing": "Publicando…",
     "published": "Tu comentario ya está publicado con canje verificado.",
     "loading": "Cargando comentarios…",
@@ -826,8 +853,15 @@
     "verified": "Canje verificado",
     "businessReply": "Respuesta del comercio",
     "replyLabel": "Tu respuesta",
-    "reply": "Publicar respuesta",
-    "error": "No pudimos completar la operación. Inténtalo de nuevo."
+    "reply": "Responder",
+    "error": "No pudimos completar la operación. Inténtalo de nuevo.",
+    "summaryLine": "{{total}} comentarios · valoración media {{average}} de 5",
+    "pending": "{{count}} comentarios esperan tu respuesta",
+    "pendingHint": "Responder los comentarios negativos en menos de 48 horas mejora tu posición en los resultados.",
+    "yourRating": "Tu valoración",
+    "verifiedCount": "{{total}} comentarios de clientes con canje verificado",
+    "pendingOne": "1 comentario espera tu respuesta",
+    "publishedWith": "Se publica con tu nombre y la marca de canje verificado."
   },
   "savedBusinesses": {
     "title": "Comercios",
@@ -841,5 +875,64 @@
     "save": "Guardar comercio",
     "error": "No pudimos actualizar tus comercios. Inténtalo de nuevo.",
     "viewOffer": "Ver oferta"
+  },
+  "favoritesTabs": {
+    "offers": "Ofertas guardadas",
+    "businesses": "Comercios guardados",
+    "follows": "Comercios que sigo"
+  },
+  "reportPage": {
+    "crumbs": "Ruta de navegación",
+    "crumb": "Reportar un problema",
+    "loading": "Cargando tu reserva…",
+    "title": "¿Qué pasó en el local?",
+    "error": "No pudimos cargar tu reserva",
+    "notice": {
+      "title": "Tu reporte afecta la posición del comercio",
+      "description": "Baja en los resultados mientras el caso siga abierto. Por eso te preguntamos qué ocurrió exactamente."
+    },
+    "reasons": {
+      "expired": {
+        "title": "La promoción ya no estaba vigente",
+        "hint": "Llegué dentro del plazo publicado y no me la aceptaron"
+      },
+      "regularPrice": {
+        "title": "Me cobraron el precio regular",
+        "hint": "Pagué más de lo que decía la oferta"
+      },
+      "closed": {
+        "title": "El local estaba cerrado",
+        "hint": "En el horario publicado como abierto"
+      },
+      "other": {
+        "title": "Otra razón",
+        "hint": "Cuéntanos qué ocurrió"
+      }
+    },
+    "more": "Cuéntanos más (opcional)",
+    "moreRequired": "Cuéntanos qué ocurrió (obligatorio)",
+    "placeholder": "Ej.: Llegué a las 3:40 p. m. y me dijeron que la promoción había terminado.",
+    "yourReservation": "Tu reserva",
+    "state": "Estado",
+    "active": "Activa",
+    "next": {
+      "title": "Qué pasa después",
+      "step1": "Se envía al comercio",
+      "step1Hint": "Tiene 48 horas para responder",
+      "step2": "Baja en el ranking",
+      "step2Hint": "Mientras el caso siga abierto",
+      "step3": "Te avisamos",
+      "step3Hint": "Si lo resuelve o si el fallo se repite"
+    },
+    "unavailable": {
+      "title": "Esta reserva ya no se puede reportar",
+      "description": "Solo se reporta una reserva activa y una sola vez.",
+      "action": "Volver a mi reserva"
+    }
+  },
+  "notFoundPage": {
+    "title": "No encontramos esta página",
+    "description": "La dirección no existe o cambió. Vuelve al inicio para seguir buscando ofertas.",
+    "back": "Ir al inicio"
   }
 }

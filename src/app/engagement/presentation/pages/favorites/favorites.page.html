@@ -10,10 +10,7 @@
 
   <geo-alert kind="info" [title]="'favoritesPage.notice.title' | translate" [description]="'favoritesPage.notice.description' | translate" />
 
-  <nav class="favorite-tabs" [attr.aria-label]="'savedBusinesses.tabs' | translate">
-    <button mat-stroked-button [attr.aria-pressed]="tab() === 'offers'" (click)="tab.set('offers')">{{ 'nav.offers' | translate }}</button>
-    <button mat-stroked-button [attr.aria-pressed]="tab() === 'businesses'" (click)="tab.set('businesses')">{{ 'savedBusinesses.title' | translate }}</button>
-  </nav>
+  <app-favorites-tabs [active]="tab()" />
   @if (tab() === 'businesses') { <app-saved-businesses /> }
   @else {
   @switch (state()) {

@@ -16,7 +16,6 @@ import { GeoSeal } from '../../../../shared/ui/geo-seal/geo-seal';
 import { GetReportUseCase } from '../../../application/get-report.use-case';
 import { GetReservationUseCase, RESERVATION_NOT_FOUND } from '../../../application/get-reservation.use-case';
 import { NonComplianceReport } from '../../../domain/model/noncompliance-report';
-import { ReportForm } from '../../components/report-form/report-form';
 import { Reservation } from '../../../domain/model/reservation';
 import { PLACED_PARAM, STATUS_SEAL, limaDateTime, remainingTime } from '../../reservation-view';
 
@@ -30,7 +29,7 @@ type Placed = 'new' | 'existing' | null;
 @Component({
   selector: 'app-reservation-detail',
   standalone: true,
-  imports: [ReviewForm, DecimalPipe, RouterLink, MatButtonModule, MatIconModule, TranslateModule, GeoAlert, GeoEmptyState, GeoOffersMap, GeoSeal, ReportForm],
+  imports: [ReviewForm, DecimalPipe, RouterLink, MatButtonModule, MatIconModule, TranslateModule, GeoAlert, GeoEmptyState, GeoOffersMap, GeoSeal],
   templateUrl: './reservation-detail.page.html',
   styleUrl: './reservation-detail.page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -50,7 +49,6 @@ export class ReservationDetailPage implements OnInit {
   protected readonly isActive = computed(() => this.reservation()?.status === 'ACTIVE');
   /** The report of this reservation and what the business answered, once there is one (US42, US43). */
   protected readonly report = signal<NonComplianceReport | null>(null);
-  protected readonly reporting = signal(false);
   /** An ACTIVE reservation that has not reached its deadline can still be reported. */
   protected readonly canReport = computed(() => this.isActive() && this.remaining() !== null && !this.report());
   protected readonly limaDateTime = limaDateTime;
@@ -90,12 +88,6 @@ export class ReservationDetailPage implements OnInit {
     } catch (error) {
       this.showFailure(error);
     }
-  }
-
-  protected onReported(report: NonComplianceReport): void {
-    this.report.set(report);
-    this.reporting.set(false);
-    void this.load();
   }
 
   /** The reservation lists the report in short; the detail brings the answer of the business. */
