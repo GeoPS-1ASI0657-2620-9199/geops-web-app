@@ -290,7 +290,10 @@
     "promise": {
       "title": "La oferta se respeta o el comercio baja en el ranking",
       "description": "Si llegas dentro del plazo y no te la respetan, repórtalo desde tu reserva."
-    }
+    },
+    "alreadyReserved": "Ya reservaste esta oferta",
+    "alreadyReservedHint": "Muestra tu código en el local.",
+    "viewReservation": "Ver mi reserva"
   },
   "reservation": {
     "status": {
