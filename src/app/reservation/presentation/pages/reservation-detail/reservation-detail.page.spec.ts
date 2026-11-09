@@ -1,8 +1,10 @@
+import { ReviewRepository } from '../../../../engagement/domain/ports/review.repository';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import { ApiError, NETWORK_ERROR } from '../../../../shared/domain/api-error';
 import { Reservation } from '../../../domain/model/reservation';
+import { ReportRepository } from '../../../domain/ports/report.repository';
 import { ReservationRepository } from '../../../domain/ports/reservation.repository';
 import { ReservationDetailPage } from './reservation-detail.page';
 import { OfferRepository } from '../../../../catalog/domain/ports/offer.repository';
@@ -24,6 +26,7 @@ describe('ReservationDetailPage', () => {
   let fixture: ComponentFixture<ReservationDetailPage>;
   let reservations: jasmine.SpyObj<ReservationRepository>;
   let offers: jasmine.SpyObj<OfferRepository>;
+  let reports: jasmine.SpyObj<ReportRepository>;
 
   const render = async (id = '15', query: Record<string, string> = {}) => {
     offers = jasmine.createSpyObj<OfferRepository>('OfferRepository', ['findNearby', 'findById']);
@@ -32,9 +35,11 @@ describe('ReservationDetailPage', () => {
       imports: [ReservationDetailPage],
       providers: [
         provideRouter([]),
+        { provide: ReviewRepository, useValue: { findByBusiness: () => Promise.resolve([]), create: () => Promise.resolve({}), reply: () => Promise.resolve() } },
         provideTranslateService(),
         { provide: ReservationRepository, useValue: reservations },
         { provide: OfferRepository, useValue: offers },
+        { provide: ReportRepository, useValue: reports },
         {
           provide: ActivatedRoute,
           useValue: { snapshot: { paramMap: convertToParamMap({ id }), queryParamMap: convertToParamMap(query) } },
@@ -49,6 +54,7 @@ describe('ReservationDetailPage', () => {
   };
 
   beforeEach(() => {
+    reports = jasmine.createSpyObj<ReportRepository>('ReportRepository', ['open', 'list', 'get', 'answer', 'resolveInFavorOfConsumer']);
     reservations = jasmine.createSpyObj<ReservationRepository>('ReservationRepository', [
       'reserve',
       'findById',
@@ -110,5 +116,52 @@ describe('ReservationDetailPage', () => {
     await fixture.componentInstance.load();
     fixture.detectChanges();
     expect(page.querySelector('.code')?.textContent?.trim()).toBe('K7P3XM9Q');
+  });
+
+  it('offers to report an active reservation and hides the button once it was reported', async () => {
+    reservations.findById.and.resolveTo(RESERVATION);
+    const page = await render();
+    expect(page.querySelector('[data-testid="report-button"]')).toBeNull();
+  });
+
+  it('shows the response deadline in Lima time when the reservation was reported', async () => {
+    reservations.findById.and.resolveTo({
+      ...RESERVATION,
+      status: 'REPORTED',
+      report: { reportId: 7, status: 'OPEN', responseDeadline: '2026-10-30T19:10:00Z' },
+    });
+    reports.get.and.rejectWith(new ApiError(NETWORK_ERROR, 'sin conexión'));
+
+    const page = await render();
+
+    expect(reports.get).toHaveBeenCalledWith(7);
+    expect(page.querySelector('[data-testid="report-deadline"]')).not.toBeNull();
+    expect(page.querySelector('[data-testid="report-button"]')).toBeNull();
+  });
+
+  it('shows what the business answered', async () => {
+    reservations.findById.and.resolveTo({
+      ...RESERVATION,
+      status: 'REPORTED',
+      report: { reportId: 7, status: 'IN_REVIEW', responseDeadline: '2026-10-30T19:10:00Z' },
+    });
+    reports.get.and.resolveTo({
+      reportId: 7,
+      reservationId: 15,
+      reservationCode: 'K7P3XM9Q',
+      offerTitle: 'Menú ejecutivo a mitad de precio',
+      reason: 'No me aplicaron el 2x1.',
+      status: 'IN_REVIEW',
+      openedAt: '2026-10-28T19:10:00Z',
+      responseDeadline: '2026-10-30T19:10:00Z',
+      response: { text: 'El 2x1 aplicaba de lunes a jueves.', respondedAt: '2026-10-29T12:00:00Z' },
+      resolution: null,
+      resolvedAt: null,
+    });
+
+    const page = await render();
+
+    expect(page.querySelector('[data-testid="report-answer"]')?.textContent).toContain('El 2x1 aplicaba de lunes a jueves.');
+    expect(page.querySelector('[data-testid="report-review"]')).not.toBeNull();
   });
 });

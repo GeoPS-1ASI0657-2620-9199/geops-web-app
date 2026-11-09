@@ -1,3 +1,6 @@
+import { SavedBusinessRepository } from '../../../../engagement/domain/ports/saved-business.repository';
+import { ReviewRepository } from '../../../../engagement/domain/ports/review.repository';
+import { FollowRepository } from '../../../../engagement/domain/ports/follow.repository';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router, convertToParamMap, provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
@@ -11,14 +14,15 @@ import { OfferDetailPage } from './offer-detail.page';
 import { of } from 'rxjs';
 import { SavedOfferRepository } from '../../../../engagement/domain/ports/saved-offer.repository';
 import { LocationProvider } from '../../../domain/ports/location.provider';
+import { radiusPreferenceTestingProviders } from '../../../testing/radius-preference.testing';
 
 const OFFER: OfferDetail = {
   offerId: 1052,
   title: '2x1 en almuerzos ejecutivos',
-  conditions: 'Válido de lunes a viernes de 12:00 a 15:00. Un cupón por mesa.',
+  conditions: 'VÃ¡lido de lunes a viernes de 12:00 a 15:00. Un cupÃ³n por mesa.',
   price: 15,
   validTo: '2099-10-15',
-  category: 'Gastronomía',
+  category: 'GastronomÃ­a',
   address: 'Av. Larco 345, Miraflores',
   location: { latitude: -12.1211, longitude: -77.0297 },
   imageUrl: null,
@@ -38,6 +42,18 @@ const sessionOf = (role: Session['role']): Session => ({
   email: 'ana@correo.pe',
   consumerId: 2001,
 });
+const ACTIVE_RESERVATION = {
+  reservationId: 15,
+  code: 'K7P3XM9Q',
+  consumerId: 4,
+  offerId: 1052,
+  businessId: 8,
+  offerTitle: '2x1 en almuerzos ejecutivos',
+  status: 'ACTIVE' as const,
+  reservedAt: '2026-10-14T15:00:00Z',
+  expiresAt: '2026-10-15T04:59:59Z',
+  redeemedAt: null,
+};
 const PLACED = { reservationId: 15, code: 'K7P3XM9Q', expiresAt: '2026-10-15T04:59:59Z', isNew: true };
 
 class MemorySessionStorage extends SessionStorage {
@@ -62,7 +78,11 @@ describe('OfferDetailPage', () => {
     await TestBed.configureTestingModule({
       imports: [OfferDetailPage],
       providers: [
+        ...radiusPreferenceTestingProviders(),
         provideRouter([]),
+        { provide: SavedBusinessRepository, useValue: { findMine: () => Promise.resolve([]), save: () => Promise.resolve(), remove: () => Promise.resolve() } },
+        { provide: ReviewRepository, useValue: { findByBusiness: () => Promise.resolve([]), create: () => Promise.resolve({}), reply: () => Promise.resolve() } },
+        { provide: FollowRepository, useValue: { findMine: () => Promise.resolve([]), follow: () => Promise.resolve({}), unfollow: () => Promise.resolve() } },
         provideTranslateService(),
         { provide: OfferRepository, useValue: offers },
         { provide: ReservationRepository, useValue: reservations },
@@ -96,6 +116,7 @@ describe('OfferDetailPage', () => {
       'findById',
       'findMine',
     ]);
+    reservations.findMine.and.resolveTo([]);
     session = sessionOf('CONSUMER');
   });
 
@@ -107,7 +128,7 @@ describe('OfferDetailPage', () => {
     expect(offers.findById).toHaveBeenCalledWith(1052);
     expect(text).toContain('2x1 en almuerzos ejecutivos');
     expect(text).toContain('15.00');
-    expect(text).toContain('Un cupón por mesa.');
+    expect(text).toContain('Un cupÃ³n por mesa.');
     expect(text).toContain('Restaurante Don Pepe');
     expect(text).toContain('Verificado');
   });
@@ -166,6 +187,27 @@ describe('OfferDetailPage', () => {
       await clickReserve();
 
       expect(navigate).toHaveBeenCalledWith(['/reservations', 15], { queryParams: { placed: 'existing' } });
+    });
+
+    it('disables the button and links to the reservation when the consumer already has it active', async () => {
+      offers.findById.and.resolveTo(OFFER);
+      reservations.findMine.and.resolveTo([{ ...ACTIVE_RESERVATION, offerId: 1052, reservationId: 77 }]);
+
+      const text = await render();
+
+      expect(reserveButton()!.disabled).toBeTrue();
+      expect(text).toContain('offerDetailPage.alreadyReserved');
+      const link = (fixture.nativeElement as HTMLElement).querySelector<HTMLAnchorElement>('a.full');
+      expect(link!.getAttribute('href')).toBe('/reservations/77');
+    });
+
+    it('keeps the button enabled when the active reservations are of other offers', async () => {
+      offers.findById.and.resolveTo(OFFER);
+      reservations.findMine.and.resolveTo([{ ...ACTIVE_RESERVATION, offerId: 9999 }]);
+
+      await render();
+
+      expect(reserveButton()!.disabled).toBeFalse();
     });
 
     it('explains that the offer can no longer be reserved on OFFER_NOT_AVAILABLE', async () => {

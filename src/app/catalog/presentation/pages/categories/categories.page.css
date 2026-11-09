@@ -16,6 +16,7 @@
 }
 .place mat-icon { width: 14px; height: 14px; font-size: 14px; color: var(--brand-action); font-variation-settings: 'FILL' 1; }
 .layout { display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 22px; align-items: start; }
+.layout.no-map { grid-template-columns: minmax(0, 1fr); }
 .side { display: flex; flex-direction: column; gap: 14px; }
 .box { padding: 14px 16px; background: var(--neutral-bg); border: 1px solid var(--neutral-line); border-radius: var(--radius-card); }
 .chips { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
@@ -88,6 +89,7 @@
 .dot { width: 9px; height: 9px; border-radius: 50%; }
 .dot.green { background: var(--status-verified); }
 .dot.blue { background: var(--status-user); }
+.dot.amber { background: var(--status-reference); }
 @media (max-width: 1000px) {
   .layout { grid-template-columns: 1fr; }
   .map { height: 420px; position: static; }

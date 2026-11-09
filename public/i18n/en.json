@@ -11,7 +11,8 @@
       "menu": {
         "myProfile": "My Profile",
         "settings": "Settings",
-        "logout": "Logout"
+        "logout": "Logout",
+        "preferences": "Notice preferences"
       }
     },
     "logIn": "Log in",
@@ -164,6 +165,23 @@
       "actions": "Actions"
     },
     "seeOffer": "See deal",
+    "pause": "Pause",
+    "reactivate": "Reactivate",
+    "validityEnded": "The validity ended",
+    "statusDialog": {
+      "cancel": "Cancel",
+      "PAUSED": {
+        "title": "Pause “{{name}}”?",
+        "description": "Your deal will stop being shown until you reactivate it.",
+        "confirm": "Pause"
+      },
+      "ACTIVE": {
+        "title": "Reactivate “{{name}}”?",
+        "description": "Your deal will be shown again to customers in your zone until its validity ends.",
+        "confirm": "Reactivate"
+      }
+    },
+    "statusError": "We could not change the status of the campaign. Try again.",
     "noneInFilter": "No campaigns with this status.",
     "error": {
       "title": "We could not load your campaigns",
@@ -191,7 +209,8 @@
     },
     "imprecise": {
       "title": "Your location has a ±{{meters}} m margin",
-      "description": "With that margin distances can be off by several blocks. Choose your district or try again with GPS on."
+      "description": "With more than 100 m of margin distances can be off by a block or two. Confirm the point if you are there, choose your district or try again with GPS on.",
+      "confirm": "Search from this point (±{{meters}} m)"
     },
     "pick": {
       "title": "Choose your district",
@@ -206,7 +225,9 @@
     "empty": {
       "title": "No valid offers within {{minutes}} minutes",
       "description": "You can widen the distance or choose another district.",
-      "widen": "Widen to {{minutes}} walking min"
+      "widen": "Widen to {{minutes}} walking min",
+      "categoryTitle": "No {{category}} offers within {{minutes}} minutes",
+      "allCategories": "See every category"
     },
     "error": {
       "title": "We could not load the offers",
@@ -270,7 +291,10 @@
     "promise": {
       "title": "The deal is honored or the business drops in the ranking",
       "description": "If you arrive in time and it is not honored, report it from your reservation."
-    }
+    },
+    "alreadyReserved": "You already reserved this offer",
+    "alreadyReservedHint": "Show your code at the store.",
+    "viewReservation": "View my reservation"
   },
   "reservation": {
     "status": {
@@ -343,7 +367,19 @@
     "expiresIn": "Ends in {{time}}",
     "payAtStore": "You pay at the store",
     "store": "Store",
-    "mapLabel": "Store location"
+    "mapLabel": "Store location",
+    "report": {
+      "button": "They did not honor it",
+      "title": "Your report",
+      "reason": "Reason",
+      "deadline": "The business has until {{date}} to answer.",
+      "answer": "Answer of the business",
+      "inReview": "The business answered and the case is under review.",
+      "closed": {
+        "CONSUMER_FAVOR": "The case was closed in your favor on {{date}}.",
+        "BUSINESS_FAVOR": "The case was closed in favor of the business on {{date}}."
+      }
+    }
   },
   "reservationsPage": {
     "title": "My coupons",
@@ -389,7 +425,9 @@
     "campaigns": "Campaigns",
     "create": "Create",
     "reports": "Reports",
-    "comments": "Comments"
+    "comments": "Comments",
+    "follows": "Followed businesses",
+    "preferences": "Notification preferences"
   },
   "search": {
     "places": "Places:",
@@ -401,7 +439,12 @@
     "otherDistrict": "Other district",
     "searchIn": "Search in {{district}}",
     "pickOne": "Pick a district",
-    "retryGps": "Retry with GPS"
+    "retryGps": "Retry with GPS",
+    "mapFailed": {
+      "title": "The map did not load",
+      "description": "These are the same offers as a list."
+    },
+    "mapLabel": "Map of nearby offers"
   },
   "home": {
     "eyebrow": "Welcome",
@@ -437,7 +480,8 @@
       "title": "Legend",
       "verified": "Affiliated business",
       "you": "Your location · {{note}}",
-      "district": "District center"
+      "district": "District center",
+      "publicSource": "Public source, no guarantee"
     }
   },
   "seal": {
@@ -499,7 +543,8 @@
     "walking": "Equals",
     "create": "Create new campaign",
     "seeCampaigns": "See my campaigns",
-    "offerCountOne": "1 deal"
+    "offerCountOne": "1 deal",
+    "mapLabel": "Zone of your active campaign"
   },
   "validatePage": {
     "title": "Validate reservation code",
@@ -530,11 +575,11 @@
       },
       "REDEEMED": {
         "title": "This code was already redeemed",
-        "description": "{{code}} was redeemed on {{date}}."
+        "description": "{{code}} was redeemed on {{date}}"
       },
       "EXPIRED": {
         "title": "The reservation has ended",
-        "description": "The time for {{code}} ended on {{date}}."
+        "description": "The time for {{code}} ended on {{date}}"
       },
       "REPORTED": {
         "title": "This reservation has an open report",
@@ -543,6 +588,10 @@
       "NETWORK": {
         "title": "We could not validate the code",
         "description": "Check your connection and try again."
+      },
+      "UNEXPECTED": {
+        "title": "We could not record the delivery",
+        "description": "Try again. If it keeps failing, validate the code again."
       }
     },
     "how": {
@@ -550,18 +599,340 @@
       "step1": "The customer shows you an 8 character code.",
       "step2": "Type it here and press Validate.",
       "step3": "If it is valid, charge the deal price at the counter."
-    }
+    },
+    "confirm": "Confirm delivery",
+    "confirming": "Recording…",
+    "delivered": "Delivery recorded on {{date}}; the code cannot be used again",
+    "alreadyDelivered": "This code was already delivered at {{time}} ({{date}}). Do not hand over the product again."
   },
   "reportsPage": {
     "title": "Customer reports",
     "emptyTitle": "You have no open reports",
     "emptyDescription": "If a customer says a deal was not honored, you will see it here with the time to answer.",
-    "action": "Validate a code"
+    "action": "Validate a code",
+    "tabs": {
+      "OPEN": "Open",
+      "IN_REVIEW": "In review",
+      "CLOSED": "Closed"
+    },
+    "empty": {
+      "OPEN": {
+        "title": "You have no open reports",
+        "description": "If a customer says an offer was not honored, you will see it here with the time to answer."
+      },
+      "IN_REVIEW": {
+        "title": "Nothing in review",
+        "description": "The reports you answer move here."
+      },
+      "CLOSED": {
+        "title": "No closed reports yet",
+        "description": "Resolved or expired cases appear here."
+      }
+    },
+    "code": "Code",
+    "reason": "What the customer wrote",
+    "yourAnswer": "Your answer",
+    "timeLeft": "{{time}} left to answer",
+    "deadlinePassed": "Deadline passed",
+    "answerLabel": "Your version",
+    "answerPlaceholder": "Explain what happened (at least 10 characters)",
+    "send": "Send my version",
+    "resolve": "Agree with the customer",
+    "confirmResolve": "The report closes and stops affecting your position.",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "closed": {
+      "CONSUMER_FAVOR": "Closed in favor of the customer.",
+      "BUSINESS_FAVOR": "Closed in your favor."
+    },
+    "actionError": "We could not complete the action",
+    "actionErrorRetry": "Try again in a moment.",
+    "error": {
+      "title": "We could not load the reports",
+      "description": "It may be your connection or the service.",
+      "retry": "Retry"
+    },
+    "notice": {
+      "title": "While a report stays open you drop in the results",
+      "description": "If you do not answer within 48 hours, the case is resolved in favor of the customer."
+    },
+    "badge": {
+      "OPEN": "Pending",
+      "IN_REVIEW": "In review",
+      "CLOSED": "Closed"
+    },
+    "reservation": "Reservation",
+    "reportedAt": "Reported",
+    "deadline": "Time to answer",
+    "answerHint": "The customer receives your answer and the case goes to review.",
+    "resolveHint": "If you agree, the report closes and stops affecting your position."
   },
   "commentsPage": {
     "title": "Customer comments",
     "emptyTitle": "No comments yet",
     "emptyDescription": "Customers comment after redeeming a deal at your store.",
     "action": "See my campaigns"
+  },
+  "createCampaign": {
+    "category": "Category",
+    "categoryError": "Choose the category.",
+    "categoriesUnavailable": "We could not load the categories. Reload the page to try again."
+  },
+  "publicSources": {
+    "title": "Public sources, no guarantee",
+    "description": "A public source published these offers and the business is not affiliated with GeoPS. Check the price and validity at the store."
+  },
+  "verifyBusiness": {
+    "title": "Verify my business",
+    "link": "Verify my business",
+    "hint": "We check your RUC in the SUNAT registry and place this address on the map. It takes a few seconds.",
+    "ruc": "RUC",
+    "address": "Store address",
+    "verify": "Verify my business",
+    "verifying": "Verifying…",
+    "retry": "Retry",
+    "loadError": "We could not load your business details",
+    "verifyError": "We could not complete the verification",
+    "status": {
+      "UNVERIFIED": "Not verified",
+      "PENDING": "Verification pending",
+      "VERIFIED": "Verified",
+      "REJECTED": "Verification rejected"
+    },
+    "result": {
+      "APPROVED": "Your business is verified",
+      "PENDING": "The verification is pending",
+      "REJECTED": "We could not verify your business"
+    },
+    "reason": {
+      "RUC_NOT_FOUND": {
+        "title": "Your RUC is not in the SUNAT registry",
+        "fix": "Check with SUNAT that the RUC is registered to you. If the RUC in your profile is mistyped, write to us to fix it."
+      },
+      "TAXPAYER_NOT_ACTIVE": {
+        "title": "Your RUC is deregistered at SUNAT",
+        "fix": "Reactivate your RUC at SUNAT and verify again from here."
+      },
+      "TAXPAYER_NOT_HABIDO": {
+        "title": "Your RUC is listed as not located (no habido)",
+        "fix": "Update your tax address at SUNAT until it is listed as located (habido) and verify again."
+      },
+      "ADDRESS_NOT_GEOCODABLE": {
+        "title": "We could not find your address on the map",
+        "fix": "Correct it below with street, number and district. Your RUC and everything else you registered are kept."
+      },
+      "GEOCODER_UNAVAILABLE": {
+        "title": "The map service is not answering right now",
+        "fix": "You do not have to do anything."
+      },
+      "INVALID_RUC": {
+        "title": "The RUC is not valid",
+        "fix": "Check the 11 digits of the RUC in your profile."
+      }
+    },
+    "pendingNote": "We retry on our own every 10 minutes. The result will show here and on your dashboard; you can keep creating campaigns meanwhile.",
+    "correctAddress": "Corrected address",
+    "addressHint": "E.g. Av. José Larco 345, Miraflores",
+    "verifyAddress": "Verify with this address",
+    "toCampaign": "Create a campaign",
+    "toPanel": "Go to my dashboard",
+    "how": {
+      "title": "How it works",
+      "step1": "We check that your RUC is active and located (habido) in the SUNAT registry.",
+      "step2": "We place your store address on the map.",
+      "step3": "If everything is fine, your offers show the verified seal."
+    },
+    "hintVerified": "Your business is verified and your offers show the seal. If you move, verify it again from here.",
+    "error": {
+      "GENERIC": "Try again in a moment. If it keeps failing, write to us.",
+      "NO_BUSINESS": "Your session does not belong to a business. Log in again.",
+      "INVALID_ADDRESS": "Write the store address with street, number and district, in up to 255 characters.",
+      "NETWORK_ERROR": "Check your connection and try again.",
+      "INVALID_REQUEST": "Check the address and try again.",
+      "FORBIDDEN": "Only the owner of the business can verify it.",
+      "UNAUTHORIZED": "Your session expired. Log in again.",
+      "BUSINESS_PROFILE_NOT_FOUND": "We could not find the profile of your business.",
+      "TAXPAYER_REGISTRY_EMPTY": "The SUNAT registry is still loading. Try again in a few minutes."
+    }
+  },
+  "reportForm": {
+    "title": "Report a problem",
+    "hint": "Tell us what happened. The business will see your report and has 48 hours to answer.",
+    "reason": "What was not honored?",
+    "placeholder": "E.g. The 2x1 was not applied and I was charged both dishes.",
+    "counter": "{{length}} of {{max}} characters (minimum {{min}})",
+    "send": "Send report",
+    "sending": "Sending...",
+    "cancel": "Cancel",
+    "error": "We could not send your report",
+    "errorRetry": "Try again in a moment."
+  },
+  "followsPage": {
+    "title": "Followed businesses",
+    "description": "Current offers from the businesses you follow, all in one place.",
+    "retry": "Retry",
+    "loading": "Loading businesses…",
+    "empty": "You are not following any business yet",
+    "emptyHint": "Open an offer and follow the business to hear about its next promotions.",
+    "count": "{{count}} active offers",
+    "unfollow": "Unfollow",
+    "following": "Following",
+    "follow": "Follow business",
+    "error": "We could not load your businesses. Please try again.",
+    "countOne": "{{count}} active offer",
+    "viewOffers": "View offers",
+    "noOffers": "No active offers right now",
+    "noticeTitle": "We notify you when you are near",
+    "noticeHint": "New offers from these businesses reach you on the channels you turned on in your notice preferences."
+  },
+  "notificationPage": {
+    "title": "Notification preferences",
+    "description": "Choose where and how often we notify you about offers near where you were in the last hour.",
+    "loading": "Loading preferences…",
+    "retry": "Retry",
+    "channels": "Offer channels",
+    "push": "Browser notifications",
+    "pushHint": "They arrive even when GeoPS is not open.",
+    "email": "Email",
+    "emailHint": "Grouped: one email per time window, not one per offer.",
+    "dailyLimit": "Maximum notices per day",
+    "limitHint": "Once you reach the maximum we send no more that day, on any channel.",
+    "invalidLimit": "Choose a whole number from 1 to 10.",
+    "save": "Save preferences",
+    "saving": "Saving…",
+    "saved": "Your next notices will follow these preferences.",
+    "error": "We could not save your preferences. Please try again.",
+    "iphoneTitle": "On iPhone, install GeoPS first",
+    "iphoneHint": "Safari only sends notices to sites added to the home screen. Tap Share and then Add to Home Screen. Meanwhile we notify you by email.",
+    "locationTitle": "We use your last location from the last hour",
+    "locationHint": "If you did not open GeoPS in the last 60 minutes we send no nearby notices."
+  },
+  "unsubscribePage": {
+    "title": "Email preferences",
+    "confirmHint": "Confirm you want to stop this type of offer email. Your account will stay active.",
+    "confirm": "Unsubscribe from these emails",
+    "busy": "Confirming…",
+    "done": "You stopped receiving nearby offer notices. Your account, favorites and reservations stay the same.",
+    "doneFollowed": "You stopped receiving notices from the businesses you follow. Your account, favorites and reservations stay the same.",
+    "missing": "Open the unsubscribe link in a GeoPS email.",
+    "error": "We could not confirm your request. Check the link and try again.",
+    "doneTitle": "Done, we will not send you these emails",
+    "reactivate": "Turn them back on",
+    "goHome": "Go to GeoPS"
+  },
+  "pushPage": {
+    "title": "Notices in this browser",
+    "hint": "Enable them here after choosing your preferences. You can turn them off on each device.",
+    "active": "This browser is registered for notifications.",
+    "disable": "Disable in this browser",
+    "enable": "Enable notices in this browser",
+    "busy": "Enabling…",
+    "needsInstall": "On iPhone, add GeoPS to your home screen: Share → Add to Home Screen. You can receive email notices in the meantime.",
+    "useEmail": "Enable email notices",
+    "notSupported": "This browser does not support these notices. You can choose email instead.",
+    "denied": "Permission was not granted. Change it in your browser settings or choose email.",
+    "unavailable": "Browser notices are not available here yet. You can enable email.",
+    "error": "We could not register this browser. Please try again."
+  },
+  "reviewsPage": {
+    "title": "Verified redemption reviews",
+    "panelTitle": "Comments from your customers",
+    "panelHint": "Reply once to each review. Your reply stays beside the original experience.",
+    "missingBusiness": "Your session has no business. Please log in again.",
+    "write": "How was it at this business?",
+    "verifiedHint": "You redeemed your reservation at this business.",
+    "rating": "Your rating",
+    "stars": "{{count}} stars",
+    "experience": "Your comment",
+    "publish": "Publish review",
+    "publishing": "Publishing…",
+    "published": "Your verified review is now published.",
+    "loading": "Loading reviews…",
+    "empty": "This business has no reviews yet.",
+    "retry": "Retry",
+    "verified": "Verified redemption",
+    "businessReply": "Business reply",
+    "replyLabel": "Your reply",
+    "reply": "Reply",
+    "error": "We could not complete the operation. Please try again.",
+    "summaryLine": "{{total}} comments · average rating {{average}} of 5",
+    "pending": "{{count}} comments are waiting for your answer",
+    "pendingHint": "Answering negative comments within 48 hours improves your position in the results.",
+    "yourRating": "Your rating",
+    "verifiedCount": "{{total}} comments from customers with a verified redemption",
+    "pendingOne": "1 comment is waiting for your answer",
+    "publishedWith": "It is published with your name and the verified redemption badge."
+  },
+  "savedBusinesses": {
+    "title": "Businesses",
+    "tabs": "Favorite type",
+    "paused": "Paused",
+    "loading": "Loading businesses…",
+    "retry": "Retry",
+    "empty": "No saved businesses yet. Save them from an offer detail.",
+    "remove": "Remove saved business",
+    "saved": "Business saved",
+    "save": "Save business",
+    "error": "We could not update your businesses. Please try again.",
+    "viewOffer": "View offer"
+  },
+  "favoritesTabs": {
+    "offers": "Saved offers",
+    "businesses": "Saved businesses",
+    "follows": "Businesses I follow"
+  },
+  "reportPage": {
+    "crumbs": "Breadcrumb",
+    "crumb": "Report a problem",
+    "loading": "Loading your reservation…",
+    "title": "What happened at the store?",
+    "error": "We could not load your reservation",
+    "notice": {
+      "title": "Your report affects the business position",
+      "description": "It drops in the results while the case stays open. That is why we ask what exactly happened."
+    },
+    "reasons": {
+      "expired": {
+        "title": "The promotion was no longer valid",
+        "hint": "I arrived within the published period and they did not accept it"
+      },
+      "regularPrice": {
+        "title": "They charged the regular price",
+        "hint": "I paid more than the offer said"
+      },
+      "closed": {
+        "title": "The store was closed",
+        "hint": "During the published opening hours"
+      },
+      "other": {
+        "title": "Other reason",
+        "hint": "Tell us what happened"
+      }
+    },
+    "more": "Tell us more (optional)",
+    "moreRequired": "Tell us what happened (required)",
+    "placeholder": "E.g.: I arrived at 3:40 p.m. and they told me the promotion had ended.",
+    "yourReservation": "Your reservation",
+    "state": "Status",
+    "active": "Active",
+    "next": {
+      "title": "What happens next",
+      "step1": "It is sent to the business",
+      "step1Hint": "It has 48 hours to answer",
+      "step2": "It drops in the ranking",
+      "step2Hint": "While the case stays open",
+      "step3": "We notify you",
+      "step3Hint": "If it is resolved or the failure repeats"
+    },
+    "unavailable": {
+      "title": "This reservation can no longer be reported",
+      "description": "Only an active reservation can be reported, and only once.",
+      "action": "Back to my reservation"
+    }
+  },
+  "notFoundPage": {
+    "title": "We could not find this page",
+    "description": "The address does not exist or has changed. Go back to the start to keep looking for offers.",
+    "back": "Go to the start"
   }
 }

@@ -29,7 +29,7 @@ export const NAV_BY_ROLE: Record<UserRole | 'VISITOR', NavItem[]> = {
   ADMIN: BUYER_TABS,
 };
 
-/** Shell of the app: top bar and tabs by role (Figma "Barra superior" and "Navegación"). */
+/** Shell of the app: top bar and tabs by role (Figma "Barra superior" and "NavegaciÃ³n"). */
 @Component({
   selector: 'app-layout',
   standalone: true,

@@ -4,7 +4,7 @@
       <h1 class="title">{{ 'businessSummary.greeting' | translate: { name: sessions.displayName() } }}</h1>
       <p class="subtitle">{{ 'businessSummary.subtitle' | translate }}</p>
     </div>
-    <geo-seal kind="active" [text]="'businessSummary.ownerAccount' | translate" />
+    <app-business-seal />
   </header>
 
   @switch (state()) {
@@ -77,7 +77,7 @@
         <aside class="right">
           <h2 class="sub">{{ 'businessSummary.zone' | translate }}</h2>
           @if (zone(); as z) {
-            <geo-offers-map class="map" [center]="z.center" [radiusMeters]="reachMeters()" [pins]="pins()" [showUser]="false" />
+            <geo-offers-map class="map" [center]="z.center" [radiusMeters]="reachMeters()" [pins]="pins()" [showUser]="false" [ariaLabel]="'businessSummary.mapLabel' | translate" />
             <dl class="facts">
               <div><dt>{{ 'businessSummary.zoneType' | translate }}</dt><dd>{{ zoneText(z) }}</dd></div>
               <div><dt>{{ 'businessSummary.walking' | translate }}</dt><dd>{{ 'search.minutes' | translate: { minutes: ((reachMeters() ?? 0) / 80 | number: '1.0-0') } }}</dd></div>

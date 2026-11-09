@@ -1,6 +1,21 @@
+/** Glyph of each category of the closed list of Catalog (OfferCategory, E2-06). */
+const ICON_BY_CATEGORY: Readonly<Record<string, string>> = {
+  'Gastronomía': 'restaurant',
+  'Cafetería y panadería': 'bakery_dining',
+  'Bodega y minimarket': 'storefront',
+  'Salud y farmacia': 'medical_services',
+  'Belleza y cuidado personal': 'content_cut',
+  'Deporte': 'fitness_center',
+  'Mascotas': 'pets',
+  'Hogar y ferretería': 'home',
+  'Librería y útiles': 'menu_book',
+  'Servicios': 'local_laundry_service',
+  'Cultura y entretenimiento': 'palette',
+};
+
 /**
- * Material Symbols Rounded glyph for an offer category (Figma Icono/* components). Catalog takes the
- * category as free text, so it matches by keywords and falls back to a tag.
+ * Keywords for a category outside the list, such as the free text of offers published before the
+ * list existed or of a public source.
  */
 const ICON_BY_KEYWORD: ReadonlyArray<readonly [RegExp, string]> = [
   [/caf[eé]/i, 'coffee'],
@@ -17,7 +32,12 @@ const ICON_BY_KEYWORD: ReadonlyArray<readonly [RegExp, string]> = [
   [/gastronom|comida|men[úu]|restaurant|cevich|poller|chifa|pizza|buffet/i, 'restaurant'],
 ];
 
+/** Material Symbols Rounded glyph for an offer category (Figma Icono/* components); a tag when unknown. */
 export function categoryIcon(category: string | null | undefined): string {
+  const direct = ICON_BY_CATEGORY[category?.trim() ?? ''];
+  if (direct) {
+    return direct;
+  }
   const match = ICON_BY_KEYWORD.find(([pattern]) => pattern.test(category ?? ''));
   return match ? match[1] : 'sell';
 }

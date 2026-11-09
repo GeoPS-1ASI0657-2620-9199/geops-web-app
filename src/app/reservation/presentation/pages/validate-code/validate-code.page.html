@@ -24,7 +24,7 @@
 
       @if (reservation(); as r) {
         @if (!rejection()) {
-          <section class="result ok" role="status">
+          <section class="result" [class.ok]="!redemption()?.alreadyRedeemed" [class.warn]="redemption()?.alreadyRedeemed" role="status">
             <h2 class="result-title">
               {{ 'validatePage.valid' | translate }}
               <geo-seal [kind]="seals[r.status]" [text]="'reservation.status.' + r.status | translate" />
@@ -43,10 +43,35 @@
               </div>
               <div><dt>{{ 'validatePage.reservedAt' | translate }}</dt><dd>{{ limaDateTime(r.reservedAt) }}</dd></div>
             </dl>
-            <div class="actions">
-              <button mat-stroked-button type="button" (click)="clear()">{{ 'validatePage.another' | translate }}</button>
-            </div>
-            <p class="note">{{ 'validatePage.charge' | translate }}</p>
+            @if (redemption(); as done) {
+              @if (done.alreadyRedeemed) {
+                <p class="delivered" data-testid="already-delivered">
+                  <mat-icon aria-hidden="true">warning</mat-icon>
+                  {{ 'validatePage.alreadyDelivered' | translate: { time: limaTime(done.redeemedAt), date: limaDateTime(done.redeemedAt) } }}
+                </p>
+              } @else {
+                <p class="delivered" data-testid="delivery-recorded">
+                  <mat-icon aria-hidden="true">check_circle</mat-icon>
+                  {{ 'validatePage.delivered' | translate: { date: limaDateTime(done.redeemedAt) } }}
+                </p>
+              }
+              <div class="actions">
+                <button mat-stroked-button type="button" (click)="clear()">{{ 'validatePage.another' | translate }}</button>
+              </div>
+            } @else {
+              <p class="note">{{ 'validatePage.charge' | translate }}</p>
+              <div class="actions">
+                <button
+                  mat-flat-button
+                  type="button"
+                  data-testid="confirm-delivery"
+                  [disabled]="redeeming()"
+                  (click)="confirmDelivery()">
+                  {{ (redeeming() ? 'validatePage.confirming' : 'validatePage.confirm') | translate }}
+                </button>
+                <button mat-stroked-button type="button" (click)="clear()">{{ 'validatePage.another' | translate }}</button>
+              </div>
+            }
           </section>
         }
       }

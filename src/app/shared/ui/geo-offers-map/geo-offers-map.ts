@@ -28,6 +28,8 @@ const DEFAULT_ZOOM = 15;
 const MAX_ZOOM = 19;
 /** Outer rings of the Figma map, as fractions of the search radius. */
 const RING_FRACTIONS = [1, 0.66, 0.33];
+/** QAS12: if the tiles have not loaded by then, the screen falls back to the list. */
+export const MAP_LOAD_TIMEOUT_MS = 8000;
 
 /**
  * Map of the Figma "Mapa" component: OpenStreetMap tiles, the user's position as a blue dot with a
@@ -97,15 +99,23 @@ export class GeoOffersMap implements AfterViewInit, OnDestroy {
   readonly pins = input<readonly MapPin[]>([]);
   /** Precision label shown at the bottom left, e.g. "Precisión ±12 m". */
   readonly precisionLabel = input<string | null>(null);
-  readonly ariaLabel = input('Mapa de ofertas cercanas');
+  /** Already translated by the screen that places the map, e.g. search.mapLabel. */
+  readonly ariaLabel = input.required<string>();
   /** Draws the user's dot; off when the map shows a business location only. */
   readonly showUser = input(true);
   readonly pinSelected = output<number>();
+  /** How long the tiles may take before the map counts as failed. */
+  readonly loadTimeoutMs = input(MAP_LOAD_TIMEOUT_MS);
+  /** Emitted once when a tile fails before the first load, or the tiles do not load in time (US09, QAS12). */
+  readonly failed = output<void>();
 
   private readonly mapHost = viewChild.required<ElementRef<HTMLDivElement>>('mapHost');
   private map?: L.Map;
   private overlays?: L.LayerGroup;
   private resizeObserver?: ResizeObserver;
+  private loadTimer?: ReturnType<typeof setTimeout>;
+  private hasFailed = false;
+  private hasLoaded = false;
 
   constructor() {
     effect(() => {
@@ -125,7 +135,15 @@ export class GeoOffersMap implements AfterViewInit, OnDestroy {
       zoomControl: false,
     });
     L.control.zoom({ position: 'bottomright' }).addTo(this.map);
-    L.tileLayer(OSM_TILES, { maxZoom: MAX_ZOOM, attribution: OSM_ATTRIBUTION }).addTo(this.map);
+    const tiles = L.tileLayer(OSM_TILES, { maxZoom: MAX_ZOOM, attribution: OSM_ATTRIBUTION });
+    // A tile that fails once the map is drawn (a zoom far away) does not hide a map that works.
+    tiles.on('tileerror', () => !this.hasLoaded && this.fail());
+    tiles.on('load', () => {
+      this.hasLoaded = true;
+      clearTimeout(this.loadTimer);
+    });
+    this.loadTimer = setTimeout(() => this.fail(), this.loadTimeoutMs());
+    tiles.addTo(this.map);
     this.overlays = L.layerGroup().addTo(this.map);
     this.draw();
     // Leaflet measures its container once; when the layout gives it its real size, redraw and refit.
@@ -137,8 +155,17 @@ export class GeoOffersMap implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    clearTimeout(this.loadTimer);
     this.resizeObserver?.disconnect();
     this.map?.remove();
+  }
+
+  private fail(): void {
+    clearTimeout(this.loadTimer);
+    if (!this.hasFailed) {
+      this.hasFailed = true;
+      this.failed.emit();
+    }
   }
 
   private draw(): void {

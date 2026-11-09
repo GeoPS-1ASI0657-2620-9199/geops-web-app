@@ -97,6 +97,37 @@ describe('HttpReservationRepository', () => {
     expect(await result).toEqual(jasmine.objectContaining({ code: 'K7P3XM9Q', status: 'ACTIVE' }));
   });
 
+  it('confirms the delivery of a code (US41)', async () => {
+    const result = repository.redeem('K7P3XM9Q');
+
+    const request = http.expectOne(`${RESERVATIONS_URL}/redeem`);
+    expect(request.request.method).toBe('POST');
+    expect(request.request.body).toEqual({ code: 'K7P3XM9Q' });
+    request.flush({
+      reservationId: 15,
+      code: 'K7P3XM9Q',
+      offerId: 1052,
+      offerTitle: 'Menú ejecutivo a mitad de precio',
+      status: 'REDEEMED',
+      redeemedAt: '2026-10-20T17:42:10Z',
+    });
+
+    expect(await result).toEqual(jasmine.objectContaining({ code: 'K7P3XM9Q', redeemedAt: '2026-10-20T17:42:10Z' }));
+  });
+
+  it('keeps the date of a code already redeemed in the 409 (E2-04)', async () => {
+    const result = repository.redeem('K7P3XM9Q');
+
+    http.expectOne(`${RESERVATIONS_URL}/redeem`).flush(
+      { code: 'RESERVATION_ALREADY_REDEEMED', message: 'Reservation 15 was already redeemed', redeemedAt: '2026-10-20T17:42:10Z' },
+      { status: 409, statusText: 'Conflict' },
+    );
+
+    await expectAsync(result).toBeRejectedWith(
+      jasmine.objectContaining<ApiError>({ code: 'RESERVATION_ALREADY_REDEEMED', redeemedAt: '2026-10-20T17:42:10Z' }),
+    );
+  });
+
   it('reads one reservation with its offer and status', async () => {
     const result = repository.findById(15);
 

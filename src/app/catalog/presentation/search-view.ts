@@ -2,6 +2,7 @@ import { MapPin } from '../../shared/ui/geo-offers-map/geo-offers-map';
 import { categoryIcon } from '../../shared/ui/category-icon';
 import { SearchOrigin } from '../application/offer-search.store';
 import { NearbyOffer } from '../domain/model/nearby-offer';
+import { PublicSourceOffer } from '../domain/model/public-source-offer';
 
 /** Walking speed Catalog uses to turn minutes into meters (WalkingRadius in catalog-service). */
 export const METERS_PER_WALK_MINUTE = 80;
@@ -22,14 +23,24 @@ export function precisionLabelOf(origin: SearchOrigin | null): string | null {
   return origin.districtName ? `Centro de ${origin.districtName}` : `Precisión ±${origin.accuracyMeters ?? 0} m`;
 }
 
-export function toPins(offers: readonly NearbyOffer[]): MapPin[] {
-  return offers.map((offer) => ({
-    id: offer.offerId,
-    point: offer.location,
-    icon: categoryIcon(offer.category),
-    label: `${offer.businessName}: ${offer.title}`,
-    kind: 'verified',
-  }));
+/** Pins of the affiliated offers, plus the amber pins of the public sources (US39). */
+export function toPins(offers: readonly NearbyOffer[], publicOffers: readonly PublicSourceOffer[] = []): MapPin[] {
+  return [
+    ...offers.map<MapPin>((offer) => ({
+      id: offer.offerId,
+      point: offer.location,
+      icon: categoryIcon(offer.category),
+      label: `${offer.businessName}: ${offer.title}`,
+      kind: 'verified',
+    })),
+    ...publicOffers.map<MapPin>((offer) => ({
+      id: offer.offerId,
+      point: offer.location,
+      icon: categoryIcon(offer.category),
+      label: `${offer.sourceName}: ${offer.title}`,
+      kind: 'reference',
+    })),
+  ];
 }
 
 /** Free-text filter of the top bar search: title, business or category. */

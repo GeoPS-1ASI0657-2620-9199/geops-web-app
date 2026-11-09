@@ -39,6 +39,11 @@ export function hasMorePages(result: NearbyOfferPage): boolean {
   return result.page + 1 < result.totalPages;
 }
 
+/** A radius Catalog and Identity accept: whole minutes from 5 to 20. */
+export function isValidRadius(minutes: number): boolean {
+  return Number.isInteger(minutes) && minutes >= MIN_RADIUS_MINUTES && minutes <= MAX_RADIUS_MINUTES;
+}
+
 export function clampRadius(minutes: number): number {
   return Math.min(MAX_RADIUS_MINUTES, Math.max(MIN_RADIUS_MINUTES, Math.round(minutes)));
 }

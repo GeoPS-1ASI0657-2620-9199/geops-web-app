@@ -1,3 +1,6 @@
+import { SaveBusiness } from '../../../../engagement/presentation/components/save-business/save-business';
+import { BusinessReviews } from '../../../../engagement/presentation/components/business-reviews/business-reviews';
+import { FollowBusiness } from '../../../../engagement/presentation/components/follow-business/follow-business';
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DecimalPipe } from '@angular/common';
@@ -6,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import { SessionStore } from '../../../../iam/application/session.store';
+import { ListMyReservationsUseCase } from '../../../../reservation/application/list-my-reservations.use-case';
 import { ReserveOfferUseCase } from '../../../../reservation/application/reserve-offer.use-case';
 import { PLACED_PARAM } from '../../../../reservation/presentation/reservation-view';
 import { ApiError } from '../../../../shared/domain/api-error';
@@ -54,6 +58,9 @@ interface ReserveFailure {
     GeoOffersMap,
     GeoSeal,
     OfferCardActions,
+    SaveBusiness,
+    BusinessReviews,
+    FollowBusiness,
   ],
   templateUrl: './offer-detail.page.html',
   styleUrl: './offer-detail.page.css',
@@ -62,6 +69,7 @@ interface ReserveFailure {
 export class OfferDetailPage implements OnInit {
   private readonly getOfferDetail = inject(GetOfferDetailUseCase);
   private readonly reserveOffer = inject(ReserveOfferUseCase);
+  private readonly myReservations = inject(ListMyReservationsUseCase);
   private readonly sessions = inject(SessionStore);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
@@ -75,11 +83,14 @@ export class OfferDetailPage implements OnInit {
   protected readonly errorMessage = signal<string | null>(null);
   protected readonly reserving = signal(false);
   protected readonly reserveFailure = signal<ReserveFailure | null>(null);
+  /** The active reservation of this consumer for this offer: the button then points to it instead of reserving again. */
+  protected readonly activeReservationId = signal<number | null>(null);
   /** Visitors see it and log in first; business owners and admins cannot reserve. */
   protected readonly canReserve = computed(() => {
     const role = this.sessions.role();
     return role === null || role === 'CONSUMER';
   });
+  protected readonly isConsumer = computed(() => this.sessions.role() === 'CONSUMER');
   protected readonly isVisitor = computed(() => this.sessions.role() === null);
   protected readonly validity = computed(() => {
     const offer = this.offer();
@@ -99,7 +110,7 @@ export class OfferDetailPage implements OnInit {
   /** i18n key of the answer to "Guardar en favoritos". */
   protected readonly saveResult = signal<string | null>(null);
   protected readonly icon = computed(() => categoryIcon(this.offer()?.category));
-  /** Each sentence of the conditions is one item of "Qué incluye" (Figma screen 2). */
+  /** Each sentence of the conditions is one item of "QuÃ© incluye" (Figma screen 2). */
   protected readonly includes = computed(() =>
     (this.offer()?.conditions ?? '')
       .split(/(?<=\.)\s+|\n+/)
@@ -129,6 +140,7 @@ export class OfferDetailPage implements OnInit {
       this.offerId = Number(params.get('id'));
       this.saveResult.set(null);
       this.reserveFailure.set(null);
+      this.activeReservationId.set(null);
       void this.load();
     });
   }
@@ -169,6 +181,7 @@ export class OfferDetailPage implements OnInit {
     try {
       this.offer.set(await this.getOfferDetail.execute(this.offerId));
       this.state.set('ready');
+      await this.findActiveReservation();
     } catch (error) {
       const apiError = error instanceof ApiError ? error : null;
       if (apiError?.code === OFFER_NOT_FOUND) {
@@ -177,6 +190,22 @@ export class OfferDetailPage implements OnInit {
       }
       this.errorMessage.set(apiError?.message ?? null);
       this.state.set('error');
+    }
+  }
+
+  /** A failure here only leaves the button enabled: the service answers a repeated request with the same reservation. */
+  private async findActiveReservation(): Promise<void> {
+    if (this.sessions.role() !== 'CONSUMER') {
+      return;
+    }
+    const offerId = this.offerId;
+    try {
+      const active = await this.myReservations.execute('ACTIVE');
+      if (offerId === this.offerId) {
+        this.activeReservationId.set(active.find((r) => r.offerId === offerId)?.reservationId ?? null);
+      }
+    } catch {
+      this.activeReservationId.set(null);
     }
   }
 

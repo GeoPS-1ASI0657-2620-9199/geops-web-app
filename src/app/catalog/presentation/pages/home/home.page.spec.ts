@@ -1,5 +1,6 @@
 import { Type } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import { SavedOfferRepository } from '../../../../engagement/domain/ports/saved-offer.repository';
@@ -9,9 +10,11 @@ import { ReservationRepository } from '../../../../reservation/domain/ports/rese
 import { DistrictDirectory } from '../../../domain/ports/district.directory';
 import { LocationProvider } from '../../../domain/ports/location.provider';
 import { OfferRepository } from '../../../domain/ports/offer.repository';
+import { GeoOffersMap } from '../../../../shared/ui/geo-offers-map/geo-offers-map';
 import { nearbyOffer, pageOf } from '../../../testing/nearby-offer.testing';
 import { CategoriesPage } from '../categories/categories.page';
 import { HomePage } from './home.page';
+import { radiusPreferenceTestingProviders } from '../../../testing/radius-preference.testing';
 
 const CONSUMER: Session = {
   accessToken: 't',
@@ -21,16 +24,21 @@ const CONSUMER: Session = {
   email: 'lucia.fernandez@correo.pe',
   consumerId: 7,
 };
+const CATEGORIES = ['Gastronomía', 'Cafetería', 'Mascotas'];
 const OFFERS = [1, 2, 3, 4, 5, 6, 7].map((id) =>
   nearbyOffer({ offerId: id, businessName: `Comercio ${id}`, distanceMeters: id * 100, walkMinutes: id, category: id % 2 ? 'Gastronomía' : 'Cafetería' }),
 );
 
 async function setUp<T>(component: Type<T>, session: Session | null): Promise<ComponentFixture<T>> {
-  const offers = jasmine.createSpyObj<OfferRepository>('OfferRepository', ['findNearby', 'findById']);
-  offers.findNearby.and.resolveTo(pageOf(OFFERS));
+  const offers = jasmine.createSpyObj<OfferRepository>('OfferRepository', ['findNearby', 'findById', 'categories']);
+  offers.findNearby.and.callFake((_origin, _radius, _page, category) =>
+    Promise.resolve(pageOf(OFFERS.filter((offer) => !category || offer.category === category))),
+  );
+  offers.categories.and.resolveTo(CATEGORIES);
   await TestBed.configureTestingModule({
     imports: [component],
     providers: [
+      ...radiusPreferenceTestingProviders(),
       provideRouter([]),
       provideTranslateService(),
       { provide: OfferRepository, useValue: offers },
@@ -63,15 +71,31 @@ describe('HomePage', () => {
     expect(host.querySelector('geo-offers-map')).not.toBeNull();
   });
 
-  it('invites a visitor to log in and filters by category', async () => {
+  it('invites a visitor to log in and filters by category through Catalog (US08)', async () => {
     const fixture = await setUp(HomePage, null);
     const host = fixture.nativeElement as HTMLElement;
     expect(host.textContent).toContain('home.logInToReserve');
+    expect([...host.querySelectorAll('button.chip')].map((b) => b.textContent?.trim())).toEqual(['search.all', ...CATEGORIES]);
 
     [...host.querySelectorAll<HTMLButtonElement>('button.chip')].find((b) => b.textContent?.trim() === 'Cafetería')!.click();
+    await fixture.whenStable();
     fixture.detectChanges();
 
+    expect(TestBed.inject(OfferRepository).findNearby).toHaveBeenCalledWith(jasmine.anything(), 10, 0, 'Cafetería');
     expect(host.querySelectorAll('geo-offer-card').length).toBe(3);
+  });
+
+  it('shows the same offers as a list when the map does not load (US09, QAS12)', async () => {
+    const fixture = await setUp(HomePage, CONSUMER);
+    const host = fixture.nativeElement as HTMLElement;
+
+    fixture.debugElement.query(By.directive(GeoOffersMap)).componentInstance.failed.emit();
+    fixture.detectChanges();
+
+    expect(host.querySelector('geo-offers-map')).toBeNull();
+    expect(host.querySelector('[data-testid="map-fallback"]')?.textContent).toContain('search.mapFailed.title');
+    expect(host.querySelector('[data-testid="map-fallback"] [role="status"]')).not.toBeNull();
+    expect(host.querySelectorAll('.near-item').length).toBe(7);
   });
 });
 
@@ -81,9 +105,37 @@ describe('CategoriesPage', () => {
     const host = fixture.nativeElement as HTMLElement;
     const figures = [...host.querySelectorAll('.figure')].map((f) => f.textContent?.trim());
 
-    expect(figures).toEqual(['5', '7', '2']);
+    expect(figures).toEqual(['5', '7', '3']);
     expect(host.querySelectorAll('.item').length).toBe(6);
     expect(host.querySelector('.item-name')?.textContent).toContain('Comercio 1');
     expect(host.textContent).toContain('categoriesPage.seeAll');
+  });
+
+  it('says there are no offers of the chosen category and offers every category again (US08)', async () => {
+    const fixture = await setUp(CategoriesPage, CONSUMER);
+    const host = fixture.nativeElement as HTMLElement;
+
+    [...host.querySelectorAll<HTMLButtonElement>('button.chip')].find((b) => b.textContent?.trim() === 'Mascotas')!.click();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(host.querySelector('[data-testid="search-empty"]')?.textContent).toContain('nearbyPage.empty.categoryTitle');
+    (host.querySelector('[data-testid="clear-category"]') as HTMLButtonElement).click();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(host.querySelectorAll('.item').length).toBe(6);
+  });
+
+  it('lists every offer when the map does not load (US09, QAS12)', async () => {
+    const fixture = await setUp(CategoriesPage, CONSUMER);
+    const host = fixture.nativeElement as HTMLElement;
+
+    fixture.debugElement.query(By.directive(GeoOffersMap)).componentInstance.failed.emit();
+    fixture.detectChanges();
+
+    expect(host.querySelector('geo-offers-map')).toBeNull();
+    expect(host.querySelector('[data-testid="map-fallback"]')).not.toBeNull();
+    expect(host.querySelectorAll('.item').length).toBe(7);
   });
 });

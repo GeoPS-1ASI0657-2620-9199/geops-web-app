@@ -47,6 +47,8 @@
             <h1 class="title">{{ o.title }}</h1>
             <div class="merchant">
               <span class="name">{{ o.businessName }}</span>
+              @if (isConsumer() && o.businessId !== null) { <app-save-business [businessId]="o.businessId" /> }
+              @if (isConsumer() && o.source !== 'PUBLIC_SOURCE' && o.businessId !== null) { <app-follow-business [businessId]="o.businessId" /> }
               @if (o.source === 'PUBLIC_SOURCE') {
                 <geo-seal kind="reference" />
               } @else if (o.verifiedSeal) {
@@ -75,6 +77,7 @@
                 <li>{{ line }}</li>
               }
             </ul>
+          @if (!isVisitor() && o.source !== 'PUBLIC_SOURCE' && o.businessId !== null) { <app-business-reviews [businessId]="o.businessId" /> }
           </article>
 
           <aside class="side">
@@ -89,14 +92,24 @@
                 <div><dt>{{ 'offerDetailPage.category' | translate }}</dt><dd>{{ o.category }}</dd></div>
               </dl>
               @if (canReserve()) {
-                <button mat-flat-button type="button" class="reserve" [disabled]="!o.available || reserving()" (click)="reserve()">
-                  <span class="reserve-main">
-                    {{ (o.available ? (reserving() ? 'offerDetailPage.reserving' : 'offerDetailPage.reserve') : 'offerDetailPage.notAvailable') | translate }}
-                  </span>
-                  <span class="reserve-sub">
-                    {{ (!o.available ? 'offerDetailPage.cannotReserve' : isVisitor() ? 'offerDetailPage.loginToReserve' : 'offerDetailPage.payAtStore') | translate }}
-                  </span>
-                </button>
+                @if (activeReservationId(); as reservationId) {
+                  <button mat-flat-button type="button" class="reserve" disabled>
+                    <span class="reserve-main">{{ 'offerDetailPage.alreadyReserved' | translate }}</span>
+                    <span class="reserve-sub">{{ 'offerDetailPage.alreadyReservedHint' | translate }}</span>
+                  </button>
+                  <a mat-stroked-button class="full" [routerLink]="['/reservations', reservationId]">
+                    {{ 'offerDetailPage.viewReservation' | translate }}
+                  </a>
+                } @else {
+                  <button mat-flat-button type="button" class="reserve" [disabled]="!o.available || reserving()" (click)="reserve()">
+                    <span class="reserve-main">
+                      {{ (o.available ? (reserving() ? 'offerDetailPage.reserving' : 'offerDetailPage.reserve') : 'offerDetailPage.notAvailable') | translate }}
+                    </span>
+                    <span class="reserve-sub">
+                      {{ (!o.available ? 'offerDetailPage.cannotReserve' : isVisitor() ? 'offerDetailPage.loginToReserve' : 'offerDetailPage.payAtStore') | translate }}
+                    </span>
+                  </button>
+                }
                 @if (reserveFailure(); as failure) {
                   <geo-alert
                     kind="error"

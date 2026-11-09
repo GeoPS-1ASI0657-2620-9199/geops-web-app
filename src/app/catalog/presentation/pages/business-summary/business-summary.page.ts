@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import { SessionStore } from '../../../../iam/application/session.store';
+import { BusinessSeal } from '../../../../iam/presentation/components/business-seal/business-seal';
 import { ApiError } from '../../../../shared/domain/api-error';
 import { categoryIcon } from '../../../../shared/ui/category-icon';
 import { GeoEmptyState } from '../../../../shared/ui/geo-empty-state/geo-empty-state';
@@ -23,7 +24,7 @@ type ViewState = 'loading' | 'ready' | 'error';
 @Component({
   selector: 'app-business-summary',
   standalone: true,
-  imports: [DecimalPipe, RouterLink, MatButtonModule, MatIconModule, TranslateModule, GeoEmptyState, GeoOffersMap, GeoSeal],
+  imports: [DecimalPipe, RouterLink, MatButtonModule, MatIconModule, TranslateModule, GeoEmptyState, GeoOffersMap, GeoSeal, BusinessSeal],
   templateUrl: './business-summary.page.html',
   styleUrl: './business-summary.page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

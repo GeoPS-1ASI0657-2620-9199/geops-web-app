@@ -7,6 +7,7 @@ const UNEXPECTED_ERROR_MESSAGE = 'No pudimos completar la operación. Inténtalo
 interface ErrorBody {
   code?: unknown;
   message?: unknown;
+  redeemedAt?: unknown;
 }
 
 /** Turns whatever HttpClient rejected with into the ApiError the use cases understand. */
@@ -22,7 +23,7 @@ export function toApiError(error: unknown): ApiError {
   }
   const body = (error.error ?? {}) as ErrorBody;
   if (typeof body.code === 'string' && typeof body.message === 'string') {
-    return new ApiError(body.code, body.message);
+    return new ApiError(body.code, body.message, typeof body.redeemedAt === 'string' ? body.redeemedAt : null);
   }
   return new ApiError(UNEXPECTED_ERROR, UNEXPECTED_ERROR_MESSAGE);
 }

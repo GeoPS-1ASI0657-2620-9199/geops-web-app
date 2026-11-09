@@ -4,6 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatRadioModule } from '@angular/material/radio';
 import { TranslateModule } from '@ngx-translate/core';
+import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { categoryIcon } from '../../../../shared/ui/category-icon';
 import { GeoOffersMap, MapPin } from '../../../../shared/ui/geo-offers-map/geo-offers-map';
 import { OfferSearchStore } from '../../../application/offer-search.store';
@@ -35,7 +36,7 @@ export function sortOffers(offers: readonly NearbyOffer[], order: OfferOrder): N
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [DecimalPipe, RouterLink, MatIconModule, MatRadioModule, TranslateModule, GeoOffersMap, RadiusControl, SearchGate],
+  imports: [DecimalPipe, RouterLink, MatIconModule, MatRadioModule, TranslateModule, GeoAlert, GeoOffersMap, RadiusControl, SearchGate],
   templateUrl: './categories.page.html',
   styleUrl: './categories.page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -44,18 +45,20 @@ export class CategoriesPage implements OnInit {
   protected readonly search = inject(OfferSearchStore);
   private readonly router = inject(Router);
 
-  protected readonly category = signal<string | null>(null);
   protected readonly order = signal<OfferOrder>('distance');
   protected readonly orders: OfferOrder[] = ['distance', 'price', 'expiry'];
   protected readonly minMinutes = MIN_RADIUS_MINUTES;
 
-  protected readonly inCategory = computed(() => {
-    const category = this.category();
-    return this.search.offers().filter((offer) => !category || offer.category === category);
-  });
+  /** Catalog already filtered them by the chosen category (US08). */
+  protected readonly inCategory = this.search.offers;
   protected readonly withinMin = computed(() => this.inCategory().filter((o) => o.walkMinutes <= MIN_RADIUS_MINUTES).length);
-  protected readonly list = computed(() => sortOffers(this.inCategory(), this.order()).slice(0, LIST_SIZE));
-  protected readonly pins = computed<MapPin[]>(() => toPins(this.inCategory()));
+  /** True once the map tiles failed: the list then carries every offer (US09, QAS12). */
+  protected readonly mapFailed = signal(false);
+  protected readonly list = computed(() => {
+    const sorted = sortOffers(this.inCategory(), this.order());
+    return this.mapFailed() ? sorted : sorted.slice(0, LIST_SIZE);
+  });
+  protected readonly pins = computed<MapPin[]>(() => toPins(this.inCategory(), this.search.publicOffers()));
   protected readonly placeLabel = computed(() => placeLabelOf(this.search.origin()));
   protected readonly radiusMeters = computed(() => this.search.radius() * METERS_PER_WALK_MINUTE);
   protected readonly locationNote = computed(() => {
@@ -77,8 +80,12 @@ export class CategoriesPage implements OnInit {
   }
 
   protected async onRadius(minutes: number): Promise<void> {
-    this.category.set(null);
     await this.search.setRadius(minutes);
+    await this.search.loadAll();
+  }
+
+  protected async onCategory(category: string | null): Promise<void> {
+    await this.search.selectCategory(category);
     await this.search.loadAll();
   }
 }

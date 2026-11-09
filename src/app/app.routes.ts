@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { Layout } from './core/layout/layout/layout';
-import { SectionEmptyData } from './core/layout/section-empty/section-empty';
 import { authGuard } from './iam/infrastructure/auth.guard';
 import { roleGuard } from './iam/infrastructure/role.guard';
 
@@ -9,11 +8,12 @@ const consumer = [authGuard, roleGuard('CONSUMER')];
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/inicio' },
+  { path: 'baja', loadComponent: () => import('./notification/presentation/pages/unsubscribe/unsubscribe.page').then(m => m.UnsubscribePage), title: 'GeoPS - Preferencias de correo' },
   {
     path: 'login',
     loadComponent: () =>
       import('./iam/presentation/pages/login/login.component').then((m) => m.LoginComponent),
-    title: 'GeoPS - Iniciar sesión',
+    title: 'GeoPS - Iniciar sesiÃ³n',
   },
   {
     path: 'register',
@@ -33,7 +33,7 @@ export const routes: Routes = [
     path: '',
     component: Layout,
     children: [
-      // Buyer tabs (Figma screens 1 to 10): Inicio, Ofertas, Categorías, Favoritos, Mis Cupones.
+      // Buyer tabs (Figma screens 1 to 10): Inicio, Ofertas, CategorÃ­as, Favoritos, Mis Cupones.
       {
         path: 'inicio',
         loadComponent: () => import('./catalog/presentation/pages/home/home.page').then((m) => m.HomePage),
@@ -55,7 +55,19 @@ export const routes: Routes = [
         path: 'categories',
         loadComponent: () =>
           import('./catalog/presentation/pages/categories/categories.page').then((m) => m.CategoriesPage),
-        title: 'GeoPS - Categorías',
+        title: 'GeoPS - CategorÃ­as',
+      },
+      {
+        path: 'follows',
+        canActivate: consumer,
+        loadComponent: () => import('./engagement/presentation/pages/follows/follows.page').then(m => m.FollowsPage),
+        title: 'GeoPS - Comercios seguidos',
+      },
+      {
+        path: 'preferences',
+        canActivate: consumer,
+        loadComponent: () => import('./notification/presentation/pages/preferences/preferences.page').then(m => m.PreferencesPage),
+        title: 'GeoPS - Preferencias de avisos',
       },
       {
         path: 'favorites',
@@ -82,6 +94,13 @@ export const routes: Routes = [
           ),
         title: 'GeoPS - Mi reserva',
       },
+      {
+        path: 'reservations/:id/report',
+        canActivate: consumer,
+        loadComponent: () =>
+          import('./reservation/presentation/pages/report/report.page').then((m) => m.ReportPage),
+        title: 'GeoPS - Reportar un problema',
+      },
       // Business tabs (Figma screens 7, 11, 12, 13, 34 and 36).
       {
         path: 'business',
@@ -93,38 +112,44 @@ export const routes: Routes = [
         title: 'GeoPS - Resumen',
       },
       {
+        path: 'business/verify',
+        canActivate: owner,
+        loadComponent: () =>
+          import('./iam/presentation/pages/verify-business/verify-business.page').then((m) => m.VerifyBusinessPage),
+        title: 'GeoPS - Verificar mi comercio',
+      },
+      {
         path: 'validate',
         canActivate: owner,
         loadComponent: () =>
           import('./reservation/presentation/pages/validate-code/validate-code.page').then((m) => m.ValidateCodePage),
-        title: 'GeoPS - Validar código',
+        title: 'GeoPS - Validar cÃ³digo',
       },
       {
         path: 'campaigns',
         canActivate: owner,
         loadComponent: () =>
           import('./catalog/presentation/pages/campaigns-panel/campaigns.component').then((m) => m.CampaignsComponent),
-        title: 'GeoPS - Mis campañas',
+        title: 'GeoPS - Mis campaÃ±as',
       },
       {
         path: 'campaigns/new',
         canActivate: owner,
         loadComponent: () =>
           import('./catalog/presentation/pages/create-campaign/create-campaign.page').then((m) => m.CreateCampaignPage),
-        title: 'GeoPS - Nueva campaña',
+        title: 'GeoPS - Nueva campaÃ±a',
       },
       {
         path: 'reports',
         canActivate: owner,
-        loadComponent: () => import('./core/layout/section-empty/section-empty').then((m) => m.SectionEmpty),
-        data: { i18n: 'reportsPage', icon: 'flag', actionRoute: '/validate' } satisfies SectionEmptyData,
+        loadComponent: () =>
+          import('./reservation/presentation/pages/reports/reports.page').then((m) => m.ReportsPage),
         title: 'GeoPS - Reportes',
       },
       {
         path: 'comments',
         canActivate: owner,
-        loadComponent: () => import('./core/layout/section-empty/section-empty').then((m) => m.SectionEmpty),
-        data: { i18n: 'commentsPage', icon: 'forum', actionRoute: '/campaigns' } satisfies SectionEmptyData,
+        loadComponent: () => import('./engagement/presentation/pages/business-comments/business-comments.page').then(m => m.BusinessCommentsPage),
         title: 'GeoPS - Comentarios',
       },
       {
@@ -138,6 +163,6 @@ export const routes: Routes = [
     path: '**',
     loadComponent: () =>
       import('./core/layout/page-not-found/page-not-found').then((m) => m.PageNotFound),
-    title: 'GeoPS - Página no encontrada',
+    title: 'GeoPS - PÃ¡gina no encontrada',
   },
 ];

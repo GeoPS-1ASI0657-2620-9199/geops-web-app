@@ -1,0 +1,25 @@
+:host { display: block; }
+.page { max-width: 1344px; padding: var(--space-2xl) var(--space-xl); margin-inline: auto; }
+.title { margin: 0; font: 600 30px/1.2 var(--font-brand); color: var(--text-primary); }
+.intro { margin: var(--space-lg) 0 var(--space-xl); font: 400 14px/1.5 var(--font-brand); color: var(--text-dim); }
+.layout { display: grid; grid-template-columns: minmax(0, 860px) minmax(0, 460px); gap: var(--space-xl); align-items: start; }
+.card { background: var(--neutral-bg); border: 1px solid var(--neutral-line); border-radius: var(--radius-panel); padding: 0 var(--space-xl); }
+fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-xl); padding: var(--space-lg) 0; border-bottom: 1px solid var(--neutral-line-soft); }
+.row.column { flex-direction: column; align-items: flex-start; gap: var(--space-xs); border-bottom: 0; }
+.row-text { min-width: 0; }
+.row-title { margin: 0; font: 500 14px/1.4 var(--font-brand); color: var(--text-primary); }
+.row-hint { margin: 2px 0 0; font: 400 12px/1.4 var(--font-brand); color: var(--text-dim); }
+.chips { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-top: var(--space-md); }
+.chip { min-width: 36px; height: 28px; padding: 0 var(--space-md); border: 1px solid var(--neutral-line); border-radius: var(--radius-chip); background: var(--neutral-bg); color: var(--text-dim); font: 500 12px/1 var(--font-brand); cursor: pointer; }
+.chip:hover { border-color: var(--brand-action); }
+.chip.selected { background: var(--brand-action); border-color: var(--brand-action); color: var(--neutral-bg); }
+.chip:focus-visible { outline: 2px solid var(--brand-deep); outline-offset: 2px; }
+.field-error { margin: var(--space-xs) 0 0; font: 400 11px/1.3 var(--font-brand); color: var(--status-expired); }
+.side { display: grid; gap: var(--space-md); }
+.side button[mat-flat-button] { justify-self: start; height: 35px; }
+.side button[mat-flat-button]:not(:disabled) { background-color: var(--brand-action); color: var(--neutral-bg); }
+.saved { margin: 0; font: 400 12px/1.4 var(--font-brand); color: var(--feedback-verified-ink); }
+@media (max-width: 1100px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 600px) { .page { padding: var(--space-xl) var(--space-lg); } .card { padding: 0 var(--space-lg); } }

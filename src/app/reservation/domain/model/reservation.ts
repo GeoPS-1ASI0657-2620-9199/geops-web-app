@@ -1,3 +1,5 @@
+import { ReservationReport } from './noncompliance-report';
+
 /** Same values as the ReservationStatus enum of reservation-service. */
 export const RESERVATION_STATUSES = ['ACTIVE', 'REDEEMED', 'EXPIRED', 'REPORTED'] as const;
 export type ReservationStatus = (typeof RESERVATION_STATUSES)[number];
@@ -18,6 +20,8 @@ export interface Reservation {
   readonly reservedAt: string;
   readonly expiresAt: string;
   readonly redeemedAt: string | null;
+  /** The report of the consumer, when there is one (US42). */
+  readonly report?: ReservationReport | null;
 }
 
 /**
@@ -29,6 +33,28 @@ export interface PlacedReservation {
   readonly code: string;
   readonly expiresAt: string;
   readonly isNew: boolean;
+}
+
+/** Answer to the delivery of a code at the counter (US41). */
+export interface RedeemedReservation {
+  readonly reservationId: number;
+  readonly code: string;
+  readonly offerId: number;
+  readonly offerTitle: string;
+  readonly redeemedAt: string;
+}
+
+/** What the owner types, as reservation-service reads it: no spaces or dashes, in capitals. */
+export function normalizeCode(typed: string): string {
+  return typed.replace(/[\s-]/g, '').toUpperCase();
+}
+
+/**
+ * A reservation past its deadline can still read ACTIVE, because no task marks it EXPIRED yet (E2-05);
+ * the counter compares the deadline itself.
+ */
+export function isPastDeadline(reservation: Pick<Reservation, 'expiresAt'>, now: number): boolean {
+  return new Date(reservation.expiresAt).getTime() <= now;
 }
 
 export function isReservationStatus(value: string | null | undefined): value is ReservationStatus {

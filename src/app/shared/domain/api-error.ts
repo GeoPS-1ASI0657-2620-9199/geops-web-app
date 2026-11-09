@@ -11,6 +11,8 @@ export class ApiError extends Error {
   constructor(
     readonly code: string,
     message: string,
+    /** When the code was redeemed, sent with RESERVATION_ALREADY_REDEEMED (E2-04). */
+    readonly redeemedAt: string | null = null,
   ) {
     super(message);
     this.name = 'ApiError';
