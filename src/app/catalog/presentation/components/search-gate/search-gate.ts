@@ -102,9 +102,12 @@ export class SearchGate {
   protected readonly search = inject(OfferSearchStore);
   private readonly router = inject(Router);
 
-  /** The text lives in the address of Ofertas (?q=); removing it there runs the search again. */
+  /** The text lives in the address of Ofertas (?q=); removing it there runs the search again, with the same category. */
   protected clearTerm(): void {
-    void this.router.navigate([], { queryParams: { q: null }, queryParamsHandling: 'merge' });
+    void this.router.navigate([], {
+      queryParams: { q: null, categoria: this.search.category() },
+      queryParamsHandling: 'merge',
+    });
   }
 
   protected readonly pickTitle = computed(() => {

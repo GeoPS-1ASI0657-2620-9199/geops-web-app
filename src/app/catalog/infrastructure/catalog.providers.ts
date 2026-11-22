@@ -2,6 +2,7 @@ import { Provider } from '@angular/core';
 import { CampaignMetricsRepository } from '../domain/ports/campaign-metrics.repository';
 import { CampaignRepository } from '../domain/ports/campaign.repository';
 import { DistrictDirectory } from '../domain/ports/district.directory';
+import { DistrictPreferenceStore } from '../domain/ports/district-preference.store';
 import { OfferImageUploader } from '../domain/ports/offer-image.uploader';
 import { LocationProvider } from '../domain/ports/location.provider';
 import { ModerationRepository } from '../domain/ports/moderation.repository';
@@ -9,6 +10,7 @@ import { OfferRepository } from '../domain/ports/offer.repository';
 import { RadiusPreferenceGateway } from '../domain/ports/radius-preference.gateway';
 import { RadiusPreferenceStore } from '../domain/ports/radius-preference.store';
 import { BrowserRadiusPreferenceStore } from './browser-radius-preference.store';
+import { BrowserDistrictPreferenceStore } from './browser-district-preference.store';
 import { BrowserLocationProvider } from './browser-location.provider';
 import { HttpCampaignMetricsRepository } from './http-campaign-metrics.repository';
 import { HttpCampaignRepository } from './http-campaign.repository';
@@ -28,5 +30,6 @@ export const catalogProviders: Provider[] = [
   { provide: LocationProvider, useClass: BrowserLocationProvider },
   { provide: DistrictDirectory, useClass: StaticDistrictDirectory },
   { provide: RadiusPreferenceStore, useClass: BrowserRadiusPreferenceStore },
+  { provide: DistrictPreferenceStore, useClass: BrowserDistrictPreferenceStore },
   { provide: RadiusPreferenceGateway, useClass: HttpRadiusPreferenceGateway },
 ];

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
+import { ActivatedRoute, Router, convertToParamMap, provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
 import { SavedOfferRepository } from '../../../../engagement/domain/ports/saved-offer.repository';
@@ -23,8 +23,9 @@ describe('NearbyOffersPage', () => {
   let repository: jasmine.SpyObj<OfferRepository>;
 
   const render = async (q: string | null = null, publicOffers: PublicSourceOffer[] = [], categoria: string | null = null) => {
-    const offers = jasmine.createSpyObj<OfferRepository>('OfferRepository', ['findNearby', 'findById', 'findPublicSourcesNearby']);
+    const offers = jasmine.createSpyObj<OfferRepository>('OfferRepository', ['findNearby', 'findById', 'findPublicSourcesNearby', 'categories']);
     offers.findPublicSourcesNearby.and.resolveTo(publicOffers);
+    offers.categories.and.resolveTo(['Gastronomía', 'Salud y belleza']);
     offers.findNearby.and.callFake((_origin, _radius, _page, category, term) =>
       Promise.resolve(
         pageOf(
@@ -61,6 +62,14 @@ describe('NearbyOffersPage', () => {
   };
   const text = () => (fixture.nativeElement as HTMLElement).textContent ?? '';
   const cards = () => (fixture.nativeElement as HTMLElement).querySelectorAll('geo-offer-card');
+  const chip = (label: string) =>
+    [...(fixture.nativeElement as HTMLElement).querySelectorAll<HTMLButtonElement>('button.chip')].find(
+      (b) => b.textContent?.trim() === label,
+    )!;
+  const settle = async () => {
+    await fixture.whenStable();
+    fixture.detectChanges();
+  };
 
   it('shows every offer of the radius as a Figma card with its photo, distance and actions', async () => {
     await render();
@@ -148,6 +157,43 @@ describe('NearbyOffersPage', () => {
 
     expect(cards().length).toBe(1);
     expect(text()).toContain('Corte clásico');
+  });
+
+  it('opens a shared address with its text and category in a single search', async () => {
+    await render('corte', [], 'Salud y belleza');
+
+    expect(repository.findNearby).toHaveBeenCalledOnceWith(jasmine.anything(), 10, 0, 'Salud y belleza', 'corte');
+    expect(cards().length).toBe(1);
+  });
+
+  it('puts the category back in the address when a search from the top bar leaves it out', async () => {
+    await render();
+    chip('Salud y belleza').click();
+    await settle();
+    const navigate = spyOn(TestBed.inject(Router), 'navigate').and.resolveTo(true);
+    repository.findNearby.calls.reset();
+
+    query.next(convertToParamMap({ q: 'corte' }));
+    await settle();
+
+    expect(navigate).toHaveBeenCalledWith([], {
+      queryParams: { categoria: 'Salud y belleza' },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
+    expect(repository.findNearby).toHaveBeenCalledOnceWith(jasmine.anything(), 10, 0, 'Salud y belleza', 'corte');
+  });
+
+  it('removes only the text with "Quitar la búsqueda", keeping the category in the address', async () => {
+    await render('corte', [], 'Salud y belleza');
+    const navigate = spyOn(TestBed.inject(Router), 'navigate').and.resolveTo(true);
+
+    (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>('button.term')!.click();
+
+    expect(navigate).toHaveBeenCalledWith([], {
+      queryParams: { q: null, categoria: 'Salud y belleza' },
+      queryParamsHandling: 'merge',
+    });
   });
 
   it('switches to the map of the same results and back to the cards', async () => {

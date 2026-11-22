@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, linkedSignal, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -175,10 +175,14 @@ export class GeoTopBar {
   readonly showSearch = input(true);
   /** Logo only, as on the login and sign up screens (Figma 14 to 22). */
   readonly minimal = input(false);
+  /** The text of the current search (?q= of Ofertas): the box shows it and empties when it is cleared. */
+  readonly query = input('');
   readonly logOut = output<void>();
+  /** The trimmed text; an empty one asks to clear the search. */
   readonly searched = output<string>();
 
-  protected readonly term = signal('');
+  /** What the buyer types; it starts again from query whenever the search of the address changes. */
+  protected readonly term = linkedSignal(() => this.query());
   protected readonly home = computed(() => HOME_BY_ROLE[this.role()]);
   protected readonly initial = computed(() => (this.userName() ?? '?').trim().charAt(0).toUpperCase());
 

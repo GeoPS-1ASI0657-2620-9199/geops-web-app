@@ -1,6 +1,7 @@
 import { IdentityGateway } from '../../../iam/domain/ports/identity.gateway';
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router, provideRouter } from '@angular/router';
+import { Router, Routes, provideRouter } from '@angular/router';
 import { Session } from '../../../iam/domain/model/session';
 import { SessionStorage } from '../../../iam/domain/ports/session.storage';
 import { Layout } from './layout';
@@ -31,16 +32,25 @@ const OWNER: Session = {
   businessName: 'Menús Doña Mirta',
 };
 
+@Component({ template: '' })
+class BlankPage {}
+
+const ROUTES: Routes = [
+  { path: 'inicio', component: BlankPage },
+  { path: 'offers', component: BlankPage },
+  { path: 'offers/:id', component: BlankPage },
+];
+
 describe('Layout', () => {
   let fixture: ComponentFixture<Layout>;
   let storage: MemorySessionStorage;
 
-  const create = async (session: Session | null) => {
+  const create = async (session: Session | null, routes: Routes = []) => {
     storage = new MemorySessionStorage(session);
     await TestBed.configureTestingModule({
       imports: [Layout],
       providers: [
-        provideRouter([]),
+        provideRouter(routes),
         provideTranslateService(),
         { provide: SessionStorage, useValue: storage },
         { provide: IdentityGateway, useValue: { logOut: () => Promise.resolve() } },
@@ -104,5 +114,68 @@ describe('Layout', () => {
 
     expect(storage.stored).toBeNull();
     expect(router.navigate).toHaveBeenCalledWith(['/login']);
+  });
+
+  describe('search box of the top bar', () => {
+    const box = () => (fixture.nativeElement as HTMLElement).querySelector<HTMLInputElement>('input[type="search"]')!;
+    const go = async (url: string) => {
+      await TestBed.inject(Router).navigateByUrl(url);
+      fixture.detectChanges();
+      await fixture.whenStable();
+      fixture.detectChanges();
+    };
+    const submit = async (text: string) => {
+      box().value = text;
+      box().dispatchEvent(new Event('input'));
+      box().form!.dispatchEvent(new Event('submit'));
+      await fixture.whenStable();
+      fixture.detectChanges();
+    };
+
+    it('shows the text of an Ofertas address opened directly, and nothing on other tabs', async () => {
+      await create(null, ROUTES);
+
+      await go('/offers?q=helado');
+      expect(box().value).toBe('helado');
+
+      await go('/inicio');
+      expect(box().value).toBe('');
+    });
+
+    it('empties the box when the search is cleared from the page, keeping the category', async () => {
+      await create(null, ROUTES);
+      await go('/offers?q=helado&categoria=Postres');
+
+      await go('/offers?categoria=Postres');
+
+      expect(box().value).toBe('');
+    });
+
+    it('clears the search keeping the category when the box is emptied and sent', async () => {
+      await create(null, ROUTES);
+      await go('/offers?q=helado&categoria=Postres');
+
+      await submit('   ');
+
+      expect(TestBed.inject(Router).url).toBe('/offers?categoria=Postres');
+    });
+
+    it('adds the text to the category already chosen on Ofertas', async () => {
+      await create(null, ROUTES);
+      await go('/offers?categoria=Postres');
+
+      await submit(' cafe ');
+
+      expect(TestBed.inject(Router).url).toBe('/offers?categoria=Postres&q=cafe');
+    });
+
+    it('opens Ofertas with only the text from another tab', async () => {
+      await create(null, ROUTES);
+      await go('/offers/12?x=1');
+
+      await submit('cafe');
+
+      expect(TestBed.inject(Router).url).toBe('/offers?q=cafe');
+    });
   });
 });
