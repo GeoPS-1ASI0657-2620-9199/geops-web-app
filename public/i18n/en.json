@@ -189,6 +189,80 @@
       "retry": "Retry"
     }
   },
+  "moderationPage": {
+    "title": "Moderation",
+    "subtitle": "Offers of the catalog with their status. Remove the ones that break the publication rules.",
+    "tabs": {
+      "offers": "Offers",
+      "history": "History"
+    },
+    "searchLabel": "Search by offer or business",
+    "searchButton": "Search",
+    "filters": {
+      "ALL": "All",
+      "PUBLISHED": "Published",
+      "EXPIRED": "Expired",
+      "REMOVED": "Removed",
+      "REPORTED": "Businesses with reports"
+    },
+    "status": {
+      "PUBLISHED": "Published",
+      "EXPIRED": "Expired",
+      "REMOVED": "Removed"
+    },
+    "columns": {
+      "offer": "Offer",
+      "business": "Business",
+      "status": "Status",
+      "reports": "Open reports",
+      "validTo": "Valid until",
+      "actions": "Actions"
+    },
+    "publicSource": "Public source",
+    "openReports": "{{count}} open",
+    "seeOffer": "See offer",
+    "remove": "Remove",
+    "alreadyRemoved": "No longer shown",
+    "removed": "You removed “{{title}}”. It no longer appears in the catalog.",
+    "removeError": "We could not remove the offer. Please try again.",
+    "removeDialog": {
+      "title": "Remove “{{title}}”?",
+      "description": "Business: {{business}}. The offer will no longer show in the search or in its detail. Its existing reservations are kept.",
+      "reason": "Reason for the removal",
+      "reasonError": "Write a reason of {{min}} to {{max}} characters.",
+      "cancel": "Cancel",
+      "confirm": "Remove offer"
+    },
+    "empty": {
+      "title": "No offers match this filter",
+      "description": "Change the status or the search text to see other offers."
+    },
+    "error": {
+      "title": "We could not load the moderation panel",
+      "description": "It may be your connection or the service. Please try again in a moment.",
+      "retry": "Retry"
+    },
+    "pager": {
+      "label": "Pages",
+      "previous": "Previous",
+      "next": "Next",
+      "position": "Page {{page}} of {{pages}}"
+    },
+    "history": {
+      "columns": {
+        "offer": "Offer",
+        "reason": "Reason",
+        "admin": "Removed by",
+        "removedAt": "Date"
+      },
+      "you": "You",
+      "admin": "Administrator #{{id}}",
+      "empty": {
+        "title": "No offer has been removed yet",
+        "description": "Each removal stays here with its reason, who did it and when."
+      }
+    }
+  },
   "forbiddenPage": {
     "title": "You do not have access to this section",
     "description": "Your account has no permission for this part of GeoPS. If you think this is a mistake, write to us.",
@@ -430,7 +504,8 @@
     "reports": "Reports",
     "comments": "Comments",
     "follows": "Followed businesses",
-    "preferences": "Notification preferences"
+    "preferences": "Notification preferences",
+    "moderation": "Moderation"
   },
   "search": {
     "places": "Places:",

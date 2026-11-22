@@ -26,7 +26,7 @@ export const NAV_BY_ROLE: Record<UserRole | 'VISITOR', NavItem[]> = {
     { label: 'nav.reports', route: '/reports' },
     { label: 'nav.comments', route: '/comments' },
   ],
-  ADMIN: BUYER_TABS,
+  ADMIN: [{ label: 'nav.moderation', route: '/admin/moderation' }, ...BUYER_TABS],
 };
 
 /** Shell of the app: top bar and tabs by role (Figma "Barra superior" and "NavegaciÃ³n"). */

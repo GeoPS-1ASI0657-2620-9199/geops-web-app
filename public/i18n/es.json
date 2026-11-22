@@ -189,6 +189,80 @@
       "retry": "Reintentar"
     }
   },
+  "moderationPage": {
+    "title": "Moderación",
+    "subtitle": "Ofertas del catálogo con su estado. Retira las que incumplen las condiciones de publicación.",
+    "tabs": {
+      "offers": "Ofertas",
+      "history": "Historial"
+    },
+    "searchLabel": "Buscar por oferta o comercio",
+    "searchButton": "Buscar",
+    "filters": {
+      "ALL": "Todas",
+      "PUBLISHED": "Publicadas",
+      "EXPIRED": "Vencidas",
+      "REMOVED": "Retiradas",
+      "REPORTED": "Comercios con reportes"
+    },
+    "status": {
+      "PUBLISHED": "Publicada",
+      "EXPIRED": "Vencida",
+      "REMOVED": "Retirada"
+    },
+    "columns": {
+      "offer": "Oferta",
+      "business": "Comercio",
+      "status": "Estado",
+      "reports": "Reportes abiertos",
+      "validTo": "Vigencia",
+      "actions": "Acciones"
+    },
+    "publicSource": "Fuente pública",
+    "openReports": "{{count}} abiertos",
+    "seeOffer": "Ver oferta",
+    "remove": "Retirar",
+    "alreadyRemoved": "Ya no se muestra",
+    "removed": "Retiraste «{{title}}». Ya no aparece en el catálogo.",
+    "removeError": "No pudimos retirar la oferta. Inténtalo de nuevo.",
+    "removeDialog": {
+      "title": "¿Retirar «{{title}}»?",
+      "description": "Comercio: {{business}}. La oferta dejará de mostrarse en la búsqueda y en su detalle. Las reservas que ya tiene se conservan.",
+      "reason": "Motivo del retiro",
+      "reasonError": "Escribe un motivo de {{min}} a {{max}} caracteres.",
+      "cancel": "Cancelar",
+      "confirm": "Retirar oferta"
+    },
+    "empty": {
+      "title": "No hay ofertas con este filtro",
+      "description": "Cambia el estado o el texto de búsqueda para ver otras ofertas."
+    },
+    "error": {
+      "title": "No pudimos cargar la moderación",
+      "description": "Puede ser tu conexión o el servicio. Inténtalo de nuevo en un momento.",
+      "retry": "Reintentar"
+    },
+    "pager": {
+      "label": "Páginas",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "position": "Página {{page}} de {{pages}}"
+    },
+    "history": {
+      "columns": {
+        "offer": "Oferta",
+        "reason": "Motivo",
+        "admin": "Retirada por",
+        "removedAt": "Fecha"
+      },
+      "you": "Tú",
+      "admin": "Administrador #{{id}}",
+      "empty": {
+        "title": "Todavía no se ha retirado ninguna oferta",
+        "description": "Cada retiro queda aquí con su motivo, quién lo hizo y cuándo."
+      }
+    }
+  },
   "forbiddenPage": {
     "title": "No tienes acceso a esta sección",
     "description": "Tu cuenta no tiene permisos para esta parte de GeoPS. Si crees que es un error, escríbenos.",
@@ -430,7 +504,8 @@
     "reports": "Reportes",
     "comments": "Comentarios",
     "follows": "Comercios seguidos",
-    "preferences": "Preferencias de avisos"
+    "preferences": "Preferencias de avisos",
+    "moderation": "Moderación"
   },
   "search": {
     "places": "Lugares:",

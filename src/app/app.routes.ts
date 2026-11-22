@@ -7,6 +7,7 @@ import { roleGuard } from './iam/infrastructure/role.guard';
 
 const owner = [authGuard, roleGuard('BUSINESS_OWNER')];
 const consumer = [authGuard, roleGuard('CONSUMER')];
+const admin = [authGuard, roleGuard('ADMIN')];
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/inicio' },
@@ -150,6 +151,13 @@ export const routes: Routes = [
         canActivate: owner,
         loadComponent: () => import('./engagement/presentation/pages/business-comments/business-comments.page').then(m => m.BusinessCommentsPage),
         title: 'GeoPS - Comentarios',
+      },
+      // Admin area (US24): moderation of the catalog.
+      {
+        path: 'admin/moderation',
+        canActivate: admin,
+        loadComponent: () => import('./catalog/presentation/pages/moderation/moderation.page').then((m) => m.ModerationPage),
+        title: 'GeoPS - Moderación',
       },
       {
         path: 'forbidden',
