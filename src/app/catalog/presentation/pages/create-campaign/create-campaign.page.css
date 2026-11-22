@@ -134,5 +134,10 @@ mat-form-field {
     grid-template-columns: 1fr;
     gap: 0;
   }
+
+  /* The date fields keep no room for a hint below, so stacked they need a gap of their own. */
+  .row.dates {
+    gap: var(--space-lg);
+  }
 }
 .prefilled { margin: -4px 0 0; color: var(--feedback-verified-ink); }

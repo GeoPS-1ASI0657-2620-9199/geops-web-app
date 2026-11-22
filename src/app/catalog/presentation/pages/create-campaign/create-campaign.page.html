@@ -30,7 +30,7 @@
           <mat-label>Descripción</mat-label>
           <textarea matInput formControlName="description" rows="2"></textarea>
         </mat-form-field>
-        <div class="row">
+        <div class="row dates">
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
             <mat-label>Inicio</mat-label>
             <input matInput [matDatepicker]="startPicker" formControlName="start" [placeholder]="'createCampaign.datePlaceholder' | translate" data-testid="campaign-start" />

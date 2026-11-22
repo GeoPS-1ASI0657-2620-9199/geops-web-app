@@ -812,6 +812,23 @@
     "emptyDescription": "Los clientes comentan después de canjear una oferta en tu local.",
     "action": "Ver mis campañas"
   },
+  "datepicker": {
+    "calendarLabel": "Calendario",
+    "openCalendarLabel": "Abrir calendario",
+    "closeCalendarLabel": "Cerrar calendario",
+    "prevMonthLabel": "Mes anterior",
+    "nextMonthLabel": "Mes siguiente",
+    "prevYearLabel": "Año anterior",
+    "nextYearLabel": "Año siguiente",
+    "prevMultiYearLabel": "24 años anteriores",
+    "nextMultiYearLabel": "24 años siguientes",
+    "switchToMonthViewLabel": "Elegir fecha",
+    "switchToMultiYearViewLabel": "Elegir mes y año",
+    "startDateLabel": "Fecha de inicio",
+    "endDateLabel": "Fecha de fin",
+    "comparisonDateLabel": "Rango de comparación",
+    "yearRangeLabel": "{{start}} a {{end}}"
+  },
   "createCampaign": {
     "category": "Categoría",
     "categoryError": "Elige la categoría.",
