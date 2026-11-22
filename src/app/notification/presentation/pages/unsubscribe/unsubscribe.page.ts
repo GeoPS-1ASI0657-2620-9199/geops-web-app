@@ -5,9 +5,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import { UnsubscribeEmailUseCase } from '../../../application/preferences.use-cases';
 import { ApiError } from '../../../../shared/domain/api-error';
+import { GeoTopBar } from '../../../../core/layout/geo-top-bar/geo-top-bar';
 @Component({
-  selector: 'app-unsubscribe', imports: [RouterLink, MatButtonModule, MatIconModule, TranslateModule],
+  selector: 'app-unsubscribe', imports: [RouterLink, MatButtonModule, MatIconModule, TranslateModule, GeoTopBar],
   template: `
+    <geo-top-bar [minimal]="true" />
     <main>
       <section class="card">
         <span class="icon" [class.ok]="done()" aria-hidden="true"><mat-icon>{{ done() ? 'check_circle' : 'mail' }}</mat-icon></span>
