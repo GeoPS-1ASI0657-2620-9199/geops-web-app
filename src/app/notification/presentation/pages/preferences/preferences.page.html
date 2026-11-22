@@ -12,9 +12,12 @@
       <div class="card">
         <fieldset [disabled]="busy()">
           <legend class="sr-only">{{ 'notificationPage.channels' | translate }}</legend>
-          <div class="row">
-            <div class="row-text"><p class="row-title">{{ 'notificationPage.push' | translate }}</p><p class="row-hint">{{ 'notificationPage.pushHint' | translate }}</p></div>
-            <mat-slide-toggle formControlName="pushEnabled" [hideIcon]="true" [aria-label]="'notificationPage.push' | translate" />
+          <div class="row stacked">
+            <div class="row-main">
+              <div class="row-text"><p class="row-title">{{ 'notificationPage.push' | translate }}</p><p class="row-hint">{{ 'notificationPage.pushHint' | translate }}</p></div>
+              <mat-slide-toggle formControlName="pushEnabled" [hideIcon]="true" [aria-label]="'notificationPage.push' | translate" />
+            </div>
+            <app-push-controls [requested]="form.controls.pushEnabled.value" (enabled)="pushEnabled()" (emailRequested)="enableEmail()" />
           </div>
           <div class="row">
             <div class="row-text"><p class="row-title">{{ 'notificationPage.email' | translate }}</p><p class="row-hint">{{ 'notificationPage.emailHint' | translate }}</p></div>
@@ -32,7 +35,6 @@
             @if (form.controls.dailyLimit.invalid) { <p class="field-error" role="alert">{{ 'notificationPage.invalidLimit' | translate }}</p> }
           </div>
         </fieldset>
-        <app-push-controls (enabled)="pushEnabled()" (emailRequested)="enableEmail()" />
       </div>
       <aside class="side">
         <geo-alert kind="warning" [title]="'notificationPage.iphoneTitle' | translate" [description]="'notificationPage.iphoneHint' | translate" />

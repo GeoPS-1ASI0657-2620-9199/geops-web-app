@@ -15,6 +15,15 @@ describe('PreferencesPage', () => {
     expect(repository.update).toHaveBeenCalledWith({ pushEnabled: false, emailEnabled: true, dailyLimit: 4 });
     expect(fixture.nativeElement.textContent).toContain('notificationPage.saved');
   });
+  it('asks for the browser permission inside the push row only once its switch is on', async () => {
+    const fixture = TestBed.createComponent(PreferencesPage); fixture.detectChanges(); await fixture.whenStable(); fixture.detectChanges();
+    const host = fixture.nativeElement as HTMLElement;
+    expect(host.textContent).not.toContain('pushPage.enable');
+    host.querySelector<HTMLButtonElement>('mat-slide-toggle button')!.click(); fixture.detectChanges();
+    expect(fixture.componentInstance.form.controls.pushEnabled.value).toBeTrue();
+    const button = Array.from(host.querySelectorAll('button')).find(b => b.textContent?.includes('pushPage.enable'));
+    expect(button?.closest('.row')?.textContent).toContain('notificationPage.push');
+  });
   it('rejects a limit outside 1 to 10 and keeps edits after an error', async () => {
     const fixture = TestBed.createComponent(PreferencesPage); fixture.detectChanges(); await fixture.whenStable();
     fixture.componentInstance.form.controls.dailyLimit.setValue(11); await fixture.componentInstance.save(); expect(repository.update).not.toHaveBeenCalled();
