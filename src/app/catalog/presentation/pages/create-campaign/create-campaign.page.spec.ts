@@ -3,6 +3,7 @@ import { Router, provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import { SessionStore } from '../../../../iam/application/session.store';
 import { ApiError } from '../../../../shared/domain/api-error';
+import { ListMyCampaignsUseCase } from '../../../application/list-my-campaigns.use-case';
 import { CreateCampaignUseCase } from '../../../application/create-campaign.use-case';
 import { ListOfferCategoriesUseCase } from '../../../application/list-offer-categories.use-case';
 import { VerifyBusinessUseCase } from '../../../../iam/application/verify-business.use-case';
@@ -12,7 +13,7 @@ import { CreateCampaignPage } from './create-campaign.page';
 interface PageInternals {
   form: {
     patchValue(v: object): void;
-    controls: { end: { hasError(e: string): boolean }; offers: { at(i: number): { setValue(v: object): void } } };
+    controls: { end: { hasError(e: string): boolean }; address: { value: string }; offers: { at(i: number): { setValue(v: object): void } } };
   };
   zone: { set(z: unknown): void };
 }
@@ -24,7 +25,8 @@ describe('CreateCampaignPage', () => {
   let useCase: jasmine.SpyObj<CreateCampaignUseCase>;
   let router: Router;
   let categories: jasmine.SpyObj<ListOfferCategoriesUseCase>;
-  const verification = { verificationStatus: () => 'PENDING', profile: () => Promise.resolve() };
+  let verification: { verificationStatus: () => string; profile: () => Promise<unknown> };
+  let myCampaigns: { lastStorePoint: () => Promise<unknown> };
 
   const fill = () => {
     internals.form.patchValue({ name: 'Almuerzos de octubre', start: '2026-10-05', end: '2026-10-31', address: 'Av. Larco 345, Miraflores' });
@@ -42,6 +44,8 @@ describe('CreateCampaignPage', () => {
 
   beforeEach(async () => {
     useCase = jasmine.createSpyObj<CreateCampaignUseCase>('CreateCampaignUseCase', ['execute']);
+    verification = { verificationStatus: () => 'PENDING', profile: () => Promise.resolve() };
+    myCampaigns = { lastStorePoint: () => Promise.resolve(null) };
     categories = jasmine.createSpyObj<ListOfferCategoriesUseCase>('ListOfferCategoriesUseCase', ['execute']);
     categories.execute.and.resolveTo(['Gastronomía', 'Mascotas']);
     await TestBed.configureTestingModule({
@@ -52,6 +56,7 @@ describe('CreateCampaignPage', () => {
         { provide: ListOfferCategoriesUseCase, useValue: categories },
         { provide: VerifyBusinessUseCase, useValue: verification },
         { provide: CreateCampaignUseCase, useValue: useCase },
+        { provide: ListMyCampaignsUseCase, useValue: myCampaigns },
         { provide: DistrictDirectory, useValue: { all: () => [] } },
         { provide: SessionStore, useValue: { session: () => ({ businessName: 'Restaurante Don Pepe' }) } },
       ],
@@ -123,5 +128,18 @@ describe('CreateCampaignPage', () => {
 
     expect(useCase.execute).not.toHaveBeenCalled();
     expect(fixture.nativeElement.textContent).toContain('Falta la zona de la campaña');
+  });
+
+  it('fills the store with the profile address and the point of the last campaign', async () => {
+    verification.profile = () => Promise.resolve({ address: 'Av. Larco 345, Miraflores' });
+    myCampaigns.lastStorePoint = () => Promise.resolve({ latitude: -12.1211, longitude: -77.0297 });
+    fixture = TestBed.createComponent(CreateCampaignPage);
+    internals = fixture.componentInstance as unknown as PageInternals;
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(internals.form.controls.address.value).toBe('Av. Larco 345, Miraflores');
+    expect((fixture.componentInstance as unknown as { storePoint: () => unknown }).storePoint()).toEqual({ latitude: -12.1211, longitude: -77.0297 });
+    expect((fixture.nativeElement as HTMLElement).querySelectorAll('geo-location-picker').length).toBe(1);
   });
 });

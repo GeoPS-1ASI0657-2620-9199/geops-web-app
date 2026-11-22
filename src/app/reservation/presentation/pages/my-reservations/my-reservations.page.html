@@ -28,7 +28,13 @@
           icon="confirmation_number"
           [title]="'reservationsPage.empty.title' | translate"
           [description]="'reservationsPage.empty.description' | translate">
-          <a mat-flat-button routerLink="/offers">{{ 'reservationsPage.empty.action' | translate }}</a>
+          <div class="empty-actions">
+            <a mat-flat-button routerLink="/offers">{{ 'reservationsPage.empty.action' | translate }}</a>
+            @if (filter() === 'ACTIVE') {
+              <!-- Without active coupons the history is one tap away, not hidden behind a tab. -->
+              <button mat-stroked-button type="button" data-testid="see-all" (click)="select('ALL')">{{ 'reservationsPage.empty.seeAll' | translate }}</button>
+            }
+          </div>
         </geo-empty-state>
       } @else {
         <geo-empty-state

@@ -6,6 +6,7 @@
 }
 
 .title { margin: 0; font: 600 22px/1.25 var(--font-brand); color: var(--text-primary); }
+.empty-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-sm); }
 
 .filters {
   display: flex;

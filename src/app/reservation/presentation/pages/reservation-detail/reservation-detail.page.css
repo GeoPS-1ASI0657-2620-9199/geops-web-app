@@ -214,3 +214,8 @@
 .review-section { margin: var(--space-xl); padding-top: var(--space-xl); border-top: 1px solid var(--neutral-line); }
 .facts dd a { color: var(--brand-deep); }
 .danger { color: var(--status-expired); border-color: var(--feedback-red-border); }
+
+/* Active coupon: the QR beside the code, so the business can scan it or type it. */
+.code-block.with-qr { display: flex; align-items: center; gap: var(--space-lg); }
+.qr { flex: none; width: 132px; height: 132px; padding: 4px; border: 1px solid var(--neutral-line); border-radius: var(--radius-input); background: #fff; }
+@media (max-width: 640px) { .code-block.with-qr { flex-direction: column; align-items: flex-start; } .qr { width: 168px; height: 168px; } }

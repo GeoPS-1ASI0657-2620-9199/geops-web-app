@@ -379,7 +379,9 @@
         "CONSUMER_FAVOR": "The case was closed in your favor on {{date}}.",
         "BUSINESS_FAVOR": "The case was closed in favor of the business on {{date}}."
       }
-    }
+    },
+    "qrLabel": "QR code of reservation {{code}}",
+    "codeUsed": "Reservation code"
   },
   "reservationsPage": {
     "title": "My coupons",
@@ -400,7 +402,8 @@
     "empty": {
       "title": "You have no active coupons",
       "description": "Reserve a nearby deal and pay at the store. Its code shows here.",
-      "action": "See deals"
+      "action": "See deals",
+      "seeAll": "See all my coupons"
     },
     "emptyFiltered": {
       "title": "No coupons with this status",
@@ -694,7 +697,9 @@
   "createCampaign": {
     "category": "Category",
     "categoryError": "Choose the category.",
-    "categoriesUnavailable": "We could not load the categories. Reload the page to try again."
+    "categoriesUnavailable": "We could not load the categories. Reload the page to try again.",
+    "storeTitle": "Your store and its reach",
+    "prefilled": "We used the address of your profile and the point of your last campaign. Change them if this campaign is at another store."
   },
   "publicSources": {
     "title": "Public sources, no guarantee",

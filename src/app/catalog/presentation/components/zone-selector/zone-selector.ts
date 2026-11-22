@@ -43,7 +43,9 @@ const RADIUS_STEP_METERS = 100;
         <mat-slider [min]="min" [max]="max" [step]="step" class="slider">
           <input matSliderThumb [value]="radius()" (valueChange)="setRadius($event)" aria-label="Radio en metros" />
         </mat-slider>
-        <geo-location-picker class="map" [point]="center()" [radiusMeters]="radius()" [readOnly]="true" />
+        @if (showMap()) {
+          <geo-location-picker class="map" [point]="center()" [radiusMeters]="radius()" [readOnly]="true" />
+        }
         @if (!center()) {
           <p class="geo-meta">Marca primero la ubicación del local para dibujar la zona.</p>
         }
@@ -72,6 +74,8 @@ export class ZoneSelector {
   /** Store location: the center of a radius zone. */
   readonly center = input<GeoPoint | null>(null);
   readonly zoneChange = output<CampaignZone | null>();
+  /** Off where the store map next to it already draws the radius, so the screen has one map. */
+  readonly showMap = input(true);
 
   protected readonly type = signal<'RADIUS' | 'DISTRICT'>('RADIUS');
   protected readonly radius = signal(DEFAULT_ZONE_RADIUS_METERS);

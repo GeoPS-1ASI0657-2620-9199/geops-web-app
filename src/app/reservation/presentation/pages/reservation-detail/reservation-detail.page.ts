@@ -12,6 +12,7 @@ import { categoryIcon } from '../../../../shared/ui/category-icon';
 import { GeoOffersMap, MapPin } from '../../../../shared/ui/geo-offers-map/geo-offers-map';
 import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { GeoEmptyState } from '../../../../shared/ui/geo-empty-state/geo-empty-state';
+import { GeoQr } from '../../../../shared/ui/geo-qr/geo-qr';
 import { GeoSeal } from '../../../../shared/ui/geo-seal/geo-seal';
 import { GetReportUseCase } from '../../../application/get-report.use-case';
 import { GetReservationUseCase, RESERVATION_NOT_FOUND } from '../../../application/get-reservation.use-case';
@@ -29,7 +30,7 @@ type Placed = 'new' | 'existing' | null;
 @Component({
   selector: 'app-reservation-detail',
   standalone: true,
-  imports: [ReviewForm, DecimalPipe, RouterLink, MatButtonModule, MatIconModule, TranslateModule, GeoAlert, GeoEmptyState, GeoOffersMap, GeoSeal],
+  imports: [ReviewForm, DecimalPipe, RouterLink, MatButtonModule, MatIconModule, TranslateModule, GeoAlert, GeoEmptyState, GeoOffersMap, GeoSeal, GeoQr],
   templateUrl: './reservation-detail.page.html',
   styleUrl: './reservation-detail.page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

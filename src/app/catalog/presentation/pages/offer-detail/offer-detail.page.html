@@ -46,16 +46,23 @@
             }
             <h1 class="title">{{ o.title }}</h1>
             <div class="merchant">
-              <span class="name">{{ o.businessName }}</span>
-              @if (isConsumer() && o.businessId !== null) { <app-save-business [businessId]="o.businessId" /> }
-              @if (isConsumer() && o.source !== 'PUBLIC_SOURCE' && o.businessId !== null) { <app-follow-business [businessId]="o.businessId" /> }
-              @if (o.source === 'PUBLIC_SOURCE') {
-                <geo-seal kind="reference" />
-              } @else if (o.verifiedSeal) {
-                <geo-seal kind="verified" />
-              }
-              @if (!o.available) {
-                <geo-seal kind="expired" />
+              <div class="merchant-id">
+                <mat-icon class="store" aria-hidden="true">storefront</mat-icon>
+                <span class="name">{{ o.businessName }}</span>
+                @if (o.source === 'PUBLIC_SOURCE') {
+                  <geo-seal kind="reference" />
+                } @else if (o.verifiedSeal) {
+                  <geo-seal kind="verified" />
+                }
+                @if (!o.available) {
+                  <geo-seal kind="expired" />
+                }
+              </div>
+              @if (isConsumer() && o.businessId !== null) {
+                <div class="merchant-actions">
+                  @if (o.source !== 'PUBLIC_SOURCE') { <app-follow-business [businessId]="o.businessId" /> }
+                  <app-save-business [businessId]="o.businessId" />
+                </div>
               }
             </div>
 
@@ -138,6 +145,15 @@
             }
           </aside>
         </div>
+        @if (canReserve() && o.available && !activeReservationId()) {
+          <!-- On a phone the panel is far below: the price and Reservar stay at hand. -->
+          <div class="mobile-cta" data-testid="mobile-cta">
+            <p class="cta-price geo-tabular"><small>S/</small> {{ o.price | number: '1.2-2' }}</p>
+            <button mat-flat-button type="button" [disabled]="reserving()" (click)="reserve()">
+              {{ (reserving() ? 'offerDetailPage.reserving' : 'offerDetailPage.reserve') | translate }}
+            </button>
+          </div>
+        }
 
         @if (others().length) {
           <div class="section-head">

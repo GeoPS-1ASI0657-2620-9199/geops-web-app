@@ -109,3 +109,4 @@ mat-form-field {
     gap: 0;
   }
 }
+.prefilled { margin: -4px 0 0; color: var(--feedback-verified-ink); }

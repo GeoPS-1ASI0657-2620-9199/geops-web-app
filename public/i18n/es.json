@@ -379,7 +379,9 @@
         "CONSUMER_FAVOR": "El caso se cerró a tu favor el {{date}}.",
         "BUSINESS_FAVOR": "El caso se cerró a favor del comercio el {{date}}."
       }
-    }
+    },
+    "qrLabel": "Código QR de la reserva {{code}}",
+    "codeUsed": "Código de la reserva"
   },
   "reservationsPage": {
     "title": "Mis Cupones",
@@ -400,7 +402,8 @@
     "empty": {
       "title": "No tienes cupones activos",
       "description": "Reserva una oferta cercana y paga en el local. Aquí verás su código.",
-      "action": "Ver ofertas"
+      "action": "Ver ofertas",
+      "seeAll": "Ver todos mis cupones"
     },
     "emptyFiltered": {
       "title": "No tienes cupones en este estado",
@@ -694,7 +697,9 @@
   "createCampaign": {
     "category": "Categoría",
     "categoryError": "Elige la categoría.",
-    "categoriesUnavailable": "No pudimos cargar las categorías. Recarga la página para intentarlo de nuevo."
+    "categoriesUnavailable": "No pudimos cargar las categorías. Recarga la página para intentarlo de nuevo.",
+    "storeTitle": "Tu local y su alcance",
+    "prefilled": "Usamos la dirección de tu perfil y el punto de tu última campaña. Cámbialos si esta campaña es en otro local."
   },
   "publicSources": {
     "title": "Fuentes públicas, sin garantía",

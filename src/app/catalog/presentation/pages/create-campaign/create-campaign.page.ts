@@ -15,6 +15,8 @@ import { GeoPoint } from '../../../../shared/domain/geo-point';
 import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { GeoLocationPicker } from '../../../../shared/ui/geo-location-picker/geo-location-picker';
 import { CreateCampaignUseCase } from '../../../application/create-campaign.use-case';
+import { ListMyCampaignsUseCase } from '../../../application/list-my-campaigns.use-case';
+import { VerifyBusinessUseCase } from '../../../../iam/application/verify-business.use-case';
 import { ListOfferCategoriesUseCase } from '../../../application/list-offer-categories.use-case';
 import { CampaignZone, todayInLima } from '../../../domain/model/campaign';
 import { ZoneSelector } from '../../components/zone-selector/zone-selector';
@@ -62,6 +64,15 @@ export class CreateCampaignPage {
   protected readonly today = todayInLima();
   protected readonly storePoint = signal<GeoPoint | null>(null);
   protected readonly zone = signal<CampaignZone | null>(null);
+  /** Radius drawn on the store map; a district zone draws none. */
+  protected readonly zoneRadius = computed(() => {
+    const zone = this.zone();
+    return zone?.type === 'RADIUS' ? zone.radiusMeters : null;
+  });
+  /** True when the store came filled from the profile and the last campaign. */
+  protected readonly prefilled = signal(false);
+  private readonly verification = inject(VerifyBusinessUseCase);
+  private readonly myCampaigns = inject(ListMyCampaignsUseCase);
   protected readonly alert = signal<{ title: string; description: string } | null>(null);
   protected readonly submitting = signal(false);
   /** The closed list of Catalog for the category selector (US08, E2-06). */
@@ -88,6 +99,23 @@ export class CreateCampaignPage {
       }
     });
     void this.loadCategories();
+    void this.prefillStore();
+  }
+
+  /** The store is the same every time: its address from the profile and its point from the last campaign. */
+  private async prefillStore(): Promise<void> {
+    const [profile, point] = await Promise.all([
+      this.verification.profile().catch(() => null),
+      this.myCampaigns.lastStorePoint().catch(() => null),
+    ]);
+    const address = this.form.controls.address;
+    if (profile?.address && !address.value) {
+      address.setValue(profile.address);
+    }
+    if (point && !this.storePoint()) {
+      this.storePoint.set(point);
+    }
+    this.prefilled.set(!!profile?.address || !!point);
   }
 
   private async loadCategories(): Promise<void> {

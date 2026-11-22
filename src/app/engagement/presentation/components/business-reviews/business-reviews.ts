@@ -28,7 +28,7 @@ import { ApiError } from '../../../../shared/domain/api-error';
                 </span>
                 @if (review.verifiedRedemption) { <span class="verified"><mat-icon aria-hidden="true">check</mat-icon>{{ 'reviewsPage.verified' | translate }}</span> }
               </p>
-              <p class="when">{{ review.createdAt | date: 'd MMM y' }}</p>
+              <p class="when">{{ review.createdAt | date: 'dd/MM/yyyy' }}</p>
             </div>
           </header>
           <p class="text">{{ review.text }}</p>
