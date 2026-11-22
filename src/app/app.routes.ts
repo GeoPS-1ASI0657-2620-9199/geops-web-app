@@ -140,6 +140,13 @@ export const routes: Routes = [
         title: 'GeoPS - Nueva campaña',
       },
       {
+        path: 'campaigns/:id/metrics',
+        canActivate: owner,
+        loadComponent: () =>
+          import('./catalog/presentation/pages/campaign-metrics/campaign-metrics.page').then((m) => m.CampaignMetricsPage),
+        title: 'GeoPS - Métricas de campaña',
+      },
+      {
         path: 'reports',
         canActivate: owner,
         loadComponent: () =>

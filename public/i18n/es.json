@@ -165,6 +165,7 @@
       "actions": "Acciones"
     },
     "seeOffer": "Ver oferta",
+    "seeMetrics": "Ver métricas",
     "pause": "Pausar",
     "reactivate": "Reactivar",
     "validityEnded": "La vigencia terminó",
@@ -1060,5 +1061,76 @@
     "title": "No encontramos esta página",
     "description": "La dirección no existe o cambió. Vuelve al inicio para seguir buscando ofertas.",
     "back": "Ir al inicio"
+  },
+  "campaignMetrics": {
+    "back": "Mis campañas",
+    "title": "Métricas",
+    "periodLabel": "Del {{from}} al {{to}} · {{days}} días",
+    "period": {
+      "label": "Periodo",
+      "campaign": "Vigencia de la campaña",
+      "last7": "Últimos 7 días",
+      "last30": "Últimos 30 días",
+      "custom": "Elegir fechas",
+      "from": "Desde",
+      "to": "Hasta",
+      "apply": "Ver periodo",
+      "errors": {
+        "missing": "Elige las dos fechas del periodo.",
+        "order": "La fecha final es anterior a la inicial.",
+        "tooLong": "El periodo puede abarcar como máximo 366 días."
+      }
+    },
+    "kpi": {
+      "impressions": "Impresiones",
+      "impressionsHint": "Veces que tu oferta salió en la búsqueda cercana",
+      "clicks": "Clics",
+      "clicksHint": "{{rate}} % de las impresiones",
+      "reservations": "Reservas",
+      "reservationsHint": "{{rate}} % de los clics",
+      "redemptions": "Canjes",
+      "redemptionsHint": "{{rate}} % de las reservas",
+      "conversion": "Conversión",
+      "conversionHint": "Canjes por cada 100 clics",
+      "noBase": "Aún sin datos para calcular la tasa"
+    },
+    "daily": {
+      "title": "Actividad diaria",
+      "series": "Cifra que muestra el gráfico",
+      "date": "Fecha",
+      "empty": "Esta campaña no registra actividad en el periodo; sus cifras están en cero.",
+      "summary": "{{series}} por día durante {{days}} días; el día más alto suma {{peak}}."
+    },
+    "baseline": {
+      "title": "Frente a tu línea base",
+      "comparison": "La campaña trajo {{customers}} clientes con canje; sin GeoPS atiendes unos {{expected}} en {{days}} días.",
+      "usual": "Clientes habituales",
+      "perWeek": "{{customers}} por semana",
+      "ticket": "Ticket promedio",
+      "extraSales": "Ventas estimadas por la campaña",
+      "declaredOn": "Línea base declarada el {{date}}.",
+      "edit": "Actualizar línea base",
+      "invite": "Declara cuántos clientes atendías por semana antes de GeoPS y tu ticket promedio para ver cuánto suma cada campaña. Mientras tanto ves las cifras absolutas.",
+      "customersField": "Clientes por semana antes de GeoPS",
+      "ticketField": "Ticket promedio (S/)",
+      "save": "Guardar línea base",
+      "saving": "Guardando…",
+      "cancel": "Cancelar",
+      "saved": "Línea base guardada",
+      "errors": {
+        "customers": "Escribe un número entero de clientes entre 1 y 100 000.",
+        "ticket": "Escribe un ticket mayor que 0 con hasta dos decimales.",
+        "save": "No pudimos guardar la línea base. Inténtalo de nuevo."
+      }
+    },
+    "others": {
+      "title": "Tus campañas en el mismo periodo",
+      "campaign": "Campaña"
+    },
+    "error": {
+      "title": "No pudimos cargar las métricas",
+      "description": "Revisa tu conexión e inténtalo de nuevo.",
+      "retry": "Reintentar"
+    }
   }
 }

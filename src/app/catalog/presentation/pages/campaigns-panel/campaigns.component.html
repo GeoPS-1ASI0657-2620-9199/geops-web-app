@@ -106,6 +106,7 @@
                         {{ 'campaignsPage.reactivate' | translate }}
                       </button>
                     }
+                    <a class="action" data-testid="metrics" [routerLink]="['/campaigns', campaign.campaignId, 'metrics']">{{ 'campaignsPage.seeMetrics' | translate }}</a>
                     @if (campaign.offers[0]; as first) {
                       <a class="action" [routerLink]="['/offers', first.offerId]">{{ 'campaignsPage.seeOffer' | translate }}</a>
                     }
