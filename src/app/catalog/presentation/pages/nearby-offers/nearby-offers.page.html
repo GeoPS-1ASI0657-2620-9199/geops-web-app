@@ -4,8 +4,8 @@
       <h1 class="title">{{ 'offersPage.title' | translate }}</h1>
       @if (search.state() === 'ready') {
         <p class="subtitle" aria-live="polite">
-          @if (term()) {
-            {{ 'offersPage.matches' | translate: { shown: visible().length, total: search.offers().length } }}
+          @if (term(); as term) {
+            {{ (search.total() === 1 ? 'offersPage.countForOne' : 'offersPage.countFor') | translate: { total: search.total(), term: term } }}
           } @else {
             {{ (search.total() === 1 ? 'nearbyPage.countOne' : 'nearbyPage.count') | translate: { total: search.total(), minutes: search.radius() } }}
           }
@@ -13,9 +13,9 @@
       }
     </div>
     <div class="head-actions">
-      @if (term()) {
+      @if (term(); as term) {
         <button class="term" type="button" (click)="clearTerm()">
-          {{ 'offersPage.resultsFor' | translate: { term: term() } }}
+          {{ 'offersPage.resultsFor' | translate: { term: term } }}
           <mat-icon aria-hidden="true">close</mat-icon>
         </button>
       }
@@ -109,7 +109,7 @@
       </div>
     }
     @if (search.state() !== 'loading') {
-      <app-public-source-offers [offers]="search.publicOffers()" />
+      <app-public-source-offers [offers]="visiblePublic()" />
     }
   </app-search-gate>
 </section>

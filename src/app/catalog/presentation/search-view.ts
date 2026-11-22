@@ -43,12 +43,15 @@ export function toPins(offers: readonly NearbyOffer[], publicOffers: readonly Pu
   ];
 }
 
-/** Free-text filter of the top bar search: title, business or category. */
-export function matchesTerm(offer: NearbyOffer, term: string): boolean {
+/**
+ * The text of the top bar search over a public source offer: title, source or category, ignoring case
+ * and accents, as Catalog does with the affiliated offers.
+ */
+export function publicOfferMatches(offer: PublicSourceOffer, term: string): boolean {
   const needle = normalize(term);
-  return !needle || [offer.title, offer.businessName, offer.category].some((text) => normalize(text).includes(needle));
+  return !needle || [offer.title, offer.sourceName, offer.category].some((text) => normalize(text ?? '').includes(needle));
 }
 
 function normalize(text: string): string {
-  return text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+  return text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
 }

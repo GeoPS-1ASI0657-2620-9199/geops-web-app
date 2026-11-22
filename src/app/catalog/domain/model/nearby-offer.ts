@@ -37,6 +37,20 @@ export interface NearbyOfferPage {
   readonly totalPages: number;
 }
 
+/** Length Catalog accepts for the text of the search (SearchText in catalog-service). */
+export const SEARCH_TERM_MIN_LENGTH = 2;
+export const SEARCH_TERM_MAX_LENGTH = 60;
+
+/**
+ * The text of the top bar search as Catalog expects it: trimmed, inner spaces collapsed and cut at
+ * 60 characters. null when there is nothing to search or it is a single character, which Catalog
+ * would reject.
+ */
+export function searchTermOf(raw: string | null | undefined): string | null {
+  const term = (raw ?? '').trim().replace(/\s+/g, ' ').slice(0, SEARCH_TERM_MAX_LENGTH).trim();
+  return term.length >= SEARCH_TERM_MIN_LENGTH ? term : null;
+}
+
 export function hasMorePages(result: NearbyOfferPage): boolean {
   return result.page + 1 < result.totalPages;
 }

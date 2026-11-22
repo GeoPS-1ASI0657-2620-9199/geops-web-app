@@ -20,13 +20,21 @@ const CORTE = nearbyOffer({ offerId: 2, title: 'Corte clásico', businessName: '
 describe('NearbyOffersPage', () => {
   let fixture: ComponentFixture<NearbyOffersPage>;
   let query: BehaviorSubject<ReturnType<typeof convertToParamMap>>;
+  let repository: jasmine.SpyObj<OfferRepository>;
 
   const render = async (q: string | null = null, publicOffers: PublicSourceOffer[] = [], categoria: string | null = null) => {
     const offers = jasmine.createSpyObj<OfferRepository>('OfferRepository', ['findNearby', 'findById', 'findPublicSourcesNearby']);
     offers.findPublicSourcesNearby.and.resolveTo(publicOffers);
-    offers.findNearby.and.callFake((_origin, _radius, _page, category) =>
-      Promise.resolve(pageOf([CEVICHE, CORTE].filter((offer) => !category || offer.category === category))),
+    offers.findNearby.and.callFake((_origin, _radius, _page, category, term) =>
+      Promise.resolve(
+        pageOf(
+          [CEVICHE, CORTE]
+            .filter((offer) => !category || offer.category === category)
+            .filter((offer) => !term || offer === CORTE),
+        ),
+      ),
     );
+    repository = offers;
     query = new BehaviorSubject(convertToParamMap({ ...(q ? { q } : {}), ...(categoria !== null ? { categoria } : {}) }));
     await TestBed.configureTestingModule({
       imports: [NearbyOffersPage],
@@ -64,9 +72,10 @@ describe('NearbyOffersPage', () => {
     expect((fixture.nativeElement as HTMLElement).querySelectorAll('app-offer-card-actions').length).toBe(2);
   });
 
-  it('filters by the text typed in the top bar search, ignoring accents and case', async () => {
+  it('asks Catalog for the text typed in the top bar search and shows what it answers', async () => {
     await render('BARBERIA');
 
+    expect(repository.findNearby).toHaveBeenCalledWith(jasmine.anything(), 10, 0, null, 'BARBERIA');
     expect(cards().length).toBe(1);
     expect(text()).toContain('Barbería Velarde');
     expect(text()).not.toContain('Cevichería Mar');
@@ -97,10 +106,30 @@ describe('NearbyOffersPage', () => {
     expect(text()).toContain('Corte clásico');
   });
 
-  it('says how many of the loaded offers match the typed text, not the whole radius', async () => {
+  it('says how many offers Catalog found for the typed text', async () => {
     await render('BARBERIA');
 
-    expect((fixture.nativeElement as HTMLElement).querySelector('.subtitle')?.textContent).toContain('offersPage.matches');
+    expect((fixture.nativeElement as HTMLElement).querySelector('.subtitle')?.textContent).toContain('offersPage.countForOne');
+  });
+
+  it('searches again without text when the term is cleared from the address', async () => {
+    await render('BARBERIA');
+    repository.findNearby.calls.reset();
+
+    query.next(convertToParamMap({}));
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(repository.findNearby).toHaveBeenCalledOnceWith(jasmine.anything(), 10, 0, null, null);
+    expect(cards().length).toBe(2);
+  });
+
+  it('applies the text to the page of public sources, whose query takes no text', async () => {
+    await render('libros', [publicSourceOffer(), publicSourceOffer({ offerId: 9002, title: 'Clase de yoga', category: 'Deporte', sourceName: 'Parque' })]);
+    const section = (fixture.nativeElement as HTMLElement).querySelector('[data-testid="public-sources"]');
+
+    expect(section?.textContent).toContain('Feria de libros usados');
+    expect(section?.textContent).not.toContain('Clase de yoga');
   });
 
   it('orders the cards by the lowest price when the buyer asks for it', async () => {

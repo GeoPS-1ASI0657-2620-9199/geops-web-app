@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
-import { firstValueFrom, map } from 'rxjs';
+import { distinctUntilChanged, firstValueFrom, map, skip } from 'rxjs';
 import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { GeoEmptyState } from '../../../../shared/ui/geo-empty-state/geo-empty-state';
 import { GeoOfferCard } from '../../../../shared/ui/geo-offer-card/geo-offer-card';
@@ -17,7 +17,7 @@ import { PublicSourceOffers } from '../../components/public-source-offers/public
 import { SearchGate } from '../../components/search-gate/search-gate';
 import { SearchPanel } from '../../components/search-panel/search-panel';
 import { OfferOrder, sortOffers } from '../../offer-order';
-import { METERS_PER_WALK_MINUTE, matchesTerm, placeLabelOf, precisionLabelOf, toPins } from '../../search-view';
+import { METERS_PER_WALK_MINUTE, placeLabelOf, precisionLabelOf, publicOfferMatches, toPins } from '../../search-view';
 import { validityLabel } from '../../validity-label';
 
 export type OffersView = 'list' | 'map';
@@ -25,7 +25,7 @@ export type OffersView = 'list' | 'map';
 /**
  * Ofertas tab: the one search screen of the buyer. Every valid offer in the radius (US03, GEO-113 to
  * GEO-116), filtered by category (US08, also when Categorías sends ?categoria=) and by the search box
- * of the top bar (?q=), ordered at will, as cards or on the map.
+ * of the top bar (?q=), both on the server before paging, ordered at will, as cards or on the map.
  */
 @Component({
   selector: 'app-nearby-offers',
@@ -54,7 +54,8 @@ export class NearbyOffersPage implements OnInit {
   private readonly router = inject(Router);
   private readonly params = inject(ActivatedRoute).queryParamMap;
 
-  protected readonly term = toSignal(this.params.pipe(map((params) => params.get('q') ?? '')), { initialValue: '' });
+  /** The text Catalog filtered with, already normalized; null without search. */
+  protected readonly term = computed(() => this.search.term());
   protected readonly skeletons = [1, 2, 3, 4, 5, 6];
   protected readonly order = signal<OfferOrder>('distance');
   protected readonly view = signal<OffersView>('list');
@@ -63,18 +64,37 @@ export class NearbyOffersPage implements OnInit {
   protected readonly placeLabel = computed(() => placeLabelOf(this.search.origin()));
   protected readonly precisionLabel = computed(() => precisionLabelOf(this.search.origin()));
   protected readonly radiusMeters = computed(() => this.search.radius() * METERS_PER_WALK_MINUTE);
-  /** Catalog filters by category (US08); the search box of the top bar filters what came. */
-  protected readonly visible = computed(() => {
+  /** Catalog already filtered by category (US08) and by the text of the top bar; the page only sorts. */
+  protected readonly visible = computed(() => sortOffers(this.search.offers(), this.order()));
+  /**
+   * The public sources come in a single page of their own query, which takes no text; the text is
+   * applied to that page here so the section agrees with the search.
+   */
+  protected readonly visiblePublic = computed(() => {
     const term = this.term();
-    return sortOffers(this.search.offers().filter((offer) => matchesTerm(offer, term)), this.order());
+    const offers = this.search.publicOffers();
+    return term ? offers.filter((offer) => publicOfferMatches(offer, term)) : offers;
   });
-  protected readonly pins = computed<MapPin[]>(() => toPins(this.visible(), this.search.publicOffers()));
+  protected readonly pins = computed<MapPin[]>(() => toPins(this.visible(), this.visiblePublic()));
   protected readonly showMap = computed(() => this.view() === 'map' && !this.mapFailed());
 
+  constructor() {
+    // A new search from the top bar, or clearing it, while this tab is open.
+    this.params
+      .pipe(
+        map((params) => params.get('q')),
+        distinctUntilChanged(),
+        skip(1),
+        takeUntilDestroyed(),
+      )
+      .subscribe((term) => void this.search.selectTerm(term));
+  }
+
   async ngOnInit(): Promise<void> {
-    await this.search.ensureStarted();
+    const params = await firstValueFrom(this.params);
+    await this.search.ensureStarted(params.get('q'));
     // Categorías opens this tab with ?categoria=<name>; without the parameter the current filter stays.
-    const category = (await firstValueFrom(this.params)).get('categoria');
+    const category = params.get('categoria');
     if (category !== null && category !== (this.search.category() ?? '')) {
       await this.search.selectCategory(category || null);
     }

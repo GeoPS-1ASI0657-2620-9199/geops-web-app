@@ -79,7 +79,7 @@ describe('HomePage', () => {
 
     expect(host.textContent).toContain('home.logInToReserve');
     expect(host.querySelectorAll('button.chip').length).toBe(0);
-    expect(TestBed.inject(OfferRepository).findNearby).toHaveBeenCalledWith(jasmine.anything(), 10, 0, null);
+    expect(TestBed.inject(OfferRepository).findNearby).toHaveBeenCalledWith(jasmine.anything(), 10, 0, null, null);
   });
 
   it('shows the same offers as a list when the map does not load (US09, QAS12)', async () => {

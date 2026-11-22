@@ -5,12 +5,17 @@ import { PublicSourceOffer } from '../model/public-source-offer';
 
 /** Port to the offers of Catalog. Implementations reject with ApiError. */
 export abstract class OfferRepository {
-  /** category is one of categories(); null brings every category (US08). */
+  /**
+   * category is one of categories(); null brings every category (US08). term is the text of the top
+   * bar search, already normalized with searchTermOf(); Catalog applies it before paging, so
+   * totalElements counts only the matches. null searches without text.
+   */
   abstract findNearby(
     origin: GeoPoint,
     radiusMinutes: number,
     page: number,
     category?: string | null,
+    term?: string | null,
   ): Promise<NearbyOfferPage>;
   /**
    * The first page of offers of public sources around the same point and radius, in their own query

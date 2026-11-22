@@ -130,6 +130,20 @@ describe('HttpOfferRepository', () => {
     all.flush({ content: [], page: 0, totalElements: 0, totalPages: 0 });
   });
 
+  it('sends the text of the search as q only when there is one', async () => {
+    const result = repository.findNearby(ORIGIN, 10, 0, null, 'café');
+
+    const request = http.expectOne((r) => r.url === `${BASE_URL}/offers/nearby`);
+    expect(request.request.params.get('q')).toBe('café');
+    request.flush({ content: [], page: 0, totalElements: 0, totalPages: 0 });
+    await result;
+
+    void repository.findNearby(ORIGIN, 10, 0, null, null);
+    const all = http.expectOne((r) => r.url === `${BASE_URL}/offers/nearby`);
+    expect(all.request.params.has('q')).toBeFalse();
+    all.flush({ content: [], page: 0, totalElements: 0, totalPages: 0 });
+  });
+
   it('asks for the public sources apart, with the same origin, radius and category (US39, E2-08)', async () => {
     const result = repository.findPublicSourcesNearby(ORIGIN, 10, 'Librería y útiles');
 

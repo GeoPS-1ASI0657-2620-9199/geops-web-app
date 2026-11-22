@@ -8,6 +8,7 @@ import {
   NearbyOfferPage,
   clampRadius,
   hasMorePages,
+  searchTermOf,
   widerRadius,
 } from '../domain/model/nearby-offer';
 import { PublicSourceOffer } from '../domain/model/public-source-offer';
@@ -52,6 +53,8 @@ export class OfferSearchStore {
   readonly errorMessage = signal<string | null>(null);
   /** The category chip chosen; Catalog filters with it before paging (US08). */
   readonly category = signal<string | null>(null);
+  /** Text of the top bar search (?q= on Ofertas); Catalog filters with it before paging. */
+  readonly term = signal<string | null>(null);
   private readonly categoryList = signal<string[]>([]);
 
   readonly canLoadMore = computed(() => {
@@ -73,9 +76,14 @@ export class OfferSearchStore {
 
   /**
    * Starts the search the first time a tab opens; later visits keep the previous one, unless a
-   * consumer just logged in with another radius saved in the profile (US46, scenario 4).
+   * consumer just logged in with another radius saved in the profile (US46, scenario 4), or the tab
+   * asks for another search text. Only Ofertas passes a term; the other tabs always show the whole
+   * radius.
    */
-  async ensureStarted(): Promise<void> {
+  async ensureStarted(term: string | null = null): Promise<void> {
+    const normalized = searchTermOf(term);
+    const termChanged = normalized !== this.term();
+    this.term.set(normalized);
     if (this.state() === 'idle') {
       // Marked before the first await, so two tabs opening at once start a single search.
       this.state.set('locating');
@@ -85,8 +93,11 @@ export class OfferSearchStore {
       return;
     }
     const saved = await this.preference.resolve();
-    if (saved.fromProfile && saved.minutes !== this.radius()) {
+    const radiusChanged = saved.fromProfile && saved.minutes !== this.radius();
+    if (radiusChanged) {
       this.radius.set(saved.minutes);
+    }
+    if (radiusChanged || (termChanged && this.hasSearched())) {
       await this.runSearch();
     }
   }
@@ -146,6 +157,18 @@ export class OfferSearchStore {
     await this.runSearch();
   }
 
+  /** Searches again from page 0 with the text of the top bar, or without text for null or blank. */
+  async selectTerm(term: string | null): Promise<void> {
+    const normalized = searchTermOf(term);
+    if (normalized === this.term()) {
+      return;
+    }
+    this.term.set(normalized);
+    if (this.hasSearched()) {
+      await this.runSearch();
+    }
+  }
+
   async retry(): Promise<void> {
     await this.runSearch();
   }
@@ -158,7 +181,7 @@ export class OfferSearchStore {
     }
     this.loadingMore.set(true);
     try {
-      const next = await this.search.execute(origin.point, this.radius(), page.page + 1, this.category());
+      const next = await this.search.execute(origin.point, this.radius(), page.page + 1, this.category(), this.term());
       this.offers.update((current) => [...current, ...next.offers]);
       this.lastPage.set(next);
     } catch (error) {
@@ -173,6 +196,12 @@ export class OfferSearchStore {
     while (this.canLoadMore() && this.state() === 'ready') {
       await this.loadMore();
     }
+  }
+
+  /** True once there is a search on screen that a new filter must replace. */
+  private hasSearched(): boolean {
+    const state = this.state();
+    return state === 'ready' || state === 'empty' || state === 'error' || state === 'loading';
   }
 
   private chooseRadius(minutes: number): void {
@@ -198,7 +227,7 @@ export class OfferSearchStore {
     this.publicOffers.set([]);
     try {
       const [result, publicOffers] = await Promise.all([
-        this.search.execute(origin.point, this.radius(), 0, this.category()),
+        this.search.execute(origin.point, this.radius(), 0, this.category(), this.term()),
         this.search.publicSources(origin.point, this.radius(), this.category()),
       ]);
       this.offers.set(result.offers);

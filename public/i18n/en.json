@@ -302,6 +302,7 @@
       "description": "You can widen the distance or choose another district.",
       "widen": "Widen to {{minutes}} walking min",
       "categoryTitle": "No {{category}} offers within {{minutes}} minutes",
+      "termTitle": "No offers for “{{term}}” within {{minutes}} minutes",
       "allCategories": "See every category"
     },
     "error": {
@@ -550,7 +551,8 @@
       "list": "List",
       "map": "Map"
     },
-    "matches": "{{shown}} of {{total}} offers match",
+    "countFor": "{{total}} offers for “{{term}}”",
+    "countForOne": "1 offer for “{{term}}”",
     "category": "Category: {{name}}"
   },
   "categoriesPage": {

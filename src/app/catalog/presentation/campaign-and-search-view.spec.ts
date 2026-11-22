@@ -1,8 +1,9 @@
 import { PublishedCampaign, countByStatus } from '../domain/model/campaign';
 import { nearbyOffer } from '../testing/nearby-offer.testing';
+import { publicSourceOffer } from '../testing/public-source-offer.testing';
 import { campaignPeriodLabel, zoneLabel } from './campaign-view';
 import { sortOffers } from './offer-order';
-import { matchesTerm, placeLabelOf, precisionLabelOf, toPins } from './search-view';
+import { placeLabelOf, precisionLabelOf, publicOfferMatches, toPins } from './search-view';
 import { categoryIcon } from '../../shared/ui/category-icon';
 import { remainingTime } from '../../reservation/presentation/reservation-view';
 
@@ -41,12 +42,13 @@ describe('campaign and search views', () => {
     expect(precisionLabelOf({ point, districtName: 'Barranco' })).toBe('Centro de Barranco');
   });
 
-  it('matches the top bar search against title, business and category without accents', () => {
-    const offer = nearbyOffer({ title: 'Ceviche clásico', businessName: 'Cevichería Mar', category: 'Gastronomía' });
-    expect(matchesTerm(offer, 'clasico')).toBeTrue();
-    expect(matchesTerm(offer, 'GASTRONOMIA')).toBeTrue();
-    expect(matchesTerm(offer, '')).toBeTrue();
-    expect(matchesTerm(offer, 'pizza')).toBeFalse();
+  it('matches the top bar search against the title, source and category of a public source offer without accents', () => {
+    const offer = publicSourceOffer({ title: 'Feria de libros usados', sourceName: 'Municipalidad de Lima', category: 'Librería y útiles' });
+    expect(publicOfferMatches(offer, 'FERIA')).toBeTrue();
+    expect(publicOfferMatches(offer, 'municipalidad')).toBeTrue();
+    expect(publicOfferMatches(offer, 'libreria')).toBeTrue();
+    expect(publicOfferMatches(offer, '')).toBeTrue();
+    expect(publicOfferMatches(offer, 'pizza')).toBeFalse();
   });
 
   it('puts a pin with the category icon on each offer', () => {

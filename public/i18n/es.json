@@ -302,6 +302,7 @@
       "description": "Puedes ampliar la distancia o elegir otro distrito.",
       "widen": "Ampliar a {{minutes}} min a pie",
       "categoryTitle": "No hay ofertas de {{category}} a {{minutes}} minutos",
+      "termTitle": "No hay ofertas para «{{term}}» a {{minutes}} minutos",
       "allCategories": "Ver todas las categorías"
     },
     "error": {
@@ -550,7 +551,8 @@
       "list": "Lista",
       "map": "Mapa"
     },
-    "matches": "{{shown}} de {{total}} ofertas coinciden",
+    "countFor": "{{total}} ofertas para «{{term}}»",
+    "countForOne": "1 oferta para «{{term}}»",
     "category": "Categoría: {{name}}"
   },
   "categoriesPage": {
