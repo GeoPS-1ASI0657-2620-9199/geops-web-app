@@ -3,17 +3,32 @@
     <div>
       <h1 class="title">{{ 'offersPage.title' | translate }}</h1>
       @if (search.state() === 'ready') {
-        <p class="subtitle">
-          {{ (search.total() === 1 ? 'nearbyPage.countOne' : 'nearbyPage.count') | translate: { total: search.total(), minutes: search.radius() } }}
+        <p class="subtitle" aria-live="polite">
+          @if (term()) {
+            {{ 'offersPage.matches' | translate: { shown: visible().length, total: search.offers().length } }}
+          } @else {
+            {{ (search.total() === 1 ? 'nearbyPage.countOne' : 'nearbyPage.count') | translate: { total: search.total(), minutes: search.radius() } }}
+          }
         </p>
       }
     </div>
-    @if (term()) {
-      <button class="term" type="button" (click)="clearTerm()">
-        {{ 'offersPage.resultsFor' | translate: { term: term() } }}
-        <mat-icon aria-hidden="true">close</mat-icon>
-      </button>
-    }
+    <div class="head-actions">
+      @if (term()) {
+        <button class="term" type="button" (click)="clearTerm()">
+          {{ 'offersPage.resultsFor' | translate: { term: term() } }}
+          <mat-icon aria-hidden="true">close</mat-icon>
+        </button>
+      }
+      <mat-button-toggle-group
+        class="view"
+        [value]="view()"
+        (change)="view.set($event.value)"
+        [attr.aria-label]="'offersPage.view.label' | translate"
+        hideSingleSelectionIndicator>
+        <mat-button-toggle value="list"><mat-icon aria-hidden="true">view_agenda</mat-icon>{{ 'offersPage.view.list' | translate }}</mat-button-toggle>
+        <mat-button-toggle value="map"><mat-icon aria-hidden="true">map</mat-icon>{{ 'offersPage.view.map' | translate }}</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
   </div>
 
   <app-search-gate>
@@ -23,9 +38,31 @@
       [radius]="search.radius()"
       [categories]="search.categories()"
       [category]="search.category()"
+      [order]="order()"
       (changeDistrict)="search.changeDistrict()"
       (radiusChange)="onRadius($event)"
-      (categoryChange)="search.selectCategory($event)" />
+      (categoryChange)="onCategory($event)"
+      (orderChange)="order.set($event)" />
+
+    @if (view() === 'map' && mapFailed()) {
+      <geo-alert
+        kind="warning"
+        data-testid="map-fallback"
+        announce="status"
+        [title]="'search.mapFailed.title' | translate"
+        [description]="'search.mapFailed.description' | translate" />
+    }
+    @if (showMap()) {
+      <geo-offers-map
+        class="map"
+        [center]="search.origin()?.point ?? null"
+        [radiusMeters]="radiusMeters()"
+        [pins]="pins()"
+        [precisionLabel]="precisionLabel()"
+        [ariaLabel]="'search.mapLabel' | translate"
+        (pinSelected)="openOffer($event)"
+        (failed)="mapFailed.set(true)" />
+    }
 
     @if (search.state() === 'loading') {
       <div class="grid" aria-busy="true" [attr.aria-label]="'nearbyPage.searching' | translate">

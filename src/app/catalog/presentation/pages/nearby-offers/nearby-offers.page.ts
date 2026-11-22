@@ -1,24 +1,31 @@
-import { ChangeDetectionStrategy, Component, OnInit, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
-import { map } from 'rxjs';
+import { firstValueFrom, map } from 'rxjs';
+import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { GeoEmptyState } from '../../../../shared/ui/geo-empty-state/geo-empty-state';
 import { GeoOfferCard } from '../../../../shared/ui/geo-offer-card/geo-offer-card';
+import { GeoOffersMap, MapPin } from '../../../../shared/ui/geo-offers-map/geo-offers-map';
 import { OfferSearchStore } from '../../../application/offer-search.store';
 import { NearbyOffer } from '../../../domain/model/nearby-offer';
 import { OfferCardActions } from '../../components/offer-card-actions/offer-card-actions';
 import { PublicSourceOffers } from '../../components/public-source-offers/public-source-offers';
 import { SearchGate } from '../../components/search-gate/search-gate';
 import { SearchPanel } from '../../components/search-panel/search-panel';
-import { matchesTerm, placeLabelOf } from '../../search-view';
+import { OfferOrder, sortOffers } from '../../offer-order';
+import { METERS_PER_WALK_MINUTE, matchesTerm, placeLabelOf, precisionLabelOf, toPins } from '../../search-view';
 import { validityLabel } from '../../validity-label';
 
+export type OffersView = 'list' | 'map';
+
 /**
- * Ofertas tab: every valid offer in the radius as Figma offer cards, ordered by distance (US03,
- * GEO-113 to GEO-116), filtered by category and by the search box of the top bar (?q=).
+ * Ofertas tab: the one search screen of the buyer. Every valid offer in the radius (US03, GEO-113 to
+ * GEO-116), filtered by category (US08, also when Categorías sends ?categoria=) and by the search box
+ * of the top bar (?q=), ordered at will, as cards or on the map.
  */
 @Component({
   selector: 'app-nearby-offers',
@@ -26,10 +33,13 @@ import { validityLabel } from '../../validity-label';
   imports: [
     RouterLink,
     MatButtonModule,
+    MatButtonToggleModule,
     MatIconModule,
     TranslateModule,
+    GeoAlert,
     GeoEmptyState,
     GeoOfferCard,
+    GeoOffersMap,
     OfferCardActions,
     PublicSourceOffers,
     SearchGate,
@@ -42,20 +52,32 @@ import { validityLabel } from '../../validity-label';
 export class NearbyOffersPage implements OnInit {
   protected readonly search = inject(OfferSearchStore);
   private readonly router = inject(Router);
+  private readonly params = inject(ActivatedRoute).queryParamMap;
 
-  protected readonly term = toSignal(inject(ActivatedRoute).queryParamMap.pipe(map((params) => params.get('q') ?? '')), {
-    initialValue: '',
-  });
+  protected readonly term = toSignal(this.params.pipe(map((params) => params.get('q') ?? '')), { initialValue: '' });
   protected readonly skeletons = [1, 2, 3, 4, 5, 6];
+  protected readonly order = signal<OfferOrder>('distance');
+  protected readonly view = signal<OffersView>('list');
+  /** True once the map tiles failed: the cards then carry every offer (US09, QAS12). */
+  protected readonly mapFailed = signal(false);
   protected readonly placeLabel = computed(() => placeLabelOf(this.search.origin()));
+  protected readonly precisionLabel = computed(() => precisionLabelOf(this.search.origin()));
+  protected readonly radiusMeters = computed(() => this.search.radius() * METERS_PER_WALK_MINUTE);
   /** Catalog filters by category (US08); the search box of the top bar filters what came. */
   protected readonly visible = computed(() => {
     const term = this.term();
-    return this.search.offers().filter((offer) => matchesTerm(offer, term));
+    return sortOffers(this.search.offers().filter((offer) => matchesTerm(offer, term)), this.order());
   });
+  protected readonly pins = computed<MapPin[]>(() => toPins(this.visible(), this.search.publicOffers()));
+  protected readonly showMap = computed(() => this.view() === 'map' && !this.mapFailed());
 
-  ngOnInit(): void {
-    void this.search.ensureStarted();
+  async ngOnInit(): Promise<void> {
+    await this.search.ensureStarted();
+    // Categorías opens this tab with ?categoria=<name>; without the parameter the current filter stays.
+    const category = (await firstValueFrom(this.params)).get('categoria');
+    if (category !== null && category !== (this.search.category() ?? '')) {
+      await this.search.selectCategory(category || null);
+    }
   }
 
   protected validity(offer: NearbyOffer): string {
@@ -66,7 +88,17 @@ export class NearbyOffersPage implements OnInit {
     void this.router.navigate([], { queryParams: { q: null }, queryParamsHandling: 'merge' });
   }
 
+  protected openOffer(offerId: number): void {
+    void this.router.navigate(['/offers', offerId]);
+  }
+
   protected async onRadius(minutes: number): Promise<void> {
     await this.search.setRadius(minutes);
+  }
+
+  protected async onCategory(category: string | null): Promise<void> {
+    // The address keeps the filter, so going back from an offer returns to the same results.
+    void this.router.navigate([], { queryParams: { categoria: category }, queryParamsHandling: 'merge', replaceUrl: true });
+    await this.search.selectCategory(category);
   }
 }

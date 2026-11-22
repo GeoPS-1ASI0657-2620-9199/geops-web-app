@@ -444,7 +444,8 @@
       "title": "El mapa no cargó",
       "description": "Estas son las mismas ofertas en lista."
     },
-    "mapLabel": "Mapa de ofertas cercanas"
+    "mapLabel": "Mapa de ofertas cercanas",
+    "orderBy": "Ordenar:"
   },
   "home": {
     "eyebrow": "Te damos la bienvenida",
@@ -453,7 +454,9 @@
     "logInToReserve": "Inicia sesión para reservar",
     "nearYou": "Cerca de ti",
     "walking": "A {{minutes}} minutos caminando",
-    "seeMore": "Ver más"
+    "seeMore": "Ver más",
+    "seeAll": "Ver todas las ofertas",
+    "here": "Aquí mismo"
   },
   "offersPage": {
     "title": "Ofertas cerca de ti",
@@ -462,10 +465,17 @@
       "title": "No encontramos ofertas con ese filtro",
       "description": "Prueba con otra palabra, otra categoría o amplía el radio.",
       "clear": "Quitar la búsqueda"
-    }
+    },
+    "view": {
+      "label": "Ver como",
+      "list": "Lista",
+      "map": "Mapa"
+    },
+    "matches": "{{shown}} de {{total}} ofertas coinciden",
+    "category": "Categoría: {{name}}"
   },
   "categoriesPage": {
-    "title": "Ofertas cerca de ti",
+    "title": "Categorías",
     "atMinutes": "a {{minutes}} min",
     "categories": "categorías",
     "inRadius": "En tu radio",
@@ -482,7 +492,13 @@
       "you": "Tu ubicación · {{note}}",
       "district": "Centro del distrito",
       "publicSource": "Fuente pública, sin garantía"
-    }
+    },
+    "subtitle": "Elige qué buscas a {{minutes}} min a pie",
+    "all": "Todas las ofertas",
+    "offersCount": "{{total}} ofertas cerca",
+    "offersCountOne": "1 oferta cerca",
+    "none": "Sin ofertas cerca",
+    "gridLabel": "Categorías de ofertas"
   },
   "seal": {
     "verified": "Verificado"
@@ -520,7 +536,9 @@
       "title": "No pudimos cargar tus favoritos",
       "description": "Puede ser tu conexión o el servicio. Inténtalo de nuevo en un momento.",
       "retry": "Reintentar"
-    }
+    },
+    "countOne": "1 oferta guardada",
+    "offersOne": "1 oferta"
   },
   "businessSummary": {
     "greeting": "Hola, {{name}}",

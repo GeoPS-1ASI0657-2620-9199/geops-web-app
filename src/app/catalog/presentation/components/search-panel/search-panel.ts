@@ -3,6 +3,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslateModule } from '@ngx-translate/core';
 import { MAX_RADIUS_MINUTES, MIN_RADIUS_MINUTES, RADIUS_STEP_MINUTES } from '../../../domain/model/nearby-offer';
+import { OFFER_ORDERS, OfferOrder } from '../../offer-order';
 
 /**
  * "Panel de búsqueda" of the Figma screen 1: where the search starts ("Lugares"), the radius in
@@ -33,8 +34,21 @@ import { MAX_RADIUS_MINUTES, MIN_RADIUS_MINUTES, RADIUS_STEP_MINUTES } from '../
             <mat-option [value]="minutes">{{ 'search.minutes' | translate: { minutes } }}</mat-option>
           }
         </mat-select>
+        @if (order(); as current) {
+          <span class="label">{{ 'search.orderBy' | translate }}</span>
+          <mat-select
+            class="radius order"
+            panelWidth="180px"
+            [value]="current"
+            (selectionChange)="orderChange.emit($event.value)"
+            [attr.aria-label]="'search.orderBy' | translate">
+            @for (item of orders; track item) {
+              <mat-option [value]="item">{{ 'categoriesPage.order.' + item | translate }}</mat-option>
+            }
+          </mat-select>
+        }
       </div>
-      @if (categories().length) {
+      @if (showCategories() && categories().length) {
         <div class="chips" role="group" [attr.aria-label]="'search.categories' | translate">
           <button type="button" class="chip" [class.on]="!category()" (click)="categoryChange.emit(null)">
             {{ 'search.all' | translate }}
@@ -105,6 +119,16 @@ import { MAX_RADIUS_MINUTES, MIN_RADIUS_MINUTES, RADIUS_STEP_MINUTES } from '../
         cursor: pointer;
       }
       .chip.on { border-color: var(--brand-action); background: var(--brand-action); color: var(--neutral-bg); font-weight: 500; }
+      .order { width: 150px; }
+      @media (max-width: 720px) {
+        .panel { padding: 14px 16px; }
+        /* One row that scrolls sideways, so the first offer stays on the first screen. */
+        .chips { flex-wrap: nowrap; overflow-x: auto; margin: 0 -16px; padding: 0 16px 2px; scrollbar-width: none; }
+        .chips::-webkit-scrollbar { display: none; }
+        .chip { flex: none; height: 36px; font-size: 13px; }
+        .link { min-height: 36px; }
+        .radius, .order { width: auto; min-width: 130px; height: 40px; padding-top: 9px; }
+      }
     `,
   ],
 })
@@ -118,6 +142,12 @@ export class SearchPanel {
   readonly changeDistrict = output<void>();
   readonly radiusChange = output<number>();
   readonly categoryChange = output<string | null>();
+  /** Hidden on Inicio, which is a summary: the category filter lives on Ofertas and Categorías. */
+  readonly showCategories = input(true);
+  /** Shown only where the results are a list that can be reordered (Ofertas). */
+  readonly order = input<OfferOrder | null>(null);
+  readonly orderChange = output<OfferOrder>();
+  protected readonly orders = OFFER_ORDERS;
 
   /** The four steps of 5 minutes, plus the current value if the slider of another tab left one in between. */
   protected readonly radiusOptions = computed(() => {

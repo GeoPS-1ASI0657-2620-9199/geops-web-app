@@ -19,10 +19,9 @@
       [approximate]="!!search.origin()?.districtName"
       [radius]="search.radius()"
       [categories]="search.categories()"
-      [category]="search.category()"
+      [showCategories]="false"
       (changeDistrict)="search.changeDistrict()"
-      (radiusChange)="onRadius($event)"
-      (categoryChange)="search.selectCategory($event)">
+      (radiusChange)="onRadius($event)">
       @if (mapFailed()) {
         <geo-alert
           kind="warning"
@@ -54,8 +53,8 @@
             <a class="near-item" [routerLink]="['/offers', offer.offerId]">
               <span class="near-icon"><mat-icon aria-hidden="true">{{ icon(offer) }}</mat-icon></span>
               <span class="near-text">
-                <span class="near-name">{{ offer.businessName }}</span>
-                <span class="near-meta">{{ offer.address || offer.category }} · {{ offer.distanceMeters }} m</span>
+                <span class="near-name">{{ offer.title }}</span>
+                <span class="near-meta">{{ offer.businessName }} · @if (offer.distanceMeters < 20) { {{ 'home.here' | translate }} } @else { {{ offer.distanceMeters }} m }</span>
               </span>
             </a>
           }
@@ -65,7 +64,7 @@
 
     <div class="section-head">
       <h2 class="section-title">{{ 'home.walking' | translate: { minutes: search.radius() } }}</h2>
-      <a class="see-more" routerLink="/offers">{{ 'home.seeMore' | translate }}</a>
+      <a class="see-more" routerLink="/offers">{{ 'home.seeAll' | translate }}</a>
     </div>
     @if (search.state() === 'loading') {
       <div class="grid" aria-busy="true">

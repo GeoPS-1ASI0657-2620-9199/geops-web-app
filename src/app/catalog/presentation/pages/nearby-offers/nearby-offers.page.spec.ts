@@ -15,19 +15,19 @@ import { publicSourceOffer } from '../../../testing/public-source-offer.testing'
 import { PublicSourceOffer } from '../../../domain/model/public-source-offer';
 
 const CEVICHE = nearbyOffer({ offerId: 1, title: 'Ceviche clásico', businessName: 'Cevichería Mar', category: 'Gastronomía' });
-const CORTE = nearbyOffer({ offerId: 2, title: 'Corte clásico', businessName: 'Barbería Velarde', category: 'Salud y belleza', imageUrl: null });
+const CORTE = nearbyOffer({ offerId: 2, title: 'Corte clásico', businessName: 'Barbería Velarde', category: 'Salud y belleza', imageUrl: null, price: 9, distanceMeters: 600 });
 
 describe('NearbyOffersPage', () => {
   let fixture: ComponentFixture<NearbyOffersPage>;
   let query: BehaviorSubject<ReturnType<typeof convertToParamMap>>;
 
-  const render = async (q: string | null = null, publicOffers: PublicSourceOffer[] = []) => {
+  const render = async (q: string | null = null, publicOffers: PublicSourceOffer[] = [], categoria: string | null = null) => {
     const offers = jasmine.createSpyObj<OfferRepository>('OfferRepository', ['findNearby', 'findById', 'findPublicSourcesNearby']);
     offers.findPublicSourcesNearby.and.resolveTo(publicOffers);
     offers.findNearby.and.callFake((_origin, _radius, _page, category) =>
       Promise.resolve(pageOf([CEVICHE, CORTE].filter((offer) => !category || offer.category === category))),
     );
-    query = new BehaviorSubject(convertToParamMap(q ? { q } : {}));
+    query = new BehaviorSubject(convertToParamMap({ ...(q ? { q } : {}), ...(categoria !== null ? { categoria } : {}) }));
     await TestBed.configureTestingModule({
       imports: [NearbyOffersPage],
       providers: [
@@ -95,5 +95,41 @@ describe('NearbyOffersPage', () => {
 
     expect(cards().length).toBe(1);
     expect(text()).toContain('Corte clásico');
+  });
+
+  it('says how many of the loaded offers match the typed text, not the whole radius', async () => {
+    await render('BARBERIA');
+
+    expect((fixture.nativeElement as HTMLElement).querySelector('.subtitle')?.textContent).toContain('offersPage.matches');
+  });
+
+  it('orders the cards by the lowest price when the buyer asks for it', async () => {
+    await render();
+    const titles = () => [...cards()].map((c) => c.querySelector('.title')?.textContent?.trim());
+    expect(titles()).toEqual(['Ceviche clásico', 'Corte clásico']);
+
+    (fixture.componentInstance as unknown as { order: { set(v: string): void } }).order.set('price');
+    fixture.detectChanges();
+
+    expect(titles()).toEqual(['Corte clásico', 'Ceviche clásico']);
+  });
+
+  it('opens already filtered by the category that Categorías sends in the address (US08)', async () => {
+    await render(null, [], 'Salud y belleza');
+
+    expect(cards().length).toBe(1);
+    expect(text()).toContain('Corte clásico');
+  });
+
+  it('switches to the map of the same results and back to the cards', async () => {
+    await render();
+    const host = fixture.nativeElement as HTMLElement;
+    expect(host.querySelector('geo-offers-map')).toBeNull();
+
+    [...host.querySelectorAll<HTMLButtonElement>('mat-button-toggle button')].find((b) => b.textContent?.includes('offersPage.view.map'))!.click();
+    fixture.detectChanges();
+
+    expect(host.querySelector('geo-offers-map')).not.toBeNull();
+    expect(cards().length).toBe(2);
   });
 });

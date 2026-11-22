@@ -1,91 +1,52 @@
-import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
+import { ChangeDetectionStrategy, Component, OnInit, computed, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { MatRadioModule } from '@angular/material/radio';
 import { TranslateModule } from '@ngx-translate/core';
-import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { categoryIcon } from '../../../../shared/ui/category-icon';
-import { GeoOffersMap, MapPin } from '../../../../shared/ui/geo-offers-map/geo-offers-map';
 import { OfferSearchStore } from '../../../application/offer-search.store';
-import { MIN_RADIUS_MINUTES, NearbyOffer } from '../../../domain/model/nearby-offer';
-import { RadiusControl } from '../../components/radius-control/radius-control';
 import { SearchGate } from '../../components/search-gate/search-gate';
-import { METERS_PER_WALK_MINUTE, placeLabelOf, toPins } from '../../search-view';
+import { placeLabelOf } from '../../search-view';
 
-export type OfferOrder = 'distance' | 'price' | 'expiry';
-
-const LIST_SIZE = 6;
-
-export function sortOffers(offers: readonly NearbyOffer[], order: OfferOrder): NearbyOffer[] {
-  const sorted = [...offers];
-  if (order === 'price') {
-    sorted.sort((a, b) => a.price - b.price || a.distanceMeters - b.distanceMeters);
-  } else if (order === 'expiry') {
-    sorted.sort((a, b) => a.validTo.localeCompare(b.validTo) || a.distanceMeters - b.distanceMeters);
-  } else {
-    sorted.sort((a, b) => a.distanceMeters - b.distanceMeters);
-  }
-  return sorted;
+export interface CategoryTile {
+  readonly name: string;
+  readonly icon: string;
+  readonly count: number;
 }
 
 /**
- * Categorías tab (Figma screen 6): the walking radius, the category chips, how many offers there are
- * at 5 minutes and in the whole radius, the list ordered at will and the map of the zone.
+ * Categorías tab: the way in by "what do I want". One tile per category of Catalog with how many
+ * offers it has within the walking radius; a tile opens Ofertas already filtered (US08). The list,
+ * the order and the map live only in Ofertas, so the search is one screen and not three.
  */
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [DecimalPipe, RouterLink, MatIconModule, MatRadioModule, TranslateModule, GeoAlert, GeoOffersMap, RadiusControl, SearchGate],
+  imports: [RouterLink, MatIconModule, TranslateModule, SearchGate],
   templateUrl: './categories.page.html',
   styleUrl: './categories.page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CategoriesPage implements OnInit {
   protected readonly search = inject(OfferSearchStore);
-  private readonly router = inject(Router);
 
-  protected readonly order = signal<OfferOrder>('distance');
-  protected readonly orders: OfferOrder[] = ['distance', 'price', 'expiry'];
-  protected readonly minMinutes = MIN_RADIUS_MINUTES;
-
-  /** Catalog already filtered them by the chosen category (US08). */
-  protected readonly inCategory = this.search.offers;
-  protected readonly withinMin = computed(() => this.inCategory().filter((o) => o.walkMinutes <= MIN_RADIUS_MINUTES).length);
-  /** True once the map tiles failed: the list then carries every offer (US09, QAS12). */
-  protected readonly mapFailed = signal(false);
-  protected readonly list = computed(() => {
-    const sorted = sortOffers(this.inCategory(), this.order());
-    return this.mapFailed() ? sorted : sorted.slice(0, LIST_SIZE);
-  });
-  protected readonly pins = computed<MapPin[]>(() => toPins(this.inCategory(), this.search.publicOffers()));
   protected readonly placeLabel = computed(() => placeLabelOf(this.search.origin()));
-  protected readonly radiusMeters = computed(() => this.search.radius() * METERS_PER_WALK_MINUTE);
-  protected readonly locationNote = computed(() => {
-    const origin = this.search.origin();
-    return origin && !origin.districtName ? `±${origin.accuracyMeters} m` : null;
+  protected readonly total = computed(() => this.search.offers().length);
+  /** Categories with offers first, then the rest, each group in the order Catalog gives them. */
+  protected readonly tiles = computed<CategoryTile[]>(() => {
+    const counts = new Map<string, number>();
+    for (const offer of this.search.offers()) {
+      counts.set(offer.category, (counts.get(offer.category) ?? 0) + 1);
+    }
+    const tiles = this.search.categories().map((name) => ({ name, icon: categoryIcon(name), count: counts.get(name) ?? 0 }));
+    return [...tiles.filter((t) => t.count > 0), ...tiles.filter((t) => t.count === 0)];
   });
 
   async ngOnInit(): Promise<void> {
     await this.search.ensureStarted();
-    await this.search.loadAll();
-  }
-
-  protected icon(offer: NearbyOffer): string {
-    return categoryIcon(offer.category);
-  }
-
-  protected openOffer(offerId: number): void {
-    void this.router.navigate(['/offers', offerId]);
-  }
-
-  protected async onRadius(minutes: number): Promise<void> {
-    await this.search.setRadius(minutes);
-    await this.search.loadAll();
-  }
-
-  protected async onCategory(category: string | null): Promise<void> {
-    await this.search.selectCategory(category);
+    // The counts are over every offer in the radius, whatever filter Ofertas left chosen.
+    if (this.search.category()) {
+      await this.search.selectCategory(null);
+    }
     await this.search.loadAll();
   }
 }

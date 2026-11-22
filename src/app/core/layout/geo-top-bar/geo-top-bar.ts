@@ -55,7 +55,7 @@ export type ShellRole = 'CONSUMER' | 'BUSINESS_OWNER' | 'ADMIN';
       @if (userName()) {
         <button class="pill user" type="button" [matMenuTriggerFor]="menu" [attr.aria-label]="'header.accountMenu' | translate">
           <span class="avatar" aria-hidden="true">{{ initial() }}</span>
-          {{ userName() }}
+          <span class="name">{{ userName() }}</span>
         </button>
         <mat-menu #menu="matMenu">
           @if (role() === 'CONSUMER') {
@@ -96,7 +96,8 @@ export type ShellRole = 'CONSUMER' | 'BUSINESS_OWNER' | 'ADMIN';
         margin-left: var(--space-sm);
         padding: 0 16px;
         border-radius: var(--radius-chip);
-        background: rgba(255, 255, 255, 0.17);
+        /* A darker veil than the Figma white one, so the typed text reaches AA (5.9:1). */
+        background: rgba(74, 0, 114, 0.25);
         color: #efe0fa;
       }
       .search mat-icon { width: 17px; height: 17px; font-size: 17px; }
@@ -145,9 +146,15 @@ export type ShellRole = 'CONSUMER' | 'BUSINESS_OWNER' | 'ADMIN';
       .help ol { margin: 0; padding-left: 18px; color: var(--text-dim); }
       .notices { margin: 0; padding: var(--space-sm) var(--space-lg); font: 400 12.5px/1.45 var(--font-brand); color: var(--text-dim); }
       @media (max-width: 720px) {
-        .bar { gap: var(--space-sm); padding: 0 16px; }
-        .search { display: none; }
+        /* The search box drops to a full-width second row instead of disappearing. */
+        .bar { flex-wrap: wrap; height: auto; min-height: 64px; row-gap: 0; gap: var(--space-sm); padding: 0 16px; }
+        .logo { line-height: 64px; }
+        .search { order: 3; flex: 1 0 100%; width: auto; max-width: none; height: 40px; margin: 0 0 12px; }
+        .search input { font-size: 14px; }
         .pill { padding: 0 12px; }
+        /* The account pill keeps only the avatar; the name is in the aria-label and the menu. */
+        .pill.user { padding: 0 6px; }
+        .pill.user .name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
       }
     `,
   ],

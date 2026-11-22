@@ -1,7 +1,7 @@
 import { PublishedCampaign, countByStatus } from '../domain/model/campaign';
 import { nearbyOffer } from '../testing/nearby-offer.testing';
 import { campaignPeriodLabel, zoneLabel } from './campaign-view';
-import { sortOffers } from './pages/categories/categories.page';
+import { sortOffers } from './offer-order';
 import { matchesTerm, placeLabelOf, precisionLabelOf, toPins } from './search-view';
 import { categoryIcon } from '../../shared/ui/category-icon';
 import { remainingTime } from '../../reservation/presentation/reservation-view';

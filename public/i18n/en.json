@@ -444,7 +444,8 @@
       "title": "The map did not load",
       "description": "These are the same offers as a list."
     },
-    "mapLabel": "Map of nearby offers"
+    "mapLabel": "Map of nearby offers",
+    "orderBy": "Sort:"
   },
   "home": {
     "eyebrow": "Welcome",
@@ -453,7 +454,9 @@
     "logInToReserve": "Log in to reserve",
     "nearYou": "Near you",
     "walking": "{{minutes}} minutes away on foot",
-    "seeMore": "See more"
+    "seeMore": "See more",
+    "seeAll": "See all offers",
+    "here": "Right here"
   },
   "offersPage": {
     "title": "Deals near you",
@@ -462,10 +465,17 @@
       "title": "No deals match that filter",
       "description": "Try another word, another category or a wider radius.",
       "clear": "Clear search"
-    }
+    },
+    "view": {
+      "label": "View as",
+      "list": "List",
+      "map": "Map"
+    },
+    "matches": "{{shown}} of {{total}} offers match",
+    "category": "Category: {{name}}"
   },
   "categoriesPage": {
-    "title": "Deals near you",
+    "title": "Categories",
     "atMinutes": "within {{minutes}} min",
     "categories": "categories",
     "inRadius": "In your radius",
@@ -482,7 +492,13 @@
       "you": "Your location · {{note}}",
       "district": "District center",
       "publicSource": "Public source, no guarantee"
-    }
+    },
+    "subtitle": "Choose what you are looking for within {{minutes}} walking minutes",
+    "all": "All offers",
+    "offersCount": "{{total}} offers nearby",
+    "offersCountOne": "1 offer nearby",
+    "none": "No offers nearby",
+    "gridLabel": "Offer categories"
   },
   "seal": {
     "verified": "Verified"
@@ -520,7 +536,9 @@
       "title": "We could not load your favorites",
       "description": "It may be your connection or the service. Try again in a moment.",
       "retry": "Retry"
-    }
+    },
+    "countOne": "1 saved offer",
+    "offersOne": "1 offer"
   },
   "businessSummary": {
     "greeting": "Hi, {{name}}",

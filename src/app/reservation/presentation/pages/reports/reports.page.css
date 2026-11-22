@@ -1,7 +1,7 @@
 :host { display: block; }
-.page { display: flex; flex-direction: column; gap: var(--space-xl); max-width: 1344px; margin-inline: auto; padding: var(--space-2xl) var(--space-xl) var(--space-3xl); }
+.page { display: flex; flex-direction: column; gap: 18px; padding: 24px 26px 40px; }
 .head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-lg); flex-wrap: wrap; }
-.title { margin: 0; font: 600 30px/1.2 var(--font-brand); color: var(--text-primary); }
+.title { margin: 0; font: 600 22px/1.25 var(--font-brand); color: var(--text-primary); }
 .chips { display: flex; gap: var(--space-sm); }
 .chip { height: 28px; padding: 0 var(--space-md); border: 1px solid var(--neutral-line); border-radius: var(--radius-chip); background: var(--neutral-bg); color: var(--text-dim); font: 500 12px/1 var(--font-brand); cursor: pointer; }
 .chip:hover { border-color: var(--brand-action); }
@@ -41,4 +41,4 @@
 .give { color: var(--brand-deep); }
 .skeleton { height: 160px; background: var(--neutral-line); border-radius: var(--radius-panel); }
 @media (max-width: 1000px) { .layout { grid-template-columns: minmax(0, 1fr); } }
-@media (max-width: 600px) { .page { padding: var(--space-lg); } }
+@media (max-width: 600px) { .page { padding: 16px; } }
