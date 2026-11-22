@@ -10,6 +10,7 @@
 .ended ::ng-deep .dot { background: var(--status-expired); }
 .ended ::ng-deep .photo { filter: grayscale(0.6); }
 .small { height: 30px; padding: 0 14px; font: 500 12px/1 var(--font-brand); }
+@media (pointer: coarse), (max-width: 640px) { .small { height: 40px; } }
 .skeleton { height: 320px; border-radius: var(--radius-card); background: var(--neutral-line-soft); }
 @media (max-width: 1200px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 640px) {

@@ -919,7 +919,7 @@
     "follow": "Follow business",
     "error": "We could not load your businesses. Please try again.",
     "countOne": "{{count}} active offer",
-    "viewOffers": "View offers",
+    "viewOffer": "View offer",
     "noOffers": "No active offers right now",
     "noticeTitle": "We notify you when you are near",
     "noticeHint": "New offers from these businesses reach you on the channels you turned on in your notice preferences."

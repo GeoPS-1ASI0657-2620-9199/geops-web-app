@@ -41,7 +41,7 @@ import { GeoEmptyState } from '../../../../shared/ui/geo-empty-state/geo-empty-s
               }
             </div>
             @if (business.activeOffersCount > 0) {
-              <a mat-stroked-button class="view" [routerLink]="['/offers', business.activeOffers[0].offerId]">{{ 'followsPage.viewOffers' | translate }}</a>
+              <a mat-stroked-button class="view" [routerLink]="['/offers', business.activeOffers[0].offerId]">{{ 'followsPage.viewOffer' | translate }}</a>
             }
             <button class="action" type="button" [disabled]="removing() !== null" (click)="remove(business.businessId)">
               {{ 'followsPage.unfollow' | translate }}<span class="sr-only"> {{ business.businessName }}</span>

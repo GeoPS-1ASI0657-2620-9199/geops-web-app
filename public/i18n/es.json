@@ -919,7 +919,7 @@
     "follow": "Seguir comercio",
     "error": "No pudimos cargar tus comercios. Inténtalo de nuevo.",
     "countOne": "{{count}} oferta vigente",
-    "viewOffers": "Ver ofertas",
+    "viewOffer": "Ver oferta",
     "noOffers": "Sin ofertas vigentes por ahora",
     "noticeTitle": "Te avisamos cuando estés cerca",
     "noticeHint": "Las ofertas nuevas de estos comercios te llegan por los canales que activaste en tus preferencias de avisos."
