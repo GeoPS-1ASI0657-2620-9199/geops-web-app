@@ -889,6 +889,7 @@
     "retry": "Reintentar",
     "verified": "Canje verificado",
     "businessReply": "Respuesta del comercio",
+    "anonymousAuthor": "Cliente",
     "replyLabel": "Tu respuesta",
     "reply": "Responder",
     "error": "No pudimos completar la operación. Inténtalo de nuevo.",

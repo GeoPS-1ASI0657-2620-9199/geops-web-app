@@ -10,7 +10,10 @@ export class HttpReviewRepository implements ReviewRepository {
   private readonly http = inject(HttpClient);
   private readonly url = `${inject(API_BASE_URL)}/reviews`;
   async findByBusiness(businessId: number): Promise<Review[]> {
-    try { return await firstValueFrom(this.http.get<Review[]>(this.url, { params: { businessId } })); }
+    try {
+      const reviews = await firstValueFrom(this.http.get<Review[]>(this.url, { params: { businessId } }));
+      return reviews.map((review) => ({ ...review, authorName: review.authorName ?? null }));
+    }
     catch (error) { throw toApiError(error); }
   }
   async create(input: ReviewInput): Promise<Review> {

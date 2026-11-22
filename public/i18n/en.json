@@ -889,6 +889,7 @@
     "retry": "Retry",
     "verified": "Verified redemption",
     "businessReply": "Business reply",
+    "anonymousAuthor": "Customer",
     "replyLabel": "Your reply",
     "reply": "Reply",
     "error": "We could not complete the operation. Please try again.",
