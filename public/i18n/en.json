@@ -124,6 +124,18 @@
       "openingHoursHint": "Optional. For example: Mon-Sat 07:00-22:00.",
       "marked": "Location marked"
     },
+    "baseline": {
+      "title": "Your current situation",
+      "intro": "Tell us how many customers you serve per week and how much each one spends on average. We use it to compare every campaign against what you already sell without GeoPS. You can skip it and declare it later in Metrics.",
+      "customers": "Customers per week",
+      "ticket": "Average ticket (S/)",
+      "optional": "Optional.",
+      "errors": {
+        "customers": "Enter a whole number of customers between 1 and 100,000.",
+        "ticket": "Enter an amount above 0, up to 99,999.99 and with at most two decimals.",
+        "pair": "Fill in both values or leave both empty."
+      }
+    },
     "errors": {
       "location": "We could not place your store",
       "email": "An account with this email already exists",

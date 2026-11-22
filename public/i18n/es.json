@@ -124,6 +124,18 @@
       "openingHoursHint": "Opcional. Por ejemplo: Lun-Sáb 07:00-22:00.",
       "marked": "Ubicación marcada"
     },
+    "baseline": {
+      "title": "Tu situación actual",
+      "intro": "Cuéntanos cuántos clientes atiendes por semana y cuánto gasta cada uno en promedio. Con esos datos comparamos cada campaña contra lo que ya vendes sin GeoPS. Puedes dejarlo para después y declararlo en Métricas.",
+      "customers": "Clientes por semana",
+      "ticket": "Ticket promedio (S/)",
+      "optional": "Opcional.",
+      "errors": {
+        "customers": "Escribe un número entero de clientes entre 1 y 100 000.",
+        "ticket": "Escribe un monto mayor que 0, hasta 99 999.99 y con dos decimales como máximo.",
+        "pair": "Completa los dos datos o deja ambos vacíos."
+      }
+    },
     "errors": {
       "location": "No pudimos ubicar tu local",
       "email": "Ya existe una cuenta con este correo",

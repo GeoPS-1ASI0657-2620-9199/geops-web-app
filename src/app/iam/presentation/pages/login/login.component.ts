@@ -10,6 +10,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ApiError } from '../../../../shared/domain/api-error';
 import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { GeoTopBar } from '../../../../core/layout/geo-top-bar/geo-top-bar';
+import { PendingBaseline } from '../../../../catalog/application/pending-baseline';
 import { LogInUseCase } from '../../../application/log-in.use-case';
 import { HOME_BY_ROLE } from '../../../domain/model/home-by-role';
 
@@ -44,6 +45,7 @@ interface LoginAlert {
 export class LoginComponent {
   private readonly logIn = inject(LogInUseCase);
   private readonly router = inject(Router);
+  private readonly pendingBaseline = inject(PendingBaseline);
   private readonly query = inject(ActivatedRoute).snapshot.queryParamMap;
 
   protected readonly submitting = signal(false);
@@ -78,6 +80,9 @@ export class LoginComponent {
     this.invalidCredentials.set(false);
     try {
       const session = await this.logIn.execute(this.form.getRawValue());
+      // US45: the baseline typed while affiliating is declared now that there is a token. It does not
+      // hold the redirect, and if it fails the owner still declares it from Métricas.
+      void this.pendingBaseline.declareFor(session.email);
       await this.router.navigateByUrl(this.query.get('returnUrl') ?? HOME_BY_ROLE[session.role]);
     } catch (error) {
       this.showError(error);

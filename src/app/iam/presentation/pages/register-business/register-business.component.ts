@@ -13,6 +13,8 @@ import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { GeoLocationPicker } from '../../../../shared/ui/geo-location-picker/geo-location-picker';
 import { GeoSteps } from '../../../../shared/ui/geo-steps/geo-steps';
 import { GeoTopBar } from '../../../../core/layout/geo-top-bar/geo-top-bar';
+import { PendingBaseline } from '../../../../catalog/application/pending-baseline';
+import { MAX_AVERAGE_TICKET, MAX_CUSTOMERS_PER_WEEK } from '../../../../catalog/domain/model/campaign-metrics';
 import {
   INVALID_LOCATION,
   RegisterBusinessUseCase,
@@ -30,6 +32,7 @@ import {
   PASSWORD_MAX_LENGTH,
   PASSWORD_MIN_LENGTH,
   PHONE_PATTERN,
+  normalizeEmail,
 } from '../../../domain/model/register-consumer';
 
 const STEP_BUSINESS = 0;
@@ -45,6 +48,30 @@ const FIELD_BY_CODE: Record<string, Exclude<RejectableField, 'address'>> = {
   INVALID_RUC: 'ruc',
 };
 
+type BaselineField = 'customersPerWeek' | 'averageTicket';
+
+const isBlank = (value: unknown): boolean => value === null || value === undefined || value === '';
+
+/** Customers per week: optional, a whole number between 1 and the limit catalog-service accepts. */
+function customersValidator(control: AbstractControl): ValidationErrors | null {
+  const value = control.value as number | null;
+  if (isBlank(value)) {
+    return null;
+  }
+  return Number.isInteger(value) && value! >= 1 && value! <= MAX_CUSTOMERS_PER_WEEK ? null : { customers: true };
+}
+
+/** Average ticket in soles: optional, above zero, at most two decimals and below the limit. */
+function ticketValidator(control: AbstractControl): ValidationErrors | null {
+  const value = control.value as number | null;
+  if (isBlank(value)) {
+    return null;
+  }
+  const cents = value! * 100;
+  const valid = value! > 0 && value! <= MAX_AVERAGE_TICKET && Math.abs(Math.round(cents) - cents) < 1e-6;
+  return valid ? null : { ticket: true };
+}
+
 interface WizardAlert {
   kind: 'success' | 'error';
   titleKey: string;
@@ -55,7 +82,8 @@ interface WizardAlert {
 /**
  * Business owner registration (US22, Figma screens 18, 20 and 21). Two steps in the Sprint 1:
  * account and business, then the location; one request at the end, nothing kept in storage.
- * The SUNAT check (US38) and the baseline (US45) join with their stories.
+ * The step of the location also asks, optionally, for the baseline of the business (US45): it is
+ * declared once the owner logs in, because registering gives no session.
  */
 @Component({
   selector: 'app-register-business',
@@ -80,12 +108,14 @@ interface WizardAlert {
 export class RegisterBusinessComponent {
   private readonly registerBusiness = inject(RegisterBusinessUseCase);
   private readonly router = inject(Router);
+  private readonly pendingBaseline = inject(PendingBaseline);
   private readonly fb = inject(FormBuilder).nonNullable;
 
   protected readonly stepBusiness = STEP_BUSINESS;
   protected readonly stepLocation = STEP_LOCATION;
   protected readonly stepLabelKeys = ['registerBusinessPage.steps.business', 'registerBusinessPage.steps.location'];
   protected readonly passwordLimits = { min: PASSWORD_MIN_LENGTH, max: PASSWORD_MAX_LENGTH };
+  protected readonly baselineLimits = { maxCustomers: MAX_CUSTOMERS_PER_WEEK, maxTicket: MAX_AVERAGE_TICKET };
 
   protected readonly step = signal(STEP_BUSINESS);
   protected readonly location = signal<GeoPoint | null>(null);
@@ -119,11 +149,25 @@ export class RegisterBusinessComponent {
     openingHours: ['', Validators.maxLength(OPENING_HOURS_MAX_LENGTH)],
   });
 
+  /** "Tu situación actual": both empty or both filled, so campaigns are compared against a full baseline. */
+  protected readonly baseline = this.fb.group({
+    customersPerWeek: this.fb.control<number | null>(null, [customersValidator, this.pairedWith('averageTicket')]),
+    averageTicket: this.fb.control<number | null>(null, [ticketValidator, this.pairedWith('customersPerWeek')]),
+  });
+
   constructor() {
     // Once the owner edits the rejected field, the server error no longer applies.
     const destroyRef = inject(DestroyRef);
     this.business.valueChanges.pipe(takeUntilDestroyed(destroyRef)).subscribe(() => this.clearRejected());
     this.place.valueChanges.pipe(takeUntilDestroyed(destroyRef)).subscribe(() => this.clearRejected());
+    // Each baseline field is required only while the other has a value: revalidate its pair.
+    const { customersPerWeek, averageTicket } = this.baseline.controls;
+    customersPerWeek.valueChanges
+      .pipe(takeUntilDestroyed(destroyRef))
+      .subscribe(() => averageTicket.updateValueAndValidity({ emitEvent: false }));
+    averageTicket.valueChanges
+      .pipe(takeUntilDestroyed(destroyRef))
+      .subscribe(() => customersPerWeek.updateValueAndValidity({ emitEvent: false }));
   }
 
   continue(): void {
@@ -155,8 +199,9 @@ export class RegisterBusinessComponent {
   }
 
   async submit(): Promise<void> {
-    if (this.place.invalid || this.submitting()) {
+    if (this.place.invalid || this.baseline.invalid || this.submitting()) {
       this.place.markAllAsTouched();
+      this.baseline.markAllAsTouched();
       return;
     }
     this.submitting.set(true);
@@ -177,12 +222,29 @@ export class RegisterBusinessComponent {
           openingHours: place.openingHours,
         },
       });
+      this.holdBaseline(account.email);
       await this.router.navigate(['/login'], { queryParams: { registered: 1 } });
     } catch (error) {
       this.showError(error);
     } finally {
       this.submitting.set(false);
     }
+  }
+
+  /** Keeps the baseline for the first login; an empty section declares nothing. */
+  private holdBaseline(email: string): void {
+    const { customersPerWeek, averageTicket } = this.baseline.getRawValue();
+    if (isBlank(customersPerWeek) || isBlank(averageTicket)) {
+      return;
+    }
+    this.pendingBaseline.hold(normalizeEmail(email), customersPerWeek!, averageTicket!);
+  }
+
+  private pairedWith(other: BaselineField) {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const sibling = control.parent?.get(other);
+      return isBlank(control.value) && sibling && !isBlank(sibling.value) ? { pair: true } : null;
+    };
   }
 
   private showError(error: unknown): void {

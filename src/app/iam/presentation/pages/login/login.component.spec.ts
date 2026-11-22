@@ -3,6 +3,7 @@ import { ActivatedRoute, Router, convertToParamMap, provideRouter } from '@angul
 import { provideTranslateService } from '@ngx-translate/core';
 import { ApiError } from '../../../../shared/domain/api-error';
 import { LogInUseCase } from '../../../application/log-in.use-case';
+import { PendingBaseline } from '../../../../catalog/application/pending-baseline';
 import { Session } from '../../../domain/model/session';
 import { LoginComponent } from './login.component';
 
@@ -18,15 +19,19 @@ describe('LoginComponent', () => {
   let fixture: ComponentFixture<LoginComponent>;
   let useCase: jasmine.SpyObj<LogInUseCase>;
   let router: Router;
+  let pendingBaseline: jasmine.SpyObj<PendingBaseline>;
 
   const create = async (query: Record<string, string> = {}) => {
     useCase = jasmine.createSpyObj<LogInUseCase>('LogInUseCase', ['execute']);
+    pendingBaseline = jasmine.createSpyObj<PendingBaseline>('PendingBaseline', ['hold', 'declareFor']);
+    pendingBaseline.declareFor.and.resolveTo(null);
     await TestBed.configureTestingModule({
       imports: [LoginComponent],
       providers: [
         provideRouter([]),
         provideTranslateService(),
         { provide: LogInUseCase, useValue: useCase },
+        { provide: PendingBaseline, useValue: pendingBaseline },
         { provide: ActivatedRoute, useValue: { snapshot: { queryParamMap: convertToParamMap(query) } } },
       ],
     }).compileComponents();
@@ -50,6 +55,39 @@ describe('LoginComponent', () => {
     await fixture.componentInstance.submit();
 
     expect(router.navigateByUrl).toHaveBeenCalledWith('/business');
+  });
+
+  it('declares the baseline typed at registration once the owner has a session (US45)', async () => {
+    await create({ registered: '1' });
+    useCase.execute.and.resolveTo(session('BUSINESS_OWNER'));
+    pendingBaseline.declareFor.and.resolveTo(true);
+    fill();
+
+    await fixture.componentInstance.submit();
+
+    expect(pendingBaseline.declareFor).toHaveBeenCalledOnceWith('rosa@ejemplo.pe');
+    expect(useCase.execute).toHaveBeenCalledBefore(pendingBaseline.declareFor);
+  });
+
+  it('still enters the panel when the baseline cannot be saved (US45)', async () => {
+    await create({ registered: '1' });
+    useCase.execute.and.resolveTo(session('BUSINESS_OWNER'));
+    pendingBaseline.declareFor.and.resolveTo(false);
+    fill();
+
+    await fixture.componentInstance.submit();
+
+    expect(router.navigateByUrl).toHaveBeenCalledWith('/business');
+  });
+
+  it('does not touch the baseline when the credentials are wrong', async () => {
+    await create();
+    useCase.execute.and.rejectWith(new ApiError('INVALID_CREDENTIALS', 'Correo o contraseña incorrectos.'));
+    fill();
+
+    await fixture.componentInstance.submit();
+
+    expect(pendingBaseline.declareFor).not.toHaveBeenCalled();
   });
 
   it('sends a consumer to the nearby offers (US21)', async () => {

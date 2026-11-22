@@ -104,6 +104,47 @@
           <mat-hint>{{ 'registerBusinessPage.location.openingHoursHint' | translate }}</mat-hint>
         </mat-form-field>
 
+        <section class="baseline" [formGroup]="baseline" aria-labelledby="baseline-title" data-testid="baseline-section">
+          <h2 class="geo-section-title subtitle" id="baseline-title">{{ 'registerBusinessPage.baseline.title' | translate }}</h2>
+          <p class="geo-body intro">{{ 'registerBusinessPage.baseline.intro' | translate }}</p>
+          <div class="row">
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'registerBusinessPage.baseline.customers' | translate }}</mat-label>
+              <input
+                matInput
+                type="number"
+                formControlName="customersPerWeek"
+                min="1"
+                [max]="baselineLimits.maxCustomers"
+                step="1"
+                inputmode="numeric" />
+              <mat-hint>{{ 'registerBusinessPage.baseline.optional' | translate }}</mat-hint>
+              @if (baseline.controls.customersPerWeek.hasError('pair')) {
+                <mat-error>{{ 'registerBusinessPage.baseline.errors.pair' | translate }}</mat-error>
+              } @else {
+                <mat-error>{{ 'registerBusinessPage.baseline.errors.customers' | translate }}</mat-error>
+              }
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>{{ 'registerBusinessPage.baseline.ticket' | translate }}</mat-label>
+              <input
+                matInput
+                type="number"
+                formControlName="averageTicket"
+                min="0.01"
+                [max]="baselineLimits.maxTicket"
+                step="0.01"
+                inputmode="decimal" />
+              <mat-hint>{{ 'registerBusinessPage.baseline.optional' | translate }}</mat-hint>
+              @if (baseline.controls.averageTicket.hasError('pair')) {
+                <mat-error>{{ 'registerBusinessPage.baseline.errors.pair' | translate }}</mat-error>
+              } @else {
+                <mat-error>{{ 'registerBusinessPage.baseline.errors.ticket' | translate }}</mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </section>
+
         <div class="actions">
           <button mat-stroked-button type="button" (click)="back()">{{ 'registerBusinessPage.back' | translate }}</button>
           <button mat-flat-button type="submit" [disabled]="submitting()">
