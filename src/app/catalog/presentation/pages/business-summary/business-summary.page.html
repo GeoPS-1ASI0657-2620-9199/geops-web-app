@@ -4,7 +4,7 @@
       <h1 class="title">{{ 'businessSummary.greeting' | translate: { name: sessions.displayName() } }}</h1>
       <p class="subtitle">{{ 'businessSummary.subtitle' | translate }}</p>
     </div>
-    <app-business-seal />
+    <app-business-seal [withLink]="!pendingVerification()" />
   </header>
 
   @if (pendingVerification(); as status) {
