@@ -1,6 +1,6 @@
 .page { display: flex; flex-direction: column; gap: 20px; padding: 22px 26px 40px; }
 .crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; font: 400 11.5px/1.3 var(--font-brand); color: var(--text-dim); }
-.crumbs a { color: var(--text-dim); text-decoration: none; }
+.crumbs a { display: inline-flex; align-items: center; min-height: 40px; color: var(--text-dim); text-decoration: none; }
 .crumbs a:hover { color: var(--brand-deep); }
 .crumbs mat-icon { width: 14px; height: 14px; font-size: 14px; }
 .crumbs .current { color: var(--brand-deep); font-weight: 500; }

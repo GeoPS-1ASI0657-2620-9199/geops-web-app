@@ -55,7 +55,9 @@ const SUBSET: IsActiveMatchOptions = { ...EXACT, paths: 'subset' };
       .tab {
         display: flex;
         align-items: center;
+        justify-content: center;
         flex: none;
+        min-width: 44px;
         font: 500 14px/1.3 var(--font-brand);
         color: var(--text-primary);
         text-decoration: none;

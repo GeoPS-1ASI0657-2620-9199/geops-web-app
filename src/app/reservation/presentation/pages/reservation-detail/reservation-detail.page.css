@@ -21,6 +21,7 @@
 .back {
   display: inline-flex;
   align-items: center;
+  min-height: 40px;
   width: fit-content;
   color: var(--text-dim);
   text-decoration: none;

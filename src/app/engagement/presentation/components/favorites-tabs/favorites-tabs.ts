@@ -26,6 +26,8 @@ export type FavoritesTab = 'offers' | 'businesses' | 'follows';
       .chip.selected { background: var(--brand-action); border-color: var(--brand-action); color: var(--neutral-bg); }
       .chip:focus-visible { outline: 2px solid var(--brand-deep); outline-offset: 2px; }
       @media (pointer: coarse), (max-width: 640px) { .chip { height: 40px; padding: 0 var(--space-lg); font-size: 13px; } }
+      /* The tabs scroll sideways on a phone: the fade on the right edge tells there is a third one. */
+      @media (max-width: 640px) { .tabs { mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent); -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent); } .tabs > :last-child { margin-right: 24px; } }
     `,
   ],
 })

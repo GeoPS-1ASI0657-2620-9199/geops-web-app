@@ -147,9 +147,9 @@ import { OFFER_ORDERS, OfferOrder } from '../../offer-order';
           -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent);
         }
         .chips::-webkit-scrollbar { display: none; }
-        .chip { flex: none; height: 36px; font-size: 13px; }
+        .chip { flex: none; height: 40px; font-size: 13px; }
         .chip:last-child { margin-right: 32px; }
-        .link { min-height: 36px; }
+        .link { min-height: 40px; }
         .radius, .order { width: auto; min-width: 130px; height: 40px; padding-top: 9px; }
       }
     `,
