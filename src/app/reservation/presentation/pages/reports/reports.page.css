@@ -42,3 +42,6 @@
 .skeleton { height: 160px; background: var(--neutral-line); border-radius: var(--radius-panel); }
 @media (max-width: 1000px) { .layout { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 600px) { .page { padding: 16px; } }
+
+/* Touch screens: chips of 40 px instead of 28 px. */
+@media (pointer: coarse), (max-width: 640px) { .chip { height: 40px; min-width: 44px; font-size: 13px; } }

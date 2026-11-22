@@ -23,6 +23,7 @@ export type FavoritesTab = 'offers' | 'businesses' | 'follows';
       .chip:hover { border-color: var(--brand-action); }
       .chip.selected { background: var(--brand-action); border-color: var(--brand-action); color: var(--neutral-bg); }
       .chip:focus-visible { outline: 2px solid var(--brand-deep); outline-offset: 2px; }
+      @media (pointer: coarse), (max-width: 640px) { .chip { height: 40px; padding: 0 var(--space-lg); font-size: 13px; } }
     `,
   ],
 })

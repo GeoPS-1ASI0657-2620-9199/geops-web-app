@@ -48,3 +48,6 @@ button.action:disabled { color: var(--text-faint); cursor: not-allowed; }
 .none { color: var(--text-dim); text-align: center; }
 .skeleton { height: 280px; border-radius: var(--radius-card); background: var(--neutral-line-soft); }
 @media (max-width: 640px) { .page { padding: 16px; } }
+
+/* Touch screens: chips of 40 px instead of 28 px. */
+@media (pointer: coarse), (max-width: 640px) { .chip { height: 40px; min-width: 44px; font-size: 13px; } }
