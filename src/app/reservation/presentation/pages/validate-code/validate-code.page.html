@@ -20,6 +20,7 @@
             {{ (checking() ? 'validatePage.checking' : 'validatePage.validate') | translate }}
           </button>
         </div>
+        <app-qr-scanner (scanned)="onScanned($event)" />
       </form>
 
       @if (reservation(); as r) {

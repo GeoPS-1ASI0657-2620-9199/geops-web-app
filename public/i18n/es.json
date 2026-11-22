@@ -624,7 +624,14 @@
     "confirm": "Confirmar entrega",
     "confirming": "Registrando…",
     "delivered": "El {{date}} quedó registrada la entrega y el código ya no admite otro uso",
-    "alreadyDelivered": "Este código ya se entregó a las {{time}} ({{date}}). No vuelvas a entregar el producto."
+    "alreadyDelivered": "Este código ya se entregó a las {{time}} ({{date}}). No vuelvas a entregar el producto.",
+    "scan": {
+      "start": "Escanear QR",
+      "camera": "Cámara para leer el QR de la reserva",
+      "hint": "Apunta al QR que el cliente muestra en «Mi reserva».",
+      "cancel": "Cancelar",
+      "failed": "No pudimos abrir la cámara. Escribe el código."
+    }
   },
   "reportsPage": {
     "title": "Reportes de clientes",

@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import { ApiError, NETWORK_ERROR } from '../../../../shared/domain/api-error';
 import { GeoSeal } from '../../../../shared/ui/geo-seal/geo-seal';
+import { QrScanner } from '../../components/qr-scanner/qr-scanner';
 import { FindReservationByCodeUseCase, MALFORMED_CODE } from '../../../application/find-reservation-by-code.use-case';
 import { RESERVATION_NOT_FOUND } from '../../../application/get-reservation.use-case';
 import { RedeemReservationUseCase, Redemption } from '../../../application/redeem-reservation.use-case';
@@ -56,7 +57,7 @@ export function rejectionOf(reservation: Reservation, now: number = Date.now()):
 @Component({
   selector: 'app-validate-code',
   standalone: true,
-  imports: [FormsModule, MatButtonModule, MatIconModule, TranslateModule, GeoSeal],
+  imports: [FormsModule, MatButtonModule, MatIconModule, TranslateModule, GeoSeal, QrScanner],
   templateUrl: './validate-code.page.html',
   styleUrl: './validate-code.page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -97,6 +98,12 @@ export class ValidateCodePage {
     } finally {
       this.checking.set(false);
     }
+  }
+
+  /** The QR holds the same code the customer would read aloud: it goes through the same check. */
+  onScanned(text: string): void {
+    this.code.set(text);
+    void this.validate();
   }
 
   /** "Confirmar entrega": records the delivery of the valid code on screen (US41). */

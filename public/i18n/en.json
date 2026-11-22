@@ -624,7 +624,14 @@
     "confirm": "Confirm delivery",
     "confirming": "Recording…",
     "delivered": "Delivery recorded on {{date}}; the code cannot be used again",
-    "alreadyDelivered": "This code was already delivered at {{time}} ({{date}}). Do not hand over the product again."
+    "alreadyDelivered": "This code was already delivered at {{time}} ({{date}}). Do not hand over the product again.",
+    "scan": {
+      "start": "Scan QR",
+      "camera": "Camera to read the reservation QR",
+      "hint": "Point at the QR the customer shows in “My reservation”.",
+      "cancel": "Cancel",
+      "failed": "We could not open the camera. Type the code."
+    }
   },
   "reportsPage": {
     "title": "Customer reports",
