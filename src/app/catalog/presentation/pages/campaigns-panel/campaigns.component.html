@@ -74,10 +74,10 @@
                   </span>
                 </td>
                 <td><geo-seal [kind]="seals[campaign.status]" [text]="'campaignsPage.status.' + campaign.status | translate" /></td>
-                <td class="dim">{{ period(campaign) }}</td>
-                <td class="dim">{{ zone(campaign) }}</td>
-                <td class="green">{{ campaign.offers.length }}</td>
-                <td class="price">
+                <td class="dim" [attr.data-label]="'campaignsPage.columns.period' | translate">{{ period(campaign) }}</td>
+                <td class="dim" [attr.data-label]="'campaignsPage.columns.zone' | translate">{{ zone(campaign) }}</td>
+                <td class="green" [attr.data-label]="'campaignsPage.columns.offers' | translate">{{ campaign.offers.length }}</td>
+                <td class="price" [attr.data-label]="'campaignsPage.columns.price' | translate">
                   @if (campaign.offers[0]; as first) {
                     S/ {{ first.price | number: '1.2-2' }}
                   }
