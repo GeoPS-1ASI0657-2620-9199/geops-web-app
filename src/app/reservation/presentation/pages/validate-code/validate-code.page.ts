@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
+import { GetOfferDetailUseCase } from '../../../../catalog/application/get-offer-detail.use-case';
 import { ApiError, NETWORK_ERROR } from '../../../../shared/domain/api-error';
 import { GeoSeal } from '../../../../shared/ui/geo-seal/geo-seal';
 import { QrScanner } from '../../components/qr-scanner/qr-scanner';
@@ -57,7 +59,7 @@ export function rejectionOf(reservation: Reservation, now: number = Date.now()):
 @Component({
   selector: 'app-validate-code',
   standalone: true,
-  imports: [FormsModule, MatButtonModule, MatIconModule, TranslateModule, GeoSeal, QrScanner],
+  imports: [DecimalPipe, FormsModule, MatButtonModule, MatIconModule, TranslateModule, GeoSeal, QrScanner],
   templateUrl: './validate-code.page.html',
   styleUrl: './validate-code.page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -65,6 +67,7 @@ export function rejectionOf(reservation: Reservation, now: number = Date.now()):
 export class ValidateCodePage {
   private readonly findByCode = inject(FindReservationByCodeUseCase);
   private readonly redeem = inject(RedeemReservationUseCase);
+  private readonly getOffer = inject(GetOfferDetailUseCase);
 
   protected readonly code = signal('');
   protected readonly checking = signal(false);
@@ -73,6 +76,16 @@ export class ValidateCodePage {
   protected readonly redeeming = signal(false);
   /** The delivery once it is recorded; the code no longer admits a second use (CA-41.2). */
   protected readonly redemption = signal<Redemption | null>(null);
+  /** Price of the reserved offer, the amount the owner charges; null while it loads or if Catalog fails. */
+  protected readonly price = signal<number | null>(null);
+  /** "Entrega registrada" once delivered here, "ya se canjeó" when it was delivered before. */
+  protected readonly resultTitle = computed(() => {
+    const done = this.redemption();
+    if (!done) {
+      return 'validatePage.valid';
+    }
+    return done.alreadyRedeemed ? 'validatePage.rejected.REDEEMED.title' : 'validatePage.deliveredTitle';
+  });
   protected readonly seals = STATUS_SEAL;
   protected readonly limaDateTime = limaDateTime;
   protected readonly limaTime = limaTime;
@@ -89,10 +102,14 @@ export class ValidateCodePage {
     this.reservation.set(null);
     this.rejection.set(null);
     this.redemption.set(null);
+    this.price.set(null);
     try {
       const reservation = await this.findByCode.execute(this.code());
       this.reservation.set(reservation);
       this.rejection.set(rejectionOf(reservation));
+      if (!this.rejection()) {
+        void this.loadPrice(reservation);
+      }
     } catch (error) {
       this.rejection.set(this.rejectionFor(error));
     } finally {
@@ -129,6 +146,19 @@ export class ValidateCodePage {
     this.reservation.set(null);
     this.rejection.set(null);
     this.redemption.set(null);
+    this.price.set(null);
+  }
+
+  /** The reservation does not carry the price; without it the result still shows, only the amount is missing. */
+  private async loadPrice(reservation: Reservation): Promise<void> {
+    try {
+      const offer = await this.getOffer.execute(reservation.offerId);
+      if (this.reservation()?.code === reservation.code) {
+        this.price.set(offer.price);
+      }
+    } catch {
+      this.price.set(null);
+    }
   }
 
   /** A lookup that fails for an unknown reason reads as not found, as in the Sprint 1. */

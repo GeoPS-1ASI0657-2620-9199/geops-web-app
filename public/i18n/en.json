@@ -690,6 +690,8 @@
     "reservedAt": "Reserved",
     "another": "Validate another code",
     "charge": "Charge the deal price. The customer paid nothing when reserving.",
+    "amount": "Amount to charge",
+    "deliveredTitle": "Delivery recorded",
     "rejected": {
       "MALFORMED": {
         "title": "That code has the wrong format",

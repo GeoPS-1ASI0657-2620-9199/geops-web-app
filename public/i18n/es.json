@@ -690,6 +690,8 @@
     "reservedAt": "Reservado",
     "another": "Validar otro código",
     "charge": "Cobra el precio de la oferta. El cliente no pagó nada al reservar.",
+    "amount": "Monto a cobrar",
+    "deliveredTitle": "Entrega registrada",
     "rejected": {
       "MALFORMED": {
         "title": "Ese código no tiene el formato correcto",
