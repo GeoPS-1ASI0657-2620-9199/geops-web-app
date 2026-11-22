@@ -5,6 +5,10 @@
     <span aria-current="page">{{ 'reportPage.crumb' | translate }}</span>
   </nav>
 
+  @if (state() !== 'ready') {
+    <h1 class="title">{{ 'reportPage.title' | translate }}</h1>
+  }
+
   @switch (state()) {
     @case ('loading') { <p role="status" class="status">{{ 'reportPage.loading' | translate }}</p> }
     @case ('unavailable') {

@@ -110,6 +110,8 @@ describe('ReportPage (US42, Figma screen 5)', () => {
     const page = await render({ ...RESERVATION, status: 'REDEEMED', redeemedAt: '2026-10-14T16:00:00Z' });
 
     expect(radios().length).toBe(0);
+    expect(page.querySelector('h1')?.textContent?.trim()).toBe('reportPage.title');
+    expect(page.querySelectorAll('h1').length).toBe(1);
     expect(page.textContent).toContain('reportPage.unavailable.title');
   });
 });
