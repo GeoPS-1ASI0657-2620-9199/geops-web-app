@@ -496,7 +496,7 @@
     "emptyFiltered": {
       "title": "No tienes cupones en este estado",
       "description": "Prueba con otro filtro.",
-      "action": "Ver todos"
+      "action": "Ver todos mis cupones"
     },
     "error": {
       "title": "No pudimos cargar tus reservas",

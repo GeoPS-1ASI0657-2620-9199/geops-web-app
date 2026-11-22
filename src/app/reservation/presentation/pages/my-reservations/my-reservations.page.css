@@ -82,8 +82,12 @@
 
 /* Not ".title": that is the page heading, and sharing it made the offer name 22 px and push the card off screen. */
 .offer-title {
+  display: flex;
+  align-items: center;
   flex: 1;
   min-width: 0;
+  /* The whole title row is the tap target, not just the 17 px line of text. */
+  min-height: 40px;
   color: var(--text-primary);
   text-decoration: none;
 }
@@ -131,6 +135,12 @@
   }
   to {
     background-position: -200% 0;
+  }
+}
+
+@media (pointer: coarse), (max-width: 640px) {
+  .chip {
+    min-height: 40px;
   }
 }
 

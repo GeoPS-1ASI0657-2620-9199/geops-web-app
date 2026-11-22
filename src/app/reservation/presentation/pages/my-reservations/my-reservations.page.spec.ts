@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { ActivatedRoute, Router, convertToParamMap, provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import { ApiError, NETWORK_ERROR } from '../../../../shared/domain/api-error';
 import { Reservation } from '../../../domain/model/reservation';
@@ -32,15 +32,17 @@ describe('MyReservationsPage', () => {
   let fixture: ComponentFixture<MyReservationsPage>;
   let reservations: jasmine.SpyObj<ReservationRepository>;
 
-  const render = async () => {
+  const render = async (query: Record<string, string> = {}) => {
     await TestBed.configureTestingModule({
       imports: [MyReservationsPage],
       providers: [
         provideRouter([]),
         provideTranslateService(),
         { provide: ReservationRepository, useValue: reservations },
+        { provide: ActivatedRoute, useValue: { snapshot: { queryParamMap: convertToParamMap(query) } } },
       ],
     }).compileComponents();
+    spyOn(TestBed.inject(Router), 'navigate').and.resolveTo(true);
     fixture = TestBed.createComponent(MyReservationsPage);
     return settle();
   };
@@ -99,6 +101,36 @@ describe('MyReservationsPage', () => {
 
     expect(reservations.findMine).toHaveBeenCalledWith('EXPIRED');
     expect(chip('filters.EXPIRED').getAttribute('aria-pressed')).toBe('true');
+  });
+
+  it('keeps the chosen status in ?estado= so a reload opens the same filter', async () => {
+    reservations.findMine.and.resolveTo([ACTIVE]);
+    await render();
+
+    chip('filters.EXPIRED').click();
+    await settle();
+
+    expect(TestBed.inject(Router).navigate).toHaveBeenCalledWith(
+      [],
+      jasmine.objectContaining({ queryParams: { estado: 'vencidos' }, replaceUrl: true }),
+    );
+  });
+
+  it('opens on the status that comes in the URL', async () => {
+    reservations.findMine.and.resolveTo([REDEEMED]);
+
+    await render({ estado: 'canjeados' });
+
+    expect(reservations.findMine).toHaveBeenCalledWith('REDEEMED');
+    expect(chip('filters.REDEEMED').getAttribute('aria-pressed')).toBe('true');
+  });
+
+  it('ignores an unknown status in the URL and opens on the active coupons', async () => {
+    reservations.findMine.and.resolveTo([ACTIVE]);
+
+    await render({ estado: 'otro' });
+
+    expect(reservations.findMine).toHaveBeenCalledWith('ACTIVE');
   });
 
   it('invites to look for offers when there is no reservation yet', async () => {

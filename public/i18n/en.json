@@ -496,7 +496,7 @@
     "emptyFiltered": {
       "title": "No coupons with this status",
       "description": "Try another filter.",
-      "action": "See all"
+      "action": "See all my coupons"
     },
     "error": {
       "title": "We could not load your reservations",
