@@ -158,6 +158,11 @@ export type ShellRole = 'CONSUMER' | 'BUSINESS_OWNER' | 'ADMIN';
         .pill.user { padding: 0 6px; }
         .pill.user .name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
       }
+      /* On touch screens and phones every pill is at least a 40 x 40 target. */
+      @media (pointer: coarse), (max-width: 640px) {
+        .pill { height: 40px; min-width: 40px; justify-content: center; }
+        .pill.user { height: 40px; }
+      }
     `,
   ],
 })
