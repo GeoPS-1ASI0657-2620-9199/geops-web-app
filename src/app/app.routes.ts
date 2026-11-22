@@ -33,6 +33,12 @@ export const routes: Routes = [
     title: 'GeoPS - Registrar negocio',
   },
   {
+    path: 'confirmar-correo',
+    loadComponent: () =>
+      import('./iam/presentation/pages/confirm-email/confirm-email.page').then((m) => m.ConfirmEmailPage),
+    title: 'GeoPS - Confirmar correo',
+  },
+  {
     path: '',
     component: Layout,
     children: [

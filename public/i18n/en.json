@@ -945,6 +945,36 @@
     "reactivate": "Turn them back on",
     "goHome": "Go to GeoPS"
   },
+  "confirmEmailPage": {
+    "confirming": {
+      "title": "Confirming your email…",
+      "description": "This only takes a few seconds."
+    },
+    "confirmed": {
+      "title": "Your email is confirmed",
+      "description": "Thanks for confirming it. You can keep using GeoPS.",
+      "channel": "From now on we can send you email notices according to your preferences."
+    },
+    "invalid": {
+      "title": "This link is invalid or has expired",
+      "description": "You may have used it already or its time ran out. Open the latest confirmation email we sent you."
+    },
+    "missing": {
+      "title": "This link is missing its code",
+      "description": "Open the full link in the GeoPS confirmation email, without cutting it."
+    },
+    "channelOff": {
+      "title": "Email notices are still off",
+      "description": "We will not send you email notices until you confirm your address."
+    },
+    "failed": {
+      "title": "We could not confirm your email",
+      "description": "We could not complete the operation. Please try again."
+    },
+    "retry": "Try again",
+    "logIn": "Log in",
+    "goHome": "Go to home"
+  },
   "pushPage": {
     "title": "Notices in this browser",
     "hint": "Enable them here after choosing your preferences. You can turn them off on each device.",

@@ -945,6 +945,36 @@
     "reactivate": "Volver a activarlos",
     "goHome": "Ir a GeoPS"
   },
+  "confirmEmailPage": {
+    "confirming": {
+      "title": "Confirmando tu correo…",
+      "description": "Esto toma solo unos segundos."
+    },
+    "confirmed": {
+      "title": "Tu correo quedó confirmado",
+      "description": "Gracias por confirmarlo. Ya puedes seguir usando GeoPS.",
+      "channel": "Desde ahora podemos enviarte avisos por correo según tus preferencias."
+    },
+    "invalid": {
+      "title": "Este enlace no es válido o ya venció",
+      "description": "Puede que ya lo hayas usado o que haya pasado su plazo. Abre el correo de confirmación más reciente que te enviamos."
+    },
+    "missing": {
+      "title": "Al enlace le falta su código",
+      "description": "Abre el enlace completo del correo de confirmación de GeoPS, sin recortarlo."
+    },
+    "channelOff": {
+      "title": "Los avisos por correo siguen desactivados",
+      "description": "No te enviaremos avisos por correo hasta que confirmes tu dirección."
+    },
+    "failed": {
+      "title": "No pudimos confirmar tu correo",
+      "description": "No pudimos completar la operación. Inténtalo de nuevo."
+    },
+    "retry": "Reintentar",
+    "logIn": "Iniciar sesión",
+    "goHome": "Ir al inicio"
+  },
   "pushPage": {
     "title": "Avisos en este navegador",
     "hint": "Actívalos aquí después de elegir tus preferencias. Puedes desactivarlos en cada dispositivo.",
