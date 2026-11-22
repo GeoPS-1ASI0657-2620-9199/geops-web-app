@@ -28,7 +28,7 @@ export const authInterceptor: HttpInterceptorFn = (request, next) => {
   return next(authorized).pipe(
     catchError((error: unknown) => {
       if (error instanceof HttpErrorResponse && error.status === UNAUTHORIZED) {
-        logOut.execute();
+        logOut.execute({ revoke: false });
         void router.navigate(['/login'], { queryParams: { expired: 1 } });
       }
       return throwError(() => error);

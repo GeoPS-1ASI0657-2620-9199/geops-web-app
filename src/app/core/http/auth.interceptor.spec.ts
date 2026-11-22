@@ -1,3 +1,4 @@
+import { IdentityGateway } from '../../iam/domain/ports/identity.gateway';
 import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
@@ -39,7 +40,10 @@ describe('authInterceptor', () => {
   let storage: MemorySessionStorage;
   let router: Router;
 
+  let identity: { logOut: jasmine.Spy };
+
   const setUp = (session: Session | null) => {
+    identity = { logOut: jasmine.createSpy('logOut').and.resolveTo() };
     storage = new MemorySessionStorage(session);
     TestBed.configureTestingModule({
       providers: [
@@ -48,6 +52,7 @@ describe('authInterceptor', () => {
         provideRouter([]),
         { provide: API_BASE_URL, useValue: BASE_URL },
         { provide: SessionStorage, useValue: storage },
+        { provide: IdentityGateway, useValue: identity },
       ],
     });
     http = TestBed.inject(HttpClient);
@@ -106,5 +111,7 @@ describe('authInterceptor', () => {
     await expectAsync(call).toBeRejected();
     expect(TestBed.inject(SessionStore).session()).toBeNull();
     expect(router.navigate).toHaveBeenCalledWith(['/login'], { queryParams: { expired: 1 } });
+    // The token was already rejected: no revocation call, so a 401 cannot loop into another 401.
+    expect(identity.logOut).not.toHaveBeenCalled();
   });
 });

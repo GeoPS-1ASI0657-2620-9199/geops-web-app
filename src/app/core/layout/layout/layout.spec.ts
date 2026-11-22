@@ -1,3 +1,4 @@
+import { IdentityGateway } from '../../../iam/domain/ports/identity.gateway';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
 import { Session } from '../../../iam/domain/model/session';
@@ -38,7 +39,12 @@ describe('Layout', () => {
     storage = new MemorySessionStorage(session);
     await TestBed.configureTestingModule({
       imports: [Layout],
-      providers: [provideRouter([]), provideTranslateService(), { provide: SessionStorage, useValue: storage }],
+      providers: [
+        provideRouter([]),
+        provideTranslateService(),
+        { provide: SessionStorage, useValue: storage },
+        { provide: IdentityGateway, useValue: { logOut: () => Promise.resolve() } },
+      ],
     }).compileComponents();
     fixture = TestBed.createComponent(Layout);
     fixture.detectChanges();
