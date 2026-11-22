@@ -577,7 +577,8 @@
     "countFor": "{{total}} offers for “{{term}}”",
     "countForOne": "1 offer for “{{term}}”",
     "results": "Results",
-    "category": "Category: {{name}}"
+    "category": "Category: {{name}}",
+    "clearTermLabel": "Clear the search “{{term}}”"
   },
   "categoriesPage": {
     "title": "Categories",

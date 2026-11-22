@@ -169,7 +169,7 @@
                 }
               </p>
               <p class="explain">
-                {{ 'campaignMetrics.baseline.comparison' | translate: { customers: (unit('customers', b.campaignCustomers) | translate: { count: b.campaignCustomers }), expected: (b.expectedCustomers | number: '1.0-1'), days: (unit('days', m.period.days) | translate: { count: m.period.days }) } }}
+                {{ 'campaignMetrics.baseline.comparison' | translate: { customers: (unit('customers', b.campaignCustomers) | translate: { count: b.campaignCustomers }), expected: (unit('customers', roundCustomers(b.expectedCustomers)) | translate: { count: (roundCustomers(b.expectedCustomers) | number: '1.0-0') }), days: (unit('days', m.period.days) | translate: { count: m.period.days }) } }}
               </p>
               <dl class="facts">
                 <div>

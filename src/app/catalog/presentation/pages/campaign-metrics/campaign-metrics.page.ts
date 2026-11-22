@@ -173,6 +173,11 @@ export class CampaignMetricsPage implements OnInit {
   }
 
   /** Key of "1 día" or "3 días": Spanish and English need the singular when the count is one. */
+  /** Customers are whole people: the expected count from the weekly baseline is rounded. */
+  protected roundCustomers(value: number): number {
+    return Math.round(value);
+  }
+
   protected unit(name: 'days' | 'customers', count: number): string {
     return 'campaignMetrics.units.' + name + (count === 1 ? 'One' : '');
   }

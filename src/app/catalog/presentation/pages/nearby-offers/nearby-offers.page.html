@@ -14,7 +14,7 @@
     </div>
     <div class="head-actions">
       @if (term(); as term) {
-        <button class="term" type="button" (click)="clearTerm()">
+        <button class="term" type="button" (click)="clearTerm()" [attr.aria-label]="'offersPage.clearTermLabel' | translate: { term: term }">
           {{ 'offersPage.resultsFor' | translate: { term: term } }}
           <mat-icon aria-hidden="true">close</mat-icon>
         </button>
