@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
-import { provideTranslateService } from '@ngx-translate/core';
+import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { ApiError } from '../../../../shared/domain/api-error';
 import { CampaignMetrics, CampaignMetricsSummary } from '../../../domain/model/campaign-metrics';
@@ -159,5 +159,49 @@ describe('CampaignMetricsPage', () => {
     const page = await render(new ApiError('FORBIDDEN', 'Campaign 14 belongs to another account'));
 
     expect(page.textContent).toContain('Campaign 14 belongs to another account');
+  });
+
+  it('writes one day and one customer in singular', async () => {
+    const oneDay = { from: '2026-10-05', to: '2026-10-05', days: 1 };
+    await render({
+      ...METRICS,
+      period: oneDay,
+      daily: [METRICS.daily[0]],
+      baseline: {
+        customersPerWeek: 140,
+        averageTicket: 18.5,
+        declaredAt: '2026-10-01T15:20:00Z',
+        expectedCustomers: 20,
+        campaignCustomers: 1,
+        customersChangePercent: -95,
+        estimatedExtraSales: 0,
+      },
+    });
+    const translate = TestBed.inject(TranslateService);
+    translate.setTranslation('es', {
+      campaignMetrics: {
+        periodLabel: 'Del {{from}} al {{to}} · {{days}}',
+        units: { days: '{{count}} días', daysOne: '{{count}} día', customers: '{{count}} clientes', customersOne: '{{count}} cliente' },
+        baseline: { comparison: 'La campaña trajo {{customers}} con canje; sin GeoPS atiendes unos {{expected}} en {{days}}.' },
+      },
+    });
+    translate.use('es');
+    fixture.detectChanges();
+    const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
+
+    expect(text).toContain('· 1 día');
+    expect(text).toContain('La campaña trajo 1 cliente con canje');
+    expect(text).toContain('en 1 día.');
+    expect(text).not.toContain('días');
+  });
+
+  it('keeps the daily table hidden inside a 1 px wrapper so it never widens the page', async () => {
+    const page = await render();
+    const wrapper = page.querySelector<HTMLElement>('.visually-hidden')!;
+
+    expect(wrapper.tagName).toBe('DIV');
+    expect(wrapper.querySelector('table')).not.toBeNull();
+    expect(getComputedStyle(wrapper).width).toBe('1px');
+    expect(getComputedStyle(wrapper).overflow).toBe('hidden');
   });
 });

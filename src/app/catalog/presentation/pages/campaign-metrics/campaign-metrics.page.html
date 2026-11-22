@@ -14,7 +14,7 @@
       </h1>
       @if (metrics(); as m) {
         <p class="subtitle">
-          {{ 'campaignMetrics.periodLabel' | translate: { from: day(m.period.from, true), to: day(m.period.to, true), days: m.period.days } }}
+          {{ 'campaignMetrics.periodLabel' | translate: { from: day(m.period.from, true), to: day(m.period.to, true), days: (unit('days', m.period.days) | translate: { count: m.period.days }) } }}
         </p>
       }
     </div>
@@ -118,7 +118,7 @@
             @if (peak() === 0) {
               <p class="quiet" data-testid="no-activity">{{ 'campaignMetrics.daily.empty' | translate }}</p>
             }
-            <div class="chart" role="img" [attr.aria-label]="'campaignMetrics.daily.summary' | translate: { series: ('campaignMetrics.kpi.' + series() | translate), peak: peak(), days: m.period.days }">
+            <div class="chart" role="img" [attr.aria-label]="'campaignMetrics.daily.summary' | translate: { series: ('campaignMetrics.kpi.' + series() | translate), peak: peak(), days: (unit('days', m.period.days) | translate: { count: m.period.days }) }">
               <span class="peak" aria-hidden="true">{{ peak() | number }}</span>
               <div class="bars" aria-hidden="true">
                 @for (bar of bars(); track bar.date; let i = $index) {
@@ -129,28 +129,30 @@
                 }
               </div>
             </div>
-            <table class="visually-hidden">
-              <caption>{{ 'campaignMetrics.daily.title' | translate }}</caption>
-              <thead>
-                <tr>
-                  <th scope="col">{{ 'campaignMetrics.daily.date' | translate }}</th>
-                  @for (option of seriesOptions; track option) {
-                    <th scope="col">{{ 'campaignMetrics.kpi.' + option | translate }}</th>
-                  }
-                </tr>
-              </thead>
-              <tbody>
-                @for (entry of m.daily; track entry.date) {
+            <div class="visually-hidden">
+              <table>
+                <caption>{{ 'campaignMetrics.daily.title' | translate }}</caption>
+                <thead>
                   <tr>
-                    <th scope="row">{{ day(entry.date, true) }}</th>
-                    <td>{{ entry.impressions }}</td>
-                    <td>{{ entry.clicks }}</td>
-                    <td>{{ entry.reservations }}</td>
-                    <td>{{ entry.redemptions }}</td>
+                    <th scope="col">{{ 'campaignMetrics.daily.date' | translate }}</th>
+                    @for (option of seriesOptions; track option) {
+                      <th scope="col">{{ 'campaignMetrics.kpi.' + option | translate }}</th>
+                    }
                   </tr>
-                }
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  @for (entry of m.daily; track entry.date) {
+                    <tr>
+                      <th scope="row">{{ day(entry.date, true) }}</th>
+                      <td>{{ entry.impressions }}</td>
+                      <td>{{ entry.clicks }}</td>
+                      <td>{{ entry.reservations }}</td>
+                      <td>{{ entry.redemptions }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
           </section>
 
           <section class="card baseline" aria-labelledby="baseline-title" data-testid="baseline">
@@ -167,7 +169,7 @@
                 }
               </p>
               <p class="explain">
-                {{ 'campaignMetrics.baseline.comparison' | translate: { customers: b.campaignCustomers, expected: (b.expectedCustomers | number: '1.0-1'), days: m.period.days } }}
+                {{ 'campaignMetrics.baseline.comparison' | translate: { customers: (unit('customers', b.campaignCustomers) | translate: { count: b.campaignCustomers }), expected: (b.expectedCustomers | number: '1.0-1'), days: (unit('days', m.period.days) | translate: { count: m.period.days }) } }}
               </p>
               <dl class="facts">
                 <div>

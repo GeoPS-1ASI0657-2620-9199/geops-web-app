@@ -156,7 +156,14 @@
       "title": "Publica una oferta para tu zona",
       "description": "Elige el producto, el precio con descuento, la vigencia y hasta dónde quieres llegar."
     },
-    "summary": "{{active}} activas · {{paused}} pausadas · {{finished}} finalizadas",
+    "summary": {
+      "active": "{{count}} activas",
+      "activeOne": "{{count}} activa",
+      "paused": "{{count}} pausadas",
+      "pausedOne": "{{count}} pausada",
+      "finished": "{{count}} finalizadas",
+      "finishedOne": "{{count}} finalizada"
+    },
     "filters": {
       "ALL": "Todas",
       "ACTIVE": "Activas",
@@ -1124,7 +1131,13 @@
   "campaignMetrics": {
     "back": "Mis campañas",
     "title": "Métricas",
-    "periodLabel": "Del {{from}} al {{to}} · {{days}} días",
+    "periodLabel": "Del {{from}} al {{to}} · {{days}}",
+    "units": {
+      "days": "{{count}} días",
+      "daysOne": "{{count}} día",
+      "customers": "{{count}} clientes",
+      "customersOne": "{{count}} cliente"
+    },
     "period": {
       "label": "Periodo",
       "campaign": "Vigencia de la campaña",
@@ -1158,11 +1171,11 @@
       "series": "Cifra que muestra el gráfico",
       "date": "Fecha",
       "empty": "Esta campaña no registra actividad en el periodo; sus cifras están en cero.",
-      "summary": "{{series}} por día durante {{days}} días; el día más alto suma {{peak}}."
+      "summary": "{{series}} por día durante {{days}}; el día más alto suma {{peak}}."
     },
     "baseline": {
       "title": "Frente a tu línea base",
-      "comparison": "La campaña trajo {{customers}} clientes con canje; sin GeoPS atiendes unos {{expected}} en {{days}} días.",
+      "comparison": "La campaña trajo {{customers}} con canje; sin GeoPS atiendes unos {{expected}} en {{days}}.",
       "usual": "Clientes habituales",
       "perWeek": "{{customers}} por semana",
       "ticket": "Ticket promedio",

@@ -156,7 +156,14 @@
       "title": "Publish an offer for your area",
       "description": "Choose the product, the discounted price, the validity and how far you want to reach."
     },
-    "summary": "{{active}} active · {{paused}} paused · {{finished}} finished",
+    "summary": {
+      "active": "{{count}} active",
+      "activeOne": "{{count}} active",
+      "paused": "{{count}} paused",
+      "pausedOne": "{{count}} paused",
+      "finished": "{{count}} finished",
+      "finishedOne": "{{count}} finished"
+    },
     "filters": {
       "ALL": "All",
       "ACTIVE": "Active",
@@ -1124,7 +1131,13 @@
   "campaignMetrics": {
     "back": "My campaigns",
     "title": "Metrics",
-    "periodLabel": "From {{from}} to {{to}} · {{days}} days",
+    "periodLabel": "From {{from}} to {{to}} · {{days}}",
+    "units": {
+      "days": "{{count}} days",
+      "daysOne": "{{count}} day",
+      "customers": "{{count}} customers",
+      "customersOne": "{{count}} customer"
+    },
     "period": {
       "label": "Period",
       "campaign": "Campaign validity",
@@ -1158,11 +1171,11 @@
       "series": "Figure shown in the chart",
       "date": "Date",
       "empty": "This campaign has no activity in the period; its figures are zero.",
-      "summary": "{{series}} per day over {{days}} days; the highest day adds up to {{peak}}."
+      "summary": "{{series}} per day over {{days}}; the highest day adds up to {{peak}}."
     },
     "baseline": {
       "title": "Against your baseline",
-      "comparison": "The campaign brought {{customers}} customers who redeemed; without GeoPS you serve about {{expected}} in {{days}} days.",
+      "comparison": "The campaign brought {{customers}} who redeemed; without GeoPS you serve about {{expected}} in {{days}}.",
       "usual": "Usual customers",
       "perWeek": "{{customers}} per week",
       "ticket": "Average ticket",

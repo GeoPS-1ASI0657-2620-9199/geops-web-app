@@ -128,12 +128,18 @@
 .table tr.current td { background: var(--brand-mist); }
 .current-name { font-weight: 600; }
 
+/* A table sizes itself to its content and ignores width: 1px, so the wrapper is the one hidden. */
+.chart-card { position: relative; }
 .visually-hidden {
   position: absolute;
   width: 1px;
   height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
   overflow: hidden;
   clip: rect(0 0 0 0);
+  clip-path: inset(50%);
   white-space: nowrap;
 }
 
@@ -152,6 +158,8 @@
   .table tr { padding: 12px 0; border-bottom: 1px solid var(--neutral-line-soft); }
   .table td { display: flex; justify-content: space-between; padding: 4px 0; border: 0; }
   .table td[data-label]::before { content: attr(data-label); color: var(--text-dim); }
+  .table tr.current { padding: 12px; border-radius: var(--radius-input); background: var(--brand-mist); }
+  .table tr.current td { background: transparent; }
   .table .num { text-align: right; }
 }
 

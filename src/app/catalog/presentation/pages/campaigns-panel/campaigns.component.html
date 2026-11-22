@@ -4,7 +4,9 @@
       <h1 class="title">{{ 'campaignsPage.title' | translate }}</h1>
       @if (state() === 'ready') {
         <p class="subtitle">
-          {{ 'campaignsPage.summary' | translate: { active: counts().ACTIVE, paused: counts().PAUSED, finished: counts().FINISHED } }}
+          {{ summaryKey('active', counts().ACTIVE) | translate: { count: counts().ACTIVE } }} ·
+          {{ summaryKey('paused', counts().PAUSED) | translate: { count: counts().PAUSED } }} ·
+          {{ summaryKey('finished', counts().FINISHED) | translate: { count: counts().FINISHED } }}
         </p>
       } @else if (sessions.session()?.businessName; as business) {
         <p class="subtitle">{{ business }}</p>

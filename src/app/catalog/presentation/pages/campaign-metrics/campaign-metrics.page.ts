@@ -172,6 +172,11 @@ export class CampaignMetricsPage implements OnInit {
     return this.day(new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Lima' }).format(new Date(instant)), true);
   }
 
+  /** Key of "1 día" or "3 días": Spanish and English need the singular when the count is one. */
+  protected unit(name: 'days' | 'customers', count: number): string {
+    return 'campaignMetrics.units.' + name + (count === 1 ? 'One' : '');
+  }
+
   /** A label every few bars so a 30-day chart does not print 30 overlapping dates. */
   protected showsLabel(index: number, total: number): boolean {
     const step = Math.ceil(total / 7);
