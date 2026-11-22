@@ -995,6 +995,11 @@
     "logIn": "Log in",
     "goHome": "Go to home"
   },
+  "map": {
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "location": "Location"
+  },
   "pushPage": {
     "title": "Notices in this browser",
     "hint": "Enable them here after choosing your preferences. You can turn them off on each device.",

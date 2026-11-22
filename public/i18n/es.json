@@ -995,6 +995,11 @@
     "logIn": "Iniciar sesión",
     "goHome": "Ir al inicio"
   },
+  "map": {
+    "zoomIn": "Acercar",
+    "zoomOut": "Alejar",
+    "location": "Ubicación"
+  },
   "pushPage": {
     "title": "Avisos en este navegador",
     "hint": "Actívalos aquí después de elegir tus preferencias. Puedes desactivarlos en cada dispositivo.",

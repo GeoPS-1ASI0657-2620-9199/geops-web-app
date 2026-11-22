@@ -4,11 +4,14 @@ import {
   ElementRef,
   OnDestroy,
   effect,
+  inject,
   input,
   output,
   viewChild,
 } from '@angular/core';
 import * as L from 'leaflet';
+import { TranslateService } from '@ngx-translate/core';
+import { MapLabels, mapLabels } from '../map-labels';
 
 /** Point chosen on the map, in decimal degrees. */
 export interface PickedPoint {
@@ -65,6 +68,8 @@ export class GeoLocationPicker implements AfterViewInit, OnDestroy {
 
   private readonly mapHost = viewChild.required<ElementRef<HTMLDivElement>>('mapHost');
   private map?: L.Map;
+  private readonly translate = inject(TranslateService, { optional: true });
+  private labels: MapLabels = mapLabels(null);
   private resizeObserver?: ResizeObserver;
   private marker?: L.Marker;
   private circle?: L.Circle;
@@ -87,7 +92,10 @@ export class GeoLocationPicker implements AfterViewInit, OnDestroy {
     this.map = L.map(this.mapHost().nativeElement, {
       center: [start.latitude, start.longitude],
       zoom: DEFAULT_ZOOM,
+      zoomControl: false,
     });
+    this.labels = mapLabels(this.translate);
+    L.control.zoom({ zoomInTitle: this.labels.zoomIn, zoomOutTitle: this.labels.zoomOut }).addTo(this.map);
     L.tileLayer(OSM_TILES, { maxZoom: MAX_ZOOM, attribution: OSM_ATTRIBUTION }).addTo(this.map);
 
     const p = this.point();
@@ -121,7 +129,12 @@ export class GeoLocationPicker implements AfterViewInit, OnDestroy {
     if (this.marker) {
       this.marker.setLatLng(latlng);
     } else {
-      this.marker = L.marker(latlng, { draggable: !this.readOnly(), icon: MARKER_ICON }).addTo(this.map);
+      this.marker = L.marker(latlng, {
+        draggable: !this.readOnly(),
+        icon: MARKER_ICON,
+        alt: this.labels.location,
+        title: this.labels.location,
+      }).addTo(this.map);
       this.marker.on('dragend', () => this.select(this.marker!.getLatLng()));
     }
     this.map.panTo(latlng);

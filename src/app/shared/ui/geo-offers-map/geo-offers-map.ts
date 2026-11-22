@@ -5,12 +5,15 @@ import {
   ElementRef,
   OnDestroy,
   effect,
+  inject,
   input,
   output,
   viewChild,
 } from '@angular/core';
 import * as L from 'leaflet';
+import { TranslateService } from '@ngx-translate/core';
 import { GeoPoint } from '../../domain/geo-point';
+import { mapLabels } from '../map-labels';
 
 /** A business on the map: green when verified, amber when it comes from a public source. */
 export interface MapPin {
@@ -110,6 +113,7 @@ export class GeoOffersMap implements AfterViewInit, OnDestroy {
   readonly failed = output<void>();
 
   private readonly mapHost = viewChild.required<ElementRef<HTMLDivElement>>('mapHost');
+  private readonly translate = inject(TranslateService, { optional: true });
   private map?: L.Map;
   private overlays?: L.LayerGroup;
   private resizeObserver?: ResizeObserver;
@@ -134,7 +138,8 @@ export class GeoOffersMap implements AfterViewInit, OnDestroy {
       scrollWheelZoom: false,
       zoomControl: false,
     });
-    L.control.zoom({ position: 'bottomright' }).addTo(this.map);
+    const labels = mapLabels(this.translate);
+    L.control.zoom({ position: 'bottomright', zoomInTitle: labels.zoomIn, zoomOutTitle: labels.zoomOut }).addTo(this.map);
     const tiles = L.tileLayer(OSM_TILES, { maxZoom: MAX_ZOOM, attribution: OSM_ATTRIBUTION });
     // A tile that fails once the map is drawn (a zoom far away) does not hide a map that works.
     tiles.on('tileerror', () => !this.hasLoaded && this.fail());
@@ -213,6 +218,8 @@ export class GeoOffersMap implements AfterViewInit, OnDestroy {
       });
       marker.on('click', () => this.pinSelected.emit(pin.id));
       marker.addTo(this.overlays);
+      // A div icon gets no alt text: the pin is named by the offer it points to.
+      marker.getElement()?.setAttribute('aria-label', pin.label);
     }
     this.fit(center, radius);
   }
