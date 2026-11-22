@@ -565,7 +565,14 @@
     "create": "Create new campaign",
     "seeCampaigns": "See my campaigns",
     "offerCountOne": "1 deal",
-    "mapLabel": "Zone of your active campaign"
+    "mapLabel": "Zone of your active campaign",
+    "verifyAlert": {
+      "title": "Your business is not verified yet",
+      "description": "Verify it to show the Verified seal to your neighbours. We check your RUC with SUNAT and place your store on the map in a few seconds.",
+      "pendingTitle": "We are verifying your business",
+      "pendingDescription": "You will see the Verified seal once we finish checking your details.",
+      "pendingAction": "See the status"
+    }
   },
   "validatePage": {
     "title": "Validate reservation code",

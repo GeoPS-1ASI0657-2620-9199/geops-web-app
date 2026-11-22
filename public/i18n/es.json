@@ -565,7 +565,14 @@
     "create": "Crear nueva campaña",
     "seeCampaigns": "Ver mis campañas",
     "offerCountOne": "1 oferta",
-    "mapLabel": "Zona de tu campaña activa"
+    "mapLabel": "Zona de tu campaña activa",
+    "verifyAlert": {
+      "title": "Tu comercio aún no está verificado",
+      "description": "Verifícalo para mostrar el sello Verificado a los vecinos. Revisamos tu RUC en SUNAT y ubicamos tu local en unos segundos.",
+      "pendingTitle": "Estamos verificando tu comercio",
+      "pendingDescription": "Verás el sello Verificado cuando terminemos de revisar tus datos.",
+      "pendingAction": "Ver el estado"
+    }
   },
   "validatePage": {
     "title": "Validar código de reserva",

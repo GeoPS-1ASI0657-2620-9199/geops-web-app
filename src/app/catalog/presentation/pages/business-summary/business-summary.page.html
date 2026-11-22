@@ -7,6 +7,19 @@
     <app-business-seal />
   </header>
 
+  @if (pendingVerification(); as status) {
+    <geo-alert
+      data-testid="verify-business-alert"
+      [kind]="status === 'PENDING' ? 'info' : 'warning'"
+      [announce]="'status'"
+      [title]="(status === 'PENDING' ? 'businessSummary.verifyAlert.pendingTitle' : 'businessSummary.verifyAlert.title') | translate"
+      [description]="(status === 'PENDING' ? 'businessSummary.verifyAlert.pendingDescription' : 'businessSummary.verifyAlert.description') | translate">
+      <a mat-flat-button class="verify-action" routerLink="/business/verify">
+        {{ (status === 'PENDING' ? 'businessSummary.verifyAlert.pendingAction' : 'verifyBusiness.link') | translate }}
+      </a>
+    </geo-alert>
+  }
+
   @switch (state()) {
     @case ('loading') {
       <div class="metrics" aria-busy="true">
