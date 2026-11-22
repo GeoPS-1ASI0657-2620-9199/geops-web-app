@@ -454,6 +454,8 @@
     },
     "expiresIn": "Ends in {{time}}",
     "payAtStore": "You pay at the store",
+    "paidAtStore": "You paid at the store",
+    "offerPrice": "Offer price",
     "store": "Store",
     "mapLabel": "Store location",
     "report": {

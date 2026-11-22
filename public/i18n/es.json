@@ -454,6 +454,8 @@
     },
     "expiresIn": "Vence en {{time}}",
     "payAtStore": "Pagas en el local",
+    "paidAtStore": "Pagaste en el local",
+    "offerPrice": "Precio de la oferta",
     "store": "Local",
     "mapLabel": "Ubicación del local",
     "report": {

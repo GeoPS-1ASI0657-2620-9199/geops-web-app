@@ -81,7 +81,7 @@
                 <a [routerLink]="['/offers', r.offerId]">{{ r.offerTitle }}</a>
               </dd>
               @if (offer(); as o) {
-                <dt>{{ 'reservationPage.payAtStore' | translate }}</dt>
+                <dt data-testid="price-label">{{ priceLabel() | translate }}</dt>
                 <dd class="price geo-tabular">S/ {{ o.price | number: '1.2-2' }}</dd>
                 <dt>{{ 'reservationPage.store' | translate }}</dt>
                 <dd>{{ o.businessName }} · {{ o.address }}</dd>

@@ -218,4 +218,6 @@
 /* Active coupon: the QR beside the code, so the business can scan it or type it. */
 .code-block.with-qr { display: flex; align-items: center; gap: var(--space-lg); }
 .qr { flex: none; width: 132px; height: 132px; padding: 4px; border: 1px solid var(--neutral-line); border-radius: var(--radius-input); background: #fff; }
-@media (max-width: 640px) { .code-block.with-qr { flex-direction: column; align-items: flex-start; } .qr { width: 168px; height: 168px; } }
+@media (max-width: 640px) { .code-block.with-qr { flex-direction: column; align-items: center; text-align: center; } .qr { width: 168px; height: 168px; } }
+/* On a phone each action takes the full width, so a long label like "No me la respetaron" fits on one line. */
+@media (max-width: 640px) { .buttons { grid-template-columns: 1fr; } }

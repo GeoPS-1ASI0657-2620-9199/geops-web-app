@@ -53,6 +53,17 @@ export class ReservationDetailPage implements OnInit {
   /** An ACTIVE reservation that has not reached its deadline can still be reported. */
   protected readonly canReport = computed(() => this.isActive() && this.remaining() !== null && !this.report());
   protected readonly limaDateTime = limaDateTime;
+  /** "Pagas" only while the coupon can still be used; after the visit it is "Pagaste", otherwise just the price. */
+  protected readonly priceLabel = computed(() => {
+    switch (this.reservation()?.status) {
+      case 'ACTIVE':
+        return 'reservationPage.payAtStore';
+      case 'REDEEMED':
+        return 'reservationPage.paidAtStore';
+      default:
+        return 'reservationPage.offerPrice';
+    }
+  });
   /** The reserved offer, for the price, the address and the map; the reservation still shows without it. */
   protected readonly offer = signal<OfferDetail | null>(null);
   protected readonly remaining = computed(() => {
@@ -62,7 +73,7 @@ export class ReservationDetailPage implements OnInit {
   protected readonly pins = computed<MapPin[]>(() => {
     const offer = this.offer();
     return offer
-      ? [{ id: offer.offerId, point: offer.location, icon: categoryIcon(offer.category), label: offer.businessName, kind: 'verified' }]
+      ? [{ id: offer.offerId, point: offer.location, icon: categoryIcon(offer.category), label: `${offer.businessName}: ${offer.title}`, kind: 'verified' }]
       : [];
   });
   protected readonly directionsUrl = computed(() => {
