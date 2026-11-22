@@ -19,6 +19,7 @@
     @case ('not-found') {
       <geo-empty-state
         icon="search_off"
+        [headingLevel]="1"
         [title]="'offerDetailPage.notFound.title' | translate"
         [description]="'offerDetailPage.notFound.description' | translate">
         <a mat-flat-button routerLink="/offers">{{ 'offerDetailPage.seeNearby' | translate }}</a>
@@ -27,6 +28,7 @@
     @case ('error') {
       <geo-empty-state
         icon="cloud_off"
+        [headingLevel]="1"
         [title]="'offerDetailPage.error.title' | translate"
         [description]="errorMessage() ?? ('offerDetailPage.error.description' | translate)">
         <button mat-flat-button type="button" (click)="load()">{{ 'offerDetailPage.error.retry' | translate }}</button>
@@ -98,7 +100,12 @@
               <dl class="facts">
                 <div><dt>{{ 'offerDetailPage.validity' | translate }}</dt><dd [class.expired]="!o.available">{{ validity() }}</dd></div>
                 @if (distance(); as d) {
-                  <div><dt>{{ 'offerDetailPage.distance' | translate }}</dt><dd class="green">{{ 'offerDetailPage.distanceValue' | translate: d }}</dd></div>
+                  <div>
+                    <dt>{{ 'offerDetailPage.distance' | translate }}</dt>
+                    <dd class="green" data-testid="distance">
+                      {{ d.here ? ('offerDetailPage.distanceHere' | translate) : ('offerDetailPage.distanceValue' | translate: d) }}
+                    </dd>
+                  </div>
                 }
                 <div><dt>{{ 'offerDetailPage.address' | translate }}</dt><dd>{{ o.address }}</dd></div>
                 <div><dt>{{ 'offerDetailPage.category' | translate }}</dt><dd>{{ o.category }}</dd></div>

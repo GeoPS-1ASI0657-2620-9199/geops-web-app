@@ -28,6 +28,10 @@ export abstract class OfferRepository {
   ): Promise<PublicSourceOffer[]>;
   /** The closed list of categories Catalog accepts (E2-06), in its order. */
   abstract categories(): Promise<string[]>;
-  /** Rejects with OFFER_NOT_FOUND when the offer does not exist. */
-  abstract findById(offerId: number): Promise<OfferDetail>;
+  /**
+   * Rejects with OFFER_NOT_FOUND when the offer does not exist. trackClick counts the visit as a click
+   * on the offer for the metrics of its campaign; only the detail a buyer opens sends it, never a
+   * screen that reads the offer for another reason (a reservation, the favorites).
+   */
+  abstract findById(offerId: number, options?: { readonly trackClick?: boolean }): Promise<OfferDetail>;
 }

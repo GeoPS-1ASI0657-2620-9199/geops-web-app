@@ -374,6 +374,7 @@
     "includes": "What it includes",
     "distance": "Distance",
     "distanceValue": "{{meters}} m · {{minutes}} min walk",
+    "distanceHere": "Right here",
     "save": "Save to favorites",
     "mapLabel": "Store location",
     "others": "Other deals near you",

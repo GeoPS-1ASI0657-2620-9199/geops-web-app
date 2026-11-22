@@ -15,6 +15,9 @@ import { of } from 'rxjs';
 import { SavedOfferRepository } from '../../../../engagement/domain/ports/saved-offer.repository';
 import { LocationProvider } from '../../../domain/ports/location.provider';
 import { radiusPreferenceTestingProviders } from '../../../testing/radius-preference.testing';
+import { LocationReading } from '../../../domain/model/location-reading';
+import { LimaDistrict } from '../../../domain/model/lima-district';
+import { nearbyOffer, pageOf } from '../../../testing/nearby-offer.testing';
 
 const OFFER: OfferDetail = {
   offerId: 1052,
@@ -73,12 +76,14 @@ describe('OfferDetailPage', () => {
   let reservations: jasmine.SpyObj<ReservationRepository>;
   let savedOffers: jasmine.SpyObj<SavedOfferRepository>;
   let session: Session | null;
+  let reading: LocationReading;
+  let district: LimaDistrict | null;
 
   const render = async (id = '1052') => {
     await TestBed.configureTestingModule({
       imports: [OfferDetailPage],
       providers: [
-        ...radiusPreferenceTestingProviders(),
+        ...radiusPreferenceTestingProviders(null, district),
         provideRouter([]),
         { provide: SavedBusinessRepository, useValue: { findMine: () => Promise.resolve([]), save: () => Promise.resolve(), remove: () => Promise.resolve() } },
         { provide: ReviewRepository, useValue: { findByBusiness: () => Promise.resolve([]), create: () => Promise.resolve({}), reply: () => Promise.resolve() } },
@@ -89,15 +94,23 @@ describe('OfferDetailPage', () => {
         { provide: SessionStorage, useValue: new MemorySessionStorage(session) },
         { provide: ActivatedRoute, useValue: { snapshot: { paramMap: convertToParamMap({ id }) }, paramMap: of(convertToParamMap({ id })) } },
         { provide: SavedOfferRepository, useValue: savedOffers },
-        { provide: LocationProvider, useValue: { locate: () => Promise.resolve({ status: 'DENIED' }) } },
+        { provide: LocationProvider, useValue: { locate: () => Promise.resolve(reading) } },
       ],
     }).compileComponents();
     fixture = TestBed.createComponent(OfferDetailPage);
     fixture.detectChanges();
     await fixture.whenStable();
     fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
     return (fixture.nativeElement as HTMLElement).textContent ?? '';
   };
+  const distanceText = () =>
+    (fixture.nativeElement as HTMLElement).querySelector('[data-testid="distance"]')?.textContent?.trim() ?? null;
+  const directionsHref = () =>
+    [...(fixture.nativeElement as HTMLElement).querySelectorAll<HTMLAnchorElement>('a[target="_blank"]')]
+      .map((a) => a.getAttribute('href'))
+      .find((href) => href?.includes('openstreetmap')) ?? '';
 
   const reserveButton = () =>
     (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>('button.reserve');
@@ -109,7 +122,11 @@ describe('OfferDetailPage', () => {
   };
 
   beforeEach(() => {
-    offers = jasmine.createSpyObj<OfferRepository>('OfferRepository', ['findNearby', 'findById']);
+    offers = jasmine.createSpyObj<OfferRepository>('OfferRepository', ['findNearby', 'findById', 'findPublicSourcesNearby', 'categories']);
+    offers.findPublicSourcesNearby.and.resolveTo([]);
+    offers.categories.and.resolveTo([]);
+    reading = { status: 'DENIED' };
+    district = null;
     savedOffers = jasmine.createSpyObj<SavedOfferRepository>('SavedOfferRepository', ['findMine', 'save', 'remove']);
     reservations = jasmine.createSpyObj<ReservationRepository>('ReservationRepository', [
       'reserve',
@@ -125,7 +142,7 @@ describe('OfferDetailPage', () => {
 
     const text = await render();
 
-    expect(offers.findById).toHaveBeenCalledWith(1052);
+    expect(offers.findById).toHaveBeenCalledWith(1052, { trackClick: true });
     expect(text).toContain('2x1 en almuerzos ejecutivos');
     expect(text).toContain('15.00');
     expect(text).toContain('Un cupÃ³n por mesa.');
@@ -159,10 +176,57 @@ describe('OfferDetailPage', () => {
     expect(text).toContain('Vencida');
   });
 
+  it('measures the distance on a direct visit from the place the search starts and routes from there', async () => {
+    reading = { status: 'GRANTED', point: { latitude: -12.12, longitude: -77.0297 }, accuracyMeters: 12 };
+    offers.findNearby.and.resolveTo(pageOf([]));
+    offers.findById.and.resolveTo(OFFER);
+
+    await render();
+
+    // 0.0011 degrees of latitude, about 122 m: 2 minutes at 80 m per minute.
+    expect(distanceText()).toBe('offerDetailPage.distanceValue');
+    expect((fixture.componentInstance as unknown as { distance(): { meters: number; minutes: number } }).distance()).toEqual(
+      jasmine.objectContaining({ meters: 122, minutes: 2 }),
+    );
+    expect(directionsHref()).toContain('route=-12.12%2C-77.0297%3B-12.1211%2C-77.0297');
+  });
+
+  it('uses the distance of the search results when the offer is among them', async () => {
+    reading = { status: 'GRANTED', point: { latitude: -12.12, longitude: -77.03 }, accuracyMeters: 12 };
+    offers.findNearby.and.resolveTo(pageOf([nearbyOffer({ offerId: 1052, distanceMeters: 350, walkMinutes: 5 })]));
+    offers.findById.and.resolveTo(OFFER);
+
+    await render();
+
+    expect((fixture.componentInstance as unknown as { distance(): { meters: number; minutes: number } }).distance()).toEqual(
+      jasmine.objectContaining({ meters: 350, minutes: 5 }),
+    );
+  });
+
+  it('measures from the district picked earlier in the tab and says "Aquí mismo" below 20 m', async () => {
+    district = { name: 'Miraflores', center: { latitude: -12.1211, longitude: -77.0297 } };
+    offers.findNearby.and.resolveTo(pageOf([]));
+    offers.findById.and.resolveTo(OFFER);
+
+    await render();
+
+    expect(distanceText()).toBe('offerDetailPage.distanceHere');
+  });
+
+  it('shows no distance and routes without origin when there is no place to measure from', async () => {
+    offers.findById.and.resolveTo(OFFER);
+
+    await render();
+
+    expect(distanceText()).toBeNull();
+    expect(directionsHref()).toContain('route=%3B-12.1211%2C-77.0297');
+  });
+
   it('says the offer does not exist on OFFER_NOT_FOUND', async () => {
     offers.findById.and.rejectWith(new ApiError('OFFER_NOT_FOUND', 'La oferta 9999 no existe.'));
 
     expect(await render('9999')).toContain('offerDetailPage.notFound.title');
+    expect((fixture.nativeElement as HTMLElement).querySelector('h1')?.textContent).toContain('offerDetailPage.notFound.title');
   });
 
   it('offers a retry when Catalog cannot be reached', async () => {

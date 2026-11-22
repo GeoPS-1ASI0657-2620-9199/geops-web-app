@@ -255,6 +255,18 @@ describe('HttpOfferRepository', () => {
     expect((await result).regularPrice).toBe(30);
   });
 
+  it('asks for the detail with track=click only when the buyer opens it, so the campaign counts a click', async () => {
+    const opened = repository.findById(1052, { trackClick: true });
+    http.expectOne(`${BASE_URL}/offers/1052?track=click`).flush(null, { status: 404, statusText: 'Not Found' });
+    await expectAsync(opened).toBeRejected();
+
+    const read = repository.findById(1052);
+    const request = http.expectOne(`${BASE_URL}/offers/1052`);
+    expect(request.request.params.has('track')).toBeFalse();
+    request.flush(null, { status: 404, statusText: 'Not Found' });
+    await expectAsync(read).toBeRejected();
+  });
+
   it('rejects a missing offer with OFFER_NOT_FOUND', async () => {
     const result = repository.findById(9999);
 

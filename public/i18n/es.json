@@ -374,6 +374,7 @@
     "includes": "Qué incluye",
     "distance": "Distancia",
     "distanceValue": "{{meters}} m · {{minutes}} min a pie",
+    "distanceHere": "Aquí mismo",
     "save": "Guardar en favoritos",
     "mapLabel": "Ubicación del local",
     "others": "Otras ofertas cerca de ti",

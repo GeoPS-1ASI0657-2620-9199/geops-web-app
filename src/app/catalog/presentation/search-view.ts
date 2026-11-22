@@ -6,6 +6,13 @@ import { PublicSourceOffer } from '../domain/model/public-source-offer';
 
 /** Walking speed Catalog uses to turn minutes into meters (WalkingRadius in catalog-service). */
 export const METERS_PER_WALK_MINUTE = 80;
+/** Below this distance the cards say "Aquí mismo" instead of meters and minutes. */
+export const HERE_METERS = 20;
+
+/** Minutes on foot for a distance, at the walking speed of Catalog. */
+export function walkMinutesFor(meters: number): number {
+  return Math.ceil(meters / METERS_PER_WALK_MINUTE);
+}
 
 /** "Jesús María" or "Tu ubicación · ±12 m", the chip of the "Lugares" row. */
 export function placeLabelOf(origin: SearchOrigin | null): string {

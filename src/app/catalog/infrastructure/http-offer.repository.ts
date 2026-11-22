@@ -65,10 +65,11 @@ export class HttpOfferRepository implements OfferRepository {
     }
   }
 
-  async findById(offerId: number): Promise<OfferDetail> {
+  async findById(offerId: number, options: { readonly trackClick?: boolean } = {}): Promise<OfferDetail> {
+    const params = options.trackClick ? new HttpParams().set('track', 'click') : undefined;
     try {
       const response = await firstValueFrom(
-        this.http.get<OfferDetailResponse>(`${this.baseUrl}/offers/${offerId}`),
+        this.http.get<OfferDetailResponse>(`${this.baseUrl}/offers/${offerId}`, { params }),
       );
       return toOfferDetail(response);
     } catch (error) {
