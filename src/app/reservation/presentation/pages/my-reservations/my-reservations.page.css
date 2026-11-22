@@ -38,7 +38,7 @@
 
 .list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(420px, 100%), 1fr));
   gap: var(--space-lg);
   margin: 0;
   padding: 0;
@@ -80,13 +80,15 @@
   text-decoration: line-through;
 }
 
-.title {
+/* Not ".title": that is the page heading, and sharing it made the offer name 22 px and push the card off screen. */
+.offer-title {
   flex: 1;
+  min-width: 0;
   color: var(--text-primary);
   text-decoration: none;
 }
 
-.title:hover {
+.offer-title:hover {
   color: var(--brand-action);
 }
 
@@ -137,7 +139,20 @@
     padding: var(--space-lg);
   }
 
+  .card {
+    padding: var(--space-lg);
+  }
+
   .top {
     flex-wrap: wrap;
+  }
+
+  .offer-title {
+    flex-basis: 100%;
+    order: -1;
+  }
+
+  .facts {
+    gap: var(--space-lg);
   }
 }
