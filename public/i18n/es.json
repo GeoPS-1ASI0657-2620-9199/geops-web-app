@@ -77,7 +77,8 @@
     "registerBusiness": "Registrar mi negocio",
     "registered": {
       "title": "Tu cuenta está lista",
-      "description": "Inicia sesión con el correo y la contraseña que acabas de registrar."
+      "description": "Inicia sesión con el correo y la contraseña que acabas de registrar.",
+      "confirmationSent": "Te enviamos un correo para confirmar tu dirección. Ya puedes iniciar sesión con el correo y la contraseña que registraste."
     },
     "expired": "Tu sesión terminó. Vuelve a iniciar sesión.",
     "errors": {

@@ -5,7 +5,7 @@ import { ApiError } from '../../../../shared/domain/api-error';
 import { LogInUseCase } from '../../../application/log-in.use-case';
 import { PendingBaseline } from '../../../../catalog/application/pending-baseline';
 import { Session } from '../../../domain/model/session';
-import { LoginComponent } from './login.component';
+import { LoginComponent, RegisteredState } from './login.component';
 
 const session = (role: Session['role']): Session => ({
   accessToken: 't',
@@ -21,7 +21,7 @@ describe('LoginComponent', () => {
   let router: Router;
   let pendingBaseline: jasmine.SpyObj<PendingBaseline>;
 
-  const create = async (query: Record<string, string> = {}) => {
+  const create = async (query: Record<string, string> = {}, state: RegisteredState | null = null) => {
     useCase = jasmine.createSpyObj<LogInUseCase>('LogInUseCase', ['execute']);
     pendingBaseline = jasmine.createSpyObj<PendingBaseline>('PendingBaseline', ['hold', 'declareFor']);
     pendingBaseline.declareFor.and.resolveTo(null);
@@ -35,8 +35,11 @@ describe('LoginComponent', () => {
         { provide: ActivatedRoute, useValue: { snapshot: { queryParamMap: convertToParamMap(query) } } },
       ],
     }).compileComponents();
-    fixture = TestBed.createComponent(LoginComponent);
     router = TestBed.inject(Router);
+    spyOn(router, 'getCurrentNavigation').and.returnValue(
+      state ? ({ extras: { state } } as unknown as ReturnType<Router['getCurrentNavigation']>) : null,
+    );
+    fixture = TestBed.createComponent(LoginComponent);
     spyOn(router, 'navigateByUrl').and.resolveTo(true);
     fixture.detectChanges();
   };
@@ -138,5 +141,26 @@ describe('LoginComponent', () => {
     await create({ registered: '1' });
 
     expect(text()).toContain('loginPage.registered.title');
+  });
+
+  it('tells a new consumer that the confirmation e-mail was sent and fills in the address', async () => {
+    await create({ registered: '1' }, { registeredEmail: 'ariana@correo.pe', registeredRole: 'CONSUMER' });
+
+    expect(text()).toContain('loginPage.registered.confirmationSent');
+    expect((fixture.nativeElement as HTMLElement).querySelector<HTMLInputElement>('input[type="email"]')?.value).toBe('ariana@correo.pe');
+  });
+
+  it('fills in the address of a new business owner without mentioning the confirmation e-mail', async () => {
+    await create({ registered: '1' }, { registeredEmail: 'rosa@ejemplo.pe', registeredRole: 'BUSINESS_OWNER' });
+
+    expect(text()).toContain('loginPage.registered.description');
+    expect(text()).not.toContain('loginPage.registered.confirmationSent');
+    expect((fixture.nativeElement as HTMLElement).querySelector<HTMLInputElement>('input[type="email"]')?.value).toBe('rosa@ejemplo.pe');
+  });
+
+  it('leaves the address empty when the navigation brings none', async () => {
+    await create({ registered: '1' });
+
+    expect((fixture.nativeElement as HTMLElement).querySelector<HTMLInputElement>('input[type="email"]')?.value).toBe('');
   });
 });

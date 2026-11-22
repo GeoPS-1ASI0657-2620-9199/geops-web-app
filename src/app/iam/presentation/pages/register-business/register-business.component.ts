@@ -19,6 +19,7 @@ import {
   INVALID_LOCATION,
   RegisterBusinessUseCase,
 } from '../../../application/register-business.use-case';
+import { RegisteredState } from '../login/login.component';
 import {
   ADDRESS_MAX_LENGTH,
   BUSINESS_NAME_MAX_LENGTH,
@@ -223,7 +224,8 @@ export class RegisterBusinessComponent {
         },
       });
       this.holdBaseline(account.email);
-      await this.router.navigate(['/login'], { queryParams: { registered: 1 } });
+      const state: RegisteredState = { registeredEmail: account.email, registeredRole: 'BUSINESS_OWNER' };
+      await this.router.navigate(['/login'], { queryParams: { registered: 1 }, state });
     } catch (error) {
       this.showError(error);
     } finally {

@@ -69,7 +69,10 @@ describe('RegisterComponent', () => {
 
     await submit();
 
-    expect(router.navigate).toHaveBeenCalledWith(['/login'], { queryParams: { registered: 1 } });
+    expect(router.navigate).toHaveBeenCalledWith(['/login'], {
+      queryParams: { registered: 1 },
+      state: { registeredEmail: jasmine.any(String), registeredRole: 'CONSUMER' },
+    });
   });
 
   it('marks the email and shows the alert when it is already registered', async () => {

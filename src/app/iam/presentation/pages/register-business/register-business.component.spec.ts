@@ -86,7 +86,7 @@ describe('RegisterBusinessComponent', () => {
 
     expect(useCase.execute).toHaveBeenCalledTimes(1);
     expect(useCase.execute.calls.mostRecent().args[0].business.location).toEqual({ latitude: -12.0681, longitude: -77.035 });
-    expect(router.navigate).toHaveBeenCalledWith(['/login'], { queryParams: { registered: 1 } });
+    expect(router.navigate).toHaveBeenCalledWith(['/login'], { queryParams: { registered: 1 }, state: { registeredEmail: 'rosa.quispe@ejemplo.pe', registeredRole: 'BUSINESS_OWNER' } });
   });
 
   describe('Tu situación actual (US45)', () => {
@@ -99,7 +99,7 @@ describe('RegisterBusinessComponent', () => {
       expect(wizard.baseline.invalid).toBeFalse();
       expect(useCase.execute).toHaveBeenCalledTimes(1);
       expect(pendingBaseline.hold).not.toHaveBeenCalled();
-      expect(router.navigate).toHaveBeenCalledWith(['/login'], { queryParams: { registered: 1 } });
+      expect(router.navigate).toHaveBeenCalledWith(['/login'], { queryParams: { registered: 1 }, state: { registeredEmail: 'rosa.quispe@ejemplo.pe', registeredRole: 'BUSINESS_OWNER' } });
     });
 
     it('rejects customers that are not a whole number between 1 and 100 000', () => {
@@ -138,7 +138,7 @@ describe('RegisterBusinessComponent', () => {
       await component.submit();
 
       expect(pendingBaseline.hold).toHaveBeenCalledOnceWith('rosa.quispe@ejemplo.pe', 120, 18.5);
-      expect(router.navigate).toHaveBeenCalledWith(['/login'], { queryParams: { registered: 1 } });
+      expect(router.navigate).toHaveBeenCalledWith(['/login'], { queryParams: { registered: 1 }, state: { registeredEmail: 'rosa.quispe@ejemplo.pe', registeredRole: 'BUSINESS_OWNER' } });
     });
 
     it('holds nothing when the registration fails', async () => {

@@ -77,7 +77,8 @@
     "registerBusiness": "Register my business",
     "registered": {
       "title": "Your account is ready",
-      "description": "Log in with the email and password you just registered."
+      "description": "Log in with the email and password you just registered.",
+      "confirmationSent": "We sent you an email to confirm your address. You can already log in with the email and password you registered."
     },
     "expired": "Your session ended. Log in again.",
     "errors": {
