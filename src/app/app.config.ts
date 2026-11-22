@@ -6,7 +6,6 @@ import {
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
 } from '@angular/core';
-import { MatDatepickerIntl } from '@angular/material/datepicker';
 import { MatIconRegistry } from '@angular/material/icon';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
@@ -18,7 +17,6 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import { authInterceptor } from './core/http/auth.interceptor';
 import {provideTranslateService} from '@ngx-translate/core';
 import {provideTranslateHttpLoader} from '@ngx-translate/http-loader';
-import { TranslatedDatepickerIntl } from './shared/ui/translated-datepicker-intl';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -30,8 +28,6 @@ export const appConfig: ApplicationConfig = {
       fallbackLang: 'es'
     }),
     provideRouter(routes),
-    // Every datepicker reads its buttons in the language of the app, Spanish by default.
-    { provide: MatDatepickerIntl, useClass: TranslatedDatepickerIntl },
     ...iamProviders,
     ...catalogProviders,
     ...reservationProviders,

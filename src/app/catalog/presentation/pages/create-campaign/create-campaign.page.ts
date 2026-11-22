@@ -3,7 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AbstractControl, FormArray, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDatepickerIntl, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -15,6 +15,7 @@ import { ApiError } from '../../../../shared/domain/api-error';
 import { GeoPoint } from '../../../../shared/domain/geo-point';
 import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { GeoLocationPicker } from '../../../../shared/ui/geo-location-picker/geo-location-picker';
+import { TranslatedDatepickerIntl } from '../../../../shared/ui/translated-datepicker-intl';
 import { CreateCampaignUseCase } from '../../../application/create-campaign.use-case';
 import { UploadOfferImageUseCase } from '../../../application/upload-offer-image.use-case';
 import { ListMyCampaignsUseCase } from '../../../application/list-my-campaigns.use-case';
@@ -85,7 +86,10 @@ function withEntry<V>(map: ReadonlyMap<AbstractControl, V>, key: AbstractControl
     BusinessSeal,
     ZoneSelector,
   ],
-  providers: [...isoDatepickerProviders],
+  providers: [
+    // The calendar labels in the language of the app (Spanish by default), only where a datepicker exists.
+    { provide: MatDatepickerIntl, useClass: TranslatedDatepickerIntl },
+...isoDatepickerProviders],
   templateUrl: './create-campaign.page.html',
   styleUrl: './create-campaign.page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
