@@ -104,6 +104,10 @@ describe('ModerationPage', () => {
     expect(text()).toContain('moderationPage.status.REMOVED');
     expect(text()).toContain('moderationPage.removed');
     expect((fixture.nativeElement as HTMLElement).querySelector('[data-testid="remove"]')).toBeNull();
+
+    await click('[data-testid="reported-only"]');
+
+    expect(text()).not.toContain('moderationPage.removed');
   });
 
   it('does nothing when the administrator cancels the dialog', async () => {

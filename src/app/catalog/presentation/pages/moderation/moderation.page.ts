@@ -77,6 +77,7 @@ export class ModerationPage implements OnInit {
   }
 
   async loadOffers(page = 0): Promise<void> {
+    this.clearFeedback();
     this.offersState.set('loading');
     try {
       const result = await this.listOffers.execute(this.filter(), page);
@@ -101,6 +102,7 @@ export class ModerationPage implements OnInit {
   }
 
   protected show(view: View): void {
+    this.clearFeedback();
     this.view.set(view);
     if (view === 'history') {
       void this.loadHistory();
@@ -155,6 +157,12 @@ export class ModerationPage implements OnInit {
 
   protected isMe(entry: ModerationEntry): boolean {
     return this.sessions.session()?.userId === entry.adminId;
+  }
+
+  /** The result of a removal belongs to the list it happened on; another filter, page or tab drops it. */
+  private clearFeedback(): void {
+    this.removed.set(null);
+    this.removeError.set(null);
   }
 
   private filter(): ModerationFilter {
