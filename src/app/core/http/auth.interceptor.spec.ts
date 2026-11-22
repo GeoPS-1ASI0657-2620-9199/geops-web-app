@@ -68,6 +68,19 @@ describe('authInterceptor', () => {
     );
   });
 
+  it('leaves the Content-Type of a photo upload to the browser', () => {
+    setUp(ACTIVE);
+    const body = new FormData();
+    body.append('file', new Blob(['jpg'], { type: 'image/jpeg' }), 'menu.jpg');
+
+    void firstValueFrom(http.post(`${BASE_URL}/campaigns/images`, body));
+
+    const request = backend.expectOne(`${BASE_URL}/campaigns/images`).request;
+    expect(request.headers.get('Authorization')).toBe('Bearer token-123');
+    expect(request.headers.has('Content-Type')).toBeFalse();
+    expect(request.body).toBe(body);
+  });
+
   it('never sends the token to other hosts such as the map tiles', () => {
     setUp(ACTIVE);
 

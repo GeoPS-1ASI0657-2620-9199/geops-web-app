@@ -89,7 +89,12 @@
 
           <aside class="side">
             <div class="panel">
-              <p class="price geo-tabular" [class.muted]="!o.available"><small>S/</small> {{ o.price | number: '1.2-2' }}</p>
+              <p class="price geo-tabular" [class.muted]="!o.available">
+                <small>S/</small> {{ o.price | number: '1.2-2' }}
+                @if (o.regularPrice) {
+                  <s class="regular-price" data-testid="regular-price">S/ {{ o.regularPrice | number: '1.2-2' }}</s>
+                }
+              </p>
               <dl class="facts">
                 <div><dt>{{ 'offerDetailPage.validity' | translate }}</dt><dd [class.expired]="!o.available">{{ validity() }}</dd></div>
                 @if (distance(); as d) {
@@ -171,6 +176,7 @@
                   [category]="other.category"
                   [validity]="validityOf(other.validTo)"
                   [price]="other.price"
+                  [regularPrice]="other.regularPrice ?? null"
                   [distanceMeters]="other.distanceMeters"
                   [walkMinutes]="other.walkMinutes">
                   <app-offer-card-actions [offerId]="other.offerId" />

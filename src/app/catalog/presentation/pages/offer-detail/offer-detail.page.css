@@ -43,6 +43,7 @@
 .price { margin: 0; font: 700 34px/1.12 var(--font-brand); color: var(--brand-deep); }
 .price small { font-size: 18px; font-weight: 500; }
 .price.muted { color: var(--text-dim); }
+.price .regular-price { margin-left: 8px; font-size: 18px; font-weight: 400; color: var(--text-faint); }
 .facts { display: flex; flex-direction: column; margin: 0; }
 .facts div { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--neutral-line-soft); }
 .facts dt { font: 400 12.5px/1.4 var(--font-brand); color: var(--text-dim); }

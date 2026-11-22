@@ -24,6 +24,7 @@ export interface NearbyOfferResponse {
   latitude: number;
   longitude: number;
   price: number;
+  regularPrice?: number | null;
   validTo: string;
 }
 
@@ -50,6 +51,7 @@ function toNearbyOffer(offer: NearbyOfferResponse): NearbyOffer {
     imageUrl: offer.imageUrl ?? null,
     location: { latitude: offer.latitude, longitude: offer.longitude },
     price: offer.price,
+    regularPrice: offer.regularPrice ?? null,
     validTo: offer.validTo,
   };
 }
@@ -99,6 +101,7 @@ export interface OfferDetailResponse {
   title: string;
   conditions: string;
   price: number;
+  regularPrice?: number | null;
   validTo: string;
   category: string;
   address: string;
@@ -118,6 +121,7 @@ export function toOfferDetail(response: OfferDetailResponse): OfferDetail {
     title: response.title,
     conditions: response.conditions,
     price: response.price,
+    regularPrice: response.regularPrice ?? null,
     validTo: response.validTo,
     category: response.category,
     address: response.address,

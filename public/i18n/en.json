@@ -713,7 +713,17 @@
     "categoryError": "Choose the category.",
     "categoriesUnavailable": "We could not load the categories. Reload the page to try again.",
     "storeTitle": "Your store and its reach",
-    "prefilled": "We used the address of your profile and the point of your last campaign. Change them if this campaign is at another store."
+    "prefilled": "We used the address of your profile and the point of your last campaign. Change them if this campaign is at another store.",
+    "datePlaceholder": "dd/mm/yyyy",
+    "regularPrice": "Regular price (S/)",
+    "regularPriceHint": "Optional. It is shown struck through so the saving shows.",
+    "regularPriceError": "It must be higher than the offer price.",
+    "uploadPhoto": "Upload photo",
+    "photoHint": "Optional. JPG, PNG or WebP up to 2 MB.",
+    "uploadingPhoto": "Uploading photo…",
+    "photoReady": "Photo ready.",
+    "removePhoto": "Remove photo",
+    "photoAlt": "Photo of the offer"
   },
   "publicSources": {
     "title": "Public sources, no guarantee",

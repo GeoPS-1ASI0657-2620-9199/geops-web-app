@@ -133,6 +133,23 @@ describe('OfferDetailPage', () => {
     expect(text).toContain('Verificado');
   });
 
+  it('shows the regular price struck through next to the price', async () => {
+    offers.findById.and.resolveTo({ ...OFFER, regularPrice: 30 });
+
+    await render();
+
+    const regular = (fixture.nativeElement as HTMLElement).querySelector('s[data-testid="regular-price"]');
+    expect(regular?.textContent).toContain('30.00');
+  });
+
+  it('shows no struck-through price when the offer has no regular price', async () => {
+    offers.findById.and.resolveTo(OFFER);
+
+    await render();
+
+    expect((fixture.nativeElement as HTMLElement).querySelector('[data-testid="regular-price"]')).toBeNull();
+  });
+
   it('marks an expired offer as not available (CA-04.2)', async () => {
     offers.findById.and.resolveTo({ ...OFFER, validTo: '2026-10-01', available: false });
 

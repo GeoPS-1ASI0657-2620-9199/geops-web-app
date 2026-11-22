@@ -11,6 +11,7 @@ export type CampaignRuleViolation =
   | 'INVALID_CAMPAIGN_PERIOD'
   | 'INVALID_CAMPAIGN_ZONE'
   | 'OFFER_VALIDITY_OUTSIDE_CAMPAIGN'
+  | 'INVALID_REGULAR_PRICE'
   | 'CAMPAIGN_WITHOUT_OFFERS'
   | 'INVALID_STORE_LOCATION';
 
@@ -24,6 +25,8 @@ export interface OfferDraft {
   readonly title: string;
   readonly conditions: string;
   readonly price: number;
+  /** Price before the offer, shown struck through; optional, and above price when given. */
+  readonly regularPrice?: number | null;
   readonly validTo: string;
   readonly category: string;
   /** Public link to a photo of the product; optional (Catalog allows up to 500 characters). */
@@ -75,7 +78,15 @@ export function firstViolation(draft: CampaignDraft, today: string): CampaignRul
   const outside = draft.offers.some(
     (offer) => offer.validTo < draft.period.start || offer.validTo > draft.period.end,
   );
-  return outside ? 'OFFER_VALIDITY_OUTSIDE_CAMPAIGN' : null;
+  if (outside) {
+    return 'OFFER_VALIDITY_OUTSIDE_CAMPAIGN';
+  }
+  return draft.offers.some((offer) => !hasValidRegularPrice(offer)) ? 'INVALID_REGULAR_PRICE' : null;
+}
+
+/** Same rule as Offer.publishFor in catalog-service: no regular price, or one above the price. */
+export function hasValidRegularPrice(offer: Pick<OfferDraft, 'price' | 'regularPrice'>): boolean {
+  return offer.regularPrice == null || offer.regularPrice > offer.price;
 }
 
 function isValidZone(zone: CampaignZone): boolean {
@@ -103,6 +114,8 @@ export interface CampaignOffer {
   readonly offerId: number;
   readonly title: string;
   readonly price: number;
+  /** Null when the owner did not give a regular price. */
+  readonly regularPrice?: number | null;
   readonly validTo: string;
   readonly category: string;
   readonly imageUrl: string | null;

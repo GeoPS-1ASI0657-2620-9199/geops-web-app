@@ -19,7 +19,15 @@ export interface CreateCampaignRequest {
   zone:
     | { type: 'RADIUS'; center: { latitude: number; longitude: number }; radiusMeters: number }
     | { type: 'DISTRICT'; district: string; center: { latitude: number; longitude: number } };
-  offers: { title: string; conditions: string; price: number; validTo: string; category: string; imageUrl?: string }[];
+  offers: {
+    title: string;
+    conditions: string;
+    price: number;
+    regularPrice?: number;
+    validTo: string;
+    category: string;
+    imageUrl?: string;
+  }[];
 }
 
 /** Body of the 201 answer. */
@@ -54,6 +62,7 @@ export function toCreateCampaignRequest(draft: CampaignDraft): CreateCampaignReq
       title: offer.title,
       conditions: offer.conditions,
       price: offer.price,
+      ...(offer.regularPrice != null ? { regularPrice: offer.regularPrice } : {}),
       validTo: offer.validTo,
       category: offer.category,
       ...(offer.imageUrl ? { imageUrl: offer.imageUrl } : {}),
@@ -85,6 +94,7 @@ export interface CampaignOfferResponse {
   offerId: number;
   title: string;
   price: number;
+  regularPrice?: number | null;
   validTo: string;
   category: string;
   imageUrl: string | null;
@@ -111,6 +121,7 @@ export function toCampaignOffer(response: CampaignOfferResponse): CampaignOffer 
     offerId: response.offerId,
     title: response.title,
     price: response.price,
+    regularPrice: response.regularPrice ?? null,
     validTo: response.validTo,
     category: response.category,
     imageUrl: response.imageUrl ?? null,

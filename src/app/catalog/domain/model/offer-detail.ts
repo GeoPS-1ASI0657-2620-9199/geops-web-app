@@ -9,6 +9,8 @@ export interface OfferDetail {
   readonly title: string;
   readonly conditions: string;
   readonly price: number;
+  /** Price before the offer, struck through next to price; null when the business did not give one. */
+  readonly regularPrice?: number | null;
   /** Last valid day, ISO date (yyyy-mm-dd). */
   readonly validTo: string;
   readonly category: string;

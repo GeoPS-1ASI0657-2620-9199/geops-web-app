@@ -713,7 +713,17 @@
     "categoryError": "Elige la categoría.",
     "categoriesUnavailable": "No pudimos cargar las categorías. Recarga la página para intentarlo de nuevo.",
     "storeTitle": "Tu local y su alcance",
-    "prefilled": "Usamos la dirección de tu perfil y el punto de tu última campaña. Cámbialos si esta campaña es en otro local."
+    "prefilled": "Usamos la dirección de tu perfil y el punto de tu última campaña. Cámbialos si esta campaña es en otro local.",
+    "datePlaceholder": "dd/mm/aaaa",
+    "regularPrice": "Precio normal (S/)",
+    "regularPriceHint": "Opcional. Se muestra tachado para que se vea el ahorro.",
+    "regularPriceError": "Debe ser mayor que el precio de la oferta.",
+    "uploadPhoto": "Subir foto",
+    "photoHint": "Opcional. JPG, PNG o WebP de hasta 2 MB.",
+    "uploadingPhoto": "Subiendo foto…",
+    "photoReady": "Foto lista.",
+    "removePhoto": "Quitar foto",
+    "photoAlt": "Foto de la oferta"
   },
   "publicSources": {
     "title": "Fuentes públicas, sin garantía",

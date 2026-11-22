@@ -61,6 +61,34 @@ describe('HttpOfferRepository', () => {
     expect(page.offers[0]).toEqual(
       jasmine.objectContaining({ offerId: 1052, distanceMeters: 350, walkMinutes: 5, verifiedSeal: true }),
     );
+    expect(page.offers[0].regularPrice).toBeNull();
+  });
+
+  it('reads the regular price of a nearby offer for the struck-through price of the card', async () => {
+    const result = repository.findNearby(ORIGIN, 10, 0);
+
+    http.expectOne((r) => r.url === `${BASE_URL}/offers/nearby`).flush({
+      content: [
+        {
+          offerId: 1052,
+          title: '2x1 en almuerzos ejecutivos',
+          businessId: 84,
+          businessName: 'Restaurante Don Pepe',
+          verifiedSeal: true,
+          distanceMeters: 350,
+          walkMinutes: 5,
+          category: 'Gastronomía',
+          price: 15.0,
+          regularPrice: 30.0,
+          validTo: '2026-10-15',
+        },
+      ],
+      page: 0,
+      totalElements: 1,
+      totalPages: 1,
+    });
+
+    expect((await result).offers[0]).toEqual(jasmine.objectContaining({ price: 15, regularPrice: 30 }));
   });
 
   it('returns an empty page for a zone without offers', async () => {
@@ -185,6 +213,32 @@ describe('HttpOfferRepository', () => {
     const offer = await result;
     expect(offer.location).toEqual({ latitude: -12.1211, longitude: -77.0297 });
     expect(offer.available).toBeTrue();
+    expect(offer.regularPrice).toBeNull();
+  });
+
+  it('reads the regular price of the offer detail', async () => {
+    const result = repository.findById(1052);
+
+    http.expectOne(`${BASE_URL}/offers/1052`).flush({
+      offerId: 1052,
+      title: '2x1 en almuerzos ejecutivos',
+      conditions: 'Un cupón por mesa.',
+      price: 15.0,
+      regularPrice: 30.0,
+      validTo: '2026-10-15',
+      category: 'Gastronomía',
+      address: 'Av. Larco 345, Miraflores',
+      latitude: -12.1211,
+      longitude: -77.0297,
+      imageUrl: null,
+      source: 'AFFILIATED',
+      businessId: 84,
+      businessName: 'Restaurante Don Pepe',
+      verifiedSeal: false,
+      available: true,
+    });
+
+    expect((await result).regularPrice).toBe(30);
   });
 
   it('rejects a missing offer with OFFER_NOT_FOUND', async () => {

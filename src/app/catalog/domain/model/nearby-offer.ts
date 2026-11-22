@@ -24,6 +24,8 @@ export interface NearbyOffer {
   /** Where the offer is redeemed, for the map pins. */
   readonly location: GeoPoint;
   readonly price: number;
+  /** Price before the offer, struck through on the card; null when the business did not give one. */
+  readonly regularPrice?: number | null;
   /** Last valid day, ISO date (yyyy-mm-dd). */
   readonly validTo: string;
 }
