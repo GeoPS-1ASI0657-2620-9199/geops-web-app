@@ -2,6 +2,7 @@ import { inject } from '@angular/core';
 import { Router, Routes } from '@angular/router';
 import { Layout } from './core/layout/layout/layout';
 import { authGuard } from './iam/infrastructure/auth.guard';
+import { buyerHomeGuard } from './iam/infrastructure/buyer-home.guard';
 import { roleGuard } from './iam/infrastructure/role.guard';
 
 const owner = [authGuard, roleGuard('BUSINESS_OWNER')];
@@ -37,6 +38,7 @@ export const routes: Routes = [
       // Buyer tabs (Figma screens 1 to 10): Inicio, Ofertas, Categorías, Favoritos, Mis Cupones.
       {
         path: 'inicio',
+        canActivate: [buyerHomeGuard],
         loadComponent: () => import('./catalog/presentation/pages/home/home.page').then((m) => m.HomePage),
         title: 'GeoPS - Inicio',
       },
