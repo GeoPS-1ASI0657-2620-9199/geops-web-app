@@ -20,7 +20,7 @@ export type ShellRole = 'CONSUMER' | 'BUSINESS_OWNER' | 'ADMIN';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <header class="bar">
-      <a class="logo" [routerLink]="home()">GeoPs</a>
+      <a class="logo" [routerLink]="home()">GeoPS</a>
       @if (showSearch() && !minimal()) {
         <form class="search" role="search" (submit)="submit($event)">
           <mat-icon aria-hidden="true">search</mat-icon>
@@ -46,12 +46,14 @@ export type ShellRole = 'CONSUMER' | 'BUSINESS_OWNER' | 'ADMIN';
           </ol>
         </div>
       </mat-menu>
-      <button class="pill icon" type="button" [matMenuTriggerFor]="notices" [attr.aria-label]="'header.notifications' | translate">
-        <mat-icon aria-hidden="true">notifications</mat-icon>
-      </button>
-      <mat-menu #notices="matMenu">
-        <p class="notices">{{ 'header.noNotices' | translate }}</p>
-      </mat-menu>
+      @if (userName()) {
+        <button class="pill icon" type="button" [matMenuTriggerFor]="notices" [attr.aria-label]="'header.notifications' | translate">
+          <mat-icon aria-hidden="true">notifications</mat-icon>
+        </button>
+        <mat-menu #notices="matMenu">
+          <p class="notices">{{ 'header.noNotices' | translate }}</p>
+        </mat-menu>
+      }
       @if (userName()) {
         <button class="pill user" type="button" [matMenuTriggerFor]="menu" [attr.aria-label]="'header.accountMenu' | translate">
           <span class="avatar" aria-hidden="true">{{ initial() }}</span>

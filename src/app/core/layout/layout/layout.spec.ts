@@ -72,6 +72,23 @@ describe('Layout', () => {
     expect(fixture.nativeElement.textContent).toContain('header.logIn');
   });
 
+  it('writes the brand as GeoPS in the top bar', async () => {
+    await create(null);
+
+    expect((fixture.nativeElement as HTMLElement).querySelector('.logo')?.textContent?.trim()).toBe('GeoPS');
+  });
+
+  it('hides the notices bell from a visitor and keeps it for a signed in user', async () => {
+    const bell = () => (fixture.nativeElement as HTMLElement).querySelector('[aria-label="header.notifications"]');
+
+    await create(null);
+    expect(bell()).toBeNull();
+
+    TestBed.resetTestingModule();
+    await create(OWNER);
+    expect(bell()).not.toBeNull();
+  });
+
   it('logs out and goes to login', async () => {
     await create(OWNER);
     const router = TestBed.inject(Router);
