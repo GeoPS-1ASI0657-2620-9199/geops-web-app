@@ -196,6 +196,21 @@ describe('NearbyOffersPage', () => {
     });
   });
 
+  it('tells assistive technologies which category chip is pressed', async () => {
+    await render(null, [], 'Salud y belleza');
+
+    expect(chip('Salud y belleza').getAttribute('aria-pressed')).toBe('true');
+    expect(chip('Gastronomía').getAttribute('aria-pressed')).toBe('false');
+    expect(chip('search.all').getAttribute('aria-pressed')).toBe('false');
+  });
+
+  it('keeps the heading levels in order with a hidden "Resultados" between the title and the cards', async () => {
+    await render();
+    const headings = [...(fixture.nativeElement as HTMLElement).querySelectorAll('h1, h2, h3')].map((h) => h.tagName);
+
+    expect(headings.slice(0, 3)).toEqual(['H1', 'H2', 'H3']);
+  });
+
   it('switches to the map of the same results and back to the cards', async () => {
     await render();
     const host = fixture.nativeElement as HTMLElement;

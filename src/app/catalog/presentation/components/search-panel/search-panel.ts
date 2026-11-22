@@ -23,38 +23,48 @@ import { OFFER_ORDERS, OfferOrder } from '../../offer-order';
         </span>
         <button class="link" type="button" (click)="changeDistrict.emit()">{{ 'search.changeDistrict' | translate }}</button>
         <span class="spacer"></span>
-        <span class="label">{{ 'search.radius' | translate }}</span>
-        <mat-select
-          class="radius"
-          panelWidth="160px"
-          [value]="radius()"
-          (selectionChange)="radiusChange.emit($event.value)"
-          [attr.aria-label]="'search.radius' | translate">
-          @for (minutes of radiusOptions(); track minutes) {
-            <mat-option [value]="minutes">{{ 'search.minutes' | translate: { minutes } }}</mat-option>
-          }
-        </mat-select>
-        @if (order(); as current) {
-          <span class="label">{{ 'search.orderBy' | translate }}</span>
+        <!-- Each label travels with its select when the row wraps on a phone. -->
+        <span class="field">
+          <span class="label">{{ 'search.radius' | translate }}</span>
           <mat-select
-            class="radius order"
-            panelWidth="180px"
-            [value]="current"
-            (selectionChange)="orderChange.emit($event.value)"
-            [attr.aria-label]="'search.orderBy' | translate">
-            @for (item of orders; track item) {
-              <mat-option [value]="item">{{ 'categoriesPage.order.' + item | translate }}</mat-option>
+            class="radius"
+            panelWidth="160px"
+            [value]="radius()"
+            (selectionChange)="radiusChange.emit($event.value)"
+            [attr.aria-label]="'search.radius' | translate">
+            @for (minutes of radiusOptions(); track minutes) {
+              <mat-option [value]="minutes">{{ 'search.minutes' | translate: { minutes } }}</mat-option>
             }
           </mat-select>
+        </span>
+        @if (order(); as current) {
+          <span class="field">
+            <span class="label">{{ 'search.orderBy' | translate }}</span>
+            <mat-select
+              class="radius order"
+              panelWidth="180px"
+              [value]="current"
+              (selectionChange)="orderChange.emit($event.value)"
+              [attr.aria-label]="'search.orderBy' | translate">
+              @for (item of orders; track item) {
+                <mat-option [value]="item">{{ 'categoriesPage.order.' + item | translate }}</mat-option>
+              }
+            </mat-select>
+          </span>
         }
       </div>
       @if (showCategories() && categories().length) {
         <div class="chips" role="group" [attr.aria-label]="'search.categories' | translate">
-          <button type="button" class="chip" [class.on]="!category()" (click)="categoryChange.emit(null)">
+          <button type="button" class="chip" [class.on]="!category()" [attr.aria-pressed]="!category()" (click)="categoryChange.emit(null)">
             {{ 'search.all' | translate }}
           </button>
           @for (item of categories(); track item) {
-            <button type="button" class="chip" [class.on]="category() === item" (click)="categoryChange.emit(item)">
+            <button
+              type="button"
+              class="chip"
+              [class.on]="category() === item"
+              [attr.aria-pressed]="category() === item"
+              (click)="categoryChange.emit(item)">
               {{ item }}
             </button>
           }
@@ -99,6 +109,7 @@ import { OFFER_ORDERS, OfferOrder } from '../../offer-order';
         cursor: pointer;
       }
       .spacer { flex: 1; }
+      .field { display: inline-flex; flex: none; align-items: center; gap: var(--space-sm); }
       .radius {
         width: 120px;
         height: 32px;
@@ -122,10 +133,22 @@ import { OFFER_ORDERS, OfferOrder } from '../../offer-order';
       .order { width: 150px; }
       @media (max-width: 720px) {
         .panel { padding: 14px 16px; }
-        /* One row that scrolls sideways, so the first offer stays on the first screen. */
-        .chips { flex-wrap: nowrap; overflow-x: auto; margin: 0 -16px; padding: 0 16px 2px; scrollbar-width: none; }
+        /*
+         * One row that scrolls sideways, so the first offer stays on the first screen. The fade on the
+         * right edge, as in the tabs, tells there are more chips instead of cutting them at the border.
+         */
+        .chips {
+          flex-wrap: nowrap;
+          overflow-x: auto;
+          margin: 0 -16px;
+          padding: 0 16px 2px;
+          scrollbar-width: none;
+          mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent);
+          -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent);
+        }
         .chips::-webkit-scrollbar { display: none; }
         .chip { flex: none; height: 36px; font-size: 13px; }
+        .chip:last-child { margin-right: 32px; }
         .link { min-height: 36px; }
         .radius, .order { width: auto; min-width: 130px; height: 40px; padding-top: 9px; }
       }

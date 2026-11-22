@@ -569,6 +569,7 @@
     },
     "countFor": "{{total}} ofertas para «{{term}}»",
     "countForOne": "1 oferta para «{{term}}»",
+    "results": "Resultados",
     "category": "Categoría: {{name}}"
   },
   "categoriesPage": {

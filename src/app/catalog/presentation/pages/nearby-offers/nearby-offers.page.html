@@ -64,6 +64,8 @@
         (failed)="mapFailed.set(true)" />
     }
 
+    <!-- The card titles are h3: this keeps the outline h1 > h2 > h3 for screen readers. -->
+    <h2 class="sr-only">{{ 'offersPage.results' | translate }}</h2>
     @if (search.state() === 'loading') {
       <div class="grid" aria-busy="true" [attr.aria-label]="'nearbyPage.searching' | translate">
         @for (s of skeletons; track s) {
