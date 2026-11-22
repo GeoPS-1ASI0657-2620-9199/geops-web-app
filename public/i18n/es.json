@@ -941,6 +941,7 @@
     "saving": "Guardando…",
     "saved": "Tus próximos avisos respetarán estas preferencias.",
     "error": "No pudimos guardar tus preferencias. Inténtalo de nuevo.",
+    "permissionMissing": "Falta permitir los avisos en este navegador.",
     "iphoneTitle": "En iPhone primero instala GeoPS",
     "iphoneHint": "Safari solo envía avisos a sitios agregados a la pantalla de inicio. Toca Compartir y luego Agregar a inicio. Mientras tanto te avisamos por correo.",
     "locationTitle": "Usamos tu última ubicación de la última hora",

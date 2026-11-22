@@ -941,6 +941,7 @@
     "saving": "Saving…",
     "saved": "Your next notices will follow these preferences.",
     "error": "We could not save your preferences. Please try again.",
+    "permissionMissing": "Notifications are not allowed in this browser yet.",
     "iphoneTitle": "On iPhone, install GeoPS first",
     "iphoneHint": "Safari only sends notices to sites added to the home screen. Tap Share and then Add to Home Screen. Meanwhile we notify you by email.",
     "locationTitle": "We use your last location from the last hour",
