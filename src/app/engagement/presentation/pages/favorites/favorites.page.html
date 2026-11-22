@@ -2,8 +2,14 @@
   <div class="head">
     <div>
       <h1 class="title">{{ 'favoritesPage.title' | translate }}</h1>
-      @if (state() === 'ready') {
-        <p class="subtitle">{{ 'favoritesPage.count' | translate: { total: cards().length } }}</p>
+      @switch (tab()) {
+        @case ('businesses') { <p class="subtitle">{{ 'savedBusinesses.description' | translate }}</p> }
+        @case ('follows') { <p class="subtitle">{{ 'followsPage.description' | translate }}</p> }
+        @default {
+          @if (state() === 'ready') {
+            <p class="subtitle">{{ 'favoritesPage.count' | translate: { total: cards().length } }}</p>
+          }
+        }
       }
     </div>
   </div>
@@ -12,6 +18,7 @@
 
   <app-favorites-tabs [active]="tab()" />
   @if (tab() === 'businesses') { <app-saved-businesses /> }
+  @else if (tab() === 'follows') { <app-followed-businesses /> }
   @else {
   @switch (state()) {
     @case ('loading') {

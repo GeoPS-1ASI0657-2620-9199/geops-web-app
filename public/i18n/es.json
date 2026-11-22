@@ -869,12 +869,15 @@
     "paused": "Pausada",
     "loading": "Cargando comercios…",
     "retry": "Reintentar",
-    "empty": "Todavía no guardaste comercios. Puedes guardarlos desde el detalle de una oferta.",
+    "empty": "Todavía no guardas comercios",
     "remove": "Quitar de guardados",
     "saved": "Comercio guardado",
     "save": "Guardar comercio",
     "error": "No pudimos actualizar tus comercios. Inténtalo de nuevo.",
-    "viewOffer": "Ver oferta"
+    "viewOffer": "Ver oferta",
+    "description": "Los comercios que guardaste para volver a ellos.",
+    "emptyHint": "Guárdalos desde el detalle de una oferta para tenerlos a mano aquí.",
+    "savedOn": "Guardado el {{date}}"
   },
   "favoritesTabs": {
     "offers": "Ofertas guardadas",

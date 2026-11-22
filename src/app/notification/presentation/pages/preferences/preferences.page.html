@@ -14,11 +14,11 @@
           <legend class="sr-only">{{ 'notificationPage.channels' | translate }}</legend>
           <div class="row">
             <div class="row-text"><p class="row-title">{{ 'notificationPage.push' | translate }}</p><p class="row-hint">{{ 'notificationPage.pushHint' | translate }}</p></div>
-            <mat-slide-toggle formControlName="pushEnabled" [hideIcon]="true" [attr.aria-label]="'notificationPage.push' | translate" />
+            <mat-slide-toggle formControlName="pushEnabled" [hideIcon]="true" [aria-label]="'notificationPage.push' | translate" />
           </div>
           <div class="row">
             <div class="row-text"><p class="row-title">{{ 'notificationPage.email' | translate }}</p><p class="row-hint">{{ 'notificationPage.emailHint' | translate }}</p></div>
-            <mat-slide-toggle formControlName="emailEnabled" [hideIcon]="true" [attr.aria-label]="'notificationPage.email' | translate" />
+            <mat-slide-toggle formControlName="emailEnabled" [hideIcon]="true" [aria-label]="'notificationPage.email' | translate" />
           </div>
           <div class="row column" role="group" aria-labelledby="limit-title">
             <p class="row-title" id="limit-title">{{ 'notificationPage.dailyLimit' | translate }}</p>

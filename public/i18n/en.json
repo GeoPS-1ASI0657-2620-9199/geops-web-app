@@ -869,12 +869,15 @@
     "paused": "Paused",
     "loading": "Loading businesses…",
     "retry": "Retry",
-    "empty": "No saved businesses yet. Save them from an offer detail.",
+    "empty": "You have not saved any business yet",
     "remove": "Remove saved business",
     "saved": "Business saved",
     "save": "Save business",
     "error": "We could not update your businesses. Please try again.",
-    "viewOffer": "View offer"
+    "viewOffer": "View offer",
+    "description": "The businesses you saved to come back to.",
+    "emptyHint": "Save them from an offer detail to keep them at hand here.",
+    "savedOn": "Saved on {{date}}"
   },
   "favoritesTabs": {
     "offers": "Saved offers",

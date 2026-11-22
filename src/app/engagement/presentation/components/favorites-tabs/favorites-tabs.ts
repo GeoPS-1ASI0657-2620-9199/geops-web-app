@@ -13,7 +13,7 @@ export type FavoritesTab = 'offers' | 'businesses' | 'follows';
     <nav class="tabs" [attr.aria-label]="'savedBusinesses.tabs' | translate">
       <a class="chip" routerLink="/favorites" [class.selected]="active() === 'offers'" [attr.aria-current]="active() === 'offers' ? 'page' : null">{{ 'favoritesTabs.offers' | translate }}</a>
       <a class="chip" routerLink="/favorites" [queryParams]="{ tab: 'businesses' }" [class.selected]="active() === 'businesses'" [attr.aria-current]="active() === 'businesses' ? 'page' : null">{{ 'favoritesTabs.businesses' | translate }}</a>
-      <a class="chip" routerLink="/follows" [class.selected]="active() === 'follows'" [attr.aria-current]="active() === 'follows' ? 'page' : null">{{ 'favoritesTabs.follows' | translate }}</a>
+      <a class="chip" routerLink="/favorites" [queryParams]="{ tab: 'follows' }" [class.selected]="active() === 'follows'" [attr.aria-current]="active() === 'follows' ? 'page' : null">{{ 'favoritesTabs.follows' | translate }}</a>
     </nav>
   `,
   styles: [
