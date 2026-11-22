@@ -978,6 +978,10 @@
       "title": "This link is missing its code",
       "description": "Open the full link in the GeoPS confirmation email, without cutting it."
     },
+    "alreadyConfirmed": {
+      "title": "If your email is already confirmed, there is nothing else to do",
+      "description": "If you have not confirmed it yet, use the link in the latest confirmation email."
+    },
     "channelOff": {
       "title": "Email notices are still off",
       "description": "We will not send you email notices until you confirm your address."

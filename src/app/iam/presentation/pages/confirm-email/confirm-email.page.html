@@ -37,10 +37,11 @@
             <a mat-flat-button class="primary" routerLink="/login">{{ 'confirmEmailPage.logIn' | translate }}</a>
           }
         </geo-empty-state>
+        <!-- A used link may belong to an address that is already confirmed: no warning that notices are off. -->
         <geo-alert
-          kind="warning"
-          [title]="'confirmEmailPage.channelOff.title' | translate"
-          [description]="'confirmEmailPage.channelOff.description' | translate" />
+          kind="info"
+          [title]="'confirmEmailPage.alreadyConfirmed.title' | translate"
+          [description]="'confirmEmailPage.alreadyConfirmed.description' | translate" />
       }
       @case ('missing') {
         <geo-empty-state

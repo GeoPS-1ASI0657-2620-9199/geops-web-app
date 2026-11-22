@@ -79,13 +79,15 @@ describe('ConfirmEmailPage', () => {
     expect(action?.getAttribute('href')).toBe('/inicio');
   });
 
-  it('explains an invalid or expired link and that e-mail notices stay off', async () => {
+  it('explains an invalid or used link without claiming that e-mail notices are off', async () => {
     useCase.execute.and.rejectWith(new ApiError(INVALID_CONFIRMATION_LINK, 'El enlace no es válido o ya venció.'));
     await create({ token: 'used' });
     await settle();
 
     expect(heading()).toContain('confirmEmailPage.invalid.title');
-    expect(host().querySelector('geo-alert')?.textContent).toContain('confirmEmailPage.channelOff.title');
+    expect(host().querySelector('geo-alert')?.textContent).toContain('confirmEmailPage.alreadyConfirmed.title');
+    expect(host().textContent).not.toContain('confirmEmailPage.channelOff');
+    expect(host().querySelector('[role="alert"]')).toBeNull();
     expect(host().querySelector('a.primary')?.getAttribute('href')).toBe('/login');
   });
 

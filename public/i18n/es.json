@@ -978,6 +978,10 @@
       "title": "Al enlace le falta su código",
       "description": "Abre el enlace completo del correo de confirmación de GeoPS, sin recortarlo."
     },
+    "alreadyConfirmed": {
+      "title": "Si tu correo ya está confirmado, no necesitas hacer nada más",
+      "description": "Si aún no lo confirmaste, usa el enlace del correo de confirmación más reciente."
+    },
     "channelOff": {
       "title": "Los avisos por correo siguen desactivados",
       "description": "No te enviaremos avisos por correo hasta que confirmes tu dirección."
