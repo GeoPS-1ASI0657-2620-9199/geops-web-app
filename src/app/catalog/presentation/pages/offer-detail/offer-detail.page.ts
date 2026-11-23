@@ -88,11 +88,15 @@ export class OfferDetailPage implements OnInit {
   protected readonly reserveFailure = signal<ReserveFailure | null>(null);
   /** The active reservation of this consumer for this offer: the button then points to it instead of reserving again. */
   protected readonly activeReservationId = signal<number | null>(null);
-  /** Visitors see it and log in first; business owners and admins cannot reserve. */
+  /**
+   * Visitors see it and log in first; business owners and admins cannot reserve. An offer of a public source has no
+   * affiliated business behind it: Reservation always refuses it, so it shows no Reservar (US07, E2-08).
+   */
   protected readonly canReserve = computed(() => {
     const role = this.sessions.role();
-    return role === null || role === 'CONSUMER';
+    return (role === null || role === 'CONSUMER') && !this.isPublicSource();
   });
+  protected readonly isPublicSource = computed(() => this.offer()?.source === 'PUBLIC_SOURCE');
   protected readonly isConsumer = computed(() => this.sessions.role() === 'CONSUMER');
   protected readonly isVisitor = computed(() => this.sessions.role() === null);
   protected readonly validity = computed(() => {

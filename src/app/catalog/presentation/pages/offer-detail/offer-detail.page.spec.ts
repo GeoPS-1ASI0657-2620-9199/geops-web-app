@@ -330,6 +330,19 @@ describe('OfferDetailPage', () => {
       expect(reserveButton()).toBeNull();
     });
 
+    it('offers no reservation nor favorite for an offer of a public source, and says why', async () => {
+      const publicOffer: OfferDetail = { ...OFFER, source: 'PUBLIC_SOURCE', businessId: null, businessName: 'Municipalidad de Miraflores', verifiedSeal: false, price: 0 };
+      offers.findById.and.resolveTo(publicOffer);
+      const element = await render();
+      const host = fixture.nativeElement as HTMLElement;
+
+      expect(reserveButton()).toBeNull();
+      expect(host.querySelector('[data-testid="public-source-notice"]')).not.toBeNull();
+      expect(host.textContent).not.toContain('offerDetailPage.save');
+      expect(host.querySelector('[data-testid="free"]')?.textContent?.trim()).toBe('offerDetailPage.free');
+      void element;
+    });
+
     it('keeps the button disabled for an offer that is not available', async () => {
       offers.findById.and.resolveTo({ ...OFFER, available: false });
       await render();
