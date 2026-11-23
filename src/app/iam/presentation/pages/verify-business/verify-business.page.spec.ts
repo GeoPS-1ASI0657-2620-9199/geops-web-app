@@ -111,17 +111,19 @@ describe('VerifyBusinessPage', () => {
     });
   }
 
-  it('explains that a pending verification arrives by itself (CA-38.4, QAS13)', async () => {
-    await render();
-    gateway.verify.and.resolveTo(
-      answer({ result: 'PENDING', reason: 'GEOCODER_UNAVAILABLE', verificationStatus: 'PENDING', message: 'Pendiente.' }),
-    );
+  const pendingReasons: VerificationReason[] = ['GEOCODER_UNAVAILABLE', 'TAXPAYER_REGISTRY_UNAVAILABLE'];
+  for (const reason of pendingReasons) {
+    it(`explains that a verification pending for ${reason} arrives by itself (CA-38.4, QAS13)`, async () => {
+      await render();
+      gateway.verify.and.resolveTo(answer({ result: 'PENDING', reason, verificationStatus: 'PENDING', message: 'Pendiente.' }));
 
-    await verify();
+      await verify();
 
-    expect(byTestId('verify-result')?.className).toContain('wait');
-    expect(byTestId('verify-result')?.textContent).toContain('verifyBusiness.pendingNote');
-  });
+      expect(byTestId('verify-result')?.className).toContain('wait');
+      expect(byTestId('verify-result')?.textContent).toContain('verifyBusiness.pendingNote');
+      expect(byTestId('verify-result')?.textContent).toContain(`verifyBusiness.reason.${reason}.title`);
+    });
+  }
 
   it('asks to correct an address it cannot place and keeps what the owner typed (CA-38.3, QAS13)', async () => {
     await render();

@@ -894,6 +894,10 @@
         "title": "The map service is not answering right now",
         "fix": "You do not have to do anything."
       },
+      "TAXPAYER_REGISTRY_UNAVAILABLE": {
+        "title": "The SUNAT RUC lookup is not answering right now",
+        "fix": "You do not have to do anything."
+      },
       "INVALID_RUC": {
         "title": "The RUC is not valid",
         "fix": "Check the 11 digits of the RUC in your profile."

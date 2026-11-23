@@ -6,7 +6,8 @@ export type VerificationStatus = (typeof VERIFICATION_STATUSES)[number];
 export type VerificationResult = 'APPROVED' | 'REJECTED' | 'PENDING';
 
 /**
- * Why an attempt was not approved. GEOCODER_UNAVAILABLE goes with PENDING: Identity retries by itself.
+ * Why an attempt was not approved. GEOCODER_UNAVAILABLE and TAXPAYER_REGISTRY_UNAVAILABLE go with PENDING:
+ * Identity retries by itself.
  * INVALID_RUC is the answer of the register when the check digit is wrong.
  */
 export const VERIFICATION_REASONS = [
@@ -15,6 +16,7 @@ export const VERIFICATION_REASONS = [
   'TAXPAYER_NOT_HABIDO',
   'ADDRESS_NOT_GEOCODABLE',
   'GEOCODER_UNAVAILABLE',
+  'TAXPAYER_REGISTRY_UNAVAILABLE',
   'INVALID_RUC',
 ] as const;
 export type VerificationReason = (typeof VERIFICATION_REASONS)[number];

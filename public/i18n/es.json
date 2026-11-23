@@ -894,6 +894,10 @@
         "title": "El servicio de mapas no responde ahora",
         "fix": "No tienes que hacer nada."
       },
+      "TAXPAYER_REGISTRY_UNAVAILABLE": {
+        "title": "La consulta de RUC en SUNAT no responde ahora",
+        "fix": "No tienes que hacer nada."
+      },
       "INVALID_RUC": {
         "title": "El RUC no es válido",
         "fix": "Revisa los 11 dígitos del RUC de tu perfil."
