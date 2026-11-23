@@ -45,6 +45,17 @@ describe('GeoNotificationBell', () => {
     expect(element.querySelector('button.bell')?.getAttribute('aria-label')).toBeTruthy();
   });
 
+  it('marks the bell itself while there are unread notices, not only with the badge', async () => {
+    const unread = await create();
+    expect(unread.nativeElement.querySelector('button.bell').classList).toContain('has-unread');
+    expect(unread.nativeElement.querySelector('mat-icon').textContent.trim()).toBe('notifications_active');
+
+    repository.unreadCount.and.resolveTo(0);
+    const none = await create();
+    expect(none.nativeElement.querySelector('button.bell').classList).not.toContain('has-unread');
+    expect(none.nativeElement.querySelector('mat-icon').textContent.trim()).toBe('notifications');
+  });
+
   it('hides the badge at 0 and shows 9+ over 9', async () => {
     repository.unreadCount.and.resolveTo(0);
     const none = await create();
