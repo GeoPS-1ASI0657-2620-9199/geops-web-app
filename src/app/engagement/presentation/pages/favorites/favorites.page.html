@@ -14,9 +14,10 @@
     </div>
   </div>
 
-  <geo-alert kind="info" [title]="'favoritesPage.notice.title' | translate" [description]="'favoritesPage.notice.description' | translate" />
-
   <app-favorites-tabs [active]="tab()" />
+  @if (tab() === 'follows') {
+    <geo-alert kind="info" [title]="'favoritesPage.notice.title' | translate" [description]="'favoritesPage.notice.description' | translate" />
+  }
   @if (tab() === 'businesses') { <app-saved-businesses /> }
   @else if (tab() === 'follows') { <app-followed-businesses /> }
   @else {

@@ -7,11 +7,12 @@ import { FollowedBusiness } from '../../../domain/model/followed-business';
 import { ApiError } from '../../../../shared/domain/api-error';
 import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { GeoEmptyState } from '../../../../shared/ui/geo-empty-state/geo-empty-state';
+import { BusinessOffers } from '../business-offers/business-offers';
 
 /** "Comercios que sigo" tab of "Mis Favoritos" (US13, Figma screen 29). */
 @Component({
   selector: 'app-followed-businesses',
-  imports: [RouterLink, MatButtonModule, TranslateModule, GeoAlert, GeoEmptyState],
+  imports: [RouterLink, MatButtonModule, TranslateModule, GeoAlert, GeoEmptyState, BusinessOffers],
   template: `<section [attr.aria-busy]="loading()">
     @if (error(); as message) {
       <geo-alert kind="error" [title]="message | translate">
@@ -40,9 +41,7 @@ import { GeoEmptyState } from '../../../../shared/ui/geo-empty-state/geo-empty-s
                 <p class="meta count none">{{ 'followsPage.noOffers' | translate }}</p>
               }
             </div>
-            @if (business.activeOffersCount > 0) {
-              <a mat-stroked-button class="view" [routerLink]="['/offers', business.activeOffers[0].offerId]">{{ 'followsPage.viewOffer' | translate }}</a>
-            }
+            <app-business-offers [offers]="business.activeOffers" [businessName]="business.businessName" />
             <button class="action" type="button" [disabled]="removing() !== null" (click)="remove(business.businessId)">
               {{ 'followsPage.unfollow' | translate }}<span class="sr-only"> {{ business.businessName }}</span>
             </button>

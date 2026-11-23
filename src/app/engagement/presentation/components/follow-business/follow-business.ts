@@ -4,6 +4,11 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FollowBusinessUseCase, ListFollowedBusinessesUseCase, UnfollowBusinessUseCase } from '../../../application/follows.use-cases';
 import { ApiError } from '../../../../shared/domain/api-error';
 
+/**
+ * "Seguir comercio" on the offer detail (US13). It asks Engagement on every business it is given,
+ * so any offer of a followed business says "Siguiendo", and it never shows the state of the
+ * business of the previous offer while it asks.
+ */
 @Component({
   selector: 'app-follow-business',
   imports: [MatButtonModule, TranslateModule],
@@ -17,29 +22,41 @@ export class FollowBusiness implements OnChanges {
   private readonly follow = inject(FollowBusinessUseCase);
   private readonly unfollow = inject(UnfollowBusinessUseCase);
   readonly following = signal(false);
-  readonly busy = signal(false);
+  readonly busy = signal(true);
   readonly error = signal<string | null>(null);
 
-  ngOnChanges() { void this.load(); }
-
-  private async load() {
-    const id = this.businessId();
-    this.busy.set(true);
-    this.error.set(null);
-    try { const items = await this.list.execute(); if (id === this.businessId()) this.following.set(items.some(b => b.businessId === id)); }
-    catch (error) { this.error.set(error instanceof ApiError ? error.message : 'followsPage.error'); }
-    finally { this.busy.set(false); }
+  ngOnChanges(): void {
+    void this.load();
   }
 
-  async toggle() {
-    if (this.busy()) return;
+  private async load(): Promise<void> {
+    const id = this.businessId();
+    this.following.set(false);
     this.busy.set(true);
     this.error.set(null);
     try {
-      if (this.following()) await this.unfollow.execute(this.businessId());
-      else await this.follow.execute(this.businessId());
-      this.following.update(value => !value);
-    } catch (error) { this.error.set(error instanceof ApiError ? error.message : 'followsPage.error'); }
-    finally { this.busy.set(false); }
+      const items = await this.list.execute();
+      if (id === this.businessId()) this.following.set(items.some((business) => business.businessId === id));
+    } catch (error) {
+      if (id === this.businessId()) this.error.set(error instanceof ApiError ? error.message : 'followsPage.error');
+    } finally {
+      if (id === this.businessId()) this.busy.set(false);
+    }
+  }
+
+  async toggle(): Promise<void> {
+    if (this.busy()) return;
+    const id = this.businessId();
+    this.busy.set(true);
+    this.error.set(null);
+    try {
+      if (this.following()) await this.unfollow.execute(id);
+      else await this.follow.execute(id);
+      if (id === this.businessId()) this.following.update((value) => !value);
+    } catch (error) {
+      if (id === this.businessId()) this.error.set(error instanceof ApiError ? error.message : 'followsPage.error');
+    } finally {
+      if (id === this.businessId()) this.busy.set(false);
+    }
   }
 }

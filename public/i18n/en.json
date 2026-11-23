@@ -1091,7 +1091,9 @@
     "viewOffer": "View offer",
     "description": "The businesses you saved to come back to.",
     "emptyHint": "Save them from an offer detail to keep them at hand here.",
-    "savedOn": "Saved on {{date}}"
+    "savedOn": "Saved on {{date}}",
+    "noNotices": "Saving sends no notices. To hear about its new offers, follow the business.",
+    "savedTapToRemove": "Business saved. Tap to remove it."
   },
   "favoritesTabs": {
     "offers": "Saved offers",
@@ -1228,5 +1230,11 @@
       "description": "Check your connection and try again.",
       "retry": "Retry"
     }
+  },
+  "businessOffers": {
+    "show": "See {{count}} offers",
+    "showOne": "See 1 offer",
+    "until": "Ends on {{date}}",
+    "listLabel": "Current offers of {{name}}"
   }
 }

@@ -8,11 +8,15 @@ import { SavedBusiness } from '../../../domain/model/saved-business';
 import { ApiError } from '../../../../shared/domain/api-error';
 import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { GeoEmptyState } from '../../../../shared/ui/geo-empty-state/geo-empty-state';
+import { BusinessOffers } from '../business-offers/business-offers';
 
-/** "Comercios guardados" tab of "Mis Favoritos" (US12), drawn with the same rows as the followed businesses (Figma 29). */
+/**
+ * "Comercios guardados" tab of "Mis Favoritos" (US12), drawn with the same rows as the followed businesses (Figma 29).
+ * Saving is a bookmark with no notices; following (US13) is what sends them.
+ */
 @Component({
   selector: 'app-saved-businesses',
-  imports: [DatePipe, RouterLink, MatButtonModule, TranslateModule, GeoAlert, GeoEmptyState],
+  imports: [DatePipe, RouterLink, MatButtonModule, TranslateModule, GeoAlert, GeoEmptyState, BusinessOffers],
   template: `<section [attr.aria-busy]="loading()">
     @if (error(); as message) {
       <geo-alert kind="error" [title]="message | translate">
@@ -29,14 +33,21 @@ import { GeoEmptyState } from '../../../../shared/ui/geo-empty-state/geo-empty-s
       </geo-empty-state>
     }
     @if (businesses().length > 0) {
+      <p class="hint">{{ 'savedBusinesses.noNotices' | translate }}</p>
       <ul class="list">
         @for (business of businesses(); track business.businessId) {
           <li class="row">
             <span class="avatar" aria-hidden="true">{{ initial(business.businessName) }}</span>
             <div class="name">
               <h2>{{ business.businessName }}</h2>
+              @if (business.activeOffersCount > 0) {
+                <p class="meta count">{{ (business.activeOffersCount === 1 ? 'followsPage.countOne' : 'followsPage.count') | translate: { count: business.activeOffersCount } }}</p>
+              } @else {
+                <p class="meta count none">{{ 'followsPage.noOffers' | translate }}</p>
+              }
               @if (business.savedAt) { <p class="meta">{{ 'savedBusinesses.savedOn' | translate: { date: (business.savedAt | date: 'dd/MM/yyyy') } }}</p> }
             </div>
+            <app-business-offers [offers]="business.activeOffers" [businessName]="business.businessName" />
             <button class="action" type="button" [disabled]="busy() !== null" (click)="remove(business.businessId)">
               {{ 'savedBusinesses.remove' | translate }}<span class="sr-only"> {{ business.businessName }}</span>
             </button>
