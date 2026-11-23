@@ -102,6 +102,26 @@ describe('authInterceptor', () => {
     expect(backend.expectOne(`${BASE_URL}/campaigns`).request.headers.has('Authorization')).toBeFalse();
   });
 
+  it('ends a session whose token ran out on the clock and goes to login, instead of looking logged in', () => {
+    setUp({ ...ACTIVE, expiresAt: Date.now() - 1 });
+
+    void firstValueFrom(http.get(`${BASE_URL}/campaigns`));
+
+    backend.expectOne(`${BASE_URL}/campaigns`);
+    expect(TestBed.inject(SessionStore).session()).toBeNull();
+    expect(router.navigate).toHaveBeenCalledWith(['/login'], { queryParams: { expired: 1 } });
+    expect(identity.logOut).not.toHaveBeenCalled();
+  });
+
+  it('lets a visitor without a session call public routes without going to login', () => {
+    setUp(null);
+
+    void firstValueFrom(http.get(`${BASE_URL}/offers/nearby`));
+
+    expect(backend.expectOne(`${BASE_URL}/offers/nearby`).request.headers.has('Authorization')).toBeFalse();
+    expect(router.navigate).not.toHaveBeenCalled();
+  });
+
   it('ends the session and goes to login when the gateway answers 401', async () => {
     setUp(ACTIVE);
 
