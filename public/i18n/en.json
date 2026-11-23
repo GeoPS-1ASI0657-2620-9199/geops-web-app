@@ -118,24 +118,28 @@
     },
     "location": {
       "intro": "Write the address and mark the point on the map. Your customers see the distance from that location.",
-      "address": "Store address",
+      "address": "Street and number of the shop",
       "addressInvalid": "Add street and number, or mark the point on the map.",
       "mapHint": "Tap the map or drag the marker to your store's door.",
       "openingHours": "Opening hours",
       "openingHoursHint": "Optional. For example: Mon-Sat 07:00-22:00.",
-      "marked": "Location marked"
+      "marked": "Location marked",
+      "district": "District",
+      "districtRequired": "Pick the district of your shop."
     },
     "baseline": {
       "title": "Your current situation",
       "intro": "Tell us how many customers you serve per week and how much each one spends on average. We use it to compare every campaign against what you already sell without GeoPS. You can skip it and declare it later in Metrics.",
       "customers": "Customers per week",
-      "ticket": "Average ticket (S/)",
+      "ticket": "Average spend per customer (S/)",
       "optional": "Optional.",
       "errors": {
         "customers": "Enter a whole number of customers between 1 and 100,000.",
         "ticket": "Enter an amount above 0, up to 99,999.99 and with at most two decimals.",
         "pair": "Fill in both values or leave both empty."
-      }
+      },
+      "customersHint": "Optional. Count every customer you serve in a normal week. E.g.: 200.",
+      "ticketHint": "Optional. What each customer pays on average per purchase. E.g.: if one day you sell S/ 600 to 40 customers, it is S/ 15."
     },
     "errors": {
       "location": "We could not place your store",
@@ -909,8 +913,6 @@
       }
     },
     "pendingNote": "We retry on our own every 10 minutes. The result will show here and on your dashboard; you can keep creating campaigns meanwhile.",
-    "correctAddress": "Corrected address",
-    "addressHint": "E.g. Av. José Larco 345, Miraflores",
     "verifyAddress": "Verify with this address",
     "toCampaign": "Create a campaign",
     "toPanel": "Go to my dashboard",
@@ -931,7 +933,11 @@
       "UNAUTHORIZED": "Your session expired. Log in again.",
       "BUSINESS_PROFILE_NOT_FOUND": "We could not find the profile of your business.",
       "TAXPAYER_REGISTRY_EMPTY": "The SUNAT registry is still loading. Try again in a few minutes."
-    }
+    },
+    "correctStreet": "Street and number",
+    "streetHint": "E.g. Av. José Larco 345. Pick the district below.",
+    "district": "District",
+    "pickDistrict": "Pick the district"
   },
   "reportForm": {
     "title": "Report a problem",
@@ -1205,26 +1211,28 @@
       "summary": "{{series}} per day over {{days}}; the highest day adds up to {{peak}}."
     },
     "baseline": {
-      "title": "Against your baseline",
-      "comparison": "The campaign brought {{customers}} who redeemed; without GeoPS you serve about {{expected}} in {{days}}.",
-      "usual": "Usual customers",
+      "title": "Compared with your usual sales",
+      "comparison": "The campaign brought {{customers}} who redeemed; without GeoPS you usually serve about {{expected}} in {{days}}.",
+      "usual": "Customers you usually serve",
       "perWeek": "{{customers}} per week",
-      "ticket": "Average ticket",
+      "ticket": "Average spend per customer",
       "extraSales": "Estimated sales from the campaign",
-      "declaredOn": "Baseline declared on {{date}}.",
-      "edit": "Update baseline",
-      "invite": "Tell us how many customers you served per week before GeoPS and your average ticket to see how much each campaign adds. Meanwhile you see the absolute figures.",
-      "customersField": "Customers per week before GeoPS",
-      "ticketField": "Average ticket (S/)",
-      "save": "Save baseline",
+      "declaredOn": "Business figures saved on {{date}}.",
+      "edit": "Update these figures",
+      "invite": "To see how much each campaign adds, tell us how many customers you served per week before GeoPS and how much each one spends on average. Meanwhile you only see the campaign figures.",
+      "customersField": "How many customers did you serve per week before GeoPS?",
+      "ticketField": "How much does each customer spend on average? (S/)",
+      "save": "Save figures",
       "saving": "Saving…",
       "cancel": "Cancel",
-      "saved": "Baseline saved",
+      "saved": "Figures saved",
       "errors": {
         "customers": "Enter a whole number of customers between 1 and 100,000.",
-        "ticket": "Enter a ticket above 0 with up to two decimals.",
-        "save": "We could not save the baseline. Try again."
-      }
+        "ticket": "Enter an amount above 0 with up to two decimals.",
+        "save": "We could not save the figures. Please try again."
+      },
+      "customersHint": "Count every customer you serve in a normal week. E.g.: 200.",
+      "ticketHint": "What each customer pays on average per purchase. E.g.: if one day you sell S/ 600 to 40 customers, it is S/ 15."
     },
     "others": {
       "title": "Your campaigns in the same period",
@@ -1256,5 +1264,14 @@
       "yesterday": "yesterday",
       "days": "{{count}} days ago"
     }
+  },
+  "ticketCalculator": {
+    "toggle": "Not sure? Work it out from the sales of one day",
+    "daySales": "Sales of a normal day (S/)",
+    "daySalesHint": "Everything you sold that day. E.g.: 600.",
+    "dayCustomers": "Customers you served that day",
+    "dayCustomersHint": "E.g.: 40.",
+    "result": "Average spend per customer: S/ {{value}}. We already put it in the field above.",
+    "waiting": "Type the sales and customers of the day to work it out."
   }
 }

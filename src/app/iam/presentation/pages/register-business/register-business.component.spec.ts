@@ -35,7 +35,7 @@ describe('RegisterBusinessComponent', () => {
       email: 'rosa.quispe@ejemplo.pe',
       password: 'Bodega#2026',
     });
-  const place = () => wizard.place.setValue({ address: 'Jr. Huánuco 1250, La Victoria', openingHours: '' });
+  const place = () => wizard.place.setValue({ address: 'Jr. Huánuco 1250', district: 'La Victoria', openingHours: '' });
   const baseline = (customersPerWeek: number | null, averageTicket: number | null) =>
     wizard.baseline.setValue({ customersPerWeek, averageTicket });
   const toLastStep = () => {
@@ -86,6 +86,8 @@ describe('RegisterBusinessComponent', () => {
 
     expect(useCase.execute).toHaveBeenCalledTimes(1);
     expect(useCase.execute.calls.mostRecent().args[0].business.location).toEqual({ latitude: -12.0681, longitude: -77.035 });
+    // The district comes from the list and goes at the end of the address Identity looks up (US38).
+    expect(useCase.execute.calls.mostRecent().args[0].business.address).toBe('Jr. Huánuco 1250, La Victoria');
     expect(router.navigate).toHaveBeenCalledWith(['/login'], { queryParams: { registered: 1 }, state: { registeredEmail: 'rosa.quispe@ejemplo.pe', registeredRole: 'BUSINESS_OWNER' } });
   });
 

@@ -95,6 +95,16 @@
           }
         </mat-form-field>
 
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'registerBusinessPage.location.district' | translate }}</mat-label>
+          <mat-select formControlName="district" data-testid="district">
+            @for (d of districts; track d) {
+              <mat-option [value]="d">{{ d }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>{{ 'registerBusinessPage.location.districtRequired' | translate }}</mat-error>
+        </mat-form-field>
+
         <geo-location-picker class="map" [point]="location()" (pointSelected)="onPointSelected($event)" />
         <p class="geo-meta map-hint">{{ 'registerBusinessPage.location.mapHint' | translate }}</p>
 
@@ -118,7 +128,7 @@
                 [max]="baselineLimits.maxCustomers"
                 step="1"
                 inputmode="numeric" />
-              <mat-hint>{{ 'registerBusinessPage.baseline.optional' | translate }}</mat-hint>
+              <mat-hint>{{ 'registerBusinessPage.baseline.customersHint' | translate }}</mat-hint>
               @if (baseline.controls.customersPerWeek.hasError('pair')) {
                 <mat-error>{{ 'registerBusinessPage.baseline.errors.pair' | translate }}</mat-error>
               } @else {
@@ -135,7 +145,7 @@
                 [max]="baselineLimits.maxTicket"
                 step="0.01"
                 inputmode="decimal" />
-              <mat-hint>{{ 'registerBusinessPage.baseline.optional' | translate }}</mat-hint>
+              <mat-hint>{{ 'registerBusinessPage.baseline.ticketHint' | translate }}</mat-hint>
               @if (baseline.controls.averageTicket.hasError('pair')) {
                 <mat-error>{{ 'registerBusinessPage.baseline.errors.pair' | translate }}</mat-error>
               } @else {
@@ -143,6 +153,7 @@
               }
             </mat-form-field>
           </div>
+          <geo-ticket-calculator class="calculator" (ticket)="useCalculatedTicket($event)" />
         </section>
 
         <div class="actions">

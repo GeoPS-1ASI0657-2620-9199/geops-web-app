@@ -199,12 +199,15 @@
                   <span>{{ 'campaignMetrics.baseline.customersField' | translate }}</span>
                   <input type="number" name="customersPerWeek" class="input" min="1" max="100000" step="1" inputmode="numeric"
                     [ngModel]="customersPerWeek()" (ngModelChange)="customersPerWeek.set($event)" />
+                  <small class="hint">{{ 'campaignMetrics.baseline.customersHint' | translate }}</small>
                 </label>
                 <label class="field">
                   <span>{{ 'campaignMetrics.baseline.ticketField' | translate }}</span>
                   <input type="number" name="averageTicket" class="input" min="0.01" step="0.01" inputmode="decimal"
                     [ngModel]="averageTicket()" (ngModelChange)="averageTicket.set($event)" />
+                  <small class="hint">{{ 'campaignMetrics.baseline.ticketHint' | translate }}</small>
                 </label>
+                <geo-ticket-calculator (ticket)="averageTicket.set($event)" />
                 @if (formError(); as message) {
                   <p class="error" role="alert">{{ message }}</p>
                 }

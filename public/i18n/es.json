@@ -118,24 +118,28 @@
     },
     "location": {
       "intro": "Escribe la dirección y marca el punto en el mapa. Con esa ubicación se calcula la distancia que ven tus clientes.",
-      "address": "Dirección del local",
+      "address": "Calle y número del local",
       "addressInvalid": "Agrega calle y número, o marca el punto en el mapa.",
       "mapHint": "Toca el mapa o arrastra el marcador hasta la puerta de tu local.",
       "openingHours": "Horario de atención",
       "openingHoursHint": "Opcional. Por ejemplo: Lun-Sáb 07:00-22:00.",
-      "marked": "Ubicación marcada"
+      "marked": "Ubicación marcada",
+      "district": "Distrito",
+      "districtRequired": "Elige el distrito de tu local."
     },
     "baseline": {
       "title": "Tu situación actual",
       "intro": "Cuéntanos cuántos clientes atiendes por semana y cuánto gasta cada uno en promedio. Con esos datos comparamos cada campaña contra lo que ya vendes sin GeoPS. Puedes dejarlo para después y declararlo en Métricas.",
       "customers": "Clientes por semana",
-      "ticket": "Ticket promedio (S/)",
+      "ticket": "Gasto promedio por cliente (S/)",
       "optional": "Opcional.",
       "errors": {
         "customers": "Escribe un número entero de clientes entre 1 y 100 000.",
         "ticket": "Escribe un monto mayor que 0, hasta 99 999.99 y con dos decimales como máximo.",
         "pair": "Completa los dos datos o deja ambos vacíos."
-      }
+      },
+      "customersHint": "Opcional. Cuenta todos los clientes que atiendes en una semana normal. Ej.: 200.",
+      "ticketHint": "Opcional. Lo que paga en promedio cada cliente por compra. Ej.: si un día vendes S/ 600 a 40 clientes, es S/ 15."
     },
     "errors": {
       "location": "No pudimos ubicar tu local",
@@ -909,8 +913,6 @@
       }
     },
     "pendingNote": "Volvemos a intentarlo solos cada 10 minutos. El resultado aparecerá aquí y en tu panel; puedes seguir creando campañas mientras tanto.",
-    "correctAddress": "Dirección corregida",
-    "addressHint": "Ej. Av. José Larco 345, Miraflores",
     "verifyAddress": "Verificar con esta dirección",
     "toCampaign": "Crear una campaña",
     "toPanel": "Ir a mi panel",
@@ -931,7 +933,11 @@
       "UNAUTHORIZED": "Tu sesión venció. Vuelve a iniciar sesión.",
       "BUSINESS_PROFILE_NOT_FOUND": "No encontramos el perfil de tu comercio.",
       "TAXPAYER_REGISTRY_EMPTY": "El padrón de SUNAT aún se está cargando. Inténtalo en unos minutos."
-    }
+    },
+    "correctStreet": "Calle y número",
+    "streetHint": "Ej. Av. José Larco 345. El distrito se elige abajo.",
+    "district": "Distrito",
+    "pickDistrict": "Elige el distrito"
   },
   "reportForm": {
     "title": "Reportar incumplimiento",
@@ -1205,26 +1211,28 @@
       "summary": "{{series}} por día durante {{days}}; el día más alto suma {{peak}}."
     },
     "baseline": {
-      "title": "Frente a tu línea base",
-      "comparison": "La campaña trajo {{customers}} con canje; sin GeoPS atiendes unos {{expected}} en {{days}}.",
-      "usual": "Clientes habituales",
+      "title": "Comparado con tus ventas de siempre",
+      "comparison": "Con la campaña llegaron {{customers}} que canjearon; sin GeoPS sueles atender unos {{expected}} en {{days}}.",
+      "usual": "Clientes que atiendes normalmente",
       "perWeek": "{{customers}} por semana",
-      "ticket": "Ticket promedio",
+      "ticket": "Gasto promedio por cliente",
       "extraSales": "Ventas estimadas por la campaña",
-      "declaredOn": "Línea base declarada el {{date}}.",
-      "edit": "Actualizar línea base",
-      "invite": "Declara cuántos clientes atendías por semana antes de GeoPS y tu ticket promedio para ver cuánto suma cada campaña. Mientras tanto ves las cifras absolutas.",
-      "customersField": "Clientes por semana antes de GeoPS",
-      "ticketField": "Ticket promedio (S/)",
-      "save": "Guardar línea base",
+      "declaredOn": "Datos de tu negocio guardados el {{date}}.",
+      "edit": "Actualizar estos datos",
+      "invite": "Para saber cuánto te suma cada campaña, dinos cuántos clientes atendías por semana antes de usar GeoPS y cuánto gasta en promedio cada uno. Mientras tanto ves solo los números de la campaña.",
+      "customersField": "¿Cuántos clientes atendías por semana antes de GeoPS?",
+      "ticketField": "¿Cuánto gasta en promedio cada cliente? (S/)",
+      "save": "Guardar datos",
       "saving": "Guardando…",
       "cancel": "Cancelar",
-      "saved": "Línea base guardada",
+      "saved": "Datos guardados",
       "errors": {
         "customers": "Escribe un número entero de clientes entre 1 y 100 000.",
-        "ticket": "Escribe un ticket mayor que 0 con hasta dos decimales.",
-        "save": "No pudimos guardar la línea base. Inténtalo de nuevo."
-      }
+        "ticket": "Escribe un monto mayor que 0 con hasta dos decimales.",
+        "save": "No pudimos guardar los datos. Inténtalo de nuevo."
+      },
+      "customersHint": "Cuenta todos los clientes que atiendes en una semana normal. Ej.: 200.",
+      "ticketHint": "Lo que paga en promedio cada cliente por compra. Ej.: si un día vendes S/ 600 a 40 clientes, es S/ 15."
     },
     "others": {
       "title": "Tus campañas en el mismo periodo",
@@ -1256,5 +1264,14 @@
       "yesterday": "ayer",
       "days": "hace {{count}} días"
     }
+  },
+  "ticketCalculator": {
+    "toggle": "¿No lo sabes? Calcúlalo con las ventas de un día",
+    "daySales": "Ventas de un día normal (S/)",
+    "daySalesHint": "Todo lo que vendiste ese día. Ej.: 600.",
+    "dayCustomers": "Clientes que atendiste ese día",
+    "dayCustomersHint": "Ej.: 40.",
+    "result": "Gasto promedio por cliente: S/ {{value}}. Ya lo pusimos en el campo de arriba.",
+    "waiting": "Escribe las ventas y los clientes del día para calcularlo."
   }
 }

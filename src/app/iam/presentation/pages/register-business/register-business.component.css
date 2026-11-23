@@ -80,3 +80,4 @@ mat-form-field {
     gap: 0;
   }
 }
+.calculator { margin-top: var(--space-md); }

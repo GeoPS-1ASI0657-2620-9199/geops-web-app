@@ -6,6 +6,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { GeoTicketCalculator } from '../../../../shared/ui/geo-ticket-calculator/geo-ticket-calculator';
+import { ADDRESS_DISTRICTS, composeAddress } from '../../../../shared/domain/address-district';
 import { TranslateModule } from '@ngx-translate/core';
 import { ApiError } from '../../../../shared/domain/api-error';
 import { GeoPoint } from '../../../../shared/domain/geo-point';
@@ -96,7 +99,9 @@ interface WizardAlert {
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    MatSelectModule,
     TranslateModule,
+    GeoTicketCalculator,
     GeoAlert,
     GeoLocationPicker,
     GeoSteps,
@@ -145,8 +150,11 @@ export class RegisterBusinessComponent {
     ],
   });
 
+  protected readonly districts = ADDRESS_DISTRICTS;
   protected readonly place = this.fb.group({
     address: ['', [Validators.required, Validators.maxLength(ADDRESS_MAX_LENGTH), this.rejectedBy('address')]],
+    // Picked from a list, never typed: Identity looks the address up on the map and needs the district (US38).
+    district: this.fb.control<string | null>(null, Validators.required),
     openingHours: ['', Validators.maxLength(OPENING_HOURS_MAX_LENGTH)],
   });
 
@@ -155,6 +163,12 @@ export class RegisterBusinessComponent {
     customersPerWeek: this.fb.control<number | null>(null, [customersValidator, this.pairedWith('averageTicket')]),
     averageTicket: this.fb.control<number | null>(null, [ticketValidator, this.pairedWith('customersPerWeek')]),
   });
+
+  /** The average worked out from the sales of a day goes into the same field the owner can also type (US45). */
+  protected useCalculatedTicket(ticket: number): void {
+    this.baseline.controls.averageTicket.setValue(ticket);
+    this.baseline.controls.averageTicket.markAsTouched();
+  }
 
   constructor() {
     // Once the owner edits the rejected field, the server error no longer applies.
@@ -218,7 +232,7 @@ export class RegisterBusinessComponent {
           businessName: account.businessName,
           businessType: account.businessType,
           ruc: account.ruc,
-          address: place.address,
+          address: composeAddress(place.address, place.district ?? ''),
           location: this.location() as GeoPoint,
           openingHours: place.openingHours,
         },
