@@ -3,12 +3,14 @@ import { CampaignMetricsRepository } from '../domain/ports/campaign-metrics.repo
 import { CampaignRepository } from '../domain/ports/campaign.repository';
 import { DistrictDirectory } from '../domain/ports/district.directory';
 import { DistrictPreferenceStore } from '../domain/ports/district-preference.store';
+import { ImageCompressor } from '../domain/ports/image-compressor';
 import { OfferImageUploader } from '../domain/ports/offer-image.uploader';
 import { LocationProvider } from '../domain/ports/location.provider';
 import { ModerationRepository } from '../domain/ports/moderation.repository';
 import { OfferRepository } from '../domain/ports/offer.repository';
 import { RadiusPreferenceGateway } from '../domain/ports/radius-preference.gateway';
 import { RadiusPreferenceStore } from '../domain/ports/radius-preference.store';
+import { BrowserImageCompressor } from './browser-image-compressor';
 import { BrowserRadiusPreferenceStore } from './browser-radius-preference.store';
 import { BrowserDistrictPreferenceStore } from './browser-district-preference.store';
 import { BrowserLocationProvider } from './browser-location.provider';
@@ -25,6 +27,7 @@ export const catalogProviders: Provider[] = [
   { provide: OfferRepository, useClass: HttpOfferRepository },
   { provide: CampaignRepository, useClass: HttpCampaignRepository },
   { provide: OfferImageUploader, useClass: HttpOfferImageUploader },
+  { provide: ImageCompressor, useClass: BrowserImageCompressor },
   { provide: ModerationRepository, useClass: HttpModerationRepository },
   { provide: CampaignMetricsRepository, useClass: HttpCampaignMetricsRepository },
   { provide: LocationProvider, useClass: BrowserLocationProvider },

@@ -9,6 +9,7 @@ import { CreateCampaignUseCase } from '../../../application/create-campaign.use-
 import { ListOfferCategoriesUseCase } from '../../../application/list-offer-categories.use-case';
 import { VerifyBusinessUseCase } from '../../../../iam/application/verify-business.use-case';
 import { DistrictDirectory } from '../../../domain/ports/district.directory';
+import { ImageCompressor } from '../../../domain/ports/image-compressor';
 import { OfferImageUploader } from '../../../domain/ports/offer-image.uploader';
 import { CreateCampaignPage } from './create-campaign.page';
 
@@ -75,6 +76,8 @@ describe('CreateCampaignPage', () => {
         { provide: CreateCampaignUseCase, useValue: useCase },
         { provide: ListMyCampaignsUseCase, useValue: myCampaigns },
         { provide: OfferImageUploader, useValue: uploader },
+        // The page test keeps the chosen file as is; BrowserImageCompressor has its own test.
+        { provide: ImageCompressor, useValue: { compress: (file: File) => Promise.resolve(file) } },
         { provide: DistrictDirectory, useValue: { all: () => [] } },
         { provide: SessionStore, useValue: { session: () => ({ businessName: 'Restaurante Don Pepe' }) } },
       ],
