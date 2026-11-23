@@ -27,6 +27,7 @@ import { OfferDetail } from '../../../domain/model/offer-detail';
 import { validityLabel } from '../../validity-label';
 import { metersBetween } from '../../../../shared/domain/geo-point';
 import { HERE_METERS, walkMinutesFor } from '../../search-view';
+import { walkingDirectionsUrl } from '../../../../shared/ui/map-links';
 
 const OFFER_NOT_FOUND = 'OFFER_NOT_FOUND';
 const UNAUTHORIZED = 'UNAUTHORIZED';
@@ -98,16 +99,10 @@ export class OfferDetailPage implements OnInit {
     const offer = this.offer();
     return offer ? validityLabel(offer.validTo) : '';
   });
-  /** Walking directions on OpenStreetMap, the same map stack as the rest of the app, from the place of the search. */
+  /** Walking directions on Google Maps from the place of the search. */
   protected readonly directionsUrl = computed(() => {
     const offer = this.offer();
-    if (!offer) {
-      return null;
-    }
-    const from = this.consumerPoint();
-    const origin = from ? `${from.latitude}%2C${from.longitude}` : '';
-    const { latitude, longitude } = offer.location;
-    return `https://www.openstreetmap.org/directions?engine=fossgis_osrm_foot&route=${origin}%3B${latitude}%2C${longitude}`;
+    return offer ? walkingDirectionsUrl(offer.location, this.consumerPoint()) : null;
   });
 
   protected readonly saving = signal(false);

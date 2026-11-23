@@ -110,7 +110,7 @@ describe('OfferDetailPage', () => {
   const directionsHref = () =>
     [...(fixture.nativeElement as HTMLElement).querySelectorAll<HTMLAnchorElement>('a[target="_blank"]')]
       .map((a) => a.getAttribute('href'))
-      .find((href) => href?.includes('openstreetmap')) ?? '';
+      .find((href) => href?.includes('google.com/maps')) ?? '';
 
   const reserveButton = () =>
     (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>('button.reserve');
@@ -188,7 +188,7 @@ describe('OfferDetailPage', () => {
     expect((fixture.componentInstance as unknown as { distance(): { meters: number; minutes: number } }).distance()).toEqual(
       jasmine.objectContaining({ meters: 122, minutes: 2 }),
     );
-    expect(directionsHref()).toContain('route=-12.12%2C-77.0297%3B-12.1211%2C-77.0297');
+    expect(directionsHref()).toContain('origin=-12.12%2C-77.0297&destination=-12.1211%2C-77.0297');
   });
 
   it('uses the distance of the search results when the offer is among them', async () => {
@@ -219,7 +219,8 @@ describe('OfferDetailPage', () => {
     await render();
 
     expect(distanceText()).toBeNull();
-    expect(directionsHref()).toContain('route=%3B-12.1211%2C-77.0297');
+    expect(directionsHref()).not.toContain('origin=');
+    expect(directionsHref()).toContain('destination=-12.1211%2C-77.0297');
   });
 
   it('says the offer does not exist on OFFER_NOT_FOUND', async () => {

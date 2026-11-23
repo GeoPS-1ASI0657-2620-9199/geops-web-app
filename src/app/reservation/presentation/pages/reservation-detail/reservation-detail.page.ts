@@ -19,6 +19,7 @@ import { GetReservationUseCase, RESERVATION_NOT_FOUND } from '../../../applicati
 import { NonComplianceReport } from '../../../domain/model/noncompliance-report';
 import { Reservation } from '../../../domain/model/reservation';
 import { PLACED_PARAM, STATUS_SEAL, limaDateTime, remainingTime } from '../../reservation-view';
+import { walkingDirectionsUrl } from '../../../../shared/ui/map-links';
 
 /** The reservation is missing or belongs to another account: either way there is nothing to retry. */
 const NOT_FOUND_CODES = [RESERVATION_NOT_FOUND, 'FORBIDDEN'];
@@ -78,11 +79,7 @@ export class ReservationDetailPage implements OnInit {
   });
   protected readonly directionsUrl = computed(() => {
     const offer = this.offer();
-    if (!offer) {
-      return null;
-    }
-    const { latitude, longitude } = offer.location;
-    return `https://www.openstreetmap.org/directions?engine=fossgis_osrm_foot&route=%3B${latitude}%2C${longitude}`;
+    return offer ? walkingDirectionsUrl(offer.location) : null;
   });
 
   ngOnInit(): void {
