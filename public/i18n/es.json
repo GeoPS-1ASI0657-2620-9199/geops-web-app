@@ -1088,7 +1088,8 @@
     "description": "Los comercios que guardaste para volver a ellos.",
     "emptyHint": "Guárdalos desde el detalle de una oferta para tenerlos a mano aquí.",
     "savedOn": "Guardado el {{date}}",
-    "noNotices": "Guardar no envía avisos. Si quieres que te avisemos de sus ofertas nuevas, sigue al comercio."
+    "noNotices": "Guardar no envía avisos. Si quieres que te avisemos de sus ofertas nuevas, sigue al comercio.",
+    "savedTapToRemove": "Comercio guardado. Tócalo para quitarlo."
   },
   "favoritesTabs": {
     "offers": "Ofertas guardadas",
