@@ -61,7 +61,8 @@
 .hint { margin: 0; font: 400 11px/1.3 var(--font-brand); color: var(--text-faint); }
 .skeleton { height: 112px; border-radius: var(--radius-card); background: var(--neutral-line-soft); }
 
-.layout { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 22px; align-items: start; }
+/* Both cards take the height of the taller one, and the chart grows to fill its card, so the row lines up. */
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 22px; align-items: stretch; }
 .card {
   display: flex;
   flex-direction: column;
@@ -76,12 +77,14 @@
 .quiet { margin: 0; font: 400 12.5px/1.4 var(--font-brand); color: var(--text-dim); }
 
 .chart { position: relative; padding: 18px 0 0; }
+.chart-card .chart { display: flex; flex: 1; flex-direction: column; }
 .peak { position: absolute; top: 0; left: 0; font: 400 11px/1 var(--font-brand); color: var(--text-dim); font-variant-numeric: tabular-nums; }
 .bars {
   display: flex;
   align-items: flex-end;
   gap: 3px;
-  height: 200px;
+  flex: 1;
+  min-height: 200px;
   padding-bottom: 22px;
   border-bottom: 1px solid var(--neutral-line);
   background: linear-gradient(var(--neutral-line-soft) 1px, transparent 1px) 0 0 / 100% 25%;
@@ -152,7 +155,7 @@
   .head { flex-wrap: wrap; }
   .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .figure { font-size: 24px; }
-  .bars { height: 160px; gap: 2px; }
+  .bars { min-height: 160px; gap: 2px; }
   .table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .table, .table tbody, .table tr { display: block; }
   .table tr { padding: 12px 0; border-bottom: 1px solid var(--neutral-line-soft); }
