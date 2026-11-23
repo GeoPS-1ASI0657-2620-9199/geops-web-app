@@ -22,9 +22,9 @@ interface NoticeView extends InboxNotification { link: string | null; ago: Relat
   imports: [NgTemplateOutlet, RouterLink, MatIconModule, MatMenuModule, TranslateModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <button class="bell" type="button" [matMenuTriggerFor]="menu" #trigger="matMenuTrigger" (menuOpened)="open()"
+    <button class="bell" type="button" [class.has-unread]="unread() > 0" [matMenuTriggerFor]="menu" #trigger="matMenuTrigger" (menuOpened)="open()"
       [attr.aria-label]="'notificationBell.ariaLabel' | translate: { count: unread() }">
-      <mat-icon aria-hidden="true">notifications</mat-icon>
+      <mat-icon aria-hidden="true">{{ unread() > 0 ? 'notifications_active' : 'notifications' }}</mat-icon>
       @if (unread() > 0) { <span class="badge" aria-hidden="true">{{ badge() }}</span> }
     </button>
     <mat-menu #menu="matMenu" class="geo-notices-menu">
@@ -79,11 +79,14 @@ interface NoticeView extends InboxNotification { link: string | null; ago: Relat
       }
       .bell mat-icon { width: 16px; height: 16px; font-size: 16px; }
       @media (pointer: coarse), (max-width: 640px) { .bell { height: 40px; } }
+      /* Red with a white ring, so it stands out on the purple top bar (the brand purple did not). */
       .badge {
-        position: absolute; top: -4px; right: -4px; min-width: 18px; height: 18px; padding: 0 5px;
-        box-sizing: border-box; border-radius: 9px; background: var(--brand-action);
-        color: #fff; font: 700 11px/18px var(--font-brand); text-align: center;
+        position: absolute; top: -7px; right: -7px; min-width: 20px; height: 20px; padding: 0 5px;
+        box-sizing: border-box; border: 2px solid var(--neutral-bg); border-radius: 10px;
+        background: var(--status-expired); color: #fff; font: 700 11px/16px var(--font-brand); text-align: center;
+        box-shadow: 0 1px 3px rgb(0 0 0 / 25%);
       }
+      .bell.has-unread mat-icon { color: var(--brand-action); }
       .panel { width: 340px; max-width: 100%; font: 400 12.5px/1.45 var(--font-brand); }
       .list { margin: 0; padding: 0; list-style: none; max-height: 360px; overflow-y: auto; }
       .notice {
