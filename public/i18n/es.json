@@ -1236,5 +1236,20 @@
     "showOne": "Ver 1 oferta",
     "until": "Vence el {{date}}",
     "listLabel": "Ofertas vigentes de {{name}}"
+  },
+  "notificationBell": {
+    "ariaLabel": "Avisos, {{count}} sin leer",
+    "loading": "Cargando avisos",
+    "error": "No pudimos cargar tus avisos.",
+    "retry": "Reintentar",
+    "settings": "Configurar avisos",
+    "unreadDot": "Sin leer",
+    "time": {
+      "now": "ahora",
+      "minutes": "hace {{count}} min",
+      "hours": "hace {{count}} h",
+      "yesterday": "ayer",
+      "days": "hace {{count}} días"
+    }
   }
 }
