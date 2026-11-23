@@ -137,7 +137,9 @@
         "customers": "Escribe un número entero de clientes entre 1 y 100 000.",
         "ticket": "Escribe un monto mayor que 0, hasta 99 999.99 y con dos decimales como máximo.",
         "pair": "Completa los dos datos o deja ambos vacíos."
-      }
+      },
+      "customersHint": "Opcional. Cuenta todos los clientes que atiendes en una semana normal. Ej.: 200.",
+      "ticketHint": "Opcional. Lo que paga en promedio cada cliente por compra. Ej.: si un día vendes S/ 600 a 40 clientes, es S/ 15."
     },
     "errors": {
       "location": "No pudimos ubicar tu local",
@@ -1223,7 +1225,9 @@
         "customers": "Escribe un número entero de clientes entre 1 y 100 000.",
         "ticket": "Escribe un monto mayor que 0 con hasta dos decimales.",
         "save": "No pudimos guardar los datos. Inténtalo de nuevo."
-      }
+      },
+      "customersHint": "Cuenta todos los clientes que atiendes en una semana normal. Ej.: 200.",
+      "ticketHint": "Lo que paga en promedio cada cliente por compra. Ej.: si un día vendes S/ 600 a 40 clientes, es S/ 15."
     },
     "others": {
       "title": "Tus campañas en el mismo periodo",
@@ -1255,5 +1259,14 @@
       "yesterday": "ayer",
       "days": "hace {{count}} días"
     }
+  },
+  "ticketCalculator": {
+    "toggle": "¿No lo sabes? Calcúlalo con las ventas de un día",
+    "daySales": "Ventas de un día normal (S/)",
+    "daySalesHint": "Todo lo que vendiste ese día. Ej.: 600.",
+    "dayCustomers": "Clientes que atendiste ese día",
+    "dayCustomersHint": "Ej.: 40.",
+    "result": "Gasto promedio por cliente: S/ {{value}}. Ya lo pusimos en el campo de arriba.",
+    "waiting": "Escribe las ventas y los clientes del día para calcularlo."
   }
 }

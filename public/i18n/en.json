@@ -137,7 +137,9 @@
         "customers": "Enter a whole number of customers between 1 and 100,000.",
         "ticket": "Enter an amount above 0, up to 99,999.99 and with at most two decimals.",
         "pair": "Fill in both values or leave both empty."
-      }
+      },
+      "customersHint": "Optional. Count every customer you serve in a normal week. E.g.: 200.",
+      "ticketHint": "Optional. What each customer pays on average per purchase. E.g.: if one day you sell S/ 600 to 40 customers, it is S/ 15."
     },
     "errors": {
       "location": "We could not place your store",
@@ -1223,7 +1225,9 @@
         "customers": "Enter a whole number of customers between 1 and 100,000.",
         "ticket": "Enter an amount above 0 with up to two decimals.",
         "save": "We could not save the figures. Please try again."
-      }
+      },
+      "customersHint": "Count every customer you serve in a normal week. E.g.: 200.",
+      "ticketHint": "What each customer pays on average per purchase. E.g.: if one day you sell S/ 600 to 40 customers, it is S/ 15."
     },
     "others": {
       "title": "Your campaigns in the same period",
@@ -1255,5 +1259,14 @@
       "yesterday": "yesterday",
       "days": "{{count}} days ago"
     }
+  },
+  "ticketCalculator": {
+    "toggle": "Not sure? Work it out from the sales of one day",
+    "daySales": "Sales of a normal day (S/)",
+    "daySalesHint": "Everything you sold that day. E.g.: 600.",
+    "dayCustomers": "Customers you served that day",
+    "dayCustomersHint": "E.g.: 40.",
+    "result": "Average spend per customer: S/ {{value}}. We already put it in the field above.",
+    "waiting": "Type the sales and customers of the day to work it out."
   }
 }

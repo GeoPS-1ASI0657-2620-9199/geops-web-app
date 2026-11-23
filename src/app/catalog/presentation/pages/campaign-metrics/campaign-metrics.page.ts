@@ -22,6 +22,7 @@ import {
   periodFor,
 } from '../../../domain/model/campaign-metrics';
 import { CAMPAIGN_SEAL } from '../campaigns-panel/campaigns.component';
+import { GeoTicketCalculator } from '../../../../shared/ui/geo-ticket-calculator/geo-ticket-calculator';
 
 type ViewState = 'loading' | 'ready' | 'error';
 
@@ -32,7 +33,7 @@ type ViewState = 'loading' | 'ready' | 'error';
 @Component({
   selector: 'app-campaign-metrics',
   standalone: true,
-  imports: [DecimalPipe, FormsModule, RouterLink, MatButtonModule, MatIconModule, TranslateModule, GeoAlert, GeoEmptyState, GeoSeal],
+  imports: [DecimalPipe, FormsModule, RouterLink, MatButtonModule, MatIconModule, TranslateModule, GeoAlert, GeoEmptyState, GeoSeal, GeoTicketCalculator],
   templateUrl: './campaign-metrics.page.html',
   styleUrl: './campaign-metrics.page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

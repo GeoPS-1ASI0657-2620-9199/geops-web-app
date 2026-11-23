@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { GeoTicketCalculator } from '../../../../shared/ui/geo-ticket-calculator/geo-ticket-calculator';
 import { ADDRESS_DISTRICTS, composeAddress } from '../../../../shared/domain/address-district';
 import { TranslateModule } from '@ngx-translate/core';
 import { ApiError } from '../../../../shared/domain/api-error';
@@ -100,6 +101,7 @@ interface WizardAlert {
     MatInputModule,
     MatSelectModule,
     TranslateModule,
+    GeoTicketCalculator,
     GeoAlert,
     GeoLocationPicker,
     GeoSteps,
@@ -161,6 +163,12 @@ export class RegisterBusinessComponent {
     customersPerWeek: this.fb.control<number | null>(null, [customersValidator, this.pairedWith('averageTicket')]),
     averageTicket: this.fb.control<number | null>(null, [ticketValidator, this.pairedWith('customersPerWeek')]),
   });
+
+  /** The average worked out from the sales of a day goes into the same field the owner can also type (US45). */
+  protected useCalculatedTicket(ticket: number): void {
+    this.baseline.controls.averageTicket.setValue(ticket);
+    this.baseline.controls.averageTicket.markAsTouched();
+  }
 
   constructor() {
     // Once the owner edits the rejected field, the server error no longer applies.

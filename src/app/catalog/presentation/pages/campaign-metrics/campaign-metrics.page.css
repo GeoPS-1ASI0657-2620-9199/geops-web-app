@@ -168,3 +168,5 @@
   .chip { height: 40px; min-width: 44px; font-size: 13px; }
   .table a { display: inline-flex; align-items: center; min-height: 40px; }
 }
+/* The help under each baseline field reads as a sentence with its example, not as fine print. */
+.baseline-form .hint { font-size: 12px; line-height: 1.4; color: var(--text-dim); font-weight: 400; }
