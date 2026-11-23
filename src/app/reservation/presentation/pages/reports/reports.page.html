@@ -17,7 +17,13 @@
     </div>
   </header>
 
-  <geo-alert kind="warning" [title]="'reportsPage.notice.title' | translate" [description]="'reportsPage.notice.description' | translate" />
+  @if (state() === 'ready' && count('OPEN') > 0) {
+    <geo-alert
+      kind="warning"
+      data-testid="open-notice"
+      [title]="'reportsPage.notice.title' | translate"
+      [description]="'reportsPage.notice.description' | translate" />
+  }
 
   @if (actionError() !== null) {
     <geo-alert

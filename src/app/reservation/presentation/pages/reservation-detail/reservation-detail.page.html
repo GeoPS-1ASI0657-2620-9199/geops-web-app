@@ -61,9 +61,18 @@
               }
             </header>
 
-            <div class="code-block">
-              <p class="geo-meta">{{ 'reservationPage.showCode' | translate }}</p>
-              <p class="code geo-tabular" [class.void]="!isActive()">{{ r.code }}</p>
+            <div class="code-block" [class.with-qr]="isActive()">
+              @if (isActive()) {
+                <geo-qr class="qr" [value]="r.code" [label]="'reservationPage.qrLabel' | translate: { code: r.code }" />
+              }
+              <div>
+                @if (isActive()) {
+                  <p class="geo-meta">{{ 'reservationPage.showCode' | translate }}</p>
+                } @else {
+                  <p class="geo-meta">{{ 'reservationPage.codeUsed' | translate }}</p>
+                }
+                <p class="code geo-tabular" [class.void]="!isActive()">{{ r.code }}</p>
+              </div>
             </div>
 
             <dl class="facts">
@@ -72,7 +81,7 @@
                 <a [routerLink]="['/offers', r.offerId]">{{ r.offerTitle }}</a>
               </dd>
               @if (offer(); as o) {
-                <dt>{{ 'reservationPage.payAtStore' | translate }}</dt>
+                <dt data-testid="price-label">{{ priceLabel() | translate }}</dt>
                 <dd class="price geo-tabular">S/ {{ o.price | number: '1.2-2' }}</dd>
                 <dt>{{ 'reservationPage.store' | translate }}</dt>
                 <dd>{{ o.businessName }} · {{ o.address }}</dd>
@@ -132,6 +141,7 @@
             @if (pins().length) {
               <geo-offers-map class="map" [pins]="pins()" [showUser]="false" [ariaLabel]="'reservationPage.mapLabel' | translate" />
             }
+            @if (isActive()) {
             <geo-alert
               kind="info"
               [title]="'reservationPage.howTo.title' | translate"
@@ -163,6 +173,7 @@
                 </div>
               </li>
             </ol>
+            }
           </aside>
         </div>
       }

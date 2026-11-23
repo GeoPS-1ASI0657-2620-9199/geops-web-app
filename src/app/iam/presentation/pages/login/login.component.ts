@@ -10,10 +10,18 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ApiError } from '../../../../shared/domain/api-error';
 import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { GeoTopBar } from '../../../../core/layout/geo-top-bar/geo-top-bar';
+import { PendingBaseline } from '../../../../catalog/application/pending-baseline';
 import { LogInUseCase } from '../../../application/log-in.use-case';
 import { HOME_BY_ROLE } from '../../../domain/model/home-by-role';
+import { UserRole } from '../../../domain/model/user-role';
 
 const INVALID_CREDENTIALS = 'INVALID_CREDENTIALS';
+
+/** What a register page hands over in the navigation state; it is not stored anywhere else. */
+export interface RegisteredState {
+  readonly registeredEmail?: string;
+  readonly registeredRole?: UserRole;
+}
 
 interface LoginAlert {
   kind: 'success' | 'info' | 'error';
@@ -44,7 +52,9 @@ interface LoginAlert {
 export class LoginComponent {
   private readonly logIn = inject(LogInUseCase);
   private readonly router = inject(Router);
+  private readonly pendingBaseline = inject(PendingBaseline);
   private readonly query = inject(ActivatedRoute).snapshot.queryParamMap;
+  private readonly registration = this.readRegistration();
 
   protected readonly submitting = signal(false);
   protected readonly showPassword = signal(false);
@@ -57,6 +67,9 @@ export class LoginComponent {
   });
 
   constructor() {
+    if (this.registration.registeredEmail) {
+      this.form.controls.email.setValue(this.registration.registeredEmail);
+    }
     // The "wrong credentials" mark belongs to the pair: editing either field clears it on both.
     this.form.valueChanges.pipe(takeUntilDestroyed(inject(DestroyRef))).subscribe(() => {
       if (!this.invalidCredentials()) {
@@ -78,6 +91,9 @@ export class LoginComponent {
     this.invalidCredentials.set(false);
     try {
       const session = await this.logIn.execute(this.form.getRawValue());
+      // US45: the baseline typed while affiliating is declared now that there is a token. It does not
+      // hold the redirect, and if it fails the owner still declares it from Métricas.
+      void this.pendingBaseline.declareFor(session.email);
       await this.router.navigateByUrl(this.query.get('returnUrl') ?? HOME_BY_ROLE[session.role]);
     } catch (error) {
       this.showError(error);
@@ -92,12 +108,26 @@ export class LoginComponent {
 
   private initialAlert(): LoginAlert | null {
     if (this.query.has('registered')) {
-      return { kind: 'success', titleKey: 'loginPage.registered.title', descriptionKey: 'loginPage.registered.description' };
+      // Consumers get the confirmation e-mail of US28 right after signing up.
+      const descriptionKey =
+        this.registration.registeredRole === 'CONSUMER' ? 'loginPage.registered.confirmationSent' : 'loginPage.registered.description';
+      return { kind: 'success', titleKey: 'loginPage.registered.title', descriptionKey };
     }
     if (this.query.has('expired')) {
       return { kind: 'info', titleKey: 'loginPage.expired' };
     }
     return null;
+  }
+
+  private readRegistration(): RegisteredState {
+    if (!this.query.has('registered')) {
+      return {};
+    }
+    const state = (this.router.getCurrentNavigation()?.extras.state ?? globalThis.history?.state ?? {}) as RegisteredState;
+    return {
+      registeredEmail: typeof state.registeredEmail === 'string' ? state.registeredEmail : undefined,
+      registeredRole: state.registeredRole,
+    };
   }
 
   private showError(error: unknown): void {

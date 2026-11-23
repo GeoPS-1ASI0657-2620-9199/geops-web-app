@@ -1,6 +1,6 @@
 {
   "header": {
-    "logo": "GeoPs",
+    "logo": "GeoPS",
     "search": {
       "placeholder": "Busca y encuentra las mejores ofertas"
     },
@@ -77,7 +77,8 @@
     "registerBusiness": "Registrar mi negocio",
     "registered": {
       "title": "Tu cuenta está lista",
-      "description": "Inicia sesión con el correo y la contraseña que acabas de registrar."
+      "description": "Inicia sesión con el correo y la contraseña que acabas de registrar.",
+      "confirmationSent": "Te enviamos un correo para confirmar tu dirección. Ya puedes iniciar sesión con el correo y la contraseña que registraste."
     },
     "expired": "Tu sesión terminó. Vuelve a iniciar sesión.",
     "errors": {
@@ -124,6 +125,18 @@
       "openingHoursHint": "Opcional. Por ejemplo: Lun-Sáb 07:00-22:00.",
       "marked": "Ubicación marcada"
     },
+    "baseline": {
+      "title": "Tu situación actual",
+      "intro": "Cuéntanos cuántos clientes atiendes por semana y cuánto gasta cada uno en promedio. Con esos datos comparamos cada campaña contra lo que ya vendes sin GeoPS. Puedes dejarlo para después y declararlo en Métricas.",
+      "customers": "Clientes por semana",
+      "ticket": "Ticket promedio (S/)",
+      "optional": "Opcional.",
+      "errors": {
+        "customers": "Escribe un número entero de clientes entre 1 y 100 000.",
+        "ticket": "Escribe un monto mayor que 0, hasta 99 999.99 y con dos decimales como máximo.",
+        "pair": "Completa los dos datos o deja ambos vacíos."
+      }
+    },
     "errors": {
       "location": "No pudimos ubicar tu local",
       "email": "Ya existe una cuenta con este correo",
@@ -143,7 +156,14 @@
       "title": "Publica una oferta para tu zona",
       "description": "Elige el producto, el precio con descuento, la vigencia y hasta dónde quieres llegar."
     },
-    "summary": "{{active}} activas · {{paused}} pausadas · {{finished}} finalizadas",
+    "summary": {
+      "active": "{{count}} activas",
+      "activeOne": "{{count}} activa",
+      "paused": "{{count}} pausadas",
+      "pausedOne": "{{count}} pausada",
+      "finished": "{{count}} finalizadas",
+      "finishedOne": "{{count}} finalizada"
+    },
     "filters": {
       "ALL": "Todas",
       "ACTIVE": "Activas",
@@ -165,6 +185,7 @@
       "actions": "Acciones"
     },
     "seeOffer": "Ver oferta",
+    "seeMetrics": "Ver métricas",
     "pause": "Pausar",
     "reactivate": "Reactivar",
     "validityEnded": "La vigencia terminó",
@@ -187,6 +208,80 @@
       "title": "No pudimos cargar tus campañas",
       "description": "Puede ser tu conexión o el servicio. Inténtalo de nuevo en un momento.",
       "retry": "Reintentar"
+    }
+  },
+  "moderationPage": {
+    "title": "Moderación",
+    "subtitle": "Ofertas del catálogo con su estado. Retira las que incumplen las condiciones de publicación.",
+    "tabs": {
+      "offers": "Ofertas",
+      "history": "Historial"
+    },
+    "searchLabel": "Buscar por oferta o comercio",
+    "searchButton": "Buscar",
+    "filters": {
+      "ALL": "Todas",
+      "PUBLISHED": "Publicadas",
+      "EXPIRED": "Vencidas",
+      "REMOVED": "Retiradas",
+      "REPORTED": "Comercios con reportes"
+    },
+    "status": {
+      "PUBLISHED": "Publicada",
+      "EXPIRED": "Vencida",
+      "REMOVED": "Retirada"
+    },
+    "columns": {
+      "offer": "Oferta",
+      "business": "Comercio",
+      "status": "Estado",
+      "reports": "Reportes abiertos",
+      "validTo": "Vigencia",
+      "actions": "Acciones"
+    },
+    "publicSource": "Fuente pública",
+    "openReports": "{{count}} abiertos",
+    "seeOffer": "Ver oferta",
+    "remove": "Retirar",
+    "alreadyRemoved": "Ya no se muestra",
+    "removed": "Retiraste «{{title}}». Ya no aparece en el catálogo.",
+    "removeError": "No pudimos retirar la oferta. Inténtalo de nuevo.",
+    "removeDialog": {
+      "title": "¿Retirar «{{title}}»?",
+      "description": "Comercio: {{business}}. La oferta dejará de mostrarse en la búsqueda y en su detalle. Las reservas que ya tiene se conservan.",
+      "reason": "Motivo del retiro",
+      "reasonError": "Escribe un motivo de {{min}} a {{max}} caracteres.",
+      "cancel": "Cancelar",
+      "confirm": "Retirar oferta"
+    },
+    "empty": {
+      "title": "No hay ofertas con este filtro",
+      "description": "Cambia el estado o el texto de búsqueda para ver otras ofertas."
+    },
+    "error": {
+      "title": "No pudimos cargar la moderación",
+      "description": "Puede ser tu conexión o el servicio. Inténtalo de nuevo en un momento.",
+      "retry": "Reintentar"
+    },
+    "pager": {
+      "label": "Páginas",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "position": "Página {{page}} de {{pages}}"
+    },
+    "history": {
+      "columns": {
+        "offer": "Oferta",
+        "reason": "Motivo",
+        "admin": "Retirada por",
+        "removedAt": "Fecha"
+      },
+      "you": "Tú",
+      "admin": "Administrador #{{id}}",
+      "empty": {
+        "title": "Todavía no se ha retirado ninguna oferta",
+        "description": "Cada retiro queda aquí con su motivo, quién lo hizo y cuándo."
+      }
     }
   },
   "forbiddenPage": {
@@ -227,6 +322,7 @@
       "description": "Puedes ampliar la distancia o elegir otro distrito.",
       "widen": "Ampliar a {{minutes}} min a pie",
       "categoryTitle": "No hay ofertas de {{category}} a {{minutes}} minutos",
+      "termTitle": "No hay ofertas para «{{term}}» a {{minutes}} minutos",
       "allCategories": "Ver todas las categorías"
     },
     "error": {
@@ -285,6 +381,7 @@
     "includes": "Qué incluye",
     "distance": "Distancia",
     "distanceValue": "{{meters}} m · {{minutes}} min a pie",
+    "distanceHere": "Aquí mismo",
     "save": "Guardar en favoritos",
     "mapLabel": "Ubicación del local",
     "others": "Otras ofertas cerca de ti",
@@ -366,6 +463,8 @@
     },
     "expiresIn": "Vence en {{time}}",
     "payAtStore": "Pagas en el local",
+    "paidAtStore": "Pagaste en el local",
+    "offerPrice": "Precio de la oferta",
     "store": "Local",
     "mapLabel": "Ubicación del local",
     "report": {
@@ -379,7 +478,9 @@
         "CONSUMER_FAVOR": "El caso se cerró a tu favor el {{date}}.",
         "BUSINESS_FAVOR": "El caso se cerró a favor del comercio el {{date}}."
       }
-    }
+    },
+    "qrLabel": "Código QR de la reserva {{code}}",
+    "codeUsed": "Código de la reserva"
   },
   "reservationsPage": {
     "title": "Mis Cupones",
@@ -400,12 +501,13 @@
     "empty": {
       "title": "No tienes cupones activos",
       "description": "Reserva una oferta cercana y paga en el local. Aquí verás su código.",
-      "action": "Ver ofertas"
+      "action": "Ver ofertas",
+      "seeAll": "Ver todos mis cupones"
     },
     "emptyFiltered": {
       "title": "No tienes cupones en este estado",
       "description": "Prueba con otro filtro.",
-      "action": "Ver todos"
+      "action": "Ver todos mis cupones"
     },
     "error": {
       "title": "No pudimos cargar tus reservas",
@@ -427,7 +529,8 @@
     "reports": "Reportes",
     "comments": "Comentarios",
     "follows": "Comercios seguidos",
-    "preferences": "Preferencias de avisos"
+    "preferences": "Preferencias de avisos",
+    "moderation": "Moderación"
   },
   "search": {
     "places": "Lugares:",
@@ -444,7 +547,8 @@
       "title": "El mapa no cargó",
       "description": "Estas son las mismas ofertas en lista."
     },
-    "mapLabel": "Mapa de ofertas cercanas"
+    "mapLabel": "Mapa de ofertas cercanas",
+    "orderBy": "Ordenar:"
   },
   "home": {
     "eyebrow": "Te damos la bienvenida",
@@ -453,7 +557,9 @@
     "logInToReserve": "Inicia sesión para reservar",
     "nearYou": "Cerca de ti",
     "walking": "A {{minutes}} minutos caminando",
-    "seeMore": "Ver más"
+    "seeMore": "Ver más",
+    "seeAll": "Ver todas las ofertas",
+    "here": "Aquí mismo"
   },
   "offersPage": {
     "title": "Ofertas cerca de ti",
@@ -462,10 +568,20 @@
       "title": "No encontramos ofertas con ese filtro",
       "description": "Prueba con otra palabra, otra categoría o amplía el radio.",
       "clear": "Quitar la búsqueda"
-    }
+    },
+    "view": {
+      "label": "Ver como",
+      "list": "Lista",
+      "map": "Mapa"
+    },
+    "countFor": "{{total}} ofertas para «{{term}}»",
+    "countForOne": "1 oferta para «{{term}}»",
+    "results": "Resultados",
+    "category": "Categoría: {{name}}",
+    "clearTermLabel": "Quitar la búsqueda «{{term}}»"
   },
   "categoriesPage": {
-    "title": "Ofertas cerca de ti",
+    "title": "Categorías",
     "atMinutes": "a {{minutes}} min",
     "categories": "categorías",
     "inRadius": "En tu radio",
@@ -482,7 +598,13 @@
       "you": "Tu ubicación · {{note}}",
       "district": "Centro del distrito",
       "publicSource": "Fuente pública, sin garantía"
-    }
+    },
+    "subtitle": "Elige qué buscas a {{minutes}} min a pie",
+    "all": "Todas las ofertas",
+    "offersCount": "{{total}} ofertas cerca",
+    "offersCountOne": "1 oferta cerca",
+    "none": "Sin ofertas cerca",
+    "gridLabel": "Categorías de ofertas"
   },
   "seal": {
     "verified": "Verificado"
@@ -520,7 +642,9 @@
       "title": "No pudimos cargar tus favoritos",
       "description": "Puede ser tu conexión o el servicio. Inténtalo de nuevo en un momento.",
       "retry": "Reintentar"
-    }
+    },
+    "countOne": "1 oferta guardada",
+    "offersOne": "1 oferta"
   },
   "businessSummary": {
     "greeting": "Hola, {{name}}",
@@ -544,7 +668,14 @@
     "create": "Crear nueva campaña",
     "seeCampaigns": "Ver mis campañas",
     "offerCountOne": "1 oferta",
-    "mapLabel": "Zona de tu campaña activa"
+    "mapLabel": "Zona de tu campaña activa",
+    "verifyAlert": {
+      "title": "Tu comercio aún no está verificado",
+      "description": "Verifícalo para mostrar el sello Verificado a los vecinos. Revisamos tu RUC en SUNAT y ubicamos tu local en unos segundos.",
+      "pendingTitle": "Estamos verificando tu comercio",
+      "pendingDescription": "Verás el sello Verificado cuando terminemos de revisar tus datos.",
+      "pendingAction": "Ver el estado"
+    }
   },
   "validatePage": {
     "title": "Validar código de reserva",
@@ -560,6 +691,8 @@
     "reservedAt": "Reservado",
     "another": "Validar otro código",
     "charge": "Cobra el precio de la oferta. El cliente no pagó nada al reservar.",
+    "amount": "Monto a cobrar",
+    "deliveredTitle": "Entrega registrada",
     "rejected": {
       "MALFORMED": {
         "title": "Ese código no tiene el formato correcto",
@@ -603,7 +736,14 @@
     "confirm": "Confirmar entrega",
     "confirming": "Registrando…",
     "delivered": "El {{date}} quedó registrada la entrega y el código ya no admite otro uso",
-    "alreadyDelivered": "Este código ya se entregó a las {{time}} ({{date}}). No vuelvas a entregar el producto."
+    "alreadyDelivered": "Este código ya se entregó a las {{time}} ({{date}}). No vuelvas a entregar el producto.",
+    "scan": {
+      "start": "Escanear QR",
+      "camera": "Cámara para leer el QR de la reserva",
+      "hint": "Apunta al QR que el cliente muestra en «Mi reserva».",
+      "cancel": "Cancelar",
+      "failed": "No pudimos abrir la cámara. Escribe el código."
+    }
   },
   "reportsPage": {
     "title": "Reportes de clientes",
@@ -673,10 +813,39 @@
     "emptyDescription": "Los clientes comentan después de canjear una oferta en tu local.",
     "action": "Ver mis campañas"
   },
+  "datepicker": {
+    "calendarLabel": "Calendario",
+    "openCalendarLabel": "Abrir calendario",
+    "closeCalendarLabel": "Cerrar calendario",
+    "prevMonthLabel": "Mes anterior",
+    "nextMonthLabel": "Mes siguiente",
+    "prevYearLabel": "Año anterior",
+    "nextYearLabel": "Año siguiente",
+    "prevMultiYearLabel": "24 años anteriores",
+    "nextMultiYearLabel": "24 años siguientes",
+    "switchToMonthViewLabel": "Elegir fecha",
+    "switchToMultiYearViewLabel": "Elegir mes y año",
+    "startDateLabel": "Fecha de inicio",
+    "endDateLabel": "Fecha de fin",
+    "comparisonDateLabel": "Rango de comparación",
+    "yearRangeLabel": "{{start}} a {{end}}"
+  },
   "createCampaign": {
     "category": "Categoría",
     "categoryError": "Elige la categoría.",
-    "categoriesUnavailable": "No pudimos cargar las categorías. Recarga la página para intentarlo de nuevo."
+    "categoriesUnavailable": "No pudimos cargar las categorías. Recarga la página para intentarlo de nuevo.",
+    "storeTitle": "Tu local y su alcance",
+    "prefilled": "Usamos la dirección de tu perfil y el punto de tu última campaña. Cámbialos si esta campaña es en otro local.",
+    "datePlaceholder": "dd/mm/aaaa",
+    "regularPrice": "Precio normal (S/)",
+    "regularPriceHint": "Opcional. Se muestra tachado para que se vea el ahorro.",
+    "regularPriceError": "Debe ser mayor que el precio de la oferta.",
+    "uploadPhoto": "Subir foto",
+    "photoHint": "Opcional. JPG, PNG o WebP de hasta 2 MB.",
+    "uploadingPhoto": "Subiendo foto…",
+    "photoReady": "Foto lista.",
+    "removePhoto": "Quitar foto",
+    "photoAlt": "Foto de la oferta"
   },
   "publicSources": {
     "title": "Fuentes públicas, sin garantía",
@@ -780,7 +949,7 @@
     "follow": "Seguir comercio",
     "error": "No pudimos cargar tus comercios. Inténtalo de nuevo.",
     "countOne": "{{count}} oferta vigente",
-    "viewOffers": "Ver ofertas",
+    "viewOffer": "Ver oferta",
     "noOffers": "Sin ofertas vigentes por ahora",
     "noticeTitle": "Te avisamos cuando estés cerca",
     "noticeHint": "Las ofertas nuevas de estos comercios te llegan por los canales que activaste en tus preferencias de avisos."
@@ -802,6 +971,7 @@
     "saving": "Guardando…",
     "saved": "Tus próximos avisos respetarán estas preferencias.",
     "error": "No pudimos guardar tus preferencias. Inténtalo de nuevo.",
+    "permissionMissing": "Falta permitir los avisos en este navegador.",
     "iphoneTitle": "En iPhone primero instala GeoPS",
     "iphoneHint": "Safari solo envía avisos a sitios agregados a la pantalla de inicio. Toca Compartir y luego Agregar a inicio. Mientras tanto te avisamos por correo.",
     "locationTitle": "Usamos tu última ubicación de la última hora",
@@ -819,6 +989,45 @@
     "doneTitle": "Listo, ya no te enviaremos estos correos",
     "reactivate": "Volver a activarlos",
     "goHome": "Ir a GeoPS"
+  },
+  "confirmEmailPage": {
+    "confirming": {
+      "title": "Confirmando tu correo…",
+      "description": "Esto toma solo unos segundos."
+    },
+    "confirmed": {
+      "title": "Tu correo quedó confirmado",
+      "description": "Gracias por confirmarlo. Ya puedes seguir usando GeoPS.",
+      "channel": "Desde ahora podemos enviarte avisos por correo según tus preferencias."
+    },
+    "invalid": {
+      "title": "Este enlace no es válido o ya venció",
+      "description": "Puede que ya lo hayas usado o que haya pasado su plazo. Abre el correo de confirmación más reciente que te enviamos."
+    },
+    "missing": {
+      "title": "Al enlace le falta su código",
+      "description": "Abre el enlace completo del correo de confirmación de GeoPS, sin recortarlo."
+    },
+    "alreadyConfirmed": {
+      "title": "Si tu correo ya está confirmado, no necesitas hacer nada más",
+      "description": "Si aún no lo confirmaste, usa el enlace del correo de confirmación más reciente."
+    },
+    "channelOff": {
+      "title": "Los avisos por correo siguen desactivados",
+      "description": "No te enviaremos avisos por correo hasta que confirmes tu dirección."
+    },
+    "failed": {
+      "title": "No pudimos confirmar tu correo",
+      "description": "No pudimos completar la operación. Inténtalo de nuevo."
+    },
+    "retry": "Reintentar",
+    "logIn": "Iniciar sesión",
+    "goHome": "Ir al inicio"
+  },
+  "map": {
+    "zoomIn": "Acercar",
+    "zoomOut": "Alejar",
+    "location": "Ubicación"
   },
   "pushPage": {
     "title": "Avisos en este navegador",
@@ -852,6 +1061,7 @@
     "retry": "Reintentar",
     "verified": "Canje verificado",
     "businessReply": "Respuesta del comercio",
+    "anonymousAuthor": "Cliente",
     "replyLabel": "Tu respuesta",
     "reply": "Responder",
     "error": "No pudimos completar la operación. Inténtalo de nuevo.",
@@ -869,12 +1079,15 @@
     "paused": "Pausada",
     "loading": "Cargando comercios…",
     "retry": "Reintentar",
-    "empty": "Todavía no guardaste comercios. Puedes guardarlos desde el detalle de una oferta.",
+    "empty": "Todavía no guardas comercios",
     "remove": "Quitar de guardados",
     "saved": "Comercio guardado",
     "save": "Guardar comercio",
     "error": "No pudimos actualizar tus comercios. Inténtalo de nuevo.",
-    "viewOffer": "Ver oferta"
+    "viewOffer": "Ver oferta",
+    "description": "Los comercios que guardaste para volver a ellos.",
+    "emptyHint": "Guárdalos desde el detalle de una oferta para tenerlos a mano aquí.",
+    "savedOn": "Guardado el {{date}}"
   },
   "favoritesTabs": {
     "offers": "Ofertas guardadas",
@@ -934,5 +1147,82 @@
     "title": "No encontramos esta página",
     "description": "La dirección no existe o cambió. Vuelve al inicio para seguir buscando ofertas.",
     "back": "Ir al inicio"
+  },
+  "campaignMetrics": {
+    "back": "Mis campañas",
+    "title": "Métricas",
+    "periodLabel": "Del {{from}} al {{to}} · {{days}}",
+    "units": {
+      "days": "{{count}} días",
+      "daysOne": "{{count}} día",
+      "customers": "{{count}} clientes",
+      "customersOne": "{{count}} cliente"
+    },
+    "period": {
+      "label": "Periodo",
+      "campaign": "Vigencia de la campaña",
+      "last7": "Últimos 7 días",
+      "last30": "Últimos 30 días",
+      "custom": "Elegir fechas",
+      "from": "Desde",
+      "to": "Hasta",
+      "apply": "Ver periodo",
+      "errors": {
+        "missing": "Elige las dos fechas del periodo.",
+        "order": "La fecha final es anterior a la inicial.",
+        "tooLong": "El periodo puede abarcar como máximo 366 días."
+      }
+    },
+    "kpi": {
+      "impressions": "Impresiones",
+      "impressionsHint": "Veces que tu oferta salió en la búsqueda cercana",
+      "clicks": "Clics",
+      "clicksHint": "{{rate}} % de las impresiones",
+      "reservations": "Reservas",
+      "reservationsHint": "{{rate}} % de los clics",
+      "redemptions": "Canjes",
+      "redemptionsHint": "{{rate}} % de las reservas",
+      "conversion": "Conversión",
+      "conversionHint": "Canjes por cada 100 clics",
+      "noBase": "Aún sin datos para calcular la tasa"
+    },
+    "daily": {
+      "title": "Actividad diaria",
+      "series": "Cifra que muestra el gráfico",
+      "date": "Fecha",
+      "empty": "Esta campaña no registra actividad en el periodo; sus cifras están en cero.",
+      "summary": "{{series}} por día durante {{days}}; el día más alto suma {{peak}}."
+    },
+    "baseline": {
+      "title": "Frente a tu línea base",
+      "comparison": "La campaña trajo {{customers}} con canje; sin GeoPS atiendes unos {{expected}} en {{days}}.",
+      "usual": "Clientes habituales",
+      "perWeek": "{{customers}} por semana",
+      "ticket": "Ticket promedio",
+      "extraSales": "Ventas estimadas por la campaña",
+      "declaredOn": "Línea base declarada el {{date}}.",
+      "edit": "Actualizar línea base",
+      "invite": "Declara cuántos clientes atendías por semana antes de GeoPS y tu ticket promedio para ver cuánto suma cada campaña. Mientras tanto ves las cifras absolutas.",
+      "customersField": "Clientes por semana antes de GeoPS",
+      "ticketField": "Ticket promedio (S/)",
+      "save": "Guardar línea base",
+      "saving": "Guardando…",
+      "cancel": "Cancelar",
+      "saved": "Línea base guardada",
+      "errors": {
+        "customers": "Escribe un número entero de clientes entre 1 y 100 000.",
+        "ticket": "Escribe un ticket mayor que 0 con hasta dos decimales.",
+        "save": "No pudimos guardar la línea base. Inténtalo de nuevo."
+      }
+    },
+    "others": {
+      "title": "Tus campañas en el mismo periodo",
+      "campaign": "Campaña"
+    },
+    "error": {
+      "title": "No pudimos cargar las métricas",
+      "description": "Revisa tu conexión e inténtalo de nuevo.",
+      "retry": "Reintentar"
+    }
   }
 }

@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideTranslateService } from '@ngx-translate/core';
+import { OfferDetail } from '../../../../catalog/domain/model/offer-detail';
+import { OfferRepository } from '../../../../catalog/domain/ports/offer.repository';
 import { ApiError, NETWORK_ERROR } from '../../../../shared/domain/api-error';
 import { Reservation } from '../../../domain/model/reservation';
 import { ReservationRepository } from '../../../domain/ports/reservation.repository';
@@ -22,13 +24,20 @@ describe('ValidateCodePage', () => {
   let fixture: ComponentFixture<ValidateCodePage>;
   let page: ValidateCodePage;
   let reservations: jasmine.SpyObj<ReservationRepository>;
+  let offers: jasmine.SpyObj<OfferRepository>;
   type Internals = { code: { set(v: string): void }; rejection(): string | null };
 
   beforeEach(async () => {
     reservations = jasmine.createSpyObj<ReservationRepository>('ReservationRepository', ['reserve', 'findById', 'findByCode', 'redeem', 'findMine']);
+    offers = jasmine.createSpyObj<OfferRepository>('OfferRepository', ['findById']);
+    offers.findById.and.resolveTo({ offerId: 1052, price: 20 } as OfferDetail);
     await TestBed.configureTestingModule({
       imports: [ValidateCodePage],
-      providers: [provideTranslateService(), { provide: ReservationRepository, useValue: reservations }],
+      providers: [
+        provideTranslateService(),
+        { provide: ReservationRepository, useValue: reservations },
+        { provide: OfferRepository, useValue: offers },
+      ],
     }).compileComponents();
     fixture = TestBed.createComponent(ValidateCodePage);
     page = fixture.componentInstance;
@@ -38,6 +47,7 @@ describe('ValidateCodePage', () => {
   const validate = async (typed: string) => {
     (page as unknown as Internals).code.set(typed);
     await page.validate();
+    await fixture.whenStable();
     fixture.detectChanges();
   };
   const text = () => (fixture.nativeElement as HTMLElement).textContent ?? '';
@@ -51,6 +61,25 @@ describe('ValidateCodePage', () => {
     expect(reservations.findByCode).toHaveBeenCalledWith('K7P3XM9Q');
     expect(text()).toContain('validatePage.valid');
     expect(text()).toContain('Ceviche clásico');
+  });
+
+  it('shows the price of the offer as the amount to charge', async () => {
+    reservations.findByCode.and.resolveTo(RESERVATION);
+
+    await validate('K7P3XM9Q');
+
+    expect(offers.findById).toHaveBeenCalledWith(1052);
+    expect((fixture.nativeElement as HTMLElement).querySelector('[data-testid="charge-amount"]')?.textContent).toContain('S/ 20.00');
+  });
+
+  it('still shows a valid code when the price cannot be read', async () => {
+    reservations.findByCode.and.resolveTo(RESERVATION);
+    offers.findById.and.rejectWith(new ApiError('OFFER_NOT_FOUND', 'no'));
+
+    await validate('K7P3XM9Q');
+
+    expect(text()).toContain('validatePage.valid');
+    expect((fixture.nativeElement as HTMLElement).querySelector('[data-testid="charge-amount"]')).toBeNull();
   });
 
   it('rejects a malformed code without calling the service', async () => {
@@ -112,6 +141,10 @@ describe('ValidateCodePage', () => {
     expect(reservations.redeem).toHaveBeenCalledWith('K7P3XM9Q');
     expect(text()).toContain('validatePage.delivered');
     expect(text()).toContain('reservation.status.REDEEMED');
+    const title = (fixture.nativeElement as HTMLElement).querySelector('[data-testid="result-title"]')?.textContent ?? '';
+    expect(title).toContain('validatePage.deliveredTitle');
+    expect(title).not.toContain('validatePage.valid');
+    expect((fixture.nativeElement as HTMLElement).querySelector('[data-testid="charge-amount"]')).toBeNull();
     expect((fixture.nativeElement as HTMLElement).querySelector('.result.ok')).not.toBeNull();
     expect((fixture.nativeElement as HTMLElement).querySelector('[data-testid="already-delivered"]')).toBeNull();
     expect(confirmButton()).toBeNull();

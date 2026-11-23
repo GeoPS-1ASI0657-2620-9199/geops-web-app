@@ -1,5 +1,7 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { IsActiveMatchOptions, RouterLink, RouterLinkActive } from '@angular/router';
+import { ChangeDetectionStrategy, Component, DestroyRef, ElementRef, afterNextRender, inject, input } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs';
+import { IsActiveMatchOptions, NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 
 export interface NavItem {
@@ -53,7 +55,9 @@ const SUBSET: IsActiveMatchOptions = { ...EXACT, paths: 'subset' };
       .tab {
         display: flex;
         align-items: center;
+        justify-content: center;
         flex: none;
+        min-width: 44px;
         font: 500 14px/1.3 var(--font-brand);
         color: var(--text-primary);
         text-decoration: none;
@@ -61,7 +65,14 @@ const SUBSET: IsActiveMatchOptions = { ...EXACT, paths: 'subset' };
       }
       .tab:hover { color: var(--brand-deep); }
       .tab.active { font-weight: 600; color: var(--brand-deep); }
-      @media (max-width: 720px) { .nav { justify-content: flex-start; gap: 24px; } }
+      @media (max-width: 720px) {
+        /* Tabs scroll sideways; the fade on the right edge tells there are more. */
+        .nav { justify-content: flex-start; gap: 22px; scrollbar-width: none;
+               mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent);
+               -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 40px), transparent); }
+        .nav::-webkit-scrollbar { display: none; }
+        .tab:last-child { padding-right: 32px; }
+      }
     `,
   ],
 })
@@ -69,4 +80,12 @@ export class GeoNav {
   readonly items = input.required<NavItem[]>();
   protected readonly exact = EXACT;
   protected readonly subset = SUBSET;
+
+  constructor() {
+    // On a narrow screen the active tab may sit past the edge (e.g. "Mis Cupones"): bring it into view.
+    const host = inject(ElementRef<HTMLElement>).nativeElement as HTMLElement;
+    const reveal = () => setTimeout(() => host.querySelector('.tab.active')?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' }));
+    afterNextRender(reveal);
+    inject(Router).events.pipe(filter(e => e instanceof NavigationEnd), takeUntilDestroyed(inject(DestroyRef))).subscribe(reveal);
+  }
 }

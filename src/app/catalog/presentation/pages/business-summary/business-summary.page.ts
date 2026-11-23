@@ -5,9 +5,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
 import { SessionStore } from '../../../../iam/application/session.store';
+import { VerifyBusinessUseCase } from '../../../../iam/application/verify-business.use-case';
+import { isVerified } from '../../../../iam/domain/model/business-verification';
 import { BusinessSeal } from '../../../../iam/presentation/components/business-seal/business-seal';
 import { ApiError } from '../../../../shared/domain/api-error';
 import { categoryIcon } from '../../../../shared/ui/category-icon';
+import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { GeoEmptyState } from '../../../../shared/ui/geo-empty-state/geo-empty-state';
 import { GeoOffersMap, MapPin } from '../../../../shared/ui/geo-offers-map/geo-offers-map';
 import { GeoSeal } from '../../../../shared/ui/geo-seal/geo-seal';
@@ -24,7 +27,7 @@ type ViewState = 'loading' | 'ready' | 'error';
 @Component({
   selector: 'app-business-summary',
   standalone: true,
-  imports: [DecimalPipe, RouterLink, MatButtonModule, MatIconModule, TranslateModule, GeoEmptyState, GeoOffersMap, GeoSeal, BusinessSeal],
+  imports: [DecimalPipe, RouterLink, MatButtonModule, MatIconModule, TranslateModule, GeoAlert, GeoEmptyState, GeoOffersMap, GeoSeal, BusinessSeal],
   templateUrl: './business-summary.page.html',
   styleUrl: './business-summary.page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,10 +35,16 @@ type ViewState = 'loading' | 'ready' | 'error';
 export class BusinessSummaryPage implements OnInit {
   protected readonly sessions = inject(SessionStore);
   private readonly listCampaigns = inject(ListMyCampaignsUseCase);
+  private readonly verification = inject(VerifyBusinessUseCase);
 
   protected readonly state = signal<ViewState>('loading');
   protected readonly campaigns = signal<PublishedCampaign[]>([]);
   protected readonly errorMessage = signal<string | null>(null);
+  /** Known and not verified yet: the summary asks the owner to verify (US38). Hidden while unknown. */
+  protected readonly pendingVerification = computed(() => {
+    const status = this.verification.verificationStatus();
+    return status !== null && !isVerified(status) ? status : null;
+  });
   protected readonly counts = computed(() => countByStatus(this.campaigns()));
   protected readonly active = computed(() => this.campaigns().filter((c) => c.status === 'ACTIVE'));
   protected readonly publishedOffers = computed(() =>

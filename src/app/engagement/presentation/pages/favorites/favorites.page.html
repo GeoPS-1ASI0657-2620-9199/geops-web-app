@@ -2,8 +2,14 @@
   <div class="head">
     <div>
       <h1 class="title">{{ 'favoritesPage.title' | translate }}</h1>
-      @if (state() === 'ready') {
-        <p class="subtitle">{{ 'favoritesPage.count' | translate: { total: cards().length } }}</p>
+      @switch (tab()) {
+        @case ('businesses') { <p class="subtitle">{{ 'savedBusinesses.description' | translate }}</p> }
+        @case ('follows') { <p class="subtitle">{{ 'followsPage.description' | translate }}</p> }
+        @default {
+          @if (state() === 'ready') {
+            <p class="subtitle">{{ (cards().length === 1 ? 'favoritesPage.countOne' : 'favoritesPage.count') | translate: { total: cards().length } }}</p>
+          }
+        }
       }
     </div>
   </div>
@@ -12,6 +18,7 @@
 
   <app-favorites-tabs [active]="tab()" />
   @if (tab() === 'businesses') { <app-saved-businesses /> }
+  @else if (tab() === 'follows') { <app-followed-businesses /> }
   @else {
   @switch (state()) {
     @case ('loading') {
@@ -41,7 +48,7 @@
       @if (current().length) {
         <div class="section-head">
           <h2 class="section-title">{{ 'favoritesPage.current' | translate }}</h2>
-          <span class="section-count">{{ 'favoritesPage.offers' | translate: { total: current().length } }}</span>
+          <span class="section-count">{{ (current().length === 1 ? 'favoritesPage.offersOne' : 'favoritesPage.offers') | translate: { total: current().length } }}</span>
         </div>
         <div class="grid">
           @for (card of current(); track card.saved.offerId) {
@@ -66,7 +73,7 @@
       @if (paused().length) {
         <div class="section-head">
           <h2 class="section-title">{{ 'savedBusinesses.paused' | translate }}</h2>
-          <span class="section-count">{{ 'favoritesPage.offers' | translate: { total: paused().length } }}</span>
+          <span class="section-count">{{ (paused().length === 1 ? 'favoritesPage.offersOne' : 'favoritesPage.offers') | translate: { total: paused().length } }}</span>
         </div>
         <div class="grid">
           @for (card of paused(); track card.saved.offerId) {
@@ -91,7 +98,7 @@
       @if (expired().length) {
         <div class="section-head">
           <h2 class="section-title">{{ 'favoritesPage.expired' | translate }}</h2>
-          <span class="section-count">{{ 'favoritesPage.offers' | translate: { total: expired().length } }}</span>
+          <span class="section-count">{{ (expired().length === 1 ? 'favoritesPage.offersOne' : 'favoritesPage.offers') | translate: { total: expired().length } }}</span>
         </div>
         <div class="grid">
           @for (card of expired(); track card.saved.offerId) {

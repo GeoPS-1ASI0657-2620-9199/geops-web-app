@@ -1,7 +1,8 @@
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs';
-import { FavoritesTabs } from '../../components/favorites-tabs/favorites-tabs';
+import { FavoritesTab, FavoritesTabs } from '../../components/favorites-tabs/favorites-tabs';
+import { FollowedBusinesses } from '../../components/followed-businesses/followed-businesses';
 import { SavedBusinesses } from '../../components/saved-businesses/saved-businesses';
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
@@ -28,11 +29,14 @@ interface FavoriteCard {
   readonly detail: OfferDetail | null;
 }
 
-/** "Mis Favoritos" (US12, Figma screen 10): the saved offers still valid and the ones that ended. */
+/**
+ * "Mis Favoritos" (US12 and US13, Figma screens 10 and 29): one page, one header and three tabs —
+ * saved offers, saved businesses and followed businesses.
+ */
 @Component({
   selector: 'app-favorites',
   standalone: true,
-  imports: [FavoritesTabs, SavedBusinesses, RouterLink, MatButtonModule, TranslateModule, GeoAlert, GeoEmptyState, GeoOfferCard],
+  imports: [FavoritesTabs, SavedBusinesses, FollowedBusinesses, RouterLink, MatButtonModule, TranslateModule, GeoAlert, GeoEmptyState, GeoOfferCard],
   templateUrl: './favorites.page.html',
   styleUrl: './favorites.page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -44,8 +48,11 @@ export class FavoritesPage implements OnInit {
 
   private readonly route = inject(ActivatedRoute);
   protected readonly tab = toSignal(
-    this.route.queryParamMap.pipe(map((params): 'offers' | 'businesses' => (params.get('tab') === 'businesses' ? 'businesses' : 'offers'))),
-    { initialValue: 'offers' as 'offers' | 'businesses' },
+    this.route.queryParamMap.pipe(map((params): FavoritesTab => {
+      const tab = params.get('tab');
+      return tab === 'businesses' || tab === 'follows' ? tab : 'offers';
+    })),
+    { initialValue: 'offers' as FavoritesTab },
   );
   protected readonly state = signal<ViewState>('loading');
   protected readonly cards = signal<FavoriteCard[]>([]);

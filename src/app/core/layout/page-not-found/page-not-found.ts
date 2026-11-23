@@ -5,17 +5,20 @@ import { TranslateModule } from '@ngx-translate/core';
 import { SessionStore } from '../../../iam/application/session.store';
 import { HOME_BY_ROLE } from '../../../iam/domain/model/home-by-role';
 import { GeoEmptyState } from '../../../shared/ui/geo-empty-state/geo-empty-state';
+import { GeoTopBar } from '../geo-top-bar/geo-top-bar';
 
 /** Page for an address that does not exist: it takes the visitor back to the start of their role. */
 @Component({
   selector: 'app-page-not-found',
   standalone: true,
-  imports: [RouterLink, MatButtonModule, TranslateModule, GeoEmptyState],
+  imports: [RouterLink, MatButtonModule, TranslateModule, GeoEmptyState, GeoTopBar],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
+    <geo-top-bar [minimal]="true" [role]="sessions.role() ?? 'CONSUMER'" />
     <main class="page">
       <geo-empty-state
         icon="search_off"
+        [headingLevel]="1"
         [title]="'notFoundPage.title' | translate"
         [description]="'notFoundPage.description' | translate">
         <a mat-flat-button [routerLink]="home()">{{ 'notFoundPage.back' | translate }}</a>
@@ -30,7 +33,7 @@ import { GeoEmptyState } from '../../../shared/ui/geo-empty-state/geo-empty-stat
   ],
 })
 export class PageNotFound {
-  private readonly sessions = inject(SessionStore);
+  protected readonly sessions = inject(SessionStore);
   protected readonly home = computed(() => {
     const role = this.sessions.role();
     return role ? HOME_BY_ROLE[role] : '/inicio';

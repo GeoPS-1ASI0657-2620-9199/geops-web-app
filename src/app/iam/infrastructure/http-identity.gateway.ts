@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpBackend, HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { API_BASE_URL } from '../../core/config/api-base-url';
@@ -21,6 +21,8 @@ import {
 @Injectable()
 export class HttpIdentityGateway implements IdentityGateway {
   private readonly http = inject(HttpClient);
+  /** Without interceptors: the session is already closed here and a 401 must not log out again. */
+  private readonly bare = new HttpClient(inject(HttpBackend));
   private readonly baseUrl = inject(API_BASE_URL);
 
   async registerConsumer(person: RegisterConsumer): Promise<RegisteredUser> {
@@ -60,5 +62,11 @@ export class HttpIdentityGateway implements IdentityGateway {
     } catch (error) {
       throw toApiError(error);
     }
+  }
+
+  async logOut(accessToken: string): Promise<void> {
+    await firstValueFrom(
+      this.bare.post<void>(`${this.baseUrl}/auth/logout`, null, { headers: { Authorization: `Bearer ${accessToken}` } }),
+    );
   }
 }

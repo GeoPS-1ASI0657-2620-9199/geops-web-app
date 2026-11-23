@@ -12,12 +12,14 @@ import { categoryIcon } from '../../../../shared/ui/category-icon';
 import { GeoOffersMap, MapPin } from '../../../../shared/ui/geo-offers-map/geo-offers-map';
 import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { GeoEmptyState } from '../../../../shared/ui/geo-empty-state/geo-empty-state';
+import { GeoQr } from '../../../../shared/ui/geo-qr/geo-qr';
 import { GeoSeal } from '../../../../shared/ui/geo-seal/geo-seal';
 import { GetReportUseCase } from '../../../application/get-report.use-case';
 import { GetReservationUseCase, RESERVATION_NOT_FOUND } from '../../../application/get-reservation.use-case';
 import { NonComplianceReport } from '../../../domain/model/noncompliance-report';
 import { Reservation } from '../../../domain/model/reservation';
 import { PLACED_PARAM, STATUS_SEAL, limaDateTime, remainingTime } from '../../reservation-view';
+import { walkingDirectionsUrl } from '../../../../shared/ui/map-links';
 
 /** The reservation is missing or belongs to another account: either way there is nothing to retry. */
 const NOT_FOUND_CODES = [RESERVATION_NOT_FOUND, 'FORBIDDEN'];
@@ -29,7 +31,7 @@ type Placed = 'new' | 'existing' | null;
 @Component({
   selector: 'app-reservation-detail',
   standalone: true,
-  imports: [ReviewForm, DecimalPipe, RouterLink, MatButtonModule, MatIconModule, TranslateModule, GeoAlert, GeoEmptyState, GeoOffersMap, GeoSeal],
+  imports: [ReviewForm, DecimalPipe, RouterLink, MatButtonModule, MatIconModule, TranslateModule, GeoAlert, GeoEmptyState, GeoOffersMap, GeoSeal, GeoQr],
   templateUrl: './reservation-detail.page.html',
   styleUrl: './reservation-detail.page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,6 +54,17 @@ export class ReservationDetailPage implements OnInit {
   /** An ACTIVE reservation that has not reached its deadline can still be reported. */
   protected readonly canReport = computed(() => this.isActive() && this.remaining() !== null && !this.report());
   protected readonly limaDateTime = limaDateTime;
+  /** "Pagas" only while the coupon can still be used; after the visit it is "Pagaste", otherwise just the price. */
+  protected readonly priceLabel = computed(() => {
+    switch (this.reservation()?.status) {
+      case 'ACTIVE':
+        return 'reservationPage.payAtStore';
+      case 'REDEEMED':
+        return 'reservationPage.paidAtStore';
+      default:
+        return 'reservationPage.offerPrice';
+    }
+  });
   /** The reserved offer, for the price, the address and the map; the reservation still shows without it. */
   protected readonly offer = signal<OfferDetail | null>(null);
   protected readonly remaining = computed(() => {
@@ -61,16 +74,12 @@ export class ReservationDetailPage implements OnInit {
   protected readonly pins = computed<MapPin[]>(() => {
     const offer = this.offer();
     return offer
-      ? [{ id: offer.offerId, point: offer.location, icon: categoryIcon(offer.category), label: offer.businessName, kind: 'verified' }]
+      ? [{ id: offer.offerId, point: offer.location, icon: categoryIcon(offer.category), label: `${offer.businessName}: ${offer.title}`, kind: 'verified' }]
       : [];
   });
   protected readonly directionsUrl = computed(() => {
     const offer = this.offer();
-    if (!offer) {
-      return null;
-    }
-    const { latitude, longitude } = offer.location;
-    return `https://www.openstreetmap.org/directions?engine=fossgis_osrm_foot&route=%3B${latitude}%2C${longitude}`;
+    return offer ? walkingDirectionsUrl(offer.location) : null;
   });
 
   ngOnInit(): void {

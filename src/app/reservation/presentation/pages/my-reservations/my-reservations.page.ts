@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
@@ -16,6 +16,15 @@ type Filter = ReservationStatus | 'ALL';
 /** Figma screen 4: Activos, Canjeados and Vencidos; the reported ones and all of them after. */
 const FILTERS: readonly Filter[] = ['ACTIVE', 'REDEEMED', 'EXPIRED', 'REPORTED', 'ALL'];
 const SKELETON_CARDS = [1, 2, 3];
+/** The chosen filter lives in ?estado= so a reload or a shared link keeps it. */
+const FILTER_PARAM = 'estado';
+const FILTER_SLUGS: Record<Filter, string> = {
+  ACTIVE: 'activos',
+  REDEEMED: 'canjeados',
+  EXPIRED: 'vencidos',
+  REPORTED: 'reportados',
+  ALL: 'todos',
+};
 
 /** "Mis Cupones": the reservations of the consumer by status (US40, Figma screens 4 and 27). */
 @Component({
@@ -28,6 +37,8 @@ const SKELETON_CARDS = [1, 2, 3];
 })
 export class MyReservationsPage implements OnInit {
   private readonly listReservations = inject(ListMyReservationsUseCase);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   protected readonly filters = FILTERS;
   protected readonly skeletons = SKELETON_CARDS;
@@ -39,6 +50,11 @@ export class MyReservationsPage implements OnInit {
   protected readonly errorMessage = signal<string | null>(null);
 
   ngOnInit(): void {
+    const slug = this.route.snapshot.queryParamMap.get(FILTER_PARAM);
+    const fromUrl = FILTERS.find((option) => FILTER_SLUGS[option] === slug);
+    if (fromUrl) {
+      this.filter.set(fromUrl);
+    }
     void this.load();
   }
 
@@ -47,6 +63,12 @@ export class MyReservationsPage implements OnInit {
       return;
     }
     this.filter.set(filter);
+    void this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { [FILTER_PARAM]: filter === 'ACTIVE' ? null : FILTER_SLUGS[filter] },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
     void this.load();
   }
 

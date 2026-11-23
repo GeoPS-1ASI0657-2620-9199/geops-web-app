@@ -18,7 +18,8 @@ describe('PageNotFound', () => {
     fixture.detectChanges();
 
     const page = fixture.nativeElement as HTMLElement;
-    expect(page.textContent).toContain('notFoundPage.title');
-    expect(page.querySelector('a')!.getAttribute('href')).toBe('/inicio');
+    expect(page.querySelector('h1')?.textContent?.trim()).toBe('notFoundPage.title');
+    expect(page.querySelector('geo-top-bar .logo')).not.toBeNull();
+    expect(page.querySelector('main a')!.getAttribute('href')).toBe('/inicio');
   });
 });

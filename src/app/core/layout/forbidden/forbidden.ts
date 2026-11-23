@@ -16,6 +16,7 @@ import { GeoEmptyState } from '../../../shared/ui/geo-empty-state/geo-empty-stat
     <main class="page">
       <geo-empty-state
         icon="lock"
+        [headingLevel]="1"
         [title]="'forbiddenPage.title' | translate"
         [description]="'forbiddenPage.description' | translate">
         <a mat-flat-button [routerLink]="home()">{{ 'forbiddenPage.back' | translate }}</a>

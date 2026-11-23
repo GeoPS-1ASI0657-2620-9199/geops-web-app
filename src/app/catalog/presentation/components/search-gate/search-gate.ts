@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { Router } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { GeoEmptyState } from '../../../../shared/ui/geo-empty-state/geo-empty-state';
@@ -56,13 +57,20 @@ import { DistrictPicker } from '../district-picker/district-picker';
         <geo-empty-state
           icon="search_off"
           data-testid="search-empty"
-          [title]="search.category()
+          [title]="search.term()
+            ? ('nearbyPage.empty.termTitle' | translate: { term: search.term(), minutes: search.radius() })
+            : search.category()
             ? ('nearbyPage.empty.categoryTitle' | translate: { category: search.category(), minutes: search.radius() })
             : ('nearbyPage.empty.title' | translate: { minutes: search.radius() })"
           [description]="'nearbyPage.empty.description' | translate">
           @if (search.nextRadius(); as next) {
             <button mat-flat-button type="button" (click)="search.widenRadius()">
               {{ 'nearbyPage.empty.widen' | translate: { minutes: next } }}
+            </button>
+          }
+          @if (search.term()) {
+            <button mat-stroked-button type="button" data-testid="clear-term" (click)="clearTerm()">
+              {{ 'offersPage.noMatch.clear' | translate }}
             </button>
           }
           @if (search.category()) {
@@ -92,6 +100,15 @@ import { DistrictPicker } from '../district-picker/district-picker';
 })
 export class SearchGate {
   protected readonly search = inject(OfferSearchStore);
+  private readonly router = inject(Router);
+
+  /** The text lives in the address of Ofertas (?q=); removing it there runs the search again, with the same category. */
+  protected clearTerm(): void {
+    void this.router.navigate([], {
+      queryParams: { q: null, categoria: this.search.category() },
+      queryParamsHandling: 'merge',
+    });
+  }
 
   protected readonly pickTitle = computed(() => {
     const reason = this.search.pickReason();

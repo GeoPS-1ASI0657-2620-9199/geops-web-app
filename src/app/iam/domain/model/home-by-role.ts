@@ -4,5 +4,5 @@ import { UserRole } from './user-role';
 export const HOME_BY_ROLE: Record<UserRole, string> = {
   CONSUMER: '/inicio',
   BUSINESS_OWNER: '/business',
-  ADMIN: '/inicio',
+  ADMIN: '/admin/moderation',
 };

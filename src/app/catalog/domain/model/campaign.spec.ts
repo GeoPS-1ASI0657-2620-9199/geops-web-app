@@ -59,6 +59,20 @@ describe('campaign rules (BRD-05 RF-02 and RF-03)', () => {
     );
   });
 
+  it('accepts an offer without regular price or with one above the price', () => {
+    expect(firstViolation({ ...DRAFT, offers: [{ ...DRAFT.offers[0], regularPrice: null }] }, TODAY)).toBeNull();
+    expect(firstViolation({ ...DRAFT, offers: [{ ...DRAFT.offers[0], regularPrice: 30 }] }, TODAY)).toBeNull();
+  });
+
+  it('rejects a regular price that is not above the price', () => {
+    expect(firstViolation({ ...DRAFT, offers: [{ ...DRAFT.offers[0], regularPrice: 15 }] }, TODAY)).toBe(
+      'INVALID_REGULAR_PRICE',
+    );
+    expect(firstViolation({ ...DRAFT, offers: [{ ...DRAFT.offers[0], regularPrice: 10 }] }, TODAY)).toBe(
+      'INVALID_REGULAR_PRICE',
+    );
+  });
+
   it('asks for the store on the map', () => {
     expect(firstViolation({ ...DRAFT, storeLocation: { ...DRAFT.storeLocation, point: null } }, TODAY)).toBe(
       'INVALID_STORE_LOCATION',

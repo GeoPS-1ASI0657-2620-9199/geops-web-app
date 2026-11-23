@@ -8,6 +8,8 @@ describe('UnsubscribePage', () => {
     const repository = jasmine.createSpyObj('NotificationRepository', ['unsubscribe']); repository.unsubscribe.and.resolveTo({ notificationType: 'NEARBY_OFFER', unsubscribedAt: '2026-10-29T08:00:00Z' });
     TestBed.configureTestingModule({ providers: [provideRouter([]), provideTranslateService(), { provide: NotificationRepository, useValue: repository }, { provide: ActivatedRoute, useValue: { snapshot: { queryParamMap: convertToParamMap({ token: 'signed' }) } } }] });
     const fixture = TestBed.createComponent(UnsubscribePage); fixture.detectChanges(); expect(repository.unsubscribe).not.toHaveBeenCalled();
+    const host = fixture.nativeElement as HTMLElement;
+    expect(host.querySelector('geo-top-bar .logo')?.textContent?.trim()).toBe('GeoPS'); expect(host.querySelector('h1')?.textContent).toContain('unsubscribePage.title');
     await fixture.componentInstance.confirm(); fixture.detectChanges();
     expect(repository.unsubscribe).toHaveBeenCalledWith('signed'); expect(fixture.nativeElement.textContent).toContain('unsubscribePage.done');
   });

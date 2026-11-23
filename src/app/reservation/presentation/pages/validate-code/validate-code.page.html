@@ -20,13 +20,14 @@
             {{ (checking() ? 'validatePage.checking' : 'validatePage.validate') | translate }}
           </button>
         </div>
+        <app-qr-scanner (scanned)="onScanned($event)" />
       </form>
 
       @if (reservation(); as r) {
         @if (!rejection()) {
           <section class="result" [class.ok]="!redemption()?.alreadyRedeemed" [class.warn]="redemption()?.alreadyRedeemed" role="status">
-            <h2 class="result-title">
-              {{ 'validatePage.valid' | translate }}
+            <h2 class="result-title" data-testid="result-title">
+              {{ resultTitle() | translate }}
               <geo-seal [kind]="seals[r.status]" [text]="'reservation.status.' + r.status | translate" />
             </h2>
             <dl class="facts">
@@ -59,6 +60,12 @@
                 <button mat-stroked-button type="button" (click)="clear()">{{ 'validatePage.another' | translate }}</button>
               </div>
             } @else {
+              @if (price(); as amount) {
+                <p class="amount" data-testid="charge-amount">
+                  {{ 'validatePage.amount' | translate }}
+                  <strong class="geo-tabular">S/ {{ amount | number: '1.2-2' }}</strong>
+                </p>
+              }
               <p class="note">{{ 'validatePage.charge' | translate }}</p>
               <div class="actions">
                 <button

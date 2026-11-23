@@ -1,3 +1,4 @@
+import { IdentityGateway } from '../../iam/domain/ports/identity.gateway';
 import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
@@ -39,7 +40,10 @@ describe('authInterceptor', () => {
   let storage: MemorySessionStorage;
   let router: Router;
 
+  let identity: { logOut: jasmine.Spy };
+
   const setUp = (session: Session | null) => {
+    identity = { logOut: jasmine.createSpy('logOut').and.resolveTo() };
     storage = new MemorySessionStorage(session);
     TestBed.configureTestingModule({
       providers: [
@@ -48,6 +52,7 @@ describe('authInterceptor', () => {
         provideRouter([]),
         { provide: API_BASE_URL, useValue: BASE_URL },
         { provide: SessionStorage, useValue: storage },
+        { provide: IdentityGateway, useValue: identity },
       ],
     });
     http = TestBed.inject(HttpClient);
@@ -66,6 +71,19 @@ describe('authInterceptor', () => {
     expect(backend.expectOne(`${BASE_URL}/offers/nearby`).request.headers.get('Authorization')).toBe(
       'Bearer token-123',
     );
+  });
+
+  it('leaves the Content-Type of a photo upload to the browser', () => {
+    setUp(ACTIVE);
+    const body = new FormData();
+    body.append('file', new Blob(['jpg'], { type: 'image/jpeg' }), 'menu.jpg');
+
+    void firstValueFrom(http.post(`${BASE_URL}/campaigns/images`, body));
+
+    const request = backend.expectOne(`${BASE_URL}/campaigns/images`).request;
+    expect(request.headers.get('Authorization')).toBe('Bearer token-123');
+    expect(request.headers.has('Content-Type')).toBeFalse();
+    expect(request.body).toBe(body);
   });
 
   it('never sends the token to other hosts such as the map tiles', () => {
@@ -93,5 +111,7 @@ describe('authInterceptor', () => {
     await expectAsync(call).toBeRejected();
     expect(TestBed.inject(SessionStore).session()).toBeNull();
     expect(router.navigate).toHaveBeenCalledWith(['/login'], { queryParams: { expired: 1 } });
+    // The token was already rejected: no revocation call, so a 401 cannot loop into another 401.
+    expect(identity.logOut).not.toHaveBeenCalled();
   });
 });

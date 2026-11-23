@@ -77,6 +77,51 @@ describe('VerifyBusinessUseCase', () => {
     expect(useCase.verificationStatus()).toBeNull();
   });
 
+  it('reads the profile once when the form and the seal ask for it at the same time', async () => {
+    create(OWNER);
+    gateway.find.and.resolveTo({
+      id: 84,
+      businessName: 'Don Pepe',
+      ruc: '20123456786',
+      address: 'Av. Larco 345',
+      verificationStatus: 'UNVERIFIED',
+      lastVerification: null,
+    });
+
+    const [first, second] = await Promise.all([useCase.profile(), useCase.profile()]);
+    await useCase.profile();
+
+    expect(gateway.find).toHaveBeenCalledTimes(1);
+    expect(second).toBe(first);
+  });
+
+  it('reads the profile again after a failure, a verification or a change of business', async () => {
+    create(OWNER);
+    const profile = {
+      id: 84,
+      businessName: 'Don Pepe',
+      ruc: '20123456786',
+      address: 'Av. Larco 345',
+      verificationStatus: 'UNVERIFIED' as const,
+      lastVerification: null,
+    };
+    gateway.find.and.returnValues(Promise.reject(new Error('caída')), Promise.resolve(profile), Promise.resolve(profile), Promise.resolve(profile));
+    gateway.verify.and.resolveTo(VERIFIED);
+
+    await expectAsync(useCase.profile()).toBeRejected();
+    await useCase.profile();
+    expect(gateway.find).toHaveBeenCalledTimes(2);
+
+    await useCase.verify();
+    await useCase.profile();
+    expect(gateway.find).toHaveBeenCalledTimes(3);
+
+    TestBed.inject(SessionStore).start({ ...OWNER, businessId: 30 });
+    await useCase.profile();
+    expect(gateway.find).toHaveBeenCalledTimes(4);
+    expect(gateway.find.calls.mostRecent().args).toEqual([30]);
+  });
+
   it('refuses a session without a business', async () => {
     create(null);
 

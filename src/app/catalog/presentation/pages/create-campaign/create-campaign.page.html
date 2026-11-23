@@ -30,14 +30,18 @@
           <mat-label>Descripción</mat-label>
           <textarea matInput formControlName="description" rows="2"></textarea>
         </mat-form-field>
-        <div class="row">
-          <mat-form-field appearance="outline">
+        <div class="row dates">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
             <mat-label>Inicio</mat-label>
-            <input matInput type="date" formControlName="start" />
+            <input matInput [matDatepicker]="startPicker" formControlName="start" [placeholder]="'createCampaign.datePlaceholder' | translate" data-testid="campaign-start" />
+            <mat-datepicker-toggle matIconSuffix [for]="startPicker" />
+            <mat-datepicker #startPicker />
           </mat-form-field>
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" subscriptSizing="dynamic">
             <mat-label>Fin</mat-label>
-            <input matInput type="date" formControlName="end" [min]="today" />
+            <input matInput [matDatepicker]="endPicker" formControlName="end" [min]="today" [placeholder]="'createCampaign.datePlaceholder' | translate" data-testid="campaign-end" />
+            <mat-datepicker-toggle matIconSuffix [for]="endPicker" />
+            <mat-datepicker #endPicker />
             <mat-error>Elige una fecha de fin desde hoy y posterior al inicio.</mat-error>
           </mat-form-field>
         </div>
@@ -63,15 +67,25 @@
               <textarea matInput formControlName="conditions" rows="2"></textarea>
               <mat-error>Cuenta cuándo y cómo vale la oferta.</mat-error>
             </mat-form-field>
-            <div class="row three">
+            <div class="row">
               <mat-form-field appearance="outline">
-                <mat-label>Precio con oferta (S/)</mat-label>
+                <mat-label>Precio (S/)</mat-label>
                 <input matInput type="number" min="0" step="0.10" formControlName="price" />
                 <mat-error>Indica el precio.</mat-error>
               </mat-form-field>
+              <mat-form-field appearance="outline" subscriptSizing="dynamic">
+                <mat-label>{{ 'createCampaign.regularPrice' | translate }}</mat-label>
+                <input matInput type="number" min="0" step="0.10" formControlName="regularPrice" data-testid="offer-regular-price" />
+                <mat-hint>{{ 'createCampaign.regularPriceHint' | translate }}</mat-hint>
+                <mat-error>{{ 'createCampaign.regularPriceError' | translate }}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="row">
               <mat-form-field appearance="outline">
                 <mat-label>Vence</mat-label>
-                <input matInput type="date" formControlName="validTo" [min]="today" />
+                <input matInput [matDatepicker]="validToPicker" formControlName="validTo" [min]="today" [placeholder]="'createCampaign.datePlaceholder' | translate" data-testid="offer-valid-to" />
+                <mat-datepicker-toggle matIconSuffix [for]="validToPicker" />
+                <mat-datepicker #validToPicker />
                 <mat-error>Elige hasta cuándo vale.</mat-error>
               </mat-form-field>
               <mat-form-field appearance="outline">
@@ -84,12 +98,38 @@
                 <mat-error>{{ 'createCampaign.categoryError' | translate }}</mat-error>
               </mat-form-field>
             </div>
-            <mat-form-field appearance="outline">
-              <mat-label>Foto del producto (enlace)</mat-label>
-              <input matInput type="url" formControlName="imageUrl" placeholder="https://" />
-              <mat-hint>Opcional. Con foto, la oferta se ve en las tarjetas.</mat-hint>
-              <mat-error>Pega un enlace que empiece con https://</mat-error>
-            </mat-form-field>
+            @if (photoOf(offer); as photo) {
+              <div class="photo" data-testid="offer-photo">
+                <img class="photo-preview" [src]="photo.preview" [alt]="'createCampaign.photoAlt' | translate" />
+                <span class="geo-meta" role="status">
+                  {{ (photo.busy ? 'createCampaign.uploadingPhoto' : 'createCampaign.photoReady') | translate }}
+                </span>
+                <button mat-button type="button" class="remove-photo" [disabled]="photo.busy" (click)="removePhoto(offer)" data-testid="remove-photo">
+                  <mat-icon>delete</mat-icon>
+                  {{ 'createCampaign.removePhoto' | translate }}
+                </button>
+              </div>
+            } @else {
+              @if (!offer.get('imageUrl')?.value) {
+                <div class="photo-upload">
+                  <button mat-stroked-button type="button" (click)="photoInput.click()" data-testid="upload-photo">
+                    <mat-icon>add_a_photo</mat-icon>
+                    {{ 'createCampaign.uploadPhoto' | translate }}
+                  </button>
+                  <input #photoInput type="file" hidden accept="image/jpeg,image/png,image/webp" (change)="onPhotoSelected(offer, $event)" data-testid="photo-input" />
+                  <span class="geo-meta">{{ 'createCampaign.photoHint' | translate }}</span>
+                </div>
+              }
+              <mat-form-field appearance="outline">
+                <mat-label>Foto del producto (enlace)</mat-label>
+                <input matInput type="url" formControlName="imageUrl" placeholder="https://" data-testid="offer-image-url" />
+                <mat-hint>Opcional. Con foto, la oferta se ve en las tarjetas.</mat-hint>
+                <mat-error>Pega un enlace que empiece con https://</mat-error>
+              </mat-form-field>
+            }
+            @if (photoErrorOf(offer); as photoError) {
+              <p class="photo-error" role="alert" data-testid="photo-error">{{ photoError }}</p>
+            }
             @if (offers.length > 1) {
               <button mat-button type="button" class="remove" (click)="removeOffer(i)">
                 <mat-icon>delete</mat-icon>
@@ -107,23 +147,23 @@
 
     <div class="column">
       <div class="panel">
-        <h2 class="geo-section-title">Tu local</h2>
+        <h2 class="geo-section-title">{{ 'createCampaign.storeTitle' | translate }}</h2>
         <mat-form-field appearance="outline">
           <mat-label>Dirección del local</mat-label>
           <input matInput formControlName="address" autocomplete="street-address" />
           <mat-error>Escribe la dirección del local.</mat-error>
         </mat-form-field>
-        <geo-location-picker class="map" [point]="storePoint()" (pointSelected)="onStorePoint($event)" />
+        @if (prefilled()) {
+          <p class="geo-meta prefilled" role="status">{{ 'createCampaign.prefilled' | translate }}</p>
+        }
+        <app-zone-selector [center]="storePoint()" [showMap]="false" (zoneChange)="zone.set($event)" />
+        <!-- One map: the store point and, for a radius zone, how far the campaign reaches. -->
+        <geo-location-picker class="map" [point]="storePoint()" [radiusMeters]="zoneRadius()" (pointSelected)="onStorePoint($event)" />
         <p class="geo-meta">Toca el mapa en la puerta de tu local. Con ese punto se mide la distancia.</p>
       </div>
 
-      <div class="panel">
-        <h2 class="geo-section-title">Hasta dónde quieres llegar</h2>
-        <app-zone-selector [center]="storePoint()" (zoneChange)="zone.set($event)" />
-      </div>
-
       <div class="actions">
-        <button mat-flat-button type="submit" class="publish" [disabled]="submitting()">
+        <button mat-flat-button type="submit" class="publish" [disabled]="submitting() || uploading()">
           <span class="publish-main">{{ submitting() ? 'Publicando…' : 'Publicar ahora' }}</span>
           <span class="publish-sub">Se publica al instante, sin esperar aprobación.</span>
         </button>

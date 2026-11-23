@@ -37,7 +37,12 @@ const FEATURED = [
       }
       <div class="chips" role="group">
         @for (district of featured(); track district.name) {
-          <button type="button" class="chip" [class.on]="chosen()?.name === district.name" (click)="chosen.set(district)">
+          <button
+            type="button"
+            class="chip"
+            [class.on]="chosen()?.name === district.name"
+            [attr.aria-pressed]="chosen()?.name === district.name"
+            (click)="chosen.set(district)">
             {{ district.name }}
           </button>
         }

@@ -37,6 +37,7 @@ const SNACK_MILLIS = 4000;
     `
       :host { display: flex; gap: var(--space-sm); }
       .small { height: 30px; padding: 0 14px; font: 500 12px/1 var(--font-brand); }
+      @media (pointer: coarse), (max-width: 640px) { .small { height: 40px; padding: 0 18px; font-size: 13px; } }
     `,
   ],
 })

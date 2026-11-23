@@ -7,7 +7,8 @@ import { OfferRepository } from '../domain/ports/offer.repository';
 export class GetOfferDetailUseCase {
   private readonly offers = inject(OfferRepository);
 
-  execute(offerId: number): Promise<OfferDetail> {
-    return this.offers.findById(offerId);
+  /** trackClick is only for the detail page a buyer opens: it counts a click for the campaign metrics. */
+  execute(offerId: number, trackClick = false): Promise<OfferDetail> {
+    return trackClick ? this.offers.findById(offerId, { trackClick: true }) : this.offers.findById(offerId);
   }
 }

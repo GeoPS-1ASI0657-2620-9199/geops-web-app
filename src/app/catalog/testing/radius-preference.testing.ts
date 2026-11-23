@@ -1,4 +1,6 @@
 import { Provider } from '@angular/core';
+import { LimaDistrict } from '../domain/model/lima-district';
+import { DistrictPreferenceStore } from '../domain/ports/district-preference.store';
 import { RadiusPreferenceGateway } from '../domain/ports/radius-preference.gateway';
 import { RadiusPreferenceStore } from '../domain/ports/radius-preference.store';
 
@@ -15,9 +17,23 @@ export class MemoryRadiusPreferenceStore extends RadiusPreferenceStore {
   }
 }
 
-/** Radius ports for specs that do not look at them: nothing saved, profile at the default. */
-export function radiusPreferenceTestingProviders(saved: number | null = null): Provider[] {
+/** Test double of the tab storage of the picked district. */
+export class MemoryDistrictPreferenceStore extends DistrictPreferenceStore {
+  constructor(public saved: LimaDistrict | null = null) {
+    super();
+  }
+  override read(): LimaDistrict | null {
+    return this.saved;
+  }
+  override write(district: LimaDistrict | null): void {
+    this.saved = district;
+  }
+}
+
+/** Radius ports for specs that do not look at them: nothing saved, profile at the default, no district. */
+export function radiusPreferenceTestingProviders(saved: number | null = null, district: LimaDistrict | null = null): Provider[] {
   return [
+    { provide: DistrictPreferenceStore, useValue: new MemoryDistrictPreferenceStore(district) },
     { provide: RadiusPreferenceStore, useValue: new MemoryRadiusPreferenceStore(saved) },
     { provide: RadiusPreferenceGateway, useValue: { fetch: () => Promise.resolve(10), save: () => Promise.resolve() } },
   ];

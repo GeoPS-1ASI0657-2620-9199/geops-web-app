@@ -43,6 +43,13 @@ describe('RegisterComponent', () => {
     fixture.detectChanges();
   });
 
+  it('shows the phone and password rules as hints before anything is typed', () => {
+    const hints = Array.from((fixture.nativeElement as HTMLElement).querySelectorAll('mat-hint')).map((h) => h.textContent?.trim());
+
+    expect(hints).toEqual(['registerPage.phoneHint', 'registerPage.passwordHint']);
+    expect((fixture.nativeElement as HTMLElement).querySelector('mat-error')).toBeNull();
+  });
+
   it('does not call Identity while the phone does not have 9 digits starting with 9', async () => {
     fill({ phone: '12345' });
 
@@ -62,7 +69,10 @@ describe('RegisterComponent', () => {
 
     await submit();
 
-    expect(router.navigate).toHaveBeenCalledWith(['/login'], { queryParams: { registered: 1 } });
+    expect(router.navigate).toHaveBeenCalledWith(['/login'], {
+      queryParams: { registered: 1 },
+      state: { registeredEmail: jasmine.any(String), registeredRole: 'CONSUMER' },
+    });
   });
 
   it('marks the email and shows the alert when it is already registered', async () => {

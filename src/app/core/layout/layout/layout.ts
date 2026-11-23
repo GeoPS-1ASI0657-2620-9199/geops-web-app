@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterOutlet, UrlTree } from '@angular/router';
+import { filter, map } from 'rxjs';
 import { LogOutUseCase } from '../../../iam/application/log-out.use-case';
 import { SessionStore } from '../../../iam/application/session.store';
 import { UserRole } from '../../../iam/domain/model/user-role';
@@ -26,7 +28,7 @@ export const NAV_BY_ROLE: Record<UserRole | 'VISITOR', NavItem[]> = {
     { label: 'nav.reports', route: '/reports' },
     { label: 'nav.comments', route: '/comments' },
   ],
-  ADMIN: BUYER_TABS,
+  ADMIN: [{ label: 'nav.moderation', route: '/admin/moderation' }, ...BUYER_TABS],
 };
 
 /** Shell of the app: top bar and tabs by role (Figma "Barra superior" and "NavegaciÃ³n"). */
@@ -41,6 +43,7 @@ export const NAV_BY_ROLE: Record<UserRole | 'VISITOR', NavItem[]> = {
       [userName]="sessions.displayName()"
       [showLogin]="true"
       [showSearch]="role() !== 'BUSINESS_OWNER'"
+      [query]="query()"
       (searched)="search($event)"
       (logOut)="logOut()" />
     <geo-nav [items]="navItems()" />
@@ -60,13 +63,39 @@ export class Layout {
 
   protected readonly role = computed(() => this.sessions.role());
   protected readonly navItems = computed(() => NAV_BY_ROLE[this.role() ?? 'VISITOR']);
+  /** ?q= while Ofertas is open, so the box of the top bar always says what is being searched. */
+  protected readonly query = toSignal(
+    this.router.events.pipe(
+      filter((event) => event instanceof NavigationEnd),
+      map(() => this.queryOf(this.router.parseUrl(this.router.url))),
+    ),
+    { initialValue: this.queryOf(this.router.parseUrl(this.router.url)) },
+  );
 
+  /**
+   * Searches on Ofertas; an empty text clears the search. On Ofertas the other parameters (the
+   * category) stay in the address, so the results keep their filter.
+   */
   search(term: string): void {
-    void this.router.navigate(['/offers'], { queryParams: term ? { q: term } : {} });
+    const q = term || null;
+    if (this.isOffersList(this.router.parseUrl(this.router.url))) {
+      void this.router.navigate(['/offers'], { queryParams: { q }, queryParamsHandling: 'merge' });
+      return;
+    }
+    void this.router.navigate(['/offers'], { queryParams: q ? { q } : {} });
   }
 
   logOut(): void {
     this.logOutUseCase.execute();
     void this.router.navigate(['/login']);
+  }
+
+  private queryOf(url: UrlTree): string {
+    return this.isOffersList(url) ? (url.queryParamMap.get('q') ?? '') : '';
+  }
+
+  private isOffersList(url: UrlTree): boolean {
+    const segments = url.root.children['primary']?.segments ?? [];
+    return segments.length === 1 && segments[0].path === 'offers';
   }
 }

@@ -8,6 +8,7 @@ const MESSAGES: Record<string, string> = {
   INVALID_CAMPAIGN_PERIOD: 'La fecha de fin no puede ser anterior a la de inicio.',
   INVALID_CAMPAIGN_ZONE: 'Revisa la zona: el radio va de 400 m a 5 km y el distrito debe estar elegido.',
   OFFER_VALIDITY_OUTSIDE_CAMPAIGN: 'Cada oferta debe vencer dentro de la vigencia de la campaña.',
+  INVALID_REGULAR_PRICE: 'El precio normal de cada oferta debe ser mayor que su precio.',
   CAMPAIGN_WITHOUT_OFFERS: 'Agrega al menos una oferta para que la campaña aparezca en la búsqueda.',
   INVALID_STORE_LOCATION: 'Marca en el mapa dónde está tu local.',
 };

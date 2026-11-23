@@ -28,8 +28,9 @@ export class HttpOfferRepository implements OfferRepository {
     radiusMinutes: number,
     page: number,
     category: string | null = null,
+    term: string | null = null,
   ): Promise<NearbyOfferPage> {
-    const params = searchParams(origin, radiusMinutes, page, category);
+    const params = searchParams(origin, radiusMinutes, page, category, term);
     try {
       const response = await firstValueFrom(
         this.http.get<NearbyOffersResponse>(`${this.baseUrl}/offers/nearby`, { params }),
@@ -64,10 +65,11 @@ export class HttpOfferRepository implements OfferRepository {
     }
   }
 
-  async findById(offerId: number): Promise<OfferDetail> {
+  async findById(offerId: number, options: { readonly trackClick?: boolean } = {}): Promise<OfferDetail> {
+    const params = options.trackClick ? new HttpParams().set('track', 'click') : undefined;
     try {
       const response = await firstValueFrom(
-        this.http.get<OfferDetailResponse>(`${this.baseUrl}/offers/${offerId}`),
+        this.http.get<OfferDetailResponse>(`${this.baseUrl}/offers/${offerId}`, { params }),
       );
       return toOfferDetail(response);
     } catch (error) {
@@ -77,12 +79,21 @@ export class HttpOfferRepository implements OfferRepository {
 }
 
 /** Query of both nearby searches; the category travels only when one is chosen (S2-07). */
-function searchParams(origin: GeoPoint, radiusMinutes: number, page: number, category: string | null): HttpParams {
-  const params = new HttpParams()
+function searchParams(
+  origin: GeoPoint,
+  radiusMinutes: number,
+  page: number,
+  category: string | null,
+  term: string | null = null,
+): HttpParams {
+  let params = new HttpParams()
     .set('lat', origin.latitude)
     .set('lng', origin.longitude)
     .set('radiusMinutes', radiusMinutes)
     .set('page', page)
     .set('size', PAGE_SIZE);
-  return category ? params.set('category', category) : params;
+  if (category) {
+    params = params.set('category', category);
+  }
+  return term ? params.set('q', term) : params;
 }

@@ -114,4 +114,14 @@ describe('HttpIdentityGateway', () => {
       new ApiError('INVALID_CREDENTIALS', 'Correo o contraseña incorrectos.'),
     );
   });
+
+  it('asks Identity to revoke the token on log out, sending it itself', async () => {
+    const result = gateway.logOut('header.payload.signature');
+
+    const request = http.expectOne(`${BASE_URL}/auth/logout`);
+    expect(request.request.method).toBe('POST');
+    expect(request.request.headers.get('Authorization')).toBe('Bearer header.payload.signature');
+    request.flush(null, { status: 204, statusText: 'No Content' });
+    await expectAsync(result).toBeResolved();
+  });
 });

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, linkedSignal, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -20,7 +20,7 @@ export type ShellRole = 'CONSUMER' | 'BUSINESS_OWNER' | 'ADMIN';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <header class="bar">
-      <a class="logo" [routerLink]="home()">GeoPs</a>
+      <a class="logo" [routerLink]="home()">GeoPS</a>
       @if (showSearch() && !minimal()) {
         <form class="search" role="search" (submit)="submit($event)">
           <mat-icon aria-hidden="true">search</mat-icon>
@@ -46,16 +46,18 @@ export type ShellRole = 'CONSUMER' | 'BUSINESS_OWNER' | 'ADMIN';
           </ol>
         </div>
       </mat-menu>
-      <button class="pill icon" type="button" [matMenuTriggerFor]="notices" [attr.aria-label]="'header.notifications' | translate">
-        <mat-icon aria-hidden="true">notifications</mat-icon>
-      </button>
-      <mat-menu #notices="matMenu">
-        <p class="notices">{{ 'header.noNotices' | translate }}</p>
-      </mat-menu>
+      @if (userName()) {
+        <button class="pill icon" type="button" [matMenuTriggerFor]="notices" [attr.aria-label]="'header.notifications' | translate">
+          <mat-icon aria-hidden="true">notifications</mat-icon>
+        </button>
+        <mat-menu #notices="matMenu">
+          <p class="notices">{{ 'header.noNotices' | translate }}</p>
+        </mat-menu>
+      }
       @if (userName()) {
         <button class="pill user" type="button" [matMenuTriggerFor]="menu" [attr.aria-label]="'header.accountMenu' | translate">
           <span class="avatar" aria-hidden="true">{{ initial() }}</span>
-          {{ userName() }}
+          <span class="name">{{ userName() }}</span>
         </button>
         <mat-menu #menu="matMenu">
           @if (role() === 'CONSUMER') {
@@ -96,7 +98,8 @@ export type ShellRole = 'CONSUMER' | 'BUSINESS_OWNER' | 'ADMIN';
         margin-left: var(--space-sm);
         padding: 0 16px;
         border-radius: var(--radius-chip);
-        background: rgba(255, 255, 255, 0.17);
+        /* A darker veil than the Figma white one, so the typed text reaches AA (5.9:1). */
+        background: rgba(74, 0, 114, 0.25);
         color: #efe0fa;
       }
       .search mat-icon { width: 17px; height: 17px; font-size: 17px; }
@@ -145,9 +148,20 @@ export type ShellRole = 'CONSUMER' | 'BUSINESS_OWNER' | 'ADMIN';
       .help ol { margin: 0; padding-left: 18px; color: var(--text-dim); }
       .notices { margin: 0; padding: var(--space-sm) var(--space-lg); font: 400 12.5px/1.45 var(--font-brand); color: var(--text-dim); }
       @media (max-width: 720px) {
-        .bar { gap: var(--space-sm); padding: 0 16px; }
-        .search { display: none; }
+        /* The search box drops to a full-width second row instead of disappearing. */
+        .bar { flex-wrap: wrap; height: auto; min-height: 64px; row-gap: 0; gap: var(--space-sm); padding: 0 16px; }
+        .logo { line-height: 64px; }
+        .search { order: 3; flex: 1 0 100%; width: auto; max-width: none; height: 40px; margin: 0 0 12px; }
+        .search input { font-size: 14px; }
         .pill { padding: 0 12px; }
+        /* The account pill keeps only the avatar; the name is in the aria-label and the menu. */
+        .pill.user { padding: 0 6px; }
+        .pill.user .name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+      }
+      /* On touch screens and phones every pill is at least a 40 x 40 target. */
+      @media (pointer: coarse), (max-width: 640px) {
+        .pill { height: 40px; min-width: 40px; justify-content: center; }
+        .pill.user { height: 40px; }
       }
     `,
   ],
@@ -161,10 +175,14 @@ export class GeoTopBar {
   readonly showSearch = input(true);
   /** Logo only, as on the login and sign up screens (Figma 14 to 22). */
   readonly minimal = input(false);
+  /** The text of the current search (?q= of Ofertas): the box shows it and empties when it is cleared. */
+  readonly query = input('');
   readonly logOut = output<void>();
+  /** The trimmed text; an empty one asks to clear the search. */
   readonly searched = output<string>();
 
-  protected readonly term = signal('');
+  /** What the buyer types; it starts again from query whenever the search of the address changes. */
+  protected readonly term = linkedSignal(() => this.query());
   protected readonly home = computed(() => HOME_BY_ROLE[this.role()]);
   protected readonly initial = computed(() => (this.userName() ?? '?').trim().charAt(0).toUpperCase());
 

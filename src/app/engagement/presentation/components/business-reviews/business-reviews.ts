@@ -20,15 +20,18 @@ import { ApiError } from '../../../../shared/domain/api-error';
       @for (review of reviews(); track review.reviewId) {
         <article class="review" [class.pending]="canReply() && !review.reply">
           <header class="who">
-            <span class="avatar" aria-hidden="true"><mat-icon>person</mat-icon></span>
+            <span class="avatar" aria-hidden="true">
+              @if (initialOf(review); as initial) { {{ initial }} } @else { <mat-icon>person</mat-icon> }
+            </span>
             <div class="who-text">
+              <p class="author">{{ review.authorName?.trim() || ('reviewsPage.anonymousAuthor' | translate) }}</p>
               <p class="line">
                 <span class="stars" role="img" [attr.aria-label]="'reviewsPage.stars' | translate:{count: review.rating}">
                   @for (n of [1, 2, 3, 4, 5]; track n) { <mat-icon [class.off]="n > review.rating" aria-hidden="true">star</mat-icon> }
                 </span>
                 @if (review.verifiedRedemption) { <span class="verified"><mat-icon aria-hidden="true">check</mat-icon>{{ 'reviewsPage.verified' | translate }}</span> }
               </p>
-              <p class="when">{{ review.createdAt | date: 'd MMM y' }}</p>
+              <p class="when">{{ review.createdAt | date: 'dd/MM/yyyy' }}</p>
             </div>
           </header>
           <p class="text">{{ review.text }}</p>
@@ -51,9 +54,10 @@ import { ApiError } from '../../../../shared/domain/api-error';
     .review { padding: var(--space-lg); background: var(--neutral-bg); border: 1px solid var(--neutral-line); border-radius: var(--radius-panel); }
     .review.pending { border-color: var(--feedback-amber-border); }
     .who { display: flex; align-items: center; gap: var(--space-md); }
-    .avatar { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--brand-soft); color: var(--brand-deep); }
+    .avatar { display: grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 50%; background: var(--brand-soft); color: var(--brand-deep); font: 600 15px/1 var(--font-brand); }
     .avatar mat-icon { width: 20px; height: 20px; font-size: 20px; }
     .who-text p { margin: 0; }
+    .author { font: 600 14px/1.4 var(--font-brand); color: var(--text-primary); overflow-wrap: anywhere; }
     .line { display: flex; align-items: center; gap: var(--space-sm); }
     .stars { display: inline-flex; }
     .stars mat-icon { width: 15px; height: 15px; font-size: 15px; color: var(--status-rating); font-variation-settings: 'FILL' 1; }
@@ -84,6 +88,11 @@ export class BusinessReviews implements OnChanges {
   readonly error = signal<string | null>(null);
   readonly drafts: Record<number, string> = {};
   ngOnChanges() { void this.load(); }
+  /** The first letter of the author for the avatar; null keeps the generic icon for reviews without a name. */
+  initialOf(review: Review): string | null {
+    const name = review.authorName?.trim();
+    return name ? [...name][0].toLocaleUpperCase('es') : null;
+  }
   async load() {
     const id = this.businessId();
     this.loading.set(true); this.error.set(null);

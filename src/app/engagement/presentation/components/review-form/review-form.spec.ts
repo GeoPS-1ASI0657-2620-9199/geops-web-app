@@ -21,4 +21,14 @@ describe('ReviewForm', () => {
     fixture.componentInstance.form.controls.text.setValue('Good'); await fixture.componentInstance.submit();
     expect(fixture.componentInstance.sent()).toBeFalse(); expect(fixture.componentInstance.form.controls.text.value).toBe('Good');
   });
+  it('starts without stars, so the buyer chooses the rating', () => {
+    const fixture = TestBed.createComponent(ReviewForm);
+    fixture.componentRef.setInput('businessId', 84);
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.form.controls.rating.value).toBe(0);
+    expect((fixture.nativeElement as HTMLElement).querySelectorAll('.star.on').length).toBe(0);
+    fixture.componentInstance.form.controls.text.setValue('Todo bien.');
+    expect(fixture.componentInstance.form.invalid).toBeTrue();
+  });
 });

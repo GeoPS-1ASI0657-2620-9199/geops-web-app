@@ -6,7 +6,8 @@ import { VerifyBusinessUseCase } from '../../../application/verify-business.use-
 
 /**
  * The seal of the owner's business as Identity has it (E2-16): "Verificado" only when the profile is
- * VERIFIED; otherwise the way to "Verificar mi comercio" (US38). Nothing shows while it is unknown.
+ * VERIFIED; otherwise the way to "Verificar mi comercio" (US38). Nothing shows while it is unknown. A
+ * page that already offers that action in a notice turns the link off and only the status stays.
  */
 @Component({
   selector: 'app-business-seal',
@@ -32,9 +33,16 @@ import { VerifyBusinessUseCase } from '../../../application/verify-business.use-
           @if (name()) {
             <span class="name">{{ name() }}</span>
           }
-          <a class="link" routerLink="/business/verify" data-testid="verify-business-link">
-            {{ 'verifyBusiness.link' | translate }}
-          </a>
+          @if (withLink()) {
+            <a class="link" routerLink="/business/verify" data-testid="verify-business-link">
+              {{ 'verifyBusiness.link' | translate }}
+            </a>
+          } @else {
+            <geo-seal
+              kind="unverified"
+              data-testid="business-unverified-seal"
+              [text]="'verifyBusiness.status.' + verification.verificationStatus() | translate" />
+          }
         </span>
       }
     }
@@ -43,7 +51,11 @@ import { VerifyBusinessUseCase } from '../../../application/verify-business.use-
     `
       .seal-row { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 10px; }
       .name { font: 500 13px/1.3 var(--font-brand); color: var(--text-primary); }
-      .link { font: 500 12.5px/1 var(--font-brand); color: var(--brand-action); }
+      .link { display: inline-flex; align-items: center; font: 500 12.5px/1 var(--font-brand); color: var(--brand-action); }
+      /* Touch screens: the link is a target of at least 40 px. */
+      @media (pointer: coarse), (max-width: 640px) {
+        .link { min-height: 40px; padding: 0 4px; }
+      }
     `,
   ],
 })
@@ -51,6 +63,8 @@ export class BusinessSeal implements OnInit {
   protected readonly verification = inject(VerifyBusinessUseCase);
   /** Text of the verified seal, e.g. the business name; "Verificado" when absent. */
   readonly name = input<string | null>(null);
+  /** False where the page shows its own "Verificar mi comercio" button, so the action is not repeated. */
+  readonly withLink = input(true);
 
   ngOnInit(): void {
     if (this.verification.verificationStatus() === null) {
