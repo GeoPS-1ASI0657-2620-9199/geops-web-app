@@ -4,6 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, Routes, provideRouter } from '@angular/router';
 import { Session } from '../../../iam/domain/model/session';
 import { SessionStorage } from '../../../iam/domain/ports/session.storage';
+import { NotificationInboxRepository } from '../../../notification/domain/ports/notification-inbox.repository';
 import { Layout } from './layout';
 import { provideTranslateService } from '@ngx-translate/core';
 
@@ -53,6 +54,7 @@ describe('Layout', () => {
         provideRouter(routes),
         provideTranslateService(),
         { provide: SessionStorage, useValue: storage },
+        { provide: NotificationInboxRepository, useValue: { latest: () => Promise.resolve([]), unreadCount: () => Promise.resolve(0), markAllRead: () => Promise.resolve() } },
         { provide: IdentityGateway, useValue: { logOut: () => Promise.resolve() } },
       ],
     }).compileComponents();
@@ -95,7 +97,7 @@ describe('Layout', () => {
   });
 
   it('hides the notices bell from a visitor and keeps it for a signed in user', async () => {
-    const bell = () => (fixture.nativeElement as HTMLElement).querySelector('[aria-label="header.notifications"]');
+    const bell = () => (fixture.nativeElement as HTMLElement).querySelector('geo-notification-bell');
 
     await create(null);
     expect(bell()).toBeNull();

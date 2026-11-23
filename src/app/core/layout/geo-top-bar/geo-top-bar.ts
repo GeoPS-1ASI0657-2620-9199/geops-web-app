@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { TranslateModule } from '@ngx-translate/core';
 
+import { GeoNotificationBell } from '../../../notification/presentation/components/notification-bell/notification-bell';
 import { HOME_BY_ROLE } from '../../../iam/domain/model/home-by-role';
 
 export type ShellRole = 'CONSUMER' | 'BUSINESS_OWNER' | 'ADMIN';
@@ -16,7 +17,7 @@ export type ShellRole = 'CONSUMER' | 'BUSINESS_OWNER' | 'ADMIN';
 @Component({
   selector: 'geo-top-bar',
   standalone: true,
-  imports: [RouterLink, MatIconModule, MatMenuModule, TranslateModule],
+  imports: [RouterLink, MatIconModule, MatMenuModule, TranslateModule, GeoNotificationBell],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <header class="bar">
@@ -47,12 +48,7 @@ export type ShellRole = 'CONSUMER' | 'BUSINESS_OWNER' | 'ADMIN';
         </div>
       </mat-menu>
       @if (userName()) {
-        <button class="pill icon" type="button" [matMenuTriggerFor]="notices" [attr.aria-label]="'header.notifications' | translate">
-          <mat-icon aria-hidden="true">notifications</mat-icon>
-        </button>
-        <mat-menu #notices="matMenu">
-          <p class="notices">{{ 'header.noNotices' | translate }}</p>
-        </mat-menu>
+        <geo-notification-bell [role]="role()" />
       }
       @if (userName()) {
         <button class="pill user" type="button" [matMenuTriggerFor]="menu" [attr.aria-label]="'header.accountMenu' | translate">
@@ -146,7 +142,6 @@ export type ShellRole = 'CONSUMER' | 'BUSINESS_OWNER' | 'ADMIN';
       .help { max-width: 300px; padding: var(--space-sm) var(--space-lg); font: 400 12.5px/1.45 var(--font-brand); }
       .help-title { margin: 0 0 var(--space-xs); font-weight: 600; color: var(--brand-deep); }
       .help ol { margin: 0; padding-left: 18px; color: var(--text-dim); }
-      .notices { margin: 0; padding: var(--space-sm) var(--space-lg); font: 400 12.5px/1.45 var(--font-brand); color: var(--text-dim); }
       @media (max-width: 720px) {
         /* The search box drops to a full-width second row instead of disappearing. */
         .bar { flex-wrap: wrap; height: auto; min-height: 64px; row-gap: 0; gap: var(--space-sm); padding: 0 16px; }

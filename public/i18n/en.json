@@ -1236,5 +1236,20 @@
     "showOne": "See 1 offer",
     "until": "Ends on {{date}}",
     "listLabel": "Current offers of {{name}}"
+  },
+  "notificationBell": {
+    "ariaLabel": "Notices, {{count}} unread",
+    "loading": "Loading notices",
+    "error": "We could not load your notices.",
+    "retry": "Retry",
+    "settings": "Notice settings",
+    "unreadDot": "Unread",
+    "time": {
+      "now": "now",
+      "minutes": "{{count}} min ago",
+      "hours": "{{count}} h ago",
+      "yesterday": "yesterday",
+      "days": "{{count}} days ago"
+    }
   }
 }
