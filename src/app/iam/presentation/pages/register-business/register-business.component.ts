@@ -6,6 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { ADDRESS_DISTRICTS, composeAddress } from '../../../../shared/domain/address-district';
 import { TranslateModule } from '@ngx-translate/core';
 import { ApiError } from '../../../../shared/domain/api-error';
 import { GeoPoint } from '../../../../shared/domain/geo-point';
@@ -96,6 +98,7 @@ interface WizardAlert {
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    MatSelectModule,
     TranslateModule,
     GeoAlert,
     GeoLocationPicker,
@@ -145,8 +148,11 @@ export class RegisterBusinessComponent {
     ],
   });
 
+  protected readonly districts = ADDRESS_DISTRICTS;
   protected readonly place = this.fb.group({
     address: ['', [Validators.required, Validators.maxLength(ADDRESS_MAX_LENGTH), this.rejectedBy('address')]],
+    // Picked from a list, never typed: Identity looks the address up on the map and needs the district (US38).
+    district: this.fb.control<string | null>(null, Validators.required),
     openingHours: ['', Validators.maxLength(OPENING_HOURS_MAX_LENGTH)],
   });
 
@@ -218,7 +224,7 @@ export class RegisterBusinessComponent {
           businessName: account.businessName,
           businessType: account.businessType,
           ruc: account.ruc,
-          address: place.address,
+          address: composeAddress(place.address, place.district ?? ''),
           location: this.location() as GeoPoint,
           openingHours: place.openingHours,
         },

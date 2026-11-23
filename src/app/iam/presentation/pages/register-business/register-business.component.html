@@ -95,6 +95,16 @@
           }
         </mat-form-field>
 
+        <mat-form-field appearance="outline">
+          <mat-label>{{ 'registerBusinessPage.location.district' | translate }}</mat-label>
+          <mat-select formControlName="district" data-testid="district">
+            @for (d of districts; track d) {
+              <mat-option [value]="d">{{ d }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>{{ 'registerBusinessPage.location.districtRequired' | translate }}</mat-error>
+        </mat-form-field>
+
         <geo-location-picker class="map" [point]="location()" (pointSelected)="onPointSelected($event)" />
         <p class="geo-meta map-hint">{{ 'registerBusinessPage.location.mapHint' | translate }}</p>
 
