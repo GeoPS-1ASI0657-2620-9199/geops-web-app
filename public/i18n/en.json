@@ -841,7 +841,7 @@
     "regularPriceHint": "Optional. It is shown struck through so the saving shows.",
     "regularPriceError": "It must be higher than the offer price.",
     "uploadPhoto": "Upload photo",
-    "photoHint": "Optional. JPG, PNG or WebP up to 2 MB.",
+    "photoHint": "Optional. JPG, PNG or WebP up to 20 MB. We make it lighter before uploading it.",
     "uploadingPhoto": "Uploading photo…",
     "photoReady": "Photo ready.",
     "removePhoto": "Remove photo",
