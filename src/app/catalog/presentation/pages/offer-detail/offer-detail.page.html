@@ -92,7 +92,11 @@
           <aside class="side">
             <div class="panel">
               <p class="price geo-tabular" [class.muted]="!o.available">
-                <small>S/</small> {{ o.price | number: '1.2-2' }}
+                @if (o.price === 0) {
+                  <span data-testid="free">{{ 'offerDetailPage.free' | translate }}</span>
+                } @else {
+                  <small>S/</small> {{ o.price | number: '1.2-2' }}
+                }
                 @if (o.regularPrice) {
                   <s class="regular-price" data-testid="regular-price">S/ {{ o.regularPrice | number: '1.2-2' }}</s>
                 }
@@ -110,6 +114,13 @@
                 <div><dt>{{ 'offerDetailPage.address' | translate }}</dt><dd>{{ o.address }}</dd></div>
                 <div><dt>{{ 'offerDetailPage.category' | translate }}</dt><dd>{{ o.category }}</dd></div>
               </dl>
+              @if (isPublicSource()) {
+                <geo-alert
+                  kind="info"
+                  data-testid="public-source-notice"
+                  [title]="'offerDetailPage.publicSource.title' | translate"
+                  [description]="'offerDetailPage.publicSource.description' | translate: { source: o.businessName }" />
+              }
               @if (canReserve()) {
                 @if (activeReservationId(); as reservationId) {
                   <button mat-flat-button type="button" class="reserve" disabled>

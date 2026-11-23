@@ -391,7 +391,12 @@
     },
     "alreadyReserved": "Ya reservaste esta oferta",
     "alreadyReservedHint": "Muestra tu código en el local.",
-    "viewReservation": "Ver mi reserva"
+    "viewReservation": "Ver mi reserva",
+    "free": "Gratis",
+    "publicSource": {
+      "title": "Información pública: no se reserva",
+      "description": "La publicó {{source}} y no es un comercio afiliado a GeoPS. Acércate al lugar en su horario y confirma allí el precio y la vigencia."
+    }
   },
   "reservation": {
     "status": {

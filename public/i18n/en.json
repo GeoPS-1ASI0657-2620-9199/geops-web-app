@@ -391,7 +391,12 @@
     },
     "alreadyReserved": "You already reserved this offer",
     "alreadyReservedHint": "Show your code at the store.",
-    "viewReservation": "View my reservation"
+    "viewReservation": "View my reservation",
+    "free": "Free",
+    "publicSource": {
+      "title": "Public information: it cannot be reserved",
+      "description": "It was published by {{source}}, which is not a business affiliated with GeoPS. Go to the place during its hours and confirm the price and dates there."
+    }
   },
   "reservation": {
     "status": {
