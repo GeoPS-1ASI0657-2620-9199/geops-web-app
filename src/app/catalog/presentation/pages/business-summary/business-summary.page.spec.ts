@@ -80,13 +80,32 @@ describe('BusinessSummaryPage', () => {
 
     expect(host.querySelector('[data-testid="business-seal"]')).not.toBeNull();
     expect(host.querySelector('[data-testid="verify-business-link"]')).toBeNull();
+    expect(host.querySelector('[data-testid="verify-business-alert"]')).toBeNull();
   });
 
-  it('links to "Verificar mi comercio" when the business has no seal (US38)', async () => {
+  it('offers "Verificar mi comercio" once, in the notice, when the business has no seal (US38)', async () => {
     status = 'UNVERIFIED';
     const host = await render(Promise.resolve([]));
 
     expect(host.querySelector('[data-testid="business-seal"]')).toBeNull();
-    expect(host.querySelector('[data-testid="verify-business-link"]')?.getAttribute('href')).toBe('/business/verify');
+    expect(host.querySelector('[data-testid="verify-business-link"]')).toBeNull();
+    expect(host.querySelector('[data-testid="business-unverified-seal"]')?.textContent).toContain('verifyBusiness.status.UNVERIFIED');
+    expect(host.querySelectorAll('a[href="/business/verify"]').length).toBe(1);
+  });
+
+  it('warns the owner with a visible notice and a button while the business is not verified (US38)', async () => {
+    status = 'REJECTED';
+    const host = await render(Promise.resolve([]));
+    const alert = host.querySelector('[data-testid="verify-business-alert"]');
+
+    expect(alert?.textContent).toContain('businessSummary.verifyAlert.title');
+    expect(alert?.querySelector('a.verify-action')?.getAttribute('href')).toBe('/business/verify');
+  });
+
+  it('tells the owner the verification is under way while it is pending', async () => {
+    status = 'PENDING';
+    const host = await render(Promise.resolve([]));
+
+    expect(host.querySelector('[data-testid="verify-business-alert"]')?.textContent).toContain('businessSummary.verifyAlert.pendingTitle');
   });
 });

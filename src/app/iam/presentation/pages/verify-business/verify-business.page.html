@@ -69,18 +69,32 @@
 
           @if (correcting()) {
             <form class="card" data-testid="address-form" (ngSubmit)="verify()">
-              <label class="label" for="address">{{ 'verifyBusiness.correctAddress' | translate }}</label>
+              <label class="label" for="address">{{ 'verifyBusiness.correctStreet' | translate }}</label>
               <input
                 id="address"
                 name="address"
                 class="input"
-                autocomplete="street-address"
+                autocomplete="address-line1"
                 [maxlength]="maxAddress"
-                [ngModel]="address()"
-                (ngModelChange)="address.set($event)" />
-              <p class="hint">{{ 'verifyBusiness.addressHint' | translate }}</p>
+                [ngModel]="street()"
+                (ngModelChange)="street.set($event)" />
+              <p class="hint">{{ 'verifyBusiness.streetHint' | translate }}</p>
+              <label class="label" for="district">{{ 'verifyBusiness.district' | translate }}</label>
+              <select
+                id="district"
+                name="district"
+                class="input"
+                data-testid="district"
+                required
+                [ngModel]="district()"
+                (ngModelChange)="district.set($event)">
+                <option [ngValue]="null" disabled>{{ 'verifyBusiness.pickDistrict' | translate }}</option>
+                @for (d of districts; track d) {
+                  <option [ngValue]="d">{{ d }}</option>
+                }
+              </select>
               <div class="actions">
-                <button mat-flat-button type="submit" data-testid="verify-address" [disabled]="verifying() || !address().trim()">
+                <button mat-flat-button type="submit" data-testid="verify-address" [disabled]="verifying() || !canSendAddress()">
                   {{ (verifying() ? 'verifyBusiness.verifying' : 'verifyBusiness.verifyAddress') | translate }}
                 </button>
               </div>

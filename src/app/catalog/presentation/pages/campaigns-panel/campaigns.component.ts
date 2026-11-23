@@ -73,6 +73,11 @@ export class CampaignsComponent implements OnInit {
     void this.load();
   }
 
+  /** "1 pausada" against "2 pausadas": the singular has a key of its own. */
+  protected summaryKey(status: 'active' | 'paused' | 'finished', count: number): string {
+    return 'campaignsPage.summary.' + status + (count === 1 ? 'One' : '');
+  }
+
   async load(): Promise<void> {
     this.state.set('loading');
     try {

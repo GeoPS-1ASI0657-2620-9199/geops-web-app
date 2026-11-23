@@ -10,6 +10,7 @@ import { ApiError } from '../../../../shared/domain/api-error';
 import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { GeoTopBar } from '../../../../core/layout/geo-top-bar/geo-top-bar';
 import { RegisterConsumerUseCase } from '../../../application/register-consumer.use-case';
+import { RegisteredState } from '../login/login.component';
 import {
   EMAIL_MAX_LENGTH,
   FULL_NAME_MAX_LENGTH,
@@ -82,8 +83,10 @@ export class RegisterComponent {
     this.submitting.set(true);
     this.alert.set(null);
     try {
-      await this.registerConsumer.execute(this.form.getRawValue());
-      await this.router.navigate(['/login'], { queryParams: { registered: 1 } });
+      const account = this.form.getRawValue();
+      await this.registerConsumer.execute(account);
+      const state: RegisteredState = { registeredEmail: account.email, registeredRole: 'CONSUMER' };
+      await this.router.navigate(['/login'], { queryParams: { registered: 1 }, state });
     } catch (error) {
       this.showError(error);
     } finally {

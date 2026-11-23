@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
-import { provideTranslateService } from '@ngx-translate/core';
+import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { Session } from '../../../../iam/domain/model/session';
 import { SessionStorage } from '../../../../iam/domain/ports/session.storage';
@@ -94,6 +94,24 @@ describe('CampaignsComponent', () => {
 
     expect(host.querySelectorAll('tbody tr').length).toBe(1);
     expect(host.textContent).toContain('Cena criolla');
+
+    const translate = TestBed.inject(TranslateService);
+    translate.setTranslation('es', {
+      campaignsPage: {
+        summary: {
+          active: '{{count}} activas',
+          activeOne: '{{count}} activa',
+          paused: '{{count}} pausadas',
+          pausedOne: '{{count}} pausada',
+          finished: '{{count}} finalizadas',
+          finishedOne: '{{count}} finalizada',
+        },
+      },
+    });
+    translate.use('es');
+    view.detectChanges();
+
+    expect(host.querySelector('.subtitle')?.textContent?.replace(/\s+/g, ' ').trim()).toBe('1 activa · 0 pausadas · 1 finalizada');
   });
 });
 

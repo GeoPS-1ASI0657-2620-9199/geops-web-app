@@ -1,4 +1,4 @@
-import { clampRadius, hasMorePages, widerRadius } from './nearby-offer';
+import { clampRadius, hasMorePages, searchTermOf, widerRadius } from './nearby-offer';
 import { isPrecise } from './location-reading';
 
 describe('nearby offer rules', () => {
@@ -17,6 +17,14 @@ describe('nearby offer rules', () => {
   it('knows when there is another page', () => {
     expect(hasMorePages({ offers: [], page: 0, totalElements: 25, totalPages: 2 })).toBeTrue();
     expect(hasMorePages({ offers: [], page: 1, totalElements: 25, totalPages: 2 })).toBeFalse();
+  });
+
+  it('prepares the search text as Catalog accepts it: trimmed, 2 to 60 characters', () => {
+    expect(searchTermOf('  Café   pasado ')).toBe('Café pasado');
+    expect(searchTermOf('a')).toBeNull();
+    expect(searchTermOf('   ')).toBeNull();
+    expect(searchTermOf(null)).toBeNull();
+    expect(searchTermOf('x'.repeat(80))).toHaveSize(60);
   });
 
   it('treats a reading worse than 1000 m as not precise (E-05)', () => {

@@ -60,29 +60,26 @@ async function setUp<T>(component: Type<T>, session: Session | null): Promise<Co
 }
 
 describe('HomePage', () => {
-  it('greets the consumer and shows the three nearest businesses and six cards (Figma 1)', async () => {
+  it('greets the consumer and shows the three nearest offers and six cards (Figma 1)', async () => {
     const fixture = await setUp(HomePage, CONSUMER);
     const host = fixture.nativeElement as HTMLElement;
 
     expect(host.textContent).toContain('home.greeting');
     expect(host.querySelectorAll('.near-item').length).toBe(3);
-    expect(host.querySelector('.near-item')?.textContent).toContain('Comercio 1');
+    // Each line is an offer with its business, so one business with two offers is not repeated blindly.
+    expect(host.querySelector('.near-item .near-name')?.textContent).toContain(OFFERS[0].title);
+    expect(host.querySelector('.near-item .near-meta')?.textContent).toContain('Comercio 1');
     expect(host.querySelectorAll('geo-offer-card').length).toBe(6);
     expect(host.querySelector('geo-offers-map')).not.toBeNull();
   });
 
-  it('invites a visitor to log in and filters by category through Catalog (US08)', async () => {
+  it('invites a visitor to log in and leaves the category filter to Ofertas and Categorías', async () => {
     const fixture = await setUp(HomePage, null);
     const host = fixture.nativeElement as HTMLElement;
+
     expect(host.textContent).toContain('home.logInToReserve');
-    expect([...host.querySelectorAll('button.chip')].map((b) => b.textContent?.trim())).toEqual(['search.all', ...CATEGORIES]);
-
-    [...host.querySelectorAll<HTMLButtonElement>('button.chip')].find((b) => b.textContent?.trim() === 'Cafetería')!.click();
-    await fixture.whenStable();
-    fixture.detectChanges();
-
-    expect(TestBed.inject(OfferRepository).findNearby).toHaveBeenCalledWith(jasmine.anything(), 10, 0, 'Cafetería');
-    expect(host.querySelectorAll('geo-offer-card').length).toBe(3);
+    expect(host.querySelectorAll('button.chip').length).toBe(0);
+    expect(TestBed.inject(OfferRepository).findNearby).toHaveBeenCalledWith(jasmine.anything(), 10, 0, null, null);
   });
 
   it('shows the same offers as a list when the map does not load (US09, QAS12)', async () => {
@@ -100,42 +97,23 @@ describe('HomePage', () => {
 });
 
 describe('CategoriesPage', () => {
-  it('counts the offers at 5 minutes and in the radius, and lists six ordered by distance (Figma 6)', async () => {
+  it('shows one tile per category with its offers in the radius, the ones with offers first (US08)', async () => {
     const fixture = await setUp(CategoriesPage, CONSUMER);
     const host = fixture.nativeElement as HTMLElement;
-    const figures = [...host.querySelectorAll('.figure')].map((f) => f.textContent?.trim());
+    const names = [...host.querySelectorAll('.tile .name')].map((n) => n.textContent?.trim());
+    const counts = [...host.querySelectorAll('.tile .count')].map((n) => n.textContent?.trim());
 
-    expect(figures).toEqual(['5', '7', '3']);
-    expect(host.querySelectorAll('.item').length).toBe(6);
-    expect(host.querySelector('.item-name')?.textContent).toContain('Comercio 1');
-    expect(host.textContent).toContain('categoriesPage.seeAll');
+    expect(names).toEqual(['categoriesPage.all', 'Gastronomía', 'Cafetería', 'Mascotas']);
+    expect(counts).toEqual(['categoriesPage.offersCount', 'categoriesPage.offersCount', 'categoriesPage.offersCount', 'categoriesPage.none']);
+    expect(host.querySelector('.tile.empty .name')?.textContent).toContain('Mascotas');
+    expect(host.querySelector('geo-offer-card')).toBeNull();
   });
 
-  it('says there are no offers of the chosen category and offers every category again (US08)', async () => {
+  it('opens Ofertas already filtered by the chosen category', async () => {
     const fixture = await setUp(CategoriesPage, CONSUMER);
     const host = fixture.nativeElement as HTMLElement;
+    const tile = [...host.querySelectorAll<HTMLAnchorElement>('a.tile')].find((a) => a.textContent?.includes('Cafetería'))!;
 
-    [...host.querySelectorAll<HTMLButtonElement>('button.chip')].find((b) => b.textContent?.trim() === 'Mascotas')!.click();
-    await fixture.whenStable();
-    fixture.detectChanges();
-
-    expect(host.querySelector('[data-testid="search-empty"]')?.textContent).toContain('nearbyPage.empty.categoryTitle');
-    (host.querySelector('[data-testid="clear-category"]') as HTMLButtonElement).click();
-    await fixture.whenStable();
-    fixture.detectChanges();
-
-    expect(host.querySelectorAll('.item').length).toBe(6);
-  });
-
-  it('lists every offer when the map does not load (US09, QAS12)', async () => {
-    const fixture = await setUp(CategoriesPage, CONSUMER);
-    const host = fixture.nativeElement as HTMLElement;
-
-    fixture.debugElement.query(By.directive(GeoOffersMap)).componentInstance.failed.emit();
-    fixture.detectChanges();
-
-    expect(host.querySelector('geo-offers-map')).toBeNull();
-    expect(host.querySelector('[data-testid="map-fallback"]')).not.toBeNull();
-    expect(host.querySelectorAll('.item').length).toBe(7);
+    expect(tile.getAttribute('href')).toBe('/offers?categoria=Cafeter%C3%ADa');
   });
 });

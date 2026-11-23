@@ -60,7 +60,8 @@ export class ReviewForm {
   readonly busy = signal(false);
   readonly sent = signal(false);
   readonly error = signal<string | null>(null);
-  readonly form = new FormGroup({ rating: new FormControl(5, { nonNullable: true, validators: [Validators.required, Validators.min(1), Validators.max(5)] }), text: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(2000), Validators.pattern(/\S/)] }) });
+  readonly form = new FormGroup({ // No stars chosen at first: a preset 5 would push every opinion up.
+    rating: new FormControl(0, { nonNullable: true, validators: [Validators.required, Validators.min(1), Validators.max(5)] }), text: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(2000), Validators.pattern(/\S/)] }) });
   async submit() {
     if (this.busy() || this.form.invalid) return;
     this.busy.set(true); this.error.set(null);

@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule } from '@ngx-translate/core';
+import { ADDRESS_DISTRICTS, composeAddress, splitAddress } from '../../../../shared/domain/address-district';
 import { ApiError, NETWORK_ERROR } from '../../../../shared/domain/api-error';
 import { GeoAlert } from '../../../../shared/ui/geo-alert/geo-alert';
 import { GeoSeal, SealKind } from '../../../../shared/ui/geo-seal/geo-seal';
@@ -76,8 +77,12 @@ export class VerifyBusinessPage implements OnInit {
   protected readonly errorKey = signal('verifyBusiness.error.GENERIC');
   /** The last attempt could not reach a result (network, validation or a refusal of Identity). */
   protected readonly failed = signal(false);
-  /** The corrected address; once shown it keeps what the owner typed across attempts (QAS13). */
-  protected readonly address = signal('');
+  /** The corrected street and number; once shown it keeps what the owner typed across attempts (QAS13). */
+  protected readonly street = signal('');
+  /** The district is picked from a list, never typed, so the address always carries one (US38). */
+  protected readonly district = signal<string | null>(null);
+  protected readonly districts = ADDRESS_DISTRICTS;
+  protected readonly canSendAddress = computed(() => !!this.street().trim() && !!this.district());
   protected readonly correcting = signal(false);
   protected readonly maxAddress = ADDRESS_MAX_LENGTH;
   protected readonly seals = STATUS_SEAL;
@@ -117,7 +122,8 @@ export class VerifyBusinessPage implements OnInit {
     this.verifying.set(true);
     this.failed.set(false);
     try {
-      const result = await this.verification.verify(this.correcting() ? this.address() : null);
+      const corrected = this.correcting() ? composeAddress(this.street(), this.district() ?? '') : null;
+      const result = await this.verification.verify(corrected);
       this.showResult(result);
       this.profile.update((profile) =>
         profile ? { ...profile, address: result.address, verificationStatus: result.verificationStatus } : profile,
@@ -135,7 +141,9 @@ export class VerifyBusinessPage implements OnInit {
     if (asksForAddress(result.reason)) {
       // First time: start from the address that failed. Later: keep what the owner typed.
       if (!this.correcting()) {
-        this.address.set(result.address);
+        const parts = splitAddress(result.address);
+        this.street.set(parts.street);
+        this.district.set(parts.district);
       }
       this.correcting.set(true);
     } else if (result.result === 'APPROVED') {

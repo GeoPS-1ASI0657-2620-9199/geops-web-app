@@ -76,6 +76,14 @@ describe('VerifyBusinessPage', () => {
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
   };
+  const districtSelect = () => host().querySelector<HTMLSelectElement>('#district')!;
+  const pickedDistrict = () => districtSelect().selectedOptions[0]?.textContent?.trim();
+  const pickDistrict = (name: string) => {
+    const select = districtSelect();
+    select.selectedIndex = Array.from(select.options).findIndex((option) => option.textContent?.trim() === name);
+    select.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+  };
 
   it('shows the RUC and the address that will be checked (US38)', async () => {
     await render();
@@ -111,17 +119,19 @@ describe('VerifyBusinessPage', () => {
     });
   }
 
-  it('explains that a pending verification arrives by itself (CA-38.4, QAS13)', async () => {
-    await render();
-    gateway.verify.and.resolveTo(
-      answer({ result: 'PENDING', reason: 'GEOCODER_UNAVAILABLE', verificationStatus: 'PENDING', message: 'Pendiente.' }),
-    );
+  const pendingReasons: VerificationReason[] = ['GEOCODER_UNAVAILABLE', 'TAXPAYER_REGISTRY_UNAVAILABLE'];
+  for (const reason of pendingReasons) {
+    it(`explains that a verification pending for ${reason} arrives by itself (CA-38.4, QAS13)`, async () => {
+      await render();
+      gateway.verify.and.resolveTo(answer({ result: 'PENDING', reason, verificationStatus: 'PENDING', message: 'Pendiente.' }));
 
-    await verify();
+      await verify();
 
-    expect(byTestId('verify-result')?.className).toContain('wait');
-    expect(byTestId('verify-result')?.textContent).toContain('verifyBusiness.pendingNote');
-  });
+      expect(byTestId('verify-result')?.className).toContain('wait');
+      expect(byTestId('verify-result')?.textContent).toContain('verifyBusiness.pendingNote');
+      expect(byTestId('verify-result')?.textContent).toContain(`verifyBusiness.reason.${reason}.title`);
+    });
+  }
 
   it('asks to correct an address it cannot place and keeps what the owner typed (CA-38.3, QAS13)', async () => {
     await render();
@@ -132,22 +142,27 @@ describe('VerifyBusinessPage', () => {
 
     expect(byTestId('address-form')).not.toBeNull();
     expect(host().querySelector<HTMLInputElement>('#address')!.value).toBe('Av Larco s/n');
+    // Without a district the address cannot be sent: it is picked from the list, never typed (US38).
+    expect((byTestId('verify-address') as HTMLButtonElement).disabled).toBeTrue();
 
-    typeAddress('Av. José Larco 345, Miraflores');
+    typeAddress('Av. José Larco 345');
+    pickDistrict('Miraflores');
     gateway.verify.and.rejectWith(new ApiError(NETWORK_ERROR, 'sin red'));
     byTestId('verify-address')!.click();
     await settle();
 
     expect(gateway.verify).toHaveBeenCalledWith(84, 'Av. José Larco 345, Miraflores');
     expect(byTestId('verify-error')?.textContent).toContain('verifyBusiness.error.NETWORK_ERROR');
-    expect(host().querySelector<HTMLInputElement>('#address')!.value).toBe('Av. José Larco 345, Miraflores');
+    expect(host().querySelector<HTMLInputElement>('#address')!.value).toBe('Av. José Larco 345');
+    expect(pickedDistrict()).toBe('Miraflores');
 
     gateway.verify.and.resolveTo(
       answer({ result: 'REJECTED', reason: 'ADDRESS_NOT_GEOCODABLE', verificationStatus: 'REJECTED', address: 'Av. José Larco 345, Miraflores' }),
     );
     byTestId('verify-address')!.click();
     await settle();
-    expect(host().querySelector<HTMLInputElement>('#address')!.value).toBe('Av. José Larco 345, Miraflores');
+    expect(host().querySelector<HTMLInputElement>('#address')!.value).toBe('Av. José Larco 345');
+    expect(pickedDistrict()).toBe('Miraflores');
 
     gateway.verify.and.resolveTo(answer({ address: 'Av. José Larco 345, Miraflores' }));
     byTestId('verify-address')!.click();
@@ -155,6 +170,18 @@ describe('VerifyBusinessPage', () => {
 
     expect(byTestId('address-form')).toBeNull();
     expect(host().textContent).toContain('Av. José Larco 345, Miraflores');
+  });
+
+  it('splits a failed address into its street and an already picked district', async () => {
+    await render();
+    gateway.verify.and.resolveTo(
+      answer({ result: 'REJECTED', reason: 'ADDRESS_NOT_GEOCODABLE', verificationStatus: 'REJECTED', address: 'San Andrés 191, Chorrillos' }),
+    );
+    await verify();
+
+    expect(host().querySelector<HTMLInputElement>('#address')!.value).toBe('San Andrés 191');
+    expect(pickedDistrict()).toBe('Chorrillos');
+    expect((byTestId('verify-address') as HTMLButtonElement).disabled).toBeFalse();
   });
 
   it('shows the last result when the owner comes back to a rejected verification', async () => {

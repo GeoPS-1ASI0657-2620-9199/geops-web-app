@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
+import { ActivatedRoute, Router, convertToParamMap, provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
 import { SavedOfferRepository } from '../../../../engagement/domain/ports/saved-offer.repository';
@@ -15,19 +15,28 @@ import { publicSourceOffer } from '../../../testing/public-source-offer.testing'
 import { PublicSourceOffer } from '../../../domain/model/public-source-offer';
 
 const CEVICHE = nearbyOffer({ offerId: 1, title: 'Ceviche clásico', businessName: 'Cevichería Mar', category: 'Gastronomía' });
-const CORTE = nearbyOffer({ offerId: 2, title: 'Corte clásico', businessName: 'Barbería Velarde', category: 'Salud y belleza', imageUrl: null });
+const CORTE = nearbyOffer({ offerId: 2, title: 'Corte clásico', businessName: 'Barbería Velarde', category: 'Salud y belleza', imageUrl: null, price: 9, distanceMeters: 600 });
 
 describe('NearbyOffersPage', () => {
   let fixture: ComponentFixture<NearbyOffersPage>;
   let query: BehaviorSubject<ReturnType<typeof convertToParamMap>>;
+  let repository: jasmine.SpyObj<OfferRepository>;
 
-  const render = async (q: string | null = null, publicOffers: PublicSourceOffer[] = []) => {
-    const offers = jasmine.createSpyObj<OfferRepository>('OfferRepository', ['findNearby', 'findById', 'findPublicSourcesNearby']);
+  const render = async (q: string | null = null, publicOffers: PublicSourceOffer[] = [], categoria: string | null = null) => {
+    const offers = jasmine.createSpyObj<OfferRepository>('OfferRepository', ['findNearby', 'findById', 'findPublicSourcesNearby', 'categories']);
     offers.findPublicSourcesNearby.and.resolveTo(publicOffers);
-    offers.findNearby.and.callFake((_origin, _radius, _page, category) =>
-      Promise.resolve(pageOf([CEVICHE, CORTE].filter((offer) => !category || offer.category === category))),
+    offers.categories.and.resolveTo(['Gastronomía', 'Salud y belleza']);
+    offers.findNearby.and.callFake((_origin, _radius, _page, category, term) =>
+      Promise.resolve(
+        pageOf(
+          [CEVICHE, CORTE]
+            .filter((offer) => !category || offer.category === category)
+            .filter((offer) => !term || offer === CORTE),
+        ),
+      ),
     );
-    query = new BehaviorSubject(convertToParamMap(q ? { q } : {}));
+    repository = offers;
+    query = new BehaviorSubject(convertToParamMap({ ...(q ? { q } : {}), ...(categoria !== null ? { categoria } : {}) }));
     await TestBed.configureTestingModule({
       imports: [NearbyOffersPage],
       providers: [
@@ -53,6 +62,14 @@ describe('NearbyOffersPage', () => {
   };
   const text = () => (fixture.nativeElement as HTMLElement).textContent ?? '';
   const cards = () => (fixture.nativeElement as HTMLElement).querySelectorAll('geo-offer-card');
+  const chip = (label: string) =>
+    [...(fixture.nativeElement as HTMLElement).querySelectorAll<HTMLButtonElement>('button.chip')].find(
+      (b) => b.textContent?.trim() === label,
+    )!;
+  const settle = async () => {
+    await fixture.whenStable();
+    fixture.detectChanges();
+  };
 
   it('shows every offer of the radius as a Figma card with its photo, distance and actions', async () => {
     await render();
@@ -64,9 +81,10 @@ describe('NearbyOffersPage', () => {
     expect((fixture.nativeElement as HTMLElement).querySelectorAll('app-offer-card-actions').length).toBe(2);
   });
 
-  it('filters by the text typed in the top bar search, ignoring accents and case', async () => {
+  it('asks Catalog for the text typed in the top bar search and shows what it answers', async () => {
     await render('BARBERIA');
 
+    expect(repository.findNearby).toHaveBeenCalledWith(jasmine.anything(), 10, 0, null, 'BARBERIA');
     expect(cards().length).toBe(1);
     expect(text()).toContain('Barbería Velarde');
     expect(text()).not.toContain('Cevichería Mar');
@@ -95,5 +113,113 @@ describe('NearbyOffersPage', () => {
 
     expect(cards().length).toBe(1);
     expect(text()).toContain('Corte clásico');
+  });
+
+  it('says how many offers Catalog found for the typed text', async () => {
+    await render('BARBERIA');
+
+    expect((fixture.nativeElement as HTMLElement).querySelector('.subtitle')?.textContent).toContain('offersPage.countForOne');
+  });
+
+  it('searches again without text when the term is cleared from the address', async () => {
+    await render('BARBERIA');
+    repository.findNearby.calls.reset();
+
+    query.next(convertToParamMap({}));
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(repository.findNearby).toHaveBeenCalledOnceWith(jasmine.anything(), 10, 0, null, null);
+    expect(cards().length).toBe(2);
+  });
+
+  it('applies the text to the page of public sources, whose query takes no text', async () => {
+    await render('libros', [publicSourceOffer(), publicSourceOffer({ offerId: 9002, title: 'Clase de yoga', category: 'Deporte', sourceName: 'Parque' })]);
+    const section = (fixture.nativeElement as HTMLElement).querySelector('[data-testid="public-sources"]');
+
+    expect(section?.textContent).toContain('Feria de libros usados');
+    expect(section?.textContent).not.toContain('Clase de yoga');
+  });
+
+  it('orders the cards by the lowest price when the buyer asks for it', async () => {
+    await render();
+    const titles = () => [...cards()].map((c) => c.querySelector('.title')?.textContent?.trim());
+    expect(titles()).toEqual(['Ceviche clásico', 'Corte clásico']);
+
+    (fixture.componentInstance as unknown as { order: { set(v: string): void } }).order.set('price');
+    fixture.detectChanges();
+
+    expect(titles()).toEqual(['Corte clásico', 'Ceviche clásico']);
+  });
+
+  it('opens already filtered by the category that Categorías sends in the address (US08)', async () => {
+    await render(null, [], 'Salud y belleza');
+
+    expect(cards().length).toBe(1);
+    expect(text()).toContain('Corte clásico');
+  });
+
+  it('opens a shared address with its text and category in a single search', async () => {
+    await render('corte', [], 'Salud y belleza');
+
+    expect(repository.findNearby).toHaveBeenCalledOnceWith(jasmine.anything(), 10, 0, 'Salud y belleza', 'corte');
+    expect(cards().length).toBe(1);
+  });
+
+  it('puts the category back in the address when a search from the top bar leaves it out', async () => {
+    await render();
+    chip('Salud y belleza').click();
+    await settle();
+    const navigate = spyOn(TestBed.inject(Router), 'navigate').and.resolveTo(true);
+    repository.findNearby.calls.reset();
+
+    query.next(convertToParamMap({ q: 'corte' }));
+    await settle();
+
+    expect(navigate).toHaveBeenCalledWith([], {
+      queryParams: { categoria: 'Salud y belleza' },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
+    expect(repository.findNearby).toHaveBeenCalledOnceWith(jasmine.anything(), 10, 0, 'Salud y belleza', 'corte');
+  });
+
+  it('removes only the text with "Quitar la búsqueda", keeping the category in the address', async () => {
+    await render('corte', [], 'Salud y belleza');
+    const navigate = spyOn(TestBed.inject(Router), 'navigate').and.resolveTo(true);
+
+    (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>('button.term')!.click();
+
+    expect(navigate).toHaveBeenCalledWith([], {
+      queryParams: { q: null, categoria: 'Salud y belleza' },
+      queryParamsHandling: 'merge',
+    });
+  });
+
+  it('tells assistive technologies which category chip is pressed', async () => {
+    await render(null, [], 'Salud y belleza');
+
+    expect(chip('Salud y belleza').getAttribute('aria-pressed')).toBe('true');
+    expect(chip('Gastronomía').getAttribute('aria-pressed')).toBe('false');
+    expect(chip('search.all').getAttribute('aria-pressed')).toBe('false');
+  });
+
+  it('keeps the heading levels in order with a hidden "Resultados" between the title and the cards', async () => {
+    await render();
+    const headings = [...(fixture.nativeElement as HTMLElement).querySelectorAll('h1, h2, h3')].map((h) => h.tagName);
+
+    expect(headings.slice(0, 3)).toEqual(['H1', 'H2', 'H3']);
+  });
+
+  it('switches to the map of the same results and back to the cards', async () => {
+    await render();
+    const host = fixture.nativeElement as HTMLElement;
+    expect(host.querySelector('geo-offers-map')).toBeNull();
+
+    [...host.querySelectorAll<HTMLButtonElement>('mat-button-toggle button')].find((b) => b.textContent?.includes('offersPage.view.map'))!.click();
+    fixture.detectChanges();
+
+    expect(host.querySelector('geo-offers-map')).not.toBeNull();
+    expect(cards().length).toBe(2);
   });
 });

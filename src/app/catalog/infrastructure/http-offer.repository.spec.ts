@@ -61,6 +61,34 @@ describe('HttpOfferRepository', () => {
     expect(page.offers[0]).toEqual(
       jasmine.objectContaining({ offerId: 1052, distanceMeters: 350, walkMinutes: 5, verifiedSeal: true }),
     );
+    expect(page.offers[0].regularPrice).toBeNull();
+  });
+
+  it('reads the regular price of a nearby offer for the struck-through price of the card', async () => {
+    const result = repository.findNearby(ORIGIN, 10, 0);
+
+    http.expectOne((r) => r.url === `${BASE_URL}/offers/nearby`).flush({
+      content: [
+        {
+          offerId: 1052,
+          title: '2x1 en almuerzos ejecutivos',
+          businessId: 84,
+          businessName: 'Restaurante Don Pepe',
+          verifiedSeal: true,
+          distanceMeters: 350,
+          walkMinutes: 5,
+          category: 'Gastronomía',
+          price: 15.0,
+          regularPrice: 30.0,
+          validTo: '2026-10-15',
+        },
+      ],
+      page: 0,
+      totalElements: 1,
+      totalPages: 1,
+    });
+
+    expect((await result).offers[0]).toEqual(jasmine.objectContaining({ price: 15, regularPrice: 30 }));
   });
 
   it('returns an empty page for a zone without offers', async () => {
@@ -99,6 +127,20 @@ describe('HttpOfferRepository', () => {
     void repository.findNearby(ORIGIN, 10, 0, null);
     const all = http.expectOne((r) => r.url === `${BASE_URL}/offers/nearby`);
     expect(all.request.params.has('category')).toBeFalse();
+    all.flush({ content: [], page: 0, totalElements: 0, totalPages: 0 });
+  });
+
+  it('sends the text of the search as q only when there is one', async () => {
+    const result = repository.findNearby(ORIGIN, 10, 0, null, 'café');
+
+    const request = http.expectOne((r) => r.url === `${BASE_URL}/offers/nearby`);
+    expect(request.request.params.get('q')).toBe('café');
+    request.flush({ content: [], page: 0, totalElements: 0, totalPages: 0 });
+    await result;
+
+    void repository.findNearby(ORIGIN, 10, 0, null, null);
+    const all = http.expectOne((r) => r.url === `${BASE_URL}/offers/nearby`);
+    expect(all.request.params.has('q')).toBeFalse();
     all.flush({ content: [], page: 0, totalElements: 0, totalPages: 0 });
   });
 
@@ -185,6 +227,44 @@ describe('HttpOfferRepository', () => {
     const offer = await result;
     expect(offer.location).toEqual({ latitude: -12.1211, longitude: -77.0297 });
     expect(offer.available).toBeTrue();
+    expect(offer.regularPrice).toBeNull();
+  });
+
+  it('reads the regular price of the offer detail', async () => {
+    const result = repository.findById(1052);
+
+    http.expectOne(`${BASE_URL}/offers/1052`).flush({
+      offerId: 1052,
+      title: '2x1 en almuerzos ejecutivos',
+      conditions: 'Un cupón por mesa.',
+      price: 15.0,
+      regularPrice: 30.0,
+      validTo: '2026-10-15',
+      category: 'Gastronomía',
+      address: 'Av. Larco 345, Miraflores',
+      latitude: -12.1211,
+      longitude: -77.0297,
+      imageUrl: null,
+      source: 'AFFILIATED',
+      businessId: 84,
+      businessName: 'Restaurante Don Pepe',
+      verifiedSeal: false,
+      available: true,
+    });
+
+    expect((await result).regularPrice).toBe(30);
+  });
+
+  it('asks for the detail with track=click only when the buyer opens it, so the campaign counts a click', async () => {
+    const opened = repository.findById(1052, { trackClick: true });
+    http.expectOne(`${BASE_URL}/offers/1052?track=click`).flush(null, { status: 404, statusText: 'Not Found' });
+    await expectAsync(opened).toBeRejected();
+
+    const read = repository.findById(1052);
+    const request = http.expectOne(`${BASE_URL}/offers/1052`);
+    expect(request.request.params.has('track')).toBeFalse();
+    request.flush(null, { status: 404, statusText: 'Not Found' });
+    await expectAsync(read).toBeRejected();
   });
 
   it('rejects a missing offer with OFFER_NOT_FOUND', async () => {

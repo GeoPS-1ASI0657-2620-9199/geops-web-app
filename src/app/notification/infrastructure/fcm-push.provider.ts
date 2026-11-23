@@ -7,6 +7,8 @@ export function isIosWithoutInstall(userAgent: string, standalone: boolean, touc
   return (/iPad|iPhone|iPod/.test(userAgent) || (/Macintosh/.test(userAgent) && touchPoints > 1)) && !standalone;
 }
 
+import { PUSH_RECEIVED_EVENT } from './push-received-event';
+
 @Injectable()
 export class FcmPushProvider implements PushProvider {
   private stopForeground: (() => void) | null = null;
@@ -29,6 +31,7 @@ export class FcmPushProvider implements PushProvider {
     if (!token) throw new PushUnavailableError();
     this.stopForeground?.();
     this.stopForeground = sdk.onMessage(messaging, payload => {
+      window.dispatchEvent(new Event(PUSH_RECEIVED_EVENT));
       if (Notification.permission === 'granted' && payload.notification?.title) void registration.showNotification(payload.notification.title, { body: payload.notification.body, icon: '/favicon.ico' }).catch(() => {});
     });
     return token;

@@ -1,0 +1,198 @@
+<section class="page">
+  <header class="head">
+    <div>
+      <h1 class="title">{{ 'moderationPage.title' | translate }}</h1>
+      <p class="subtitle">{{ 'moderationPage.subtitle' | translate }}</p>
+    </div>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button type="button" role="tab" class="tab" [class.on]="view() === 'offers'" [attr.aria-selected]="view() === 'offers'" (click)="show('offers')">
+      {{ 'moderationPage.tabs.offers' | translate }}
+    </button>
+    <button type="button" role="tab" class="tab" data-testid="history-tab" [class.on]="view() === 'history'" [attr.aria-selected]="view() === 'history'" (click)="show('history')">
+      {{ 'moderationPage.tabs.history' | translate }}
+    </button>
+  </div>
+
+  @if (view() === 'offers') {
+    <div class="filters">
+      <form class="search" role="search" (submit)="search($event)">
+        <mat-icon aria-hidden="true">search</mat-icon>
+        <input
+          type="search"
+          name="q"
+          [value]="text()"
+          (input)="typed($event)"
+          [attr.aria-label]="'moderationPage.searchLabel' | translate"
+          [placeholder]="'moderationPage.searchLabel' | translate" />
+        <button type="submit" class="action">{{ 'moderationPage.searchButton' | translate }}</button>
+      </form>
+      <div class="chips" role="group" [attr.aria-label]="'moderationPage.columns.status' | translate">
+        @for (option of statusFilters; track option) {
+          <button type="button" class="chip" [class.on]="status() === option" [attr.aria-pressed]="status() === option" (click)="filterByStatus(option)">
+            {{ 'moderationPage.filters.' + option | translate }}
+          </button>
+        }
+        <button type="button" class="chip" data-testid="reported-only" [class.on]="reportedOnly()" [attr.aria-pressed]="reportedOnly()" (click)="toggleReported()">
+          {{ 'moderationPage.filters.REPORTED' | translate }}
+        </button>
+      </div>
+    </div>
+
+    @if (removed(); as title) {
+      <geo-alert kind="success" [title]="'moderationPage.removed' | translate: { title: title }" />
+    }
+    @if (removeError(); as message) {
+      <geo-alert kind="error" [title]="message" />
+    }
+
+    @switch (offersState()) {
+      @case ('loading') {
+        <div class="skeleton" aria-busy="true"></div>
+      }
+      @case ('empty') {
+        <geo-empty-state
+          icon="fact_check"
+          [title]="'moderationPage.empty.title' | translate"
+          [description]="'moderationPage.empty.description' | translate" />
+      }
+      @case ('error') {
+        <geo-empty-state
+          icon="cloud_off"
+          [title]="'moderationPage.error.title' | translate"
+          [description]="errorMessage() ?? ('moderationPage.error.description' | translate)">
+          <button mat-flat-button type="button" (click)="loadOffers()">{{ 'moderationPage.error.retry' | translate }}</button>
+        </geo-empty-state>
+      }
+      @case ('ready') {
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>{{ 'moderationPage.columns.offer' | translate }}</th>
+                <th>{{ 'moderationPage.columns.business' | translate }}</th>
+                <th>{{ 'moderationPage.columns.status' | translate }}</th>
+                <th>{{ 'moderationPage.columns.reports' | translate }}</th>
+                <th>{{ 'moderationPage.columns.validTo' | translate }}</th>
+                <th class="right">{{ 'moderationPage.columns.actions' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (offer of offers().items; track offer.offerId) {
+                <tr [class.ended]="offer.status === 'REMOVED'">
+                  <td>
+                    <span class="name">{{ offer.title }}</span>
+                    <span class="meta">{{ offer.category }}</span>
+                  </td>
+                  <td class="dim" [attr.data-label]="'moderationPage.columns.business' | translate">
+                    {{ offer.businessName ?? '—' }}
+                    @if (offer.source === 'PUBLIC_SOURCE') {
+                      <span class="meta">{{ 'moderationPage.publicSource' | translate }}</span>
+                    }
+                  </td>
+                  <td [attr.data-label]="'moderationPage.columns.status' | translate">
+                    <geo-seal [kind]="seals[offer.status]" [text]="'moderationPage.status.' + offer.status | translate" />
+                  </td>
+                  <td [attr.data-label]="'moderationPage.columns.reports' | translate">
+                    @if (offer.openReports > 0) {
+                      <geo-seal kind="reported" [text]="'moderationPage.openReports' | translate: { count: offer.openReports }" />
+                    } @else {
+                      <span class="dim">0</span>
+                    }
+                  </td>
+                  <td class="dim" [attr.data-label]="'moderationPage.columns.validTo' | translate">{{ offer.validTo | date: 'dd/MM/yyyy' }}</td>
+                  <td class="right">
+                    <span class="actions">
+                      @if (offer.status !== 'REMOVED') {
+                        <a class="action" [routerLink]="['/offers', offer.offerId]">{{ 'moderationPage.seeOffer' | translate }}</a>
+                        <button
+                          type="button"
+                          class="action danger"
+                          data-testid="remove"
+                          [disabled]="removing() === offer.offerId"
+                          (click)="remove(offer)">
+                          {{ 'moderationPage.remove' | translate }}
+                        </button>
+                      } @else {
+                        <span class="hint">{{ 'moderationPage.alreadyRemoved' | translate }}</span>
+                      }
+                    </span>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        @if (offers().totalPages > 1) {
+          <nav class="pager" [attr.aria-label]="'moderationPage.pager.label' | translate">
+            <button type="button" class="action" [disabled]="offers().page === 0" (click)="loadOffers(offers().page - 1)">
+              {{ 'moderationPage.pager.previous' | translate }}
+            </button>
+            <span class="dim">{{ 'moderationPage.pager.position' | translate: { page: offers().page + 1, pages: offers().totalPages } }}</span>
+            <button type="button" class="action" [disabled]="offers().page + 1 >= offers().totalPages" (click)="loadOffers(offers().page + 1)">
+              {{ 'moderationPage.pager.next' | translate }}
+            </button>
+          </nav>
+        }
+      }
+    }
+  } @else {
+    @switch (historyState()) {
+      @case ('loading') {
+        <div class="skeleton" aria-busy="true"></div>
+      }
+      @case ('empty') {
+        <geo-empty-state
+          icon="history"
+          [title]="'moderationPage.history.empty.title' | translate"
+          [description]="'moderationPage.history.empty.description' | translate" />
+      }
+      @case ('error') {
+        <geo-empty-state
+          icon="cloud_off"
+          [title]="'moderationPage.error.title' | translate"
+          [description]="errorMessage() ?? ('moderationPage.error.description' | translate)">
+          <button mat-flat-button type="button" (click)="loadHistory()">{{ 'moderationPage.error.retry' | translate }}</button>
+        </geo-empty-state>
+      }
+      @case ('ready') {
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>{{ 'moderationPage.history.columns.offer' | translate }}</th>
+                <th>{{ 'moderationPage.history.columns.reason' | translate }}</th>
+                <th>{{ 'moderationPage.history.columns.admin' | translate }}</th>
+                <th>{{ 'moderationPage.history.columns.removedAt' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (entry of history().items; track entry.moderationId) {
+                <tr>
+                  <td><span class="name">{{ entry.offerTitle }}</span></td>
+                  <td class="reason" [attr.data-label]="'moderationPage.history.columns.reason' | translate">{{ entry.reason }}</td>
+                  <td class="dim" [attr.data-label]="'moderationPage.history.columns.admin' | translate">
+                    {{ isMe(entry) ? ('moderationPage.history.you' | translate) : ('moderationPage.history.admin' | translate: { id: entry.adminId }) }}
+                  </td>
+                  <td class="dim" [attr.data-label]="'moderationPage.history.columns.removedAt' | translate">{{ entry.removedAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        @if (history().totalPages > 1) {
+          <nav class="pager" [attr.aria-label]="'moderationPage.pager.label' | translate">
+            <button type="button" class="action" [disabled]="history().page === 0" (click)="loadHistory(history().page - 1)">
+              {{ 'moderationPage.pager.previous' | translate }}
+            </button>
+            <span class="dim">{{ 'moderationPage.pager.position' | translate: { page: history().page + 1, pages: history().totalPages } }}</span>
+            <button type="button" class="action" [disabled]="history().page + 1 >= history().totalPages" (click)="loadHistory(history().page + 1)">
+              {{ 'moderationPage.pager.next' | translate }}
+            </button>
+          </nav>
+        }
+      }
+    }
+  }
+</section>

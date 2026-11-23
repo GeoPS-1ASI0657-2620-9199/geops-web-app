@@ -25,6 +25,9 @@ import { OfferSearchStore } from '../../../application/offer-search.store';
 import { OfferCardActions } from '../../components/offer-card-actions/offer-card-actions';
 import { OfferDetail } from '../../../domain/model/offer-detail';
 import { validityLabel } from '../../validity-label';
+import { metersBetween } from '../../../../shared/domain/geo-point';
+import { HERE_METERS, walkMinutesFor } from '../../search-view';
+import { walkingDirectionsUrl } from '../../../../shared/ui/map-links';
 
 const OFFER_NOT_FOUND = 'OFFER_NOT_FOUND';
 const UNAUTHORIZED = 'UNAUTHORIZED';
@@ -85,25 +88,25 @@ export class OfferDetailPage implements OnInit {
   protected readonly reserveFailure = signal<ReserveFailure | null>(null);
   /** The active reservation of this consumer for this offer: the button then points to it instead of reserving again. */
   protected readonly activeReservationId = signal<number | null>(null);
-  /** Visitors see it and log in first; business owners and admins cannot reserve. */
+  /**
+   * Visitors see it and log in first; business owners and admins cannot reserve. An offer of a public source has no
+   * affiliated business behind it: Reservation always refuses it, so it shows no Reservar (US07, E2-08).
+   */
   protected readonly canReserve = computed(() => {
     const role = this.sessions.role();
-    return role === null || role === 'CONSUMER';
+    return (role === null || role === 'CONSUMER') && !this.isPublicSource();
   });
+  protected readonly isPublicSource = computed(() => this.offer()?.source === 'PUBLIC_SOURCE');
   protected readonly isConsumer = computed(() => this.sessions.role() === 'CONSUMER');
   protected readonly isVisitor = computed(() => this.sessions.role() === null);
   protected readonly validity = computed(() => {
     const offer = this.offer();
     return offer ? validityLabel(offer.validTo) : '';
   });
-  /** Walking directions on OpenStreetMap, the same map stack as the rest of the app. */
+  /** Walking directions on Google Maps from the place of the search. */
   protected readonly directionsUrl = computed(() => {
     const offer = this.offer();
-    if (!offer) {
-      return null;
-    }
-    const { latitude, longitude } = offer.location;
-    return `https://www.openstreetmap.org/directions?engine=fossgis_osrm_foot&route=%3B${latitude}%2C${longitude}`;
+    return offer ? walkingDirectionsUrl(offer.location, this.consumerPoint()) : null;
   });
 
   protected readonly saving = signal(false);
@@ -117,10 +120,22 @@ export class OfferDetailPage implements OnInit {
       .map((line) => line.trim())
       .filter((line) => line.length > 0),
   );
-  /** Distance and minutes as the nearby search measured them, when the consumer came from it. */
+  /**
+   * Distance and minutes as the nearby search measured them; outside its results (an offer opened from
+   * its address, beyond the radius), measured here from the same place the search starts from.
+   */
   protected readonly distance = computed(() => {
-    const found = this.search.offers().find((o) => o.offerId === this.offer()?.offerId);
-    return found ? { meters: found.distanceMeters, minutes: found.walkMinutes } : null;
+    const offer = this.offer();
+    if (!offer) {
+      return null;
+    }
+    const found = this.search.offers().find((o) => o.offerId === offer.offerId);
+    const from = this.consumerPoint();
+    const meters = found?.distanceMeters ?? (from ? metersBetween(from, offer.location) : null);
+    if (meters === null) {
+      return null;
+    }
+    return { meters, minutes: found?.walkMinutes ?? walkMinutesFor(meters), here: meters < HERE_METERS };
   });
   protected readonly consumerPoint = computed(() => this.search.origin()?.point ?? null);
   protected readonly pin = computed<MapPin[]>(() => {
@@ -179,8 +194,11 @@ export class OfferDetailPage implements OnInit {
     }
     this.state.set('loading');
     try {
-      this.offer.set(await this.getOfferDetail.execute(this.offerId));
+      // Opening the detail is the click the campaign metrics count (GET /offers/{id}?track=click).
+      this.offer.set(await this.getOfferDetail.execute(this.offerId, true));
       this.state.set('ready');
+      // Opened from its address: the distance and the directions need the place of the search.
+      void this.search.ensureOrigin();
       await this.findActiveReservation();
     } catch (error) {
       const apiError = error instanceof ApiError ? error : null;

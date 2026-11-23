@@ -1,10 +1,13 @@
-import { Routes } from '@angular/router';
+import { inject } from '@angular/core';
+import { Router, Routes } from '@angular/router';
 import { Layout } from './core/layout/layout/layout';
 import { authGuard } from './iam/infrastructure/auth.guard';
+import { buyerHomeGuard } from './iam/infrastructure/buyer-home.guard';
 import { roleGuard } from './iam/infrastructure/role.guard';
 
 const owner = [authGuard, roleGuard('BUSINESS_OWNER')];
 const consumer = [authGuard, roleGuard('CONSUMER')];
+const admin = [authGuard, roleGuard('ADMIN')];
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/inicio' },
@@ -13,7 +16,7 @@ export const routes: Routes = [
     path: 'login',
     loadComponent: () =>
       import('./iam/presentation/pages/login/login.component').then((m) => m.LoginComponent),
-    title: 'GeoPS - Iniciar sesiÃ³n',
+    title: 'GeoPS - Iniciar sesión',
   },
   {
     path: 'register',
@@ -30,12 +33,19 @@ export const routes: Routes = [
     title: 'GeoPS - Registrar negocio',
   },
   {
+    path: 'confirmar-correo',
+    loadComponent: () =>
+      import('./iam/presentation/pages/confirm-email/confirm-email.page').then((m) => m.ConfirmEmailPage),
+    title: 'GeoPS - Confirmar correo',
+  },
+  {
     path: '',
     component: Layout,
     children: [
-      // Buyer tabs (Figma screens 1 to 10): Inicio, Ofertas, CategorÃ­as, Favoritos, Mis Cupones.
+      // Buyer tabs (Figma screens 1 to 10): Inicio, Ofertas, Categorías, Favoritos, Mis Cupones.
       {
         path: 'inicio',
+        canActivate: [buyerHomeGuard],
         loadComponent: () => import('./catalog/presentation/pages/home/home.page').then((m) => m.HomePage),
         title: 'GeoPS - Inicio',
       },
@@ -55,14 +65,10 @@ export const routes: Routes = [
         path: 'categories',
         loadComponent: () =>
           import('./catalog/presentation/pages/categories/categories.page').then((m) => m.CategoriesPage),
-        title: 'GeoPS - CategorÃ­as',
+        title: 'GeoPS - Categorías',
       },
-      {
-        path: 'follows',
-        canActivate: consumer,
-        loadComponent: () => import('./engagement/presentation/pages/follows/follows.page').then(m => m.FollowsPage),
-        title: 'GeoPS - Comercios seguidos',
-      },
+      // "Comercios que sigo" is a tab of Favoritos (Figma 29); the old path keeps working.
+      { path: 'follows', redirectTo: () => inject(Router).createUrlTree(['/favorites'], { queryParams: { tab: 'follows' } }) },
       {
         path: 'preferences',
         canActivate: consumer,
@@ -123,21 +129,28 @@ export const routes: Routes = [
         canActivate: owner,
         loadComponent: () =>
           import('./reservation/presentation/pages/validate-code/validate-code.page').then((m) => m.ValidateCodePage),
-        title: 'GeoPS - Validar cÃ³digo',
+        title: 'GeoPS - Validar código',
       },
       {
         path: 'campaigns',
         canActivate: owner,
         loadComponent: () =>
           import('./catalog/presentation/pages/campaigns-panel/campaigns.component').then((m) => m.CampaignsComponent),
-        title: 'GeoPS - Mis campaÃ±as',
+        title: 'GeoPS - Mis campañas',
       },
       {
         path: 'campaigns/new',
         canActivate: owner,
         loadComponent: () =>
           import('./catalog/presentation/pages/create-campaign/create-campaign.page').then((m) => m.CreateCampaignPage),
-        title: 'GeoPS - Nueva campaÃ±a',
+        title: 'GeoPS - Nueva campaña',
+      },
+      {
+        path: 'campaigns/:id/metrics',
+        canActivate: owner,
+        loadComponent: () =>
+          import('./catalog/presentation/pages/campaign-metrics/campaign-metrics.page').then((m) => m.CampaignMetricsPage),
+        title: 'GeoPS - Métricas de campaña',
       },
       {
         path: 'reports',
@@ -152,6 +165,13 @@ export const routes: Routes = [
         loadComponent: () => import('./engagement/presentation/pages/business-comments/business-comments.page').then(m => m.BusinessCommentsPage),
         title: 'GeoPS - Comentarios',
       },
+      // Admin area (US24): moderation of the catalog.
+      {
+        path: 'admin/moderation',
+        canActivate: admin,
+        loadComponent: () => import('./catalog/presentation/pages/moderation/moderation.page').then((m) => m.ModerationPage),
+        title: 'GeoPS - Moderación',
+      },
       {
         path: 'forbidden',
         loadComponent: () => import('./core/layout/forbidden/forbidden').then((m) => m.Forbidden),
@@ -163,6 +183,6 @@ export const routes: Routes = [
     path: '**',
     loadComponent: () =>
       import('./core/layout/page-not-found/page-not-found').then((m) => m.PageNotFound),
-    title: 'GeoPS - PÃ¡gina no encontrada',
+    title: 'GeoPS - Página no encontrada',
   },
 ];

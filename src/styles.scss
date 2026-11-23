@@ -13,6 +13,12 @@
   box-sizing: border-box;
 }
 
+// The space of the scrollbar is kept on every page, so the centered top bar does not move between
+// a short page and a long one.
+html {
+  scrollbar-gutter: stable;
+}
+
 html,
 body {
   margin: 0;
@@ -40,4 +46,11 @@ body {
 // Field hints in the dim text color of the Figma (Material 20 has no token for it).
 .mat-mdc-form-field-hint {
   color: var(--text-dim);
+}
+
+/* The notices menu of the bell (GeoNotificationBell) is wider than the 280px Material gives a menu,
+   so its messages read in full instead of scrolling sideways. */
+.mat-mdc-menu-panel.geo-notices-menu {
+  max-width: min(360px, calc(100vw - 32px));
+  overflow-x: hidden;
 }

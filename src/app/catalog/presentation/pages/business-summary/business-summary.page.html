@@ -4,8 +4,21 @@
       <h1 class="title">{{ 'businessSummary.greeting' | translate: { name: sessions.displayName() } }}</h1>
       <p class="subtitle">{{ 'businessSummary.subtitle' | translate }}</p>
     </div>
-    <app-business-seal />
+    <app-business-seal [withLink]="!pendingVerification()" />
   </header>
+
+  @if (pendingVerification(); as status) {
+    <geo-alert
+      data-testid="verify-business-alert"
+      [kind]="status === 'PENDING' ? 'info' : 'warning'"
+      [announce]="'status'"
+      [title]="(status === 'PENDING' ? 'businessSummary.verifyAlert.pendingTitle' : 'businessSummary.verifyAlert.title') | translate"
+      [description]="(status === 'PENDING' ? 'businessSummary.verifyAlert.pendingDescription' : 'businessSummary.verifyAlert.description') | translate">
+      <a mat-flat-button class="verify-action" routerLink="/business/verify">
+        {{ (status === 'PENDING' ? 'businessSummary.verifyAlert.pendingAction' : 'verifyBusiness.link') | translate }}
+      </a>
+    </geo-alert>
+  }
 
   @switch (state()) {
     @case ('loading') {

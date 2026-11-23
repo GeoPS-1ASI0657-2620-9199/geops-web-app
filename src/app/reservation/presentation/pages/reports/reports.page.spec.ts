@@ -89,6 +89,16 @@ describe('ReportsPage', () => {
     expect(page.querySelector('[data-testid="report-8"]')).toBeNull();
     expect(page.querySelector('[data-testid="time-left"]')).not.toBeNull();
     expect(page.querySelector('[data-testid="tab-CLOSED"]')?.textContent).toContain('(1)');
+    expect(page.querySelector('[data-testid="open-notice"]')).not.toBeNull();
+  });
+
+  it('does not warn about open reports when there are none', async () => {
+    reports.list.and.resolveTo([CLOSED]);
+
+    const page = await render();
+
+    expect(page.querySelector('[data-testid="open-notice"]')).toBeNull();
+    expect(page.querySelector('[role="alert"]')).toBeNull();
   });
 
   it('shows the closed reports in their tab', async () => {

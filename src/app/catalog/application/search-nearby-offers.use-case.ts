@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { GeoPoint } from '../../shared/domain/geo-point';
-import { NearbyOfferPage, clampRadius } from '../domain/model/nearby-offer';
+import { NearbyOfferPage, clampRadius, searchTermOf } from '../domain/model/nearby-offer';
 import { PublicSourceOffer } from '../domain/model/public-source-offer';
 import { OfferRepository } from '../domain/ports/offer.repository';
 
@@ -12,8 +12,14 @@ import { OfferRepository } from '../domain/ports/offer.repository';
 export class SearchNearbyOffersUseCase {
   private readonly offers = inject(OfferRepository);
 
-  execute(origin: GeoPoint, radiusMinutes: number, page = 0, category: string | null = null): Promise<NearbyOfferPage> {
-    return this.offers.findNearby(origin, clampRadius(radiusMinutes), Math.max(0, page), category);
+  execute(
+    origin: GeoPoint,
+    radiusMinutes: number,
+    page = 0,
+    category: string | null = null,
+    term: string | null = null,
+  ): Promise<NearbyOfferPage> {
+    return this.offers.findNearby(origin, clampRadius(radiusMinutes), Math.max(0, page), category, searchTermOf(term));
   }
 
   /**

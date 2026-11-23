@@ -36,6 +36,25 @@ describe('GeoOffersMap', () => {
     );
   });
 
+  it('names the zoom buttons in Spanish', async () => {
+    await create(60_000);
+    const host = fixture.nativeElement as HTMLElement;
+
+    expect(host.querySelector('.leaflet-control-zoom-in')?.getAttribute('aria-label')).toBe('Acercar');
+    expect(host.querySelector('.leaflet-control-zoom-out')?.getAttribute('title')).toBe('Alejar');
+  });
+
+  it('names each pin with the offer it points to', async () => {
+    await create(60_000);
+    fixture.componentRef.setInput('pins', [
+      { id: 7, point: { latitude: -12.12, longitude: -77.03 }, icon: 'restaurant', label: 'La Esquina: Menú 2x1', kind: 'verified' },
+    ]);
+    fixture.detectChanges();
+
+    const pin = (fixture.nativeElement as HTMLElement).querySelector('.leaflet-marker-icon[title="La Esquina: Menú 2x1"]');
+    expect(pin?.getAttribute('aria-label')).toBe('La Esquina: Menú 2x1');
+  });
+
   it('emits failed once when the tiles answer with an error (US09, QAS12)', async () => {
     await create(60_000);
 

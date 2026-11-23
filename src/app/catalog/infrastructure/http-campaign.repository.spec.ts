@@ -73,6 +73,30 @@ describe('HttpCampaignRepository', () => {
     expect(await result).toEqual({ campaignId: 31, name: 'Almuerzos de octubre', status: 'ACTIVE' });
   });
 
+  it('sends the regular price only when the offer has one', async () => {
+    void repository.create({
+      ...DRAFT,
+      offers: [{ ...DRAFT.offers[0], regularPrice: 30 }, { ...DRAFT.offers[0], regularPrice: null }],
+    });
+
+    const body = http.expectOne(`${BASE_URL}/campaigns`).request.body;
+    expect(body.offers[0].regularPrice).toBe(30);
+    expect('regularPrice' in body.offers[1]).toBeFalse();
+  });
+
+  it('reads the regular price of the offers of a campaign', async () => {
+    const result = repository.findOffers(31);
+
+    http.expectOne(`${BASE_URL}/campaigns/31/offers`).flush([
+      { offerId: 1052, title: '2x1', price: 15, regularPrice: 30, validTo: '2026-10-15', category: 'Gastronomía', imageUrl: null, status: 'PUBLISHED' },
+      { offerId: 1053, title: 'Desayuno', price: 9.9, validTo: '2026-10-15', category: 'Gastronomía', imageUrl: null, status: 'PUBLISHED' },
+    ]);
+
+    const offers = await result;
+    expect(offers[0].regularPrice).toBe(30);
+    expect(offers[1].regularPrice).toBeNull();
+  });
+
   it('sends a district zone with its center and leaves out an empty budget', async () => {
     void repository.create({
       ...DRAFT,

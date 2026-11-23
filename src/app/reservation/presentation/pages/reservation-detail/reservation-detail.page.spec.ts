@@ -8,6 +8,7 @@ import { ReportRepository } from '../../../domain/ports/report.repository';
 import { ReservationRepository } from '../../../domain/ports/reservation.repository';
 import { ReservationDetailPage } from './reservation-detail.page';
 import { OfferRepository } from '../../../../catalog/domain/ports/offer.repository';
+import { OfferDetail } from '../../../../catalog/domain/model/offer-detail';
 
 const RESERVATION: Reservation = {
   reservationId: 15,
@@ -22,15 +23,36 @@ const RESERVATION: Reservation = {
   redeemedAt: null,
 };
 
+const OFFER: OfferDetail = {
+  offerId: 1052,
+  title: 'Menú ejecutivo a mitad de precio',
+  conditions: 'De lunes a viernes',
+  price: 12.5,
+  validTo: '2026-10-31',
+  category: 'RESTAURANT',
+  address: 'Av. Larco 123',
+  location: { latitude: -12.12, longitude: -77.03 },
+  imageUrl: null,
+  source: 'AFFILIATED',
+  businessId: 301,
+  businessName: 'La Esquina',
+  verifiedSeal: true,
+  available: true,
+};
+
 describe('ReservationDetailPage', () => {
   let fixture: ComponentFixture<ReservationDetailPage>;
   let reservations: jasmine.SpyObj<ReservationRepository>;
   let offers: jasmine.SpyObj<OfferRepository>;
   let reports: jasmine.SpyObj<ReportRepository>;
 
-  const render = async (id = '15', query: Record<string, string> = {}) => {
+  const render = async (id = '15', query: Record<string, string> = {}, offer: OfferDetail | null = null) => {
     offers = jasmine.createSpyObj<OfferRepository>('OfferRepository', ['findNearby', 'findById']);
-    offers.findById.and.rejectWith(new ApiError(NETWORK_ERROR, 'sin conexión'));
+    if (offer) {
+      offers.findById.and.resolveTo(offer);
+    } else {
+      offers.findById.and.rejectWith(new ApiError(NETWORK_ERROR, 'sin conexión'));
+    }
     await TestBed.configureTestingModule({
       imports: [ReservationDetailPage],
       providers: [
@@ -90,6 +112,22 @@ describe('ReservationDetailPage', () => {
     expect(page.textContent).toContain('reservationPage.existing.title');
     expect(page.textContent).not.toContain('reservationPage.created.title');
   });
+
+  for (const [status, label] of [
+    ['ACTIVE', 'reservationPage.payAtStore'],
+    ['REDEEMED', 'reservationPage.paidAtStore'],
+    ['EXPIRED', 'reservationPage.offerPrice'],
+  ] as const) {
+    it(`labels the price of a ${status} reservation as ${label}`, async () => {
+      reservations.findById.and.resolveTo({ ...RESERVATION, status, redeemedAt: status === 'REDEEMED' ? '2026-10-09T14:20:00Z' : null });
+
+      const page = await render('15', {}, OFFER);
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      expect(page.querySelector('[data-testid="price-label"]')?.textContent?.trim()).toBe(label);
+    });
+  }
 
   it('strikes the code of an expired reservation', async () => {
     reservations.findById.and.resolveTo({ ...RESERVATION, status: 'EXPIRED' });

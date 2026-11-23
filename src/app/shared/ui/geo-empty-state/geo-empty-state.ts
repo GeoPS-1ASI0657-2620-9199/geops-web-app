@@ -10,7 +10,11 @@ import { MatIconModule } from '@angular/material/icon';
   template: `
     <section class="empty" role="status">
       <span class="icon"><mat-icon aria-hidden="true">{{ icon() }}</mat-icon></span>
-      <h2 class="geo-section-title">{{ title() }}</h2>
+      @if (headingLevel() === 1) {
+        <h1 class="geo-section-title">{{ title() }}</h1>
+      } @else {
+        <h2 class="geo-section-title">{{ title() }}</h2>
+      }
       @if (description()) {
         <p class="geo-body description">{{ description() }}</p>
       }
@@ -40,6 +44,7 @@ import { MatIconModule } from '@angular/material/icon';
         color: var(--brand-deep);
       }
       .icon mat-icon { width: 30px; height: 30px; font-size: 30px; }
+      h1 { margin: 0; }
       .description { margin: 0; max-width: 560px; color: var(--text-dim); }
       .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-md); }
     `,
@@ -49,4 +54,6 @@ export class GeoEmptyState {
   readonly icon = input.required<string>();
   readonly title = input.required<string>();
   readonly description = input<string | null>(null);
+  /** 1 when the empty state is the whole page (404, forbidden) and its title is the page title. */
+  readonly headingLevel = input<1 | 2>(2);
 }

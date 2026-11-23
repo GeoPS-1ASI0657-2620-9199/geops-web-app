@@ -56,8 +56,12 @@ export class HomePage implements OnInit {
   protected readonly precisionLabel = computed(() => precisionLabelOf(this.search.origin()));
   protected readonly radiusMeters = computed(() => this.search.radius() * METERS_PER_WALK_MINUTE);
 
-  ngOnInit(): void {
-    void this.search.ensureStarted();
+  async ngOnInit(): Promise<void> {
+    await this.search.ensureStarted();
+    // Inicio has no category filter: a filter chosen in Ofertas would hide offers without saying why.
+    if (this.search.category()) {
+      await this.search.selectCategory(null);
+    }
   }
 
   protected validity(offer: NearbyOffer): string {

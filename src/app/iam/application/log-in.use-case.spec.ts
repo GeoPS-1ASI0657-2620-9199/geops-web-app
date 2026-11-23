@@ -12,6 +12,12 @@ const NOW = Date.UTC(2026, 9, 4, 15, 0, 0);
 const ONE_HOUR_SECONDS = 3600;
 
 class FakeIdentityGateway extends IdentityGateway {
+  revoked: string[] = [];
+
+  override async logOut(accessToken: string): Promise<void> {
+    this.revoked.push(accessToken);
+  }
+
   received?: Credentials;
 
   override registerConsumer(_person: RegisterConsumer): Promise<RegisteredUser> {
@@ -93,6 +99,26 @@ describe('LogInUseCase and LogOutUseCase', () => {
     TestBed.inject(LogOutUseCase).execute();
 
     expect(storage.stored).toBeNull();
+    expect(TestBed.inject(SessionStore).session()).toBeNull();
+    expect(gateway.revoked).toEqual(['header.payload.signature']);
+  });
+
+  it('does not ask to revoke a token the server already rejected', async () => {
+    await TestBed.inject(LogInUseCase).execute({ email: 'rosa@ejemplo.pe', password: 'x' }, () => NOW);
+
+    TestBed.inject(LogOutUseCase).execute({ revoke: false });
+
+    expect(TestBed.inject(SessionStore).session()).toBeNull();
+    expect(gateway.revoked).toEqual([]);
+  });
+
+  it('still closes the local session when the revocation fails', async () => {
+    await TestBed.inject(LogInUseCase).execute({ email: 'rosa@ejemplo.pe', password: 'x' }, () => NOW);
+    spyOn(gateway, 'logOut').and.rejectWith(new Error('sin red'));
+
+    TestBed.inject(LogOutUseCase).execute();
+    await Promise.resolve();
+
     expect(TestBed.inject(SessionStore).session()).toBeNull();
   });
 });

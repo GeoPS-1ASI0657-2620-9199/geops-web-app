@@ -6,6 +6,7 @@
 }
 
 .title { margin: 0; font: 600 22px/1.25 var(--font-brand); color: var(--text-primary); }
+.empty-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-sm); }
 
 .filters {
   display: flex;
@@ -37,7 +38,7 @@
 
 .list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(420px, 100%), 1fr));
   gap: var(--space-lg);
   margin: 0;
   padding: 0;
@@ -79,13 +80,19 @@
   text-decoration: line-through;
 }
 
-.title {
+/* Not ".title": that is the page heading, and sharing it made the offer name 22 px and push the card off screen. */
+.offer-title {
+  display: flex;
+  align-items: center;
   flex: 1;
+  min-width: 0;
+  /* The whole title row is the tap target, not just the 17 px line of text. */
+  min-height: 40px;
   color: var(--text-primary);
   text-decoration: none;
 }
 
-.title:hover {
+.offer-title:hover {
   color: var(--brand-action);
 }
 
@@ -131,12 +138,31 @@
   }
 }
 
+@media (pointer: coarse), (max-width: 640px) {
+  .chip {
+    min-height: 40px;
+  }
+}
+
 @media (max-width: 640px) {
   .page {
     padding: var(--space-lg);
   }
 
+  .card {
+    padding: var(--space-lg);
+  }
+
   .top {
     flex-wrap: wrap;
+  }
+
+  .offer-title {
+    flex-basis: 100%;
+    order: -1;
+  }
+
+  .facts {
+    gap: var(--space-lg);
   }
 }

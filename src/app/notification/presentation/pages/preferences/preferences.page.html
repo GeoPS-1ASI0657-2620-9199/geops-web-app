@@ -9,16 +9,23 @@
   }
   @if (loaded()) {
     <form class="layout" [formGroup]="form" (ngSubmit)="save()">
+      <div class="main">
       <div class="card">
         <fieldset [disabled]="busy()">
           <legend class="sr-only">{{ 'notificationPage.channels' | translate }}</legend>
-          <div class="row">
-            <div class="row-text"><p class="row-title">{{ 'notificationPage.push' | translate }}</p><p class="row-hint">{{ 'notificationPage.pushHint' | translate }}</p></div>
-            <mat-slide-toggle formControlName="pushEnabled" [hideIcon]="true" [attr.aria-label]="'notificationPage.push' | translate" />
+          <div class="row stacked">
+            <div class="row-main">
+              <div class="row-text"><p class="row-title">{{ 'notificationPage.push' | translate }}</p><p class="row-hint">{{ 'notificationPage.pushHint' | translate }}</p></div>
+              <mat-slide-toggle formControlName="pushEnabled" [hideIcon]="true" [aria-label]="'notificationPage.push' | translate" />
+            </div>
+            @if (form.controls.pushEnabled.value && permission() !== 'granted') {
+              <p class="row-hint permission" data-testid="permission-missing">{{ 'notificationPage.permissionMissing' | translate }}</p>
+            }
+            <app-push-controls [requested]="form.controls.pushEnabled.value" (enabled)="pushEnabled()" (emailRequested)="enableEmail()" />
           </div>
           <div class="row">
             <div class="row-text"><p class="row-title">{{ 'notificationPage.email' | translate }}</p><p class="row-hint">{{ 'notificationPage.emailHint' | translate }}</p></div>
-            <mat-slide-toggle formControlName="emailEnabled" [hideIcon]="true" [attr.aria-label]="'notificationPage.email' | translate" />
+            <mat-slide-toggle formControlName="emailEnabled" [hideIcon]="true" [aria-label]="'notificationPage.email' | translate" />
           </div>
           <div class="row column" role="group" aria-labelledby="limit-title">
             <p class="row-title" id="limit-title">{{ 'notificationPage.dailyLimit' | translate }}</p>
@@ -32,13 +39,17 @@
             @if (form.controls.dailyLimit.invalid) { <p class="field-error" role="alert">{{ 'notificationPage.invalidLimit' | translate }}</p> }
           </div>
         </fieldset>
-        <app-push-controls (enabled)="pushEnabled()" (emailRequested)="enableEmail()" />
       </div>
-      <aside class="side">
-        <geo-alert kind="warning" [title]="'notificationPage.iphoneTitle' | translate" [description]="'notificationPage.iphoneHint' | translate" />
-        <geo-alert kind="info" [title]="'notificationPage.locationTitle' | translate" [description]="'notificationPage.locationHint' | translate" />
+      <div class="actions">
         <button mat-flat-button type="submit" [disabled]="busy() || form.invalid">{{ (busy() ? 'notificationPage.saving' : 'notificationPage.save') | translate }}</button>
         @if (saved()) { <p class="saved" role="status">{{ 'notificationPage.saved' | translate }}</p> }
+      </div>
+      </div>
+      <aside class="side">
+        @if (needsInstall) {
+          <geo-alert kind="warning" announce="status" data-testid="iphone-notice" [title]="'notificationPage.iphoneTitle' | translate" [description]="'notificationPage.iphoneHint' | translate" />
+        }
+        <geo-alert kind="info" [title]="'notificationPage.locationTitle' | translate" [description]="'notificationPage.locationHint' | translate" />
       </aside>
     </form>
   }

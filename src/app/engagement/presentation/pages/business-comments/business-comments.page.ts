@@ -46,9 +46,9 @@ import { BusinessReviews } from '../../components/business-reviews/business-revi
   `,
   styles: [`
     :host { display: block; }
-    .page { max-width: 1344px; margin-inline: auto; padding: var(--space-xl) var(--space-xl) var(--space-3xl); }
+    .page { padding: 24px 26px 40px; }
     .head { margin-bottom: var(--space-lg); }
-    .title { margin: 0; font: 600 24px/1.3 var(--font-brand); color: var(--text-primary); }
+    .title { margin: 0; font: 600 22px/1.25 var(--font-brand); color: var(--text-primary); }
     .subtitle { margin: 2px 0 0; font: 400 13px/1.4 var(--font-brand); color: var(--text-faint); }
     .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 485px); gap: var(--space-2xl); align-items: start; }
     .main { display: flex; flex-direction: column; gap: var(--space-md); }
@@ -66,6 +66,7 @@ import { BusinessReviews } from '../../components/business-reviews/business-revi
     .fill { display: block; height: 100%; background: var(--status-rating); }
     .count { text-align: right; }
     @media (max-width: 1000px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+    @media (max-width: 640px) { .page { padding: 16px; } }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

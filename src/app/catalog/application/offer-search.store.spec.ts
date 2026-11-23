@@ -7,7 +7,9 @@ import { RadiusPreferenceGateway } from '../domain/ports/radius-preference.gatew
 import { RadiusPreferenceStore } from '../domain/ports/radius-preference.store';
 import { Session } from '../../iam/domain/model/session';
 import { SessionStorage } from '../../iam/domain/ports/session.storage';
-import { MemoryRadiusPreferenceStore } from '../testing/radius-preference.testing';
+import { MemoryDistrictPreferenceStore, MemoryRadiusPreferenceStore } from '../testing/radius-preference.testing';
+import { DistrictPreferenceStore } from '../domain/ports/district-preference.store';
+import { LimaDistrict } from '../domain/model/lima-district';
 import { publicSourceOffer } from '../testing/public-source-offer.testing';
 import { OfferSearchStore } from './offer-search.store';
 import { nearbyOffer, pageOf } from '../testing/nearby-offer.testing';
@@ -20,8 +22,13 @@ describe('OfferSearchStore', () => {
   let store: OfferSearchStore;
   let saved: MemoryRadiusPreferenceStore;
   let profile: jasmine.SpyObj<RadiusPreferenceGateway>;
+  let district: MemoryDistrictPreferenceStore;
+  let locate: jasmine.Spy;
 
-  const create = (reading: LocationReading, options: { saved?: number | null; session?: Session | null } = {}) => {
+  const create = (
+    reading: LocationReading,
+    options: { saved?: number | null; session?: Session | null; district?: LimaDistrict | null } = {},
+  ) => {
     offers = jasmine.createSpyObj<OfferRepository>('OfferRepository', ['findNearby', 'findById', 'categories', 'findPublicSourcesNearby']);
     offers.categories.and.resolveTo(['Gastronomía', 'Mascotas']);
     offers.findPublicSourcesNearby.and.resolveTo([]);
@@ -30,11 +37,14 @@ describe('OfferSearchStore', () => {
     profile.fetch.and.resolveTo(10);
     profile.save.and.resolveTo();
     const session = options.session ?? null;
+    district = new MemoryDistrictPreferenceStore(options.district ?? null);
+    locate = jasmine.createSpy('locate').and.callFake(() => Promise.resolve(reading));
     TestBed.configureTestingModule({
       providers: [
         { provide: OfferRepository, useValue: offers },
-        { provide: LocationProvider, useValue: { locate: () => Promise.resolve(reading) } },
+        { provide: LocationProvider, useValue: { locate } },
         { provide: RadiusPreferenceStore, useValue: saved },
+        { provide: DistrictPreferenceStore, useValue: district },
         { provide: RadiusPreferenceGateway, useValue: profile },
         { provide: SessionStorage, useValue: { read: () => session, write: () => undefined, clear: () => undefined } },
       ],
@@ -48,10 +58,57 @@ describe('OfferSearchStore', () => {
 
     await store.ensureStarted();
 
-    expect(offers.findNearby).toHaveBeenCalledWith(POINT, 10, 0, null);
+    expect(offers.findNearby).toHaveBeenCalledWith(POINT, 10, 0, null, null);
     expect(store.state()).toBe('ready');
     expect(store.origin()?.accuracyMeters).toBe(12);
     expect(store.categories()).toEqual(['Gastronomía', 'Mascotas']);
+  });
+
+  it('sends the text of the top bar to Catalog, pages with it and counts what Catalog counts', async () => {
+    create({ status: 'GRANTED', point: POINT, accuracyMeters: 12 });
+    offers.findNearby.and.resolveTo(pageOf([nearbyOffer()], 0, 2, 25));
+
+    await store.ensureStarted('  Café  pasado ');
+
+    expect(offers.findNearby).toHaveBeenCalledOnceWith(POINT, 10, 0, null, 'Café pasado');
+    expect(store.term()).toBe('Café pasado');
+    expect(store.total()).toBe(25);
+    await store.loadMore();
+    expect(offers.findNearby).toHaveBeenCalledWith(POINT, 10, 1, null, 'Café pasado');
+  });
+
+  it('searches again without text when the term is cleared, and not again for the same term', async () => {
+    create({ status: 'GRANTED', point: POINT, accuracyMeters: 12 });
+    offers.findNearby.and.resolveTo(pageOf([nearbyOffer()]));
+    await store.ensureStarted('cafe');
+    offers.findNearby.calls.reset();
+
+    await store.selectTerm(' cafe ');
+    expect(offers.findNearby).not.toHaveBeenCalled();
+
+    await store.selectTerm(null);
+    expect(offers.findNearby).toHaveBeenCalledOnceWith(POINT, 10, 0, null, null);
+    expect(store.term()).toBeNull();
+  });
+
+  it('ignores a single character, which Catalog would reject', async () => {
+    create({ status: 'GRANTED', point: POINT, accuracyMeters: 12 });
+    offers.findNearby.and.resolveTo(pageOf([nearbyOffer()]));
+
+    await store.ensureStarted('a');
+
+    expect(offers.findNearby).toHaveBeenCalledOnceWith(POINT, 10, 0, null, null);
+  });
+
+  it('a tab without text shows the whole radius again after a search with text', async () => {
+    create({ status: 'GRANTED', point: POINT, accuracyMeters: 12 });
+    offers.findNearby.and.resolveTo(pageOf([nearbyOffer()]));
+    await store.ensureStarted('cafe');
+    offers.findNearby.calls.reset();
+
+    await store.ensureStarted();
+
+    expect(offers.findNearby).toHaveBeenCalledOnceWith(POINT, 10, 0, null, null);
   });
 
   it('asks Catalog again from page 0 with the chosen category and pages with it (US08)', async () => {
@@ -60,10 +117,10 @@ describe('OfferSearchStore', () => {
     await store.ensureStarted();
 
     await store.selectCategory('Mascotas');
-    expect(offers.findNearby).toHaveBeenCalledWith(POINT, 10, 0, 'Mascotas');
+    expect(offers.findNearby).toHaveBeenCalledWith(POINT, 10, 0, 'Mascotas', null);
 
     await store.loadMore();
-    expect(offers.findNearby).toHaveBeenCalledWith(POINT, 10, 1, 'Mascotas');
+    expect(offers.findNearby).toHaveBeenCalledWith(POINT, 10, 1, 'Mascotas', null);
 
     offers.findNearby.calls.reset();
     await store.selectCategory('Mascotas');
@@ -124,8 +181,72 @@ describe('OfferSearchStore', () => {
 
     await store.chooseDistrict(JESUS_MARIA);
 
-    expect(offers.findNearby).toHaveBeenCalledWith(JESUS_MARIA.center, 10, 0, null);
+    expect(offers.findNearby).toHaveBeenCalledWith(JESUS_MARIA.center, 10, 0, null, null);
     expect(store.origin()?.districtName).toBe('Jesús María');
+  });
+
+  it('remembers the district picked by hand for the rest of the tab', async () => {
+    create({ status: 'DENIED' });
+    offers.findNearby.and.resolveTo(pageOf([nearbyOffer()]));
+    await store.ensureStarted();
+
+    await store.chooseDistrict(JESUS_MARIA);
+
+    expect(district.saved).toEqual(JESUS_MARIA);
+  });
+
+  it('starts from the remembered district after a reload, without asking the device again', async () => {
+    create({ status: 'GRANTED', point: POINT, accuracyMeters: 12 }, { district: JESUS_MARIA });
+    offers.findNearby.and.resolveTo(pageOf([nearbyOffer()]));
+
+    await store.ensureStarted();
+
+    expect(locate).not.toHaveBeenCalled();
+    expect(offers.findNearby).toHaveBeenCalledOnceWith(JESUS_MARIA.center, 10, 0, null, null);
+    expect(store.origin()?.districtName).toBe('Jesús María');
+  });
+
+  it('forgets the district once the device gives a good reading again', async () => {
+    create({ status: 'GRANTED', point: POINT, accuracyMeters: 12 }, { district: JESUS_MARIA });
+    offers.findNearby.and.resolveTo(pageOf([nearbyOffer()]));
+    await store.ensureStarted();
+
+    await store.useDeviceLocation();
+
+    expect(district.saved).toBeNull();
+    expect(store.origin()?.point).toEqual(POINT);
+  });
+
+  it('opens with the text and the category of the address in a single search', async () => {
+    create({ status: 'GRANTED', point: POINT, accuracyMeters: 12 });
+    offers.findNearby.and.resolveTo(pageOf([nearbyOffer()]));
+
+    await store.ensureStarted('helado', 'Postres');
+
+    expect(offers.findNearby).toHaveBeenCalledOnceWith(POINT, 10, 0, 'Postres', 'helado');
+    expect(store.category()).toBe('Postres');
+  });
+
+  it('searches once more when a started search gets another category, and keeps it when none is passed', async () => {
+    create({ status: 'GRANTED', point: POINT, accuracyMeters: 12 });
+    offers.findNearby.and.resolveTo(pageOf([nearbyOffer()]));
+    await store.ensureStarted();
+    offers.findNearby.calls.reset();
+
+    await store.ensureStarted('helado', 'Postres');
+    await store.ensureStarted('helado');
+
+    expect(offers.findNearby).toHaveBeenCalledOnceWith(POINT, 10, 0, 'Postres', 'helado');
+    expect(store.category()).toBe('Postres');
+  });
+
+  it('gives the origin to a screen that needs only the place, starting the search just once', async () => {
+    create({ status: 'GRANTED', point: POINT, accuracyMeters: 12 });
+    offers.findNearby.and.resolveTo(pageOf([nearbyOffer()]));
+
+    expect((await store.ensureOrigin())?.point).toEqual(POINT);
+    expect((await store.ensureOrigin())?.point).toEqual(POINT);
+    expect(offers.findNearby).toHaveBeenCalledTimes(1);
   });
 
   it('warns above 100 m and lets the consumer confirm the point instead of a district (US46, QAS14)', async () => {
@@ -142,7 +263,7 @@ describe('OfferSearchStore', () => {
 
     await store.confirmImpreciseReading();
 
-    expect(offers.findNearby).toHaveBeenCalledWith(POINT, 10, 0, null);
+    expect(offers.findNearby).toHaveBeenCalledWith(POINT, 10, 0, null, null);
     expect(store.origin()?.accuracyMeters).toBe(150);
     expect(store.canConfirmReading()).toBeFalse();
   });
@@ -161,7 +282,7 @@ describe('OfferSearchStore', () => {
     offers.findNearby.and.resolveTo(pageOf([nearbyOffer()]));
 
     await store.ensureStarted();
-    expect(offers.findNearby).toHaveBeenCalledWith(POINT, 15, 0, null);
+    expect(offers.findNearby).toHaveBeenCalledWith(POINT, 15, 0, null, null);
 
     await store.setRadius(20);
     expect(saved.saved).toBe(20);
@@ -182,7 +303,7 @@ describe('OfferSearchStore', () => {
     offers.findNearby.and.resolveTo(pageOf([nearbyOffer()]));
 
     await store.ensureStarted();
-    expect(offers.findNearby).toHaveBeenCalledWith(POINT, 15, 0, null);
+    expect(offers.findNearby).toHaveBeenCalledWith(POINT, 15, 0, null, null);
     expect(saved.saved).toBe(15);
 
     await store.widenRadius();
@@ -201,7 +322,7 @@ describe('OfferSearchStore', () => {
     await store.ensureStarted();
     await store.setRadius(10);
 
-    expect(offers.findNearby).toHaveBeenCalledWith(POINT, 5, 0, null);
+    expect(offers.findNearby).toHaveBeenCalledWith(POINT, 5, 0, null, null);
     expect(store.state()).toBe('ready');
   });
 
@@ -212,7 +333,7 @@ describe('OfferSearchStore', () => {
     expect(store.state()).toBe('empty');
 
     await store.widenRadius();
-    expect(offers.findNearby).toHaveBeenCalledWith(POINT, 15, 0, null);
+    expect(offers.findNearby).toHaveBeenCalledWith(POINT, 15, 0, null, null);
 
     await store.setRadius(20);
     expect(store.nextRadius()).toBeNull();

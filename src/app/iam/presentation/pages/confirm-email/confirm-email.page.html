@@ -1,0 +1,82 @@
+<geo-top-bar [minimal]="true" />
+
+<main class="page">
+  <div class="content">
+    @switch (state()) {
+      @case ('confirming') {
+        <section class="card confirming" role="status">
+          <mat-progress-spinner mode="indeterminate" diameter="40" aria-hidden="true" />
+          <h1 class="geo-section-title">{{ 'confirmEmailPage.confirming.title' | translate }}</h1>
+          <p class="geo-body hint">{{ 'confirmEmailPage.confirming.description' | translate }}</p>
+          <div class="skeleton" aria-hidden="true"></div>
+        </section>
+      }
+      @case ('confirmed') {
+        <geo-empty-state
+          icon="mark_email_read"
+          [headingLevel]="1"
+          [title]="'confirmEmailPage.confirmed.title' | translate"
+          [description]="'confirmEmailPage.confirmed.description' | translate">
+          @if (home(); as url) {
+            <a mat-flat-button class="primary" [routerLink]="url">{{ 'confirmEmailPage.goHome' | translate }}</a>
+          } @else {
+            <a mat-flat-button class="primary" routerLink="/login">{{ 'confirmEmailPage.logIn' | translate }}</a>
+          }
+        </geo-empty-state>
+        <geo-alert kind="success" [title]="'confirmEmailPage.confirmed.channel' | translate" />
+      }
+      @case ('invalid') {
+        <geo-empty-state
+          icon="link_off"
+          [headingLevel]="1"
+          [title]="'confirmEmailPage.invalid.title' | translate"
+          [description]="'confirmEmailPage.invalid.description' | translate">
+          @if (home(); as url) {
+            <a mat-flat-button class="primary" [routerLink]="url">{{ 'confirmEmailPage.goHome' | translate }}</a>
+          } @else {
+            <a mat-flat-button class="primary" routerLink="/login">{{ 'confirmEmailPage.logIn' | translate }}</a>
+          }
+        </geo-empty-state>
+        <!-- A used link may belong to an address that is already confirmed: no warning that notices are off. -->
+        <geo-alert
+          kind="info"
+          [title]="'confirmEmailPage.alreadyConfirmed.title' | translate"
+          [description]="'confirmEmailPage.alreadyConfirmed.description' | translate" />
+      }
+      @case ('missing') {
+        <geo-empty-state
+          icon="mail"
+          [headingLevel]="1"
+          [title]="'confirmEmailPage.missing.title' | translate"
+          [description]="'confirmEmailPage.missing.description' | translate">
+          @if (home(); as url) {
+            <a mat-flat-button class="primary" [routerLink]="url">{{ 'confirmEmailPage.goHome' | translate }}</a>
+          } @else {
+            <a mat-flat-button class="primary" routerLink="/login">{{ 'confirmEmailPage.logIn' | translate }}</a>
+          }
+        </geo-empty-state>
+        <geo-alert
+          kind="warning"
+          [title]="'confirmEmailPage.channelOff.title' | translate"
+          [description]="'confirmEmailPage.channelOff.description' | translate" />
+      }
+      @case ('failed') {
+        <geo-empty-state
+          icon="cloud_off"
+          [headingLevel]="1"
+          [title]="'confirmEmailPage.failed.title' | translate"
+          [description]="failure() ?? ('confirmEmailPage.failed.description' | translate)">
+          <button mat-flat-button class="primary" type="button" (click)="confirm()">
+            {{ 'confirmEmailPage.retry' | translate }}
+          </button>
+          @if (home(); as url) {
+            <a mat-stroked-button class="secondary" [routerLink]="url">{{ 'confirmEmailPage.goHome' | translate }}</a>
+          } @else {
+            <a mat-stroked-button class="secondary" routerLink="/login">{{ 'confirmEmailPage.logIn' | translate }}</a>
+          }
+        </geo-empty-state>
+      }
+    }
+  </div>
+</main>
+

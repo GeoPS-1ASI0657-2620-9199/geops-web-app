@@ -7,6 +7,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { TranslateModule } from '@ngx-translate/core';
 import { GetNotificationPreferencesUseCase, UpdateNotificationPreferencesUseCase } from '../../../application/preferences.use-cases';
 import { ApiError } from '../../../../shared/domain/api-error';
+import { PUSH_ENVIRONMENT } from '../../../infrastructure/browser-push-environment';
 @Component({
   selector: 'app-preferences',
   imports: [GeoAlert, PushControls, ReactiveFormsModule, MatButtonModule, MatSlideToggleModule, TranslateModule],
@@ -16,6 +17,11 @@ import { ApiError } from '../../../../shared/domain/api-error';
 export class PreferencesPage implements OnInit {
   private readonly get = inject(GetNotificationPreferencesUseCase);
   private readonly update = inject(UpdateNotificationPreferencesUseCase);
+  private readonly browser = inject(PUSH_ENVIRONMENT);
+  /** The iPhone notice only matters on iOS Safari without GeoPS installed, not on a desktop browser. */
+  readonly needsInstall = this.browser.needsInstall();
+  /** The switch is the saved preference; this is what the browser really allows right now. */
+  readonly permission = signal(this.browser.permission());
   readonly loading = signal(true);
   readonly loaded = signal(false);
   readonly busy = signal(false);
@@ -26,7 +32,7 @@ export class PreferencesPage implements OnInit {
   readonly limitOptions = [1, 3, 5, 10];
   chooseLimit(value: number) { this.form.controls.dailyLimit.setValue(value); this.form.controls.dailyLimit.markAsDirty(); }
   async enableEmail() { this.form.controls.emailEnabled.setValue(true); await this.save(); }
-  async pushEnabled() { this.form.controls.pushEnabled.setValue(true); await this.save(); }
+  async pushEnabled() { this.permission.set(this.browser.permission()); this.form.controls.pushEnabled.setValue(true); await this.save(); }
   ngOnInit() { void this.load(); }
   async load() {
     this.loading.set(true); this.error.set(null); this.loaded.set(false);

@@ -5,7 +5,8 @@
   // Brand
   --brand-base: #a751d4;
   --brand-deep: #4a0072;
-  --brand-action: #ab58e3;
+  // Darkened from the Figma #ab58e3 (4.0:1 on white) to pass WCAG AA with white text (5.9:1).
+  --brand-action: #8e3bc4;
   --brand-soft: #ead5f5;
   --brand-mist: #f4eafa;
 
@@ -18,10 +19,12 @@
   // Text
   --text-primary: #1a1420;
   --text-dim: #6b6275;
-  --text-faint: #9c93a6;
+  // Darkened from the Figma #9c93a6 (2.7:1) so subtitles and captions pass AA (4.7:1 on the page ground).
+  --text-faint: #736a7e;
 
   // Status: they never compete with the brand
-  --status-verified: #0e9f6e;
+  // Darkened from the Figma #0e9f6e (3.4:1) because it also colors small text: distances and counts (5.3:1).
+  --status-verified: #087a54;
   --status-reference: #c77700;
   --status-expired: #d42a45;
   --status-rating: #f5b027;

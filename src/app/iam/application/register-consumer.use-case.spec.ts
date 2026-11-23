@@ -6,6 +6,12 @@ import { IdentityGateway } from '../domain/ports/identity.gateway';
 import { RegisterConsumerUseCase } from './register-consumer.use-case';
 
 class FakeIdentityGateway extends IdentityGateway {
+  revoked: string[] = [];
+
+  override async logOut(accessToken: string): Promise<void> {
+    this.revoked.push(accessToken);
+  }
+
   received?: RegisterConsumer;
 
   override async registerConsumer(person: RegisterConsumer): Promise<RegisteredUser> {

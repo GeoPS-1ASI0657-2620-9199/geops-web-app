@@ -4,7 +4,9 @@
       <h1 class="title">{{ 'campaignsPage.title' | translate }}</h1>
       @if (state() === 'ready') {
         <p class="subtitle">
-          {{ 'campaignsPage.summary' | translate: { active: counts().ACTIVE, paused: counts().PAUSED, finished: counts().FINISHED } }}
+          {{ summaryKey('active', counts().ACTIVE) | translate: { count: counts().ACTIVE } }} ·
+          {{ summaryKey('paused', counts().PAUSED) | translate: { count: counts().PAUSED } }} ·
+          {{ summaryKey('finished', counts().FINISHED) | translate: { count: counts().FINISHED } }}
         </p>
       } @else if (sessions.session()?.businessName; as business) {
         <p class="subtitle">{{ business }}</p>
@@ -74,10 +76,10 @@
                   </span>
                 </td>
                 <td><geo-seal [kind]="seals[campaign.status]" [text]="'campaignsPage.status.' + campaign.status | translate" /></td>
-                <td class="dim">{{ period(campaign) }}</td>
-                <td class="dim">{{ zone(campaign) }}</td>
-                <td class="green">{{ campaign.offers.length }}</td>
-                <td class="price">
+                <td class="dim" [attr.data-label]="'campaignsPage.columns.period' | translate">{{ period(campaign) }}</td>
+                <td class="dim" [attr.data-label]="'campaignsPage.columns.zone' | translate">{{ zone(campaign) }}</td>
+                <td class="green" [attr.data-label]="'campaignsPage.columns.offers' | translate">{{ campaign.offers.length }}</td>
+                <td class="price" [attr.data-label]="'campaignsPage.columns.price' | translate">
                   @if (campaign.offers[0]; as first) {
                     S/ {{ first.price | number: '1.2-2' }}
                   }
@@ -106,6 +108,7 @@
                         {{ 'campaignsPage.reactivate' | translate }}
                       </button>
                     }
+                    <a class="action" data-testid="metrics" [routerLink]="['/campaigns', campaign.campaignId, 'metrics']">{{ 'campaignsPage.seeMetrics' | translate }}</a>
                     @if (campaign.offers[0]; as first) {
                       <a class="action" [routerLink]="['/offers', first.offerId]">{{ 'campaignsPage.seeOffer' | translate }}</a>
                     }

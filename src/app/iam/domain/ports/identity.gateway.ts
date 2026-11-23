@@ -10,4 +10,6 @@ export abstract class IdentityGateway {
   abstract registerConsumer(person: RegisterConsumer): Promise<RegisteredUser>;
   abstract registerBusiness(owner: RegisterBusiness): Promise<RegisteredUser>;
   abstract logIn(credentials: Credentials): Promise<IssuedToken>;
+  /** Revokes the token on the server (US26), so the gateway rejects it before it expires. */
+  abstract logOut(accessToken: string): Promise<void>;
 }

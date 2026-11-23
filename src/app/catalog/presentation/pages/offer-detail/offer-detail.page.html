@@ -19,6 +19,7 @@
     @case ('not-found') {
       <geo-empty-state
         icon="search_off"
+        [headingLevel]="1"
         [title]="'offerDetailPage.notFound.title' | translate"
         [description]="'offerDetailPage.notFound.description' | translate">
         <a mat-flat-button routerLink="/offers">{{ 'offerDetailPage.seeNearby' | translate }}</a>
@@ -27,6 +28,7 @@
     @case ('error') {
       <geo-empty-state
         icon="cloud_off"
+        [headingLevel]="1"
         [title]="'offerDetailPage.error.title' | translate"
         [description]="errorMessage() ?? ('offerDetailPage.error.description' | translate)">
         <button mat-flat-button type="button" (click)="load()">{{ 'offerDetailPage.error.retry' | translate }}</button>
@@ -46,16 +48,23 @@
             }
             <h1 class="title">{{ o.title }}</h1>
             <div class="merchant">
-              <span class="name">{{ o.businessName }}</span>
-              @if (isConsumer() && o.businessId !== null) { <app-save-business [businessId]="o.businessId" /> }
-              @if (isConsumer() && o.source !== 'PUBLIC_SOURCE' && o.businessId !== null) { <app-follow-business [businessId]="o.businessId" /> }
-              @if (o.source === 'PUBLIC_SOURCE') {
-                <geo-seal kind="reference" />
-              } @else if (o.verifiedSeal) {
-                <geo-seal kind="verified" />
-              }
-              @if (!o.available) {
-                <geo-seal kind="expired" />
+              <div class="merchant-id">
+                <mat-icon class="store" aria-hidden="true">storefront</mat-icon>
+                <span class="name">{{ o.businessName }}</span>
+                @if (o.source === 'PUBLIC_SOURCE') {
+                  <geo-seal kind="reference" />
+                } @else if (o.verifiedSeal) {
+                  <geo-seal kind="verified" />
+                }
+                @if (!o.available) {
+                  <geo-seal kind="expired" />
+                }
+              </div>
+              @if (isConsumer() && o.businessId !== null) {
+                <div class="merchant-actions">
+                  @if (o.source !== 'PUBLIC_SOURCE') { <app-follow-business [businessId]="o.businessId" /> }
+                  <app-save-business [businessId]="o.businessId" />
+                </div>
               }
             </div>
 
@@ -82,15 +91,36 @@
 
           <aside class="side">
             <div class="panel">
-              <p class="price geo-tabular" [class.muted]="!o.available"><small>S/</small> {{ o.price | number: '1.2-2' }}</p>
+              <p class="price geo-tabular" [class.muted]="!o.available">
+                @if (o.price === 0) {
+                  <span data-testid="free">{{ 'offerDetailPage.free' | translate }}</span>
+                } @else {
+                  <small>S/</small> {{ o.price | number: '1.2-2' }}
+                }
+                @if (o.regularPrice) {
+                  <s class="regular-price" data-testid="regular-price">S/ {{ o.regularPrice | number: '1.2-2' }}</s>
+                }
+              </p>
               <dl class="facts">
                 <div><dt>{{ 'offerDetailPage.validity' | translate }}</dt><dd [class.expired]="!o.available">{{ validity() }}</dd></div>
                 @if (distance(); as d) {
-                  <div><dt>{{ 'offerDetailPage.distance' | translate }}</dt><dd class="green">{{ 'offerDetailPage.distanceValue' | translate: d }}</dd></div>
+                  <div>
+                    <dt>{{ 'offerDetailPage.distance' | translate }}</dt>
+                    <dd class="green" data-testid="distance">
+                      {{ d.here ? ('offerDetailPage.distanceHere' | translate) : ('offerDetailPage.distanceValue' | translate: d) }}
+                    </dd>
+                  </div>
                 }
                 <div><dt>{{ 'offerDetailPage.address' | translate }}</dt><dd>{{ o.address }}</dd></div>
                 <div><dt>{{ 'offerDetailPage.category' | translate }}</dt><dd>{{ o.category }}</dd></div>
               </dl>
+              @if (isPublicSource()) {
+                <geo-alert
+                  kind="info"
+                  data-testid="public-source-notice"
+                  [title]="'offerDetailPage.publicSource.title' | translate"
+                  [description]="'offerDetailPage.publicSource.description' | translate: { source: o.businessName }" />
+              }
               @if (canReserve()) {
                 @if (activeReservationId(); as reservationId) {
                   <button mat-flat-button type="button" class="reserve" disabled>
@@ -138,6 +168,15 @@
             }
           </aside>
         </div>
+        @if (canReserve() && o.available && !activeReservationId()) {
+          <!-- On a phone the panel is far below: the price and Reservar stay at hand. -->
+          <div class="mobile-cta" data-testid="mobile-cta">
+            <p class="cta-price geo-tabular"><small>S/</small> {{ o.price | number: '1.2-2' }}</p>
+            <button mat-flat-button type="button" [disabled]="reserving()" (click)="reserve()">
+              {{ (reserving() ? 'offerDetailPage.reserving' : 'offerDetailPage.reserve') | translate }}
+            </button>
+          </div>
+        }
 
         @if (others().length) {
           <div class="section-head">
@@ -155,6 +194,7 @@
                   [category]="other.category"
                   [validity]="validityOf(other.validTo)"
                   [price]="other.price"
+                  [regularPrice]="other.regularPrice ?? null"
                   [distanceMeters]="other.distanceMeters"
                   [walkMinutes]="other.walkMinutes">
                   <app-offer-card-actions [offerId]="other.offerId" />

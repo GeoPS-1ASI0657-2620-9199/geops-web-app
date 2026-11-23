@@ -16,13 +16,15 @@ export const INVALID_ADDRESS = 'INVALID_ADDRESS';
 /**
  * The verification of the business of the owner in session (US38). It also keeps the last status it
  * read, so the seal of the panel and of the campaign form follows a new verification without
- * reloading (E2-16).
+ * reloading (E2-16). The profile is read once per business: the campaign form and its seal ask for it at
+ * the same time, and both get the same request.
  */
 @Injectable({ providedIn: 'root' })
 export class VerifyBusinessUseCase {
   private readonly profiles = inject(BusinessProfileGateway);
   private readonly sessions = inject(SessionStore);
   private readonly known = signal<{ businessId: number; status: VerificationStatus } | null>(null);
+  private cached: { businessId: number; profile: Promise<BusinessProfile> } | null = null;
 
   /** The last status read for the business in session; null until its profile was read. */
   readonly verificationStatus = computed(() => {
@@ -30,11 +32,23 @@ export class VerifyBusinessUseCase {
     return known && known.businessId === this.sessions.session()?.businessId ? known.status : null;
   });
 
+  /** The profile of the business in session, shared with every caller until a verification changes it. */
   async profile(): Promise<BusinessProfile> {
     const businessId = this.businessId();
-    const profile = await this.profiles.find(businessId);
-    this.known.set({ businessId, status: profile.verificationStatus });
-    return profile;
+    if (this.cached?.businessId !== businessId) {
+      const profile = this.profiles.find(businessId).then((found) => {
+        this.known.set({ businessId, status: found.verificationStatus });
+        return found;
+      });
+      this.cached = { businessId, profile };
+      // A failed read is not kept: the next caller tries again.
+      profile.catch(() => {
+        if (this.cached?.profile === profile) {
+          this.cached = null;
+        }
+      });
+    }
+    return this.cached.profile;
   }
 
   /** Verifies the declared address, or the corrected one when the owner typed it (QAS13). */
@@ -45,6 +59,7 @@ export class VerifyBusinessUseCase {
     }
     const businessId = this.businessId();
     const verification = await this.profiles.verify(businessId, address);
+    this.cached = null;
     this.known.set({ businessId, status: verification.verificationStatus });
     return verification;
   }

@@ -7,11 +7,14 @@ import { LOCATION_READING_OBSERVER } from '../../catalog/application/location-re
 import { RecordLastLocationUseCase } from '../application/record-last-location.use-case';
 import { NotificationRepository } from '../domain/ports/notification.repository';
 import { HttpNotificationRepository } from './http-notification.repository';
+import { NotificationInboxRepository } from '../domain/ports/notification-inbox.repository';
+import { HttpNotificationInboxRepository } from './http-notification-inbox.repository';
 export const notificationProviders: Provider[] = [
   { provide: PushProvider, useClass: FcmPushProvider },
   { provide: PushSubscriptionsRepository, useClass: HttpPushSubscriptionsRepository },
   { provide: PushSubscriptionStorage, useClass: BrowserPushSubscriptionStorage },
   { provide: NotificationRepository, useClass: HttpNotificationRepository },
+  { provide: NotificationInboxRepository, useClass: HttpNotificationInboxRepository },
   { provide: LOCATION_READING_OBSERVER, useFactory: () => {
     const record = inject(RecordLastLocationUseCase);
     return (reading: import('../../catalog/domain/model/location-reading').GrantedReading) => record.execute({ ...reading.point, accuracyMeters: Math.max(1, Math.round(reading.accuracyMeters)), capturedAt: new Date().toISOString() });

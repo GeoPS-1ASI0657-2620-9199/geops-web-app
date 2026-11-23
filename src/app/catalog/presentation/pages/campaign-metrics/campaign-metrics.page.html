@@ -1,0 +1,268 @@
+<section class="page">
+  <a class="back" routerLink="/campaigns">
+    <mat-icon aria-hidden="true">arrow_back</mat-icon>
+    {{ 'campaignMetrics.back' | translate }}
+  </a>
+
+  <header class="head">
+    <div>
+      <h1 class="title">
+        {{ 'campaignMetrics.title' | translate }}
+        @if (metrics(); as m) {
+          <span class="name">· {{ m.campaignName }}</span>
+        }
+      </h1>
+      @if (metrics(); as m) {
+        <p class="subtitle">
+          {{ 'campaignMetrics.periodLabel' | translate: { from: day(m.period.from, true), to: day(m.period.to, true), days: (unit('days', m.period.days) | translate: { count: m.period.days }) } }}
+        </p>
+      }
+    </div>
+    @if (metrics(); as m) {
+      <geo-seal [kind]="seals[m.status]" [text]="'campaignsPage.status.' + m.status | translate" />
+    }
+  </header>
+
+  <div class="periods" role="group" [attr.aria-label]="'campaignMetrics.period.label' | translate">
+    @for (option of presets; track option) {
+      <button type="button" class="chip" [class.on]="preset() === option" [attr.aria-pressed]="preset() === option" (click)="choosePreset(option)">
+        {{ 'campaignMetrics.period.' + option | translate }}
+      </button>
+    }
+    <button type="button" class="chip" [class.on]="preset() === 'custom'" [attr.aria-pressed]="preset() === 'custom'" (click)="openCustom()">
+      {{ 'campaignMetrics.period.custom' | translate }}
+    </button>
+  </div>
+
+  @if (preset() === 'custom') {
+    <form class="custom" (ngSubmit)="applyCustom()">
+      <label class="field">
+        <span>{{ 'campaignMetrics.period.from' | translate }}</span>
+        <input type="date" name="from" class="input" [ngModel]="customFrom()" (ngModelChange)="customFrom.set($event)" />
+      </label>
+      <label class="field">
+        <span>{{ 'campaignMetrics.period.to' | translate }}</span>
+        <input type="date" name="to" class="input" [ngModel]="customTo()" (ngModelChange)="customTo.set($event)" />
+      </label>
+      <button mat-flat-button type="submit">{{ 'campaignMetrics.period.apply' | translate }}</button>
+      @if (periodError(); as message) {
+        <p class="error" role="alert">{{ message }}</p>
+      }
+    </form>
+  }
+
+  @switch (state()) {
+    @case ('loading') {
+      <div class="kpis" aria-busy="true">
+        @for (s of [1, 2, 3, 4, 5]; track s) {
+          <div class="skeleton"></div>
+        }
+      </div>
+    }
+    @case ('error') {
+      <geo-empty-state
+        icon="cloud_off"
+        [title]="'campaignMetrics.error.title' | translate"
+        [description]="errorMessage() ?? ('campaignMetrics.error.description' | translate)">
+        <button mat-flat-button type="button" (click)="load()">{{ 'campaignMetrics.error.retry' | translate }}</button>
+      </geo-empty-state>
+    }
+    @case ('ready') {
+      @if (metrics(); as m) {
+        <div class="kpis">
+          <div class="kpi" data-testid="kpi-impressions">
+            <span class="figure">{{ m.totals.impressions | number }}</span>
+            <span class="label">{{ 'campaignMetrics.kpi.impressions' | translate }}</span>
+            <span class="hint">{{ 'campaignMetrics.kpi.impressionsHint' | translate }}</span>
+          </div>
+          <div class="kpi" data-testid="kpi-clicks">
+            <span class="figure">{{ m.totals.clicks | number }}</span>
+            <span class="label">{{ 'campaignMetrics.kpi.clicks' | translate }}</span>
+            <span class="hint">{{ rateHint('clicksHint', m.rates.clickThroughRate) }}</span>
+          </div>
+          <div class="kpi" data-testid="kpi-reservations">
+            <span class="figure">{{ m.totals.reservations | number }}</span>
+            <span class="label">{{ 'campaignMetrics.kpi.reservations' | translate }}</span>
+            <span class="hint">{{ rateHint('reservationsHint', m.rates.reservationRate) }}</span>
+          </div>
+          <div class="kpi" data-testid="kpi-redemptions">
+            <span class="figure green">{{ m.totals.redemptions | number }}</span>
+            <span class="label">{{ 'campaignMetrics.kpi.redemptions' | translate }}</span>
+            <span class="hint">{{ rateHint('redemptionsHint', m.rates.redemptionRate) }}</span>
+          </div>
+          <div class="kpi" data-testid="kpi-conversion">
+            <span class="figure purple">
+              @if (m.rates.conversionRate !== null) {
+                {{ m.rates.conversionRate | number: '1.1-1' }} %
+              } @else {
+                —
+              }
+            </span>
+            <span class="label">{{ 'campaignMetrics.kpi.conversion' | translate }}</span>
+            <span class="hint">{{ 'campaignMetrics.kpi.conversionHint' | translate }}</span>
+          </div>
+        </div>
+
+        <div class="layout">
+          <section class="card chart-card" aria-labelledby="daily-title">
+            <div class="card-head">
+              <h2 class="sub" id="daily-title">{{ 'campaignMetrics.daily.title' | translate }}</h2>
+              <div class="series" role="group" [attr.aria-label]="'campaignMetrics.daily.series' | translate">
+                @for (option of seriesOptions; track option) {
+                  <button type="button" class="chip small" [class.on]="series() === option" [attr.aria-pressed]="series() === option" (click)="series.set(option)">
+                    {{ 'campaignMetrics.kpi.' + option | translate }}
+                  </button>
+                }
+              </div>
+            </div>
+            @if (peak() === 0) {
+              <p class="quiet" data-testid="no-activity">{{ 'campaignMetrics.daily.empty' | translate }}</p>
+            }
+            <div class="chart" role="img" [attr.aria-label]="'campaignMetrics.daily.summary' | translate: { series: ('campaignMetrics.kpi.' + series() | translate), peak: peak(), days: (unit('days', m.period.days) | translate: { count: m.period.days }) }">
+              <span class="peak" aria-hidden="true">{{ peak() | number }}</span>
+              <div class="bars" aria-hidden="true">
+                @for (bar of bars(); track bar.date; let i = $index) {
+                  <div class="bar-slot" [title]="day(bar.date) + ': ' + bar.value">
+                    <div class="bar" [style.height.%]="bar.share * 100" [class.zero]="bar.value === 0"></div>
+                    <span class="tick" [class.hidden]="!showsLabel(i, bars().length)">{{ day(bar.date) }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+            <div class="visually-hidden">
+              <table>
+                <caption>{{ 'campaignMetrics.daily.title' | translate }}</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">{{ 'campaignMetrics.daily.date' | translate }}</th>
+                    @for (option of seriesOptions; track option) {
+                      <th scope="col">{{ 'campaignMetrics.kpi.' + option | translate }}</th>
+                    }
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (entry of m.daily; track entry.date) {
+                    <tr>
+                      <th scope="row">{{ day(entry.date, true) }}</th>
+                      <td>{{ entry.impressions }}</td>
+                      <td>{{ entry.clicks }}</td>
+                      <td>{{ entry.reservations }}</td>
+                      <td>{{ entry.redemptions }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="card baseline" aria-labelledby="baseline-title" data-testid="baseline">
+            <h2 class="sub" id="baseline-title">{{ 'campaignMetrics.baseline.title' | translate }}</h2>
+            @if (saved()) {
+              <geo-alert kind="success" [title]="'campaignMetrics.baseline.saved' | translate" />
+            }
+            @if (m.baseline; as b) {
+              <p class="change" [class.up]="(b.customersChangePercent ?? 0) > 0" data-testid="baseline-change">
+                @if (b.customersChangePercent !== null) {
+                  +{{ b.customersChangePercent | number: '1.1-1' }} %
+                } @else {
+                  —
+                }
+              </p>
+              <p class="explain">
+                {{ 'campaignMetrics.baseline.comparison' | translate: { customers: (unit('customers', b.campaignCustomers) | translate: { count: b.campaignCustomers }), expected: (unit('customers', roundCustomers(b.expectedCustomers)) | translate: { count: (roundCustomers(b.expectedCustomers) | number: '1.0-0') }), days: (unit('days', m.period.days) | translate: { count: m.period.days }) } }}
+              </p>
+              <dl class="facts">
+                <div>
+                  <dt>{{ 'campaignMetrics.baseline.usual' | translate }}</dt>
+                  <dd>{{ 'campaignMetrics.baseline.perWeek' | translate: { customers: b.customersPerWeek } }}</dd>
+                </div>
+                <div>
+                  <dt>{{ 'campaignMetrics.baseline.ticket' | translate }}</dt>
+                  <dd>S/ {{ b.averageTicket | number: '1.2-2' }}</dd>
+                </div>
+                <div>
+                  <dt>{{ 'campaignMetrics.baseline.extraSales' | translate }}</dt>
+                  <dd>S/ {{ b.estimatedExtraSales | number: '1.2-2' }}</dd>
+                </div>
+              </dl>
+              <p class="hint">{{ 'campaignMetrics.baseline.declaredOn' | translate: { date: declaredOn(b.declaredAt) } }}</p>
+              @if (!formOpen()) {
+                <button mat-stroked-button type="button" class="edit" (click)="openForm()">{{ 'campaignMetrics.baseline.edit' | translate }}</button>
+              }
+            } @else {
+              <p class="explain" data-testid="baseline-invite">{{ 'campaignMetrics.baseline.invite' | translate }}</p>
+            }
+
+            @if (showForm()) {
+              <form class="baseline-form" (ngSubmit)="saveBaseline()" data-testid="baseline-form">
+                <label class="field">
+                  <span>{{ 'campaignMetrics.baseline.customersField' | translate }}</span>
+                  <input type="number" name="customersPerWeek" class="input" min="1" max="100000" step="1" inputmode="numeric"
+                    [ngModel]="customersPerWeek()" (ngModelChange)="customersPerWeek.set($event)" />
+                  <small class="hint">{{ 'campaignMetrics.baseline.customersHint' | translate }}</small>
+                </label>
+                <label class="field">
+                  <span>{{ 'campaignMetrics.baseline.ticketField' | translate }}</span>
+                  <input type="number" name="averageTicket" class="input" min="0.01" step="0.01" inputmode="decimal"
+                    [ngModel]="averageTicket()" (ngModelChange)="averageTicket.set($event)" />
+                  <small class="hint">{{ 'campaignMetrics.baseline.ticketHint' | translate }}</small>
+                </label>
+                <geo-ticket-calculator (ticket)="averageTicket.set($event)" />
+                @if (formError(); as message) {
+                  <p class="error" role="alert">{{ message }}</p>
+                }
+                <div class="form-actions">
+                  @if (m.baseline) {
+                    <button mat-stroked-button type="button" (click)="formOpen.set(false)">{{ 'campaignMetrics.baseline.cancel' | translate }}</button>
+                  }
+                  <button mat-flat-button type="submit" [disabled]="saving()">
+                    {{ (saving() ? 'campaignMetrics.baseline.saving' : 'campaignMetrics.baseline.save') | translate }}
+                  </button>
+                </div>
+              </form>
+            }
+          </section>
+        </div>
+
+        <section class="card" aria-labelledby="others-title">
+          <h2 class="sub" id="others-title">{{ 'campaignMetrics.others.title' | translate }}</h2>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">{{ 'campaignMetrics.others.campaign' | translate }}</th>
+                  <th scope="col" class="num">{{ 'campaignMetrics.kpi.impressions' | translate }}</th>
+                  <th scope="col" class="num">{{ 'campaignMetrics.kpi.clicks' | translate }}</th>
+                  <th scope="col" class="num">{{ 'campaignMetrics.kpi.reservations' | translate }}</th>
+                  <th scope="col" class="num">{{ 'campaignMetrics.kpi.redemptions' | translate }}</th>
+                  <th scope="col" class="num">{{ 'campaignMetrics.kpi.conversion' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (row of view()!.others; track row.campaignId) {
+                  <tr [class.current]="row.campaignId === m.campaignId">
+                    <td>
+                      @if (row.campaignId === m.campaignId) {
+                        <span class="current-name">{{ row.name }}</span>
+                      } @else {
+                        <a [routerLink]="['/campaigns', row.campaignId, 'metrics']">{{ row.name }}</a>
+                      }
+                      <geo-seal [kind]="seals[row.status]" [text]="'campaignsPage.status.' + row.status | translate" />
+                    </td>
+                    <td class="num" [attr.data-label]="'campaignMetrics.kpi.impressions' | translate">{{ row.totals.impressions | number }}</td>
+                    <td class="num" [attr.data-label]="'campaignMetrics.kpi.clicks' | translate">{{ row.totals.clicks | number }}</td>
+                    <td class="num" [attr.data-label]="'campaignMetrics.kpi.reservations' | translate">{{ row.totals.reservations | number }}</td>
+                    <td class="num" [attr.data-label]="'campaignMetrics.kpi.redemptions' | translate">{{ row.totals.redemptions | number }}</td>
+                    <td class="num" [attr.data-label]="'campaignMetrics.kpi.conversion' | translate">
+                      {{ row.rates.conversionRate !== null ? (row.rates.conversionRate | number: '1.1-1') + ' %' : '—' }}
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </section>
+      }
+    }
+  }
+</section>

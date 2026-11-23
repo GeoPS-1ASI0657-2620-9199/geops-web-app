@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
 import { DecimalPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { GeoSeal } from '../geo-seal/geo-seal';
+import { categoryIcon } from '../category-icon';
 
 const MAX_STARS = 5;
 
@@ -22,7 +23,7 @@ const MAX_STARS = 5;
         <img class="photo" [src]="url" [alt]="title()" [attr.loading]="priority() ? 'eager' : 'lazy'" />
       } @else if (category()) {
         <div class="photo placeholder" aria-hidden="true">
-          <mat-icon>sell</mat-icon>
+          <mat-icon>{{ placeholderIcon() }}</mat-icon>
           <span>{{ category() }}</span>
         </div>
       }
@@ -53,7 +54,7 @@ const MAX_STARS = 5;
           @if (distanceMeters() !== null) {
             <span class="distance geo-tabular">
               <mat-icon class="filled" aria-hidden="true">location_on</mat-icon>
-              {{ distanceMeters() }} m · {{ walkMinutes() }} min
+              @if (distanceMeters()! < 20) { Aquí mismo } @else { {{ distanceMeters() }} m · {{ walkMinutes() }} min }
             </span>
           }
         </div>
@@ -70,16 +71,19 @@ const MAX_STARS = 5;
         background: var(--neutral-bg);
         border: 1px solid var(--neutral-line);
         border-radius: var(--radius-card);
+        height: 100%;
       }
+      .content { flex: 1; }
       .card.reference { border: 1.5px dashed var(--status-reference); }
       .photo { width: 100%; height: 148px; object-fit: cover; background: var(--neutral-line-soft); }
+      .placeholder mat-icon { width: 32px; height: 32px; font-size: 32px; }
       .placeholder {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         gap: var(--space-xs);
-        height: 96px;
+        height: 148px;
         background: var(--brand-mist);
         color: var(--brand-deep);
         font: 500 12px/1.3 var(--font-brand);
@@ -101,7 +105,7 @@ const MAX_STARS = 5;
       .distance mat-icon { width: 14px; height: 14px; font-size: 14px; }
       /* Material Symbols draw the filled glyph through the FILL axis of the font. */
       .filled { font-variation-settings: 'FILL' 1; }
-      .actions { display: flex; gap: var(--space-sm); margin-top: var(--space-xs); }
+      .actions { display: flex; gap: var(--space-sm); margin-top: auto; padding-top: var(--space-xs); }
       .actions:empty { display: none; }
     `,
   ],
@@ -122,6 +126,9 @@ export class GeoOfferCard {
   readonly walkMinutes = input<number | null>(null);
   /** True for the cards visible on load, so their photo is not lazy loaded. */
   readonly priority = input(false);
+
+  /** Without a photo the category glyph stands in, at the same height, so the row stays aligned. */
+  protected readonly placeholderIcon = computed(() => categoryIcon(this.category()));
 
   /** Glyph and fill of each of the five stars, half stars included. */
   protected readonly stars = computed(() => {
