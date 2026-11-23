@@ -47,3 +47,10 @@ body {
 .mat-mdc-form-field-hint {
   color: var(--text-dim);
 }
+
+/* The notices menu of the bell (GeoNotificationBell) is wider than the 280px Material gives a menu,
+   so its messages read in full instead of scrolling sideways. */
+.mat-mdc-menu-panel.geo-notices-menu {
+  max-width: min(360px, calc(100vw - 32px));
+  overflow-x: hidden;
+}

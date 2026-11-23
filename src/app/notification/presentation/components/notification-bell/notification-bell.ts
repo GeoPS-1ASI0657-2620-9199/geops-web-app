@@ -84,7 +84,7 @@ interface NoticeView extends InboxNotification { link: string | null; ago: Relat
         box-sizing: border-box; border-radius: 9px; background: var(--brand-action);
         color: #fff; font: 700 11px/18px var(--font-brand); text-align: center;
       }
-      .panel { width: 340px; max-width: calc(100vw - 32px); font: 400 12.5px/1.45 var(--font-brand); }
+      .panel { width: 340px; max-width: 100%; font: 400 12.5px/1.45 var(--font-brand); }
       .list { margin: 0; padding: 0; list-style: none; max-height: 360px; overflow-y: auto; }
       .notice {
         display: flex; gap: 10px; align-items: flex-start; padding: 10px var(--space-lg);
